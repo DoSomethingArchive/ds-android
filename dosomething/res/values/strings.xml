@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Do Something</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="log_in_upper">LOG IN</string>
+    <string name="sign_up_upper">BECOME A MEMBER</string>
+    <string name="cancel_upper">CANCEL</string>
+    <string name="facebook_log_in">Login with Facebook</string>
+    
+</resources>

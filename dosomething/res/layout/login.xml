@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <EditText android:id="@+id/email" android:hint="@string/email" style="@style/LoginInput"/>
+    <EditText android:id="@+id/password" style="@style/LoginInput" android:hint="@string/password" android:inputType="textPassword"/>
+    <Button android:onClick="logIn" style="@style/LoginButton" android:text="@string/log_in_upper"/>
+    <Button android:onClick="signUp" style="@style/LoginButton" android:text="@string/sign_up_upper"/>
+    <Button android:onClick="facebookLogIn" style="@style/FacebookLoginButton" android:text="@string/facebook_log_in"/>
+
+</LinearLayout>
