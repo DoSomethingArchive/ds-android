@@ -8,6 +8,6 @@
     <EditText android:id="@+id/password" style="@style/LoginInput" android:hint="@string/password" android:inputType="textPassword"/>
     <Button android:onClick="logIn" style="@style/LoginButton" android:text="@string/log_in_upper"/>
     <Button android:onClick="signUp" style="@style/LoginButton" android:text="@string/sign_up_upper"/>
-    <Button android:onClick="facebookLogIn" style="@style/FacebookLoginButton" android:text="@string/facebook_log_in"/>
+    <Button android:onClick="facebookLogin" style="@style/FacebookLoginButton" android:text="@string/facebook_log_in"/>
 
 </LinearLayout>

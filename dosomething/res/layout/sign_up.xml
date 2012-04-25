@@ -3,15 +3,19 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
+	
+    <TextView style="@style/SignUpLabel" android:text="@string/first_name_upper"/>
     <EditText android:id="@+id/first_name" style="@style/SignUpInput" android:inputType="textPersonName"/>
+    <TextView style="@style/SignUpLabel" android:text="@string/last_name_upper"/>
     <EditText android:id="@+id/last_name" style="@style/SignUpInput" android:inputType="textPersonName"/>
+    <TextView style="@style/SignUpLabel" android:text="@string/email_address_upper"/>
     <EditText android:id="@+id/email" style="@style/SignUpInput" android:inputType="textEmailAddress"/>
+    <TextView style="@style/SignUpLabel" android:text="@string/password_upper"/>
     <EditText android:id="@+id/password" style="@style/SignUpInput" android:inputType="textPassword"/>
+    <TextView style="@style/SignUpLabel" android:text="@string/birthday_upper"/>
     <EditText android:id="@+id/birthday" style="@style/SignUpInput" android:inputType="date"/>
     
     <Button android:onClick="cancel" style="@style/SignUpCancelButton" android:text="@string/cancel_upper"/>
     <Button android:onClick="signUp" style="@style/SignUpButton" android:text="@string/sign_up_upper"/>
-    
 
 </LinearLayout>
