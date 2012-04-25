@@ -3,9 +3,16 @@
     <string name="app_name">Do Something</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="facebook_log_in">Login with Facebook</string>
     <string name="log_in_upper">LOG IN</string>
     <string name="sign_up_upper">BECOME A MEMBER</string>
     <string name="cancel_upper">CANCEL</string>
-    <string name="facebook_log_in">Login with Facebook</string>
+    <string name="first_name_upper">FIRST NAME</string>
+    <string name="last_name_upper">LAST NAME</string>
+    <string name="email_address_upper">EMAIL ADDRESS</string>
+    <string name="password_upper">PASSWORD</string>
+    <string name="birthday_upper">BIRTHDAY</string>
     
+    <string name="profile_no_campaigns">You are not currently signed up for any campaigns.  Sign up for campaigns to add to your to-do list.</string>
+    <string name="profile_no_campaigns_button">GO FIND CAMPAIGNS</string>
 </resources>
