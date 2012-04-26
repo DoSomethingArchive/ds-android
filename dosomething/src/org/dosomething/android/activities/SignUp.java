@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.dosomething.android.R;
+import org.dosomething.android.widgets.ActionBar;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -30,12 +31,18 @@ public class SignUp extends RoboActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up);
         
-        birthday.setOnFocusChangeListener(new OnFocusChangeListener() {
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				new DatePickerDialog(getApplicationContext(), dateListener, 2000, 1, 1).show();
-			}
-		});
+        birthday.setOnFocusChangeListener(birthdayFocusListener);
+    }
+    
+    private final OnFocusChangeListener birthdayFocusListener = new OnFocusChangeListener() {
+		@Override
+		public void onFocusChange(View v, boolean hasFocus) {
+			showBirthdayPicker();
+		}
+	};
+    
+    private void showBirthdayPicker(){
+    	new DatePickerDialog(this, dateListener, 1995, 0, 1).show();
     }
     
     public void signUp(View v){

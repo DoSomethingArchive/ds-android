@@ -27,11 +27,12 @@ import android.util.Log;
 
 public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean>{
 
+
 	private static final String TAG = "AbstractWebserviceTask";
 	private static final String ACCEPT_GZIP = "gzip";
 	private static final String UA = "android";
 
-	protected static final String URL = "";
+	protected static final String API_URL = "http://apps.dosomething.org/m_app_api/";
 
 	protected abstract void onSuccess();
 	protected abstract void onFinish();

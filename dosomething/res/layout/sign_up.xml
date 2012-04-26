@@ -2,8 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
 	
+    <org.dosomething.android.widgets.ActionBar 
+        android:id="@+id/actionbar" 
+        style="@style/ActionBar" 
+        app:title="@string/sign_up_title" 
+        app:showHomeButton="false"/>
+    
     <TextView style="@style/SignUpLabel" android:text="@string/first_name_upper"/>
     <EditText android:id="@+id/first_name" style="@style/SignUpInput" android:inputType="textPersonName"/>
     <TextView style="@style/SignUpLabel" android:text="@string/last_name_upper"/>
