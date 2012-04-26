@@ -1,14 +1,24 @@
 package org.dosomething.android.transfer;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class CampaignRef {
+public class Campaign implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+	
+	private String name;
 	private String logoUrl;
 	private Date startDate;
 	private Date endDate;
 	private String backgroundColor;
 	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public String getLogoUrl() {
 		return logoUrl;
 	}

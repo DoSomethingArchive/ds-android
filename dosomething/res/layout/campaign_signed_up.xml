@@ -2,6 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
+	
+    <org.dosomething.android.widgets.ActionBar 
+        android:id="@+id/actionbar" 
+        style="@style/ActionBar" 
+        app:title="@string/campaign_signed_up_title"
+        app:showHomeButton="true"/>
 
 </LinearLayout>

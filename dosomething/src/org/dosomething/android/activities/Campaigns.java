@@ -1,11 +1,12 @@
 package org.dosomething.android.activities;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.dosomething.android.R;
-import org.dosomething.android.transfer.CampaignRef;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.transfer.Campaign;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -42,36 +43,74 @@ public class Campaigns extends RoboActivity {
     }
 	
 	private void fetchCampaigns(){
-		List<CampaignRef> campaigns = new ArrayList<CampaignRef>();
+		new MyTask().execute();
 		
-		Date date = new Date();
-		
-		for(int i = 0; i < 20; i++){
-			CampaignRef campaign = new CampaignRef();
-			campaign.setLogoUrl("http://placehold.it/350x150" + "&text=" + i + i + i);
-			campaign.setStartDate(date);
-			campaign.setEndDate(date);
-			campaign.setBackgroundColor(i % 2 == 0 ? "#DB709B" : "#3059E3");
-			campaigns.add(campaign);
-		}
-		
-		list.setOnItemClickListener(itemClickListener);
-		list.setAdapter(new MyAdapter(this, campaigns));
+//		List<CampaignRef> campaigns = new ArrayList<CampaignRef>();
+//		
+//		Date date = new Date();
+//		
+//		for(int i = 0; i < 20; i++){
+//			CampaignRef campaign = new CampaignRef();
+//			campaign.setLogoUrl("http://placehold.it/350x150" + "&text=" + i + i + i);
+//			campaign.setStartDate(date);
+//			campaign.setEndDate(date);
+//			campaign.setBackgroundColor(i % 2 == 0 ? "#DB709B" : "#3059E3");
+//			campaigns.add(campaign);
+//		}
+//		
+//		list.setOnItemClickListener(itemClickListener);
+//		list.setAdapter(new MyAdapter(this, campaigns));
 	}
 	
 	private final OnItemClickListener itemClickListener = new OnItemClickListener() {
-
 		@Override
 		public void onItemClick(AdapterView<?> av, View v, int position,
 				long id) {
-			CampaignRef campaign = (CampaignRef) list.getAdapter().getItem(position);
+			Campaign campaign = (Campaign) list.getAdapter().getItem(position);
 			
+			startActivity(org.dosomething.android.activities.Campaign.getIntent(getApplicationContext(), campaign));
 		}
 	};
 	
-	private class MyAdapter extends ArrayAdapter<CampaignRef> {
+	private class MyTask extends AbstractWebserviceTask {
 
-		public MyAdapter(Context context, List<CampaignRef> objects){
+		private List<Campaign> campaigns;
+		
+		@Override
+		protected void onSuccess() {
+			list.setOnItemClickListener(itemClickListener);
+			list.setAdapter(new MyAdapter(getApplicationContext(), campaigns));
+		}
+
+		@Override
+		protected void onFinish() {}
+
+		@Override
+		protected void onError() {
+		
+		}
+
+		@Override
+		protected void doWebOperation() throws Exception {
+			
+			//JSONObject json = getObject(API_URL + "?q=campaigns");
+			JSONObject json = getObject("http://api.shoutz.com/api/v2/shouts/3937");
+			
+			JSONArray names = json.names();
+			
+			for(int i = 0; i < names.length(); i++){
+				String name = names.getString(0);
+				json.get(name);
+				
+			}
+			
+		}
+		
+	}
+	
+	private class MyAdapter extends ArrayAdapter<Campaign> {
+
+		public MyAdapter(Context context, List<Campaign> objects){
 			super(context, android.R.layout.simple_list_item_1, objects);
 		}
 		
@@ -82,7 +121,7 @@ public class Campaigns extends RoboActivity {
 				v = inflater.inflate(R.layout.campaign_row, null);
 			}
 			
-			CampaignRef campaign = getItem(position);
+			Campaign campaign = getItem(position);
 			
 			v.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
 			

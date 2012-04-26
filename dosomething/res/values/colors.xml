@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<color name="actionbar_separator">#5C5C5C</color>
+<color name="action_bar_background">#0B0D7A</color>
 </resources>
