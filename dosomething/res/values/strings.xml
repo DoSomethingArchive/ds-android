@@ -6,6 +6,7 @@
     <string name="facebook_log_in">Login with Facebook</string>
     <string name="log_in_upper">LOG IN</string>
     <string name="sign_up_upper">BECOME A MEMBER</string>
+    <string name="go_upper">GO</string>
     <string name="cancel_upper">CANCEL</string>
     <string name="first_name_upper">FIRST NAME</string>
     <string name="last_name_upper">LAST NAME</string>
@@ -13,11 +14,15 @@
     <string name="password_upper">PASSWORD</string>
     <string name="birthday_upper">BIRTHDAY</string>
     
-    <string name="sign_up_title">Register</string>
+    <string name="sign_up_title">Become A Member</string>
+    <string name="sign_up_disclaimer">By tapping Sign Up, you accept the <u>terms of use</u> and <u>privacy policy</u>.</string>
     <string name="profile_title">Participation Profile</string>
     <string name="campaigns_title">Current Campaigns</string>
     <string name="campaign_signed_up_title">Share</string>
     
     <string name="profile_no_campaigns">You are not currently signed up for any campaigns.  Sign up for campaigns to add to your to-do list.</string>
     <string name="profile_no_campaigns_button">GO FIND CAMPAIGNS</string>
+    
+    <string name="campaign_sign_up_button">SIGN UP!</string>
+    
 </resources>

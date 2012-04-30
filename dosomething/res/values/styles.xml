@@ -19,9 +19,32 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#fff</item>
     </style>
+    <style name="LoginLogo">
+        <item name="android:src">@drawable/login_logo</item>
+        <item name="android:layout_margin">20dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+    <style name="LoginInputsLayout">
+        <item name="android:background">@drawable/login_inputs_background</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:layout_marginRight">18dp</item>
+        <item name="android:paddingTop">26dp</item>
+        <item name="android:paddingLeft">14dp</item>
+        <item name="android:paddingRight">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
     <style name="LoginInput">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/login_input_background</item>
+        <item name="android:textColor">@color/login_input_text</item>
+        <item name="android:padding">10dp</item>
     </style>
     <style name="LoginButton">
         <item name="android:layout_width">fill_parent</item>
@@ -31,11 +54,21 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+    <style name="SignUpDisclaimer">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textColor">@color/sign_up_disclaimer_text</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
     <style name="SignUpInput">
+        <item name="android:layout_marginTop">2dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="SignUpLabel">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/sign_up_label</item>
+        <item name="android:layout_marginTop">5dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -48,14 +81,32 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="ProfileNoCampaignsLayout">
+        <item name="android:background">@color/profile_background</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
     </style>
+    
+    <style name="ProfileNoCampaignsInner">
+        <item name="android:background">@drawable/profile_no_campaigns_background</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingBottom">40dp</item>
+    </style>
+    
     <style name="ProfileNoCampaignsText">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/profile_no_campaigns_text</item>
     </style>
     <style name="ProfileNoCampaignsButton">
         <item name="android:layout_width">fill_parent</item>
@@ -63,8 +114,50 @@
     </style>
     <style name="CampaignRowImage">
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">120dp</item>
-        <item name="android:layout_margin">15dp</item>
+        <item name="android:layout_height">130dp</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="CampaignDatesRow">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/campaign_dates_row_background</item>
+        <item name="android:padding">15dp</item>
+    </style>
+    <style name="CampaignDatesText">
+       <item name="android:layout_width">fill_parent</item>
+       <item name="android:layout_height">wrap_content</item>
+       <item name="android:gravity">center_horizontal</item>
+       <item name="android:textSize">20dp</item>
+       <item name="android:textStyle">bold</item>
+       <item name="android:textColor">#FECC05</item>
+    </style>
+    <style name="CampaignTeaserText">
+       <item name="android:layout_width">fill_parent</item>
+       <item name="android:layout_height">wrap_content</item>
+       <item name="android:gravity">center_horizontal</item>
+       <item name="android:textColor">#fff</item>
+    </style>
+    <style name="CampaignSignUpRow">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/campaign_sign_up_row_background</item>
+    </style>
+    <style name="CampaignSignUpButton">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">40dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+    </style>
+    <style name="CampaignImage">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">190dp</item>
+        <item name="android:layout_margin">2dp</item>
         <item name="android:scaleType">centerInside</item>
         <item name="android:gravity">center</item>
     </style>

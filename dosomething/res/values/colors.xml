@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<color name="action_bar_background">#0B0D7A</color>
+<color name="action_bar_background">#173781</color>
+<color name="login_background_top">#173880</color>
+<color name="login_background_bottom">#1E529C</color>
+<color name="login_background_inputs_top">#173880</color>
+<color name="login_background_inputs_bottom">#1C1B1A</color>
+<color name="login_input_background">#424040</color>
+<color name="login_input_text">#A6A4A4</color>
+<color name="sign_up_label">#505050</color>
+<color name="sign_up_background">#EDEDED</color>
+<color name="sign_up_disclaimer_text">#7A7C7F</color>
+<color name="profile_background">#EDEDED</color>
+<color name="profile_no_campaigns_text">#333333</color>
+<color name="campaign_dates_row_background">#2A2C2B</color>
+<color name="campaign_sign_up_row_background">#1C1B19</color>
 </resources>

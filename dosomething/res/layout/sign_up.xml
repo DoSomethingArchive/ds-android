@@ -3,6 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
+    android:background="@color/sign_up_background"
     xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
 	
     <org.dosomething.android.widgets.ActionBar 
@@ -11,18 +12,43 @@
         app:title="@string/sign_up_title" 
         app:showHomeButton="false"/>
     
-    <TextView style="@style/SignUpLabel" android:text="@string/first_name_upper"/>
-    <EditText android:id="@+id/first_name" style="@style/SignUpInput" android:inputType="textPersonName"/>
-    <TextView style="@style/SignUpLabel" android:text="@string/last_name_upper"/>
-    <EditText android:id="@+id/last_name" style="@style/SignUpInput" android:inputType="textPersonName"/>
-    <TextView style="@style/SignUpLabel" android:text="@string/email_address_upper"/>
-    <EditText android:id="@+id/email" style="@style/SignUpInput" android:inputType="textEmailAddress"/>
-    <TextView style="@style/SignUpLabel" android:text="@string/password_upper"/>
-    <EditText android:id="@+id/password" style="@style/SignUpInput" android:inputType="textPassword"/>
-    <TextView style="@style/SignUpLabel" android:text="@string/birthday_upper"/>
-    <EditText android:id="@+id/birthday" style="@style/SignUpInput" android:inputType="date"/>
+   	<ScrollView 
+		android:orientation="vertical"
+		android:layout_weight="1.0"
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:fillViewport="true">
     
-    <Button android:onClick="cancel" style="@style/SignUpCancelButton" android:text="@string/cancel_upper"/>
-    <Button android:onClick="signUp" style="@style/SignUpButton" android:text="@string/sign_up_upper"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:padding="10dp">
+    
+		    <TextView style="@style/SignUpLabel" android:text="@string/first_name_upper"/>
+		    <EditText android:id="@+id/first_name" style="@style/SignUpInput" android:inputType="textPersonName"/>
+		    <TextView style="@style/SignUpLabel" android:text="@string/last_name_upper"/>
+		    <EditText android:id="@+id/last_name" style="@style/SignUpInput" android:inputType="textPersonName"/>
+		    <TextView style="@style/SignUpLabel" android:text="@string/email_address_upper"/>
+		    <EditText android:id="@+id/email" style="@style/SignUpInput" android:inputType="textEmailAddress"/>
+		    <TextView style="@style/SignUpLabel" android:text="@string/password_upper"/>
+		    <EditText android:id="@+id/password" style="@style/SignUpInput" android:inputType="textPassword"/>
+		    <TextView style="@style/SignUpLabel" android:text="@string/birthday_upper"/>
+		    <EditText android:id="@+id/birthday" style="@style/SignUpInput" android:inputType="date"/>
+			
+		    <TextView style="@style/SignUpDisclaimer" android:text="@string/sign_up_disclaimer"/>
+		    
+    	</LinearLayout>
+    
+    </ScrollView>
+    
+   	<LinearLayout
+   	    android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+   	    android:orientation="horizontal"
+   	    android:padding="10dp">
+   	    <Button android:onClick="cancel" style="@style/SignUpCancelButton" android:text="@string/cancel_upper" android:layout_weight="1.0"/>
+    	<Button android:onClick="signUp" style="@style/SignUpButton" android:text="@string/go_upper" android:layout_weight="1.0"/>
+   	</LinearLayout>
 
 </LinearLayout>

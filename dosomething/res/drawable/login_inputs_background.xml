@@ -1,0 +1,12 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+	    <shape>
+	        <solid android:color="@color/login_background_inputs_top" />
+	    </shape>
+	</item>
+	<item android:top="8dp">
+	    <shape>
+	        <solid android:color="@color/login_background_inputs_bottom" />
+	    </shape>
+	</item>
+</layer-list>

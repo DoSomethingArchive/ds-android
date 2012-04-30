@@ -11,6 +11,7 @@ public class Campaign implements Serializable {
 	private String logoUrl;
 	private Date startDate;
 	private Date endDate;
+	private String teaser;
 	private String backgroundColor;
 	
 	public String getName() {
@@ -43,4 +44,11 @@ public class Campaign implements Serializable {
 	public void setBackgroundColor(String backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
+	public String getTeaser() {
+		return teaser;
+	}
+	public void setTeaser(String teaser) {
+		this.teaser = teaser;
+	}
+	
 }
