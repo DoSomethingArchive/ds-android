@@ -1,11 +1,16 @@
 package org.dosomething.android.activities;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.acra.ErrorReporter;
 import org.dosomething.android.R;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import roboguice.activity.RoboActivity;
@@ -27,10 +32,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class Campaigns extends RoboActivity {
 	
-	@Inject
-	private LayoutInflater inflater;
-	@Inject
-	private ImageLoader imageLoader;
+	@Inject private LayoutInflater inflater;
+	@Inject private ImageLoader imageLoader;
 	
 	@InjectView(R.id.list) private ListView list;
 	
@@ -44,22 +47,6 @@ public class Campaigns extends RoboActivity {
 	
 	private void fetchCampaigns(){
 		new MyTask().execute();
-		
-//		List<CampaignRef> campaigns = new ArrayList<CampaignRef>();
-//		
-//		Date date = new Date();
-//		
-//		for(int i = 0; i < 20; i++){
-//			CampaignRef campaign = new CampaignRef();
-//			campaign.setLogoUrl("http://placehold.it/350x150" + "&text=" + i + i + i);
-//			campaign.setStartDate(date);
-//			campaign.setEndDate(date);
-//			campaign.setBackgroundColor(i % 2 == 0 ? "#DB709B" : "#3059E3");
-//			campaigns.add(campaign);
-//		}
-//		
-//		list.setOnItemClickListener(itemClickListener);
-//		list.setAdapter(new MyAdapter(this, campaigns));
 	}
 	
 	private final OnItemClickListener itemClickListener = new OnItemClickListener() {
@@ -75,6 +62,8 @@ public class Campaigns extends RoboActivity {
 	private class MyTask extends AbstractWebserviceTask {
 
 		private List<Campaign> campaigns;
+		
+		private final SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy");
 		
 		@Override
 		protected void onSuccess() {
@@ -92,22 +81,45 @@ public class Campaigns extends RoboActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
+			//String url = API_URL + "?q=campaigns";
 			
-			//JSONObject json = getObject(API_URL + "?q=campaigns");
-			JSONObject json = getObject("http://api.shoutz.com/api/v2/shouts/3937");
+			String url = "http://dl.dropbox.com/u/15016480/campaigns.json";
+			
+			JSONObject json = getObject(url);
 			
 			JSONArray names = json.names();
 			
+			campaigns = new ArrayList<Campaign>();
+			
 			for(int i = 0; i < names.length(); i++){
-				String name = names.getString(0);
-				json.get(name);
+				String name = names.getString(i);
+				JSONObject object = json.getJSONObject(name);
+				try{
+					campaigns.add(convert(object));
+				}catch(Exception e){
+					ErrorReporter.getInstance().handleSilentException(e);
+				}
 				
 			}
+		}
+
+		private Campaign convert(JSONObject object) throws JSONException, ParseException {
+			Campaign answer = new Campaign();
 			
+			JSONObject co = object.getJSONObject("campaign");
+			
+			answer.setName(co.getString("campaign-name"));
+			answer.setBackgroundColor("#" + co.getString("logo-bg-color"));
+			answer.setStartDate(df.parse(co.getString("start-date")));
+			answer.setEndDate(df.parse(co.getString("end-date")));
+			answer.setLogoUrl(co.getString("logo"));
+			answer.setTeaser(object.getJSONObject("main").getString("teaser"));
+			
+			return answer;
 		}
 		
 	}
-	
+
 	private class MyAdapter extends ArrayAdapter<Campaign> {
 
 		public MyAdapter(Context context, List<Campaign> objects){
