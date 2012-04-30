@@ -1,6 +1,7 @@
 package org.dosomething.android.activities;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.dosomething.android.R;
 import org.dosomething.android.widgets.ActionBar;
@@ -40,14 +41,42 @@ public class Campaign extends RoboActivity {
         
         actionBar.setTitle(campaign.getName());
         
-        SimpleDateFormat df = new SimpleDateFormat("MMMMM dd");
-        
-        txtDates.setText(df.format(campaign.getStartDate()) + "-" + df.format(campaign.getEndDate()));
+        txtDates.setText(formatDateRange(campaign));
         txtTeaser.setText(campaign.getTeaser());
         
         llImageContainer.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
         imageLoader.displayImage(campaign.getLogoUrl(), imgLogo);
     }
+	
+	private String formatDateRange(org.dosomething.android.transfer.Campaign campaign){
+		SimpleDateFormat mf = new SimpleDateFormat("MMMMM");
+		
+		Calendar scal = Calendar.getInstance();
+		scal.setTime(campaign.getStartDate());
+		
+		Calendar ecal = Calendar.getInstance();
+		ecal.setTime(campaign.getEndDate());
+		
+		int sday = scal.get(Calendar.DAY_OF_MONTH);
+		int eday = ecal.get(Calendar.DAY_OF_MONTH);
+		
+		return mf.format(campaign.getStartDate()) + " " + sday + getOrdinalFor(sday)
+				+ "-" + mf.format(campaign.getEndDate()) + " " + eday + getOrdinalFor(eday);
+	}
+
+	private static String getOrdinalFor(int value) {
+		switch (value) {
+		case 1:
+			return "st";
+		case 2:
+			return "nd";
+		case 3:
+			return "rd";
+		default:
+			return "th";
+		}
+	}
+
 	
 	public void signUp(View v){
 		startActivity(CampaignSignedUp.getIntent(this));
