@@ -37,7 +37,7 @@
             </LinearLayout>
             
             <LinearLayout style="@style/CampaignSignUpRow">
-                <Button android:onClick="signUp" style="@style/CampaignSignUpButton" android:text="@string/campaign_sign_up_button"/>
+                <Button android:onClick="signUp" style="@style/CampaignSignUpButton" android:background="@drawable/sign_up_button"/>
             </LinearLayout>
             
         </LinearLayout>
