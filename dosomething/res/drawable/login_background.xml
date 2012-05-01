@@ -4,7 +4,7 @@
 	        <solid android:color="@color/login_background_top" />
 	    </shape>
 	</item>
-	<item android:top="100dp">
+	<item android:top="80dp">
 	    <shape>
 	        <solid android:color="@color/login_background_bottom" />
 	    </shape>

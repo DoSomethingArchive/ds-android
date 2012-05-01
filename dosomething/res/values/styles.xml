@@ -21,7 +21,7 @@
     </style>
     <style name="LoginLogo">
         <item name="android:src">@drawable/login_logo</item>
-        <item name="android:layout_margin">20dp</item>
+        <item name="android:layout_margin">10dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_horizontal</item>
@@ -29,9 +29,10 @@
     <style name="LoginInputsLayout">
         <item name="android:background">@drawable/login_inputs_background</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginTop">2dp</item>
         <item name="android:layout_marginLeft">18dp</item>
         <item name="android:layout_marginRight">18dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:paddingTop">26dp</item>
         <item name="android:paddingLeft">14dp</item>
         <item name="android:paddingRight">14dp</item>
@@ -47,11 +48,13 @@
         <item name="android:padding">10dp</item>
     </style>
     <style name="LoginButton">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="FacebookLoginButton">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="SignUpDisclaimer">
