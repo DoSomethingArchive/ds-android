@@ -16,16 +16,18 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
-        
+			
     		<ImageView style="@style/LoginLogo"/>
     
-		    <LinearLayout style="@style/LoginInputsLayout">
+		    <LinearLayout style="@style/LoginInputsLayout"
+		        android:focusableInTouchMode="true"
+		        android:descendantFocusability="beforeDescendants">
 		    
 			    <EditText android:id="@+id/email" android:hint="@string/email" style="@style/LoginInput"/>
 			    <EditText android:id="@+id/password" style="@style/LoginInput" android:hint="@string/password" android:inputType="textPassword" android:layout_marginTop="6dp"/>
-			    <Button android:onClick="logIn" style="@style/LoginButton" android:text="@string/log_in_upper" android:layout_marginTop="10dp"/>
-			    <Button android:onClick="signUp" style="@style/LoginButton" android:text="@string/sign_up_upper"/>
-			    <Button android:onClick="facebookLogin" style="@style/FacebookLoginButton" android:text="@string/facebook_log_in" android:layout_marginTop="20dp"/>
+			    <Button android:onClick="logIn" style="@style/LoginButton" android:layout_marginTop="10dp" android:background="@drawable/login_button"/>
+			    <Button android:onClick="signUp" style="@style/LoginButton" android:background="@drawable/sign_up_button"/>
+			    <Button android:onClick="facebookLogin" style="@style/FacebookLoginButton" android:layout_marginTop="10dp" android:background="@drawable/facebook_login"/>
 			
 		    </LinearLayout>
 		    
