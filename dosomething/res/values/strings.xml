@@ -7,6 +7,7 @@
     <string name="log_in_upper">LOG IN</string>
     <string name="sign_up_upper">BECOME A MEMBER</string>
     <string name="go_upper">GO</string>
+    <string name="continue_upper">CONTINUE</string>
     <string name="cancel_upper">CANCEL</string>
     <string name="first_name_upper">FIRST NAME</string>
     <string name="last_name_upper">LAST NAME</string>
@@ -24,5 +25,9 @@
     <string name="profile_no_campaigns_button">GO FIND CAMPAIGNS</string>
     
     <string name="campaign_sign_up_button">SIGN UP!</string>
+    
+    <string name="campaign_share_thanks">Thanks for signing up!</string>
+    <string name="campaign_share_button">SHARE THIS CAMPAIGN</string>
+    <string name="campaign_share_chooser">Share via</string>
     
 </resources>

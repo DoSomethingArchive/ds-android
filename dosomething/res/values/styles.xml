@@ -30,14 +30,19 @@
     </style>
     <style name="LoginButton">
         <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
         <item name="android:background">@drawable/main_button_selector</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16dp</item>
     </style>
     <style name="FacebookLoginButton">
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
     </style>
     <style name="SignUpDisclaimer">
         <item name="android:layout_marginTop">10dp</item>
@@ -58,18 +63,26 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="SignUpCancelButton">
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/secondary_button_selector</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">5dp</item>
+        
     </style>
     <style name="SignUpButton">
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/main_button_selector</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">5dp</item>
     </style>
     <style name="ProfileNoCampaignsLayout">
         <item name="android:background">@color/profile_background</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
+        <item name="android:layout_gravity">center_horizontal</item>
     </style>
     
     <style name="ProfileNoCampaignsInner">
@@ -95,9 +108,12 @@
     </style>
     <style name="ProfileNoCampaignsButton">
         <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/find_campaigns</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:background">@drawable/main_button_selector</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16dp</item>
     </style>
     <style name="CampaignRowImage">
         <item name="android:layout_width">fill_parent</item>
@@ -134,6 +150,7 @@
         <item name="android:background">@color/campaign_sign_up_row_background</item>
     </style>
     <style name="CampaignSignUpButton">
+        <item name="android:textStyle">bold</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">20dp</item>
@@ -148,4 +165,30 @@
         <item name="android:scaleType">centerInside</item>
         <item name="android:gravity">center</item>
     </style>
+    
+    <style name="CampaignShareText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/campaign_share_text</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+    
+    <style name="CampaignShareButton">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">40dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/main_button_selector</item>
+    </style>
+    
+    <style name="CampaignShareContinueButton">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/secondary_button_selector</item>
+    </style>
+    
 </resources>

@@ -18,8 +18,6 @@ import com.markupartist.android.widget.ActionBar.Action;
 
 public class Profile extends RoboActivity {
 	
-	private static final int REQ_CAMPAIGNS = 100;
-
 	@Inject private LayoutInflater inflater;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
@@ -51,7 +49,7 @@ public class Profile extends RoboActivity {
 	};
 	
 	public void findCampaigns(View v){
-		startActivityForResult(new Intent(this, Campaigns.class), REQ_CAMPAIGNS);
+		finish();
 	}
 
 	public static Intent getIntent(Context context) {
