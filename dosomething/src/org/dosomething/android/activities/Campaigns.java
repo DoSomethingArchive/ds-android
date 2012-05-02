@@ -51,7 +51,7 @@ public class Campaigns extends RoboActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaigns);
         
-        actionBar.setHomeLogo(R.id.actionbar_home_logo);
+        actionBar.setHomeLogo(R.drawable.action_bar_home_logo);
         
         actionBar.addAction(profileButtonAction);
         
@@ -92,7 +92,7 @@ public class Campaigns extends RoboActivity {
 	}
 	
 	public static Action getHomeAction(Context context){
-		return new IntentAction(context, new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), R.id.actionbar_home_logo);
+		return new IntentAction(context, new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), R.drawable.action_bar_home_logo);
 	}
 
 	private final OnItemClickListener itemClickListener = new OnItemClickListener() {
@@ -108,8 +108,6 @@ public class Campaigns extends RoboActivity {
 	private class MyTask extends AbstractWebserviceTask {
 
 		private List<Campaign> campaigns;
-		
-		private final SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy");
 		
 		@Override
 		protected void onPreExecute() {
@@ -146,30 +144,20 @@ public class Campaigns extends RoboActivity {
 			campaigns = new ArrayList<Campaign>();
 			
 			for(int i = 0; i < names.length(); i++){
-				String name = names.getString(i);
+				String name = names.getString(i); 
 				JSONObject object = json.getJSONObject(name);
-				try{
+				//try{
 					campaigns.add(convert(object));
-				}catch(Exception e){
-					ErrorReporter.getInstance().handleSilentException(e);
-				}
+				//}catch(Exception e){
+				//	ErrorReporter.getInstance().handleSilentException(e);
+				//}
 				
 			}
 		}
 
 		private Campaign convert(JSONObject object) throws JSONException, ParseException {
-			Campaign answer = new Campaign();
 			
-			JSONObject co = object.getJSONObject("campaign");
-			
-			answer.setName(co.getString("campaign-name"));
-			answer.setBackgroundColor("#" + co.getString("logo-bg-color"));
-			answer.setStartDate(df.parse(co.getString("start-date")));
-			answer.setEndDate(df.parse(co.getString("end-date")));
-			answer.setLogoUrl(co.getString("logo"));
-			answer.setTeaser(object.getJSONObject("main").getString("teaser"));
-			
-			return answer;
+			return new Campaign(object);
 		}
 		
 	}
