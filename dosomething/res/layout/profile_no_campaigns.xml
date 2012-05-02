@@ -5,7 +5,7 @@
     <LinearLayout style="@style/ProfileNoCampaignsInner">
     
 	    <TextView style="@style/ProfileNoCampaignsText" android:text="@string/profile_no_campaigns"/>
-	    <Button style="@style/ProfileNoCampaignsButton" android:onClick="findCampaigns" android:layout_marginTop="30dp"/>
+	    <Button style="@style/ProfileNoCampaignsButton" android:onClick="findCampaigns" android:text="@string/profile_no_campaigns_button"/>
 
     </LinearLayout>
     

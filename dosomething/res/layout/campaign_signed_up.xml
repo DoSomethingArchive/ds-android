@@ -3,11 +3,26 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" 
+    android:background="@color/campaign_share_outer_background"
     xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
 	
     <com.markupartist.android.widget.ActionBar
         android:id="@+id/actionbar" 
         style="@style/ActionBar" 
         app:title="@string/campaign_signed_up_title"/>
+    
+    <LinearLayout 
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_margin="15dp"
+    	android:padding="26dp"
+    	android:background="@color/campaign_share_inner_background">
+        
+        <TextView style="@style/CampaignShareText" android:text="@string/campaign_share_thanks"/>
+        <Button android:onClick="share" style="@style/CampaignShareButton" android:text="@string/campaign_share_button"/>
+        <Button android:onClick="done" style="@style/CampaignShareContinueButton" android:text="@string/continue_upper"/>
+        
+    </LinearLayout>
 
 </LinearLayout>
