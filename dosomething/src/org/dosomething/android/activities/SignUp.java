@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.dosomething.android.R;
-import org.dosomething.android.widgets.ActionBar;
+import org.dosomething.android.context.UserContext;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -49,6 +49,8 @@ public class SignUp extends RoboActivity {
     	String email = this.email.getText().toString();
     	String password = this.password.getText().toString();
   
+    	new UserContext(this).setLoggedIn(1l);
+    	
     	setResult(RESULT_OK);
     	finish();
     }

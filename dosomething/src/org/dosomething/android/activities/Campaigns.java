@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,8 +27,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.google.inject.Inject;
+import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.Action;
+import com.markupartist.android.widget.ActionBar.IntentAction;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class Campaigns extends RoboActivity {
@@ -35,12 +40,15 @@ public class Campaigns extends RoboActivity {
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
 	
+	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaigns);
+        
+        actionBar.setHomeLogo(R.id.actionbar_home_logo);
         
         fetchCampaigns();
     }
@@ -49,6 +57,10 @@ public class Campaigns extends RoboActivity {
 		new MyTask().execute();
 	}
 	
+	public static Action getHomeAction(Context context){
+		return new IntentAction(context, new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), R.id.actionbar_home_logo);
+	}
+
 	private final OnItemClickListener itemClickListener = new OnItemClickListener() {
 		@Override
 		public void onItemClick(AdapterView<?> av, View v, int position,
@@ -66,13 +78,21 @@ public class Campaigns extends RoboActivity {
 		private final SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy");
 		
 		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
+		}
+
+		@Override
 		protected void onSuccess() {
 			list.setOnItemClickListener(itemClickListener);
 			list.setAdapter(new MyAdapter(getApplicationContext(), campaigns));
 		}
 
 		@Override
-		protected void onFinish() {}
+		protected void onFinish() {
+			actionBar.setProgressBarVisibility(ProgressBar.GONE);
+		}
 
 		@Override
 		protected void onError() {

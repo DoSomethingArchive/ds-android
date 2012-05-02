@@ -1,4 +1,4 @@
-package org.dosomething.android.widgets;
+package com.markupartist.android.widget;
 
 import android.content.Context;
 import android.graphics.Rect;
