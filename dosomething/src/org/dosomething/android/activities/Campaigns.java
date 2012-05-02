@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.acra.ErrorReporter;
 import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
 import org.json.JSONArray;
@@ -37,6 +38,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class Campaigns extends RoboActivity {
 	
+	private static final int REQ_LOGIN_FOR_PROFILE = 112;
+	
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
 	
@@ -50,8 +53,39 @@ public class Campaigns extends RoboActivity {
         
         actionBar.setHomeLogo(R.id.actionbar_home_logo);
         
+        actionBar.addAction(profileButtonAction);
+        
         fetchCampaigns();
     }
+	
+	private final Action profileButtonAction = new Action(){
+
+		@Override
+		public int getDrawable() {
+			return R.drawable.action_bar_profile;
+		}
+
+		@Override
+		public void performAction(View view) {
+			Context context = getApplicationContext();
+			if(new UserContext(context).isLoggedIn()){
+				startActivity(Profile.getIntent(context));
+			}else{
+				startActivityForResult(new Intent(context, Login.class), REQ_LOGIN_FOR_PROFILE);
+			}
+		}
+	};
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == REQ_LOGIN_FOR_PROFILE && resultCode == RESULT_OK){
+			if(new UserContext(this).isLoggedIn()){
+				startActivity(Profile.getIntent(getApplicationContext()));
+			}
+		}
+	}
 	
 	private void fetchCampaigns(){
 		new MyTask().execute();
