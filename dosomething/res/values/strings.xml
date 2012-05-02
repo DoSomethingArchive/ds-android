@@ -20,6 +20,7 @@
     <string name="profile_title">Participation Profile</string>
     <string name="campaigns_title">Current Campaigns</string>
     <string name="campaign_signed_up_title">Share</string>
+    <string name="campaign_how_to_title">How To</string>
     
     <string name="profile_no_campaigns">You are not currently signed up for any campaigns.  Sign up for campaigns to add to your to-do list.</string>
     <string name="profile_no_campaigns_button">GO FIND CAMPAIGNS</string>
