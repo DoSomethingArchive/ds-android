@@ -2,13 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" 
-    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
+    android:orientation="vertical" >
 	
-    <org.dosomething.android.widgets.ActionBar 
-        android:id="@+id/actionbar" 
-        style="@style/ActionBar" 
-        app:showHomeButton="true"/>
+    <com.markupartist.android.widget.ActionBar
+	    android:id="@+id/actionbar"
+	    style="@style/ActionBar"/>
     
     <ScrollView 
 		android:orientation="vertical"

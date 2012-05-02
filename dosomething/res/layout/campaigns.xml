@@ -5,11 +5,10 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
 	
-    <org.dosomething.android.widgets.ActionBar 
+    <com.markupartist.android.widget.ActionBar
         android:id="@+id/actionbar" 
         style="@style/ActionBar" 
-        app:title="@string/campaigns_title"
-        app:showHomeButton="true"/>
+        app:title="@string/campaigns_title"/>
 
     <ListView android:id="@+id/list"
     	android:layout_width="fill_parent"

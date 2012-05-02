@@ -6,11 +6,10 @@
     android:background="@color/profile_background"
     xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
 	
-    <org.dosomething.android.widgets.ActionBar 
+    <com.markupartist.android.widget.ActionBar
         android:id="@+id/actionbar" 
         style="@style/ActionBar" 
-        app:title="@string/profile_title" 
-        app:showHomeButton="false"/>
+        app:title="@string/profile_title"/>
     
     <LinearLayout android:id="@+id/content"
         android:layout_width="fill_parent"

@@ -1,6 +1,7 @@
 package org.dosomething.android.activities;
 
 import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -8,12 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
-import com.facebook.android.Facebook.DialogListener;
-import com.facebook.android.FacebookError;
 
 public class Login extends RoboActivity {
 	
@@ -34,6 +31,8 @@ public class Login extends RoboActivity {
     public void logIn(View v){
     	String email = this.email.getText().toString();
     	String password = this.password.getText().toString();
+    	
+    	new UserContext(this).setLoggedIn(1l);
 
     	goToProfile();
     }
@@ -49,29 +48,29 @@ public class Login extends RoboActivity {
     
     public void facebookLogin(View v){
 
-    	facebook.authorize(this, new String[]{"birthday"}, REQ_FACEBOOK_LOGIN, new DialogListener(){
-
-			@Override
-			public void onComplete(Bundle values) {
-				Toast.makeText(getApplicationContext(), "complete", Toast.LENGTH_SHORT).show();
-			}
-
-			@Override
-			public void onFacebookError(FacebookError e) {
-				Toast.makeText(getApplicationContext(), "facebook error", Toast.LENGTH_SHORT).show();
-			}
-
-			@Override
-			public void onError(DialogError e) {
-				Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
-			}
-
-			@Override
-			public void onCancel() {
-				Toast.makeText(getApplicationContext(), "cancel", Toast.LENGTH_SHORT).show();
-			}
-    		
-    	});
+//    	facebook.authorize(this, new String[]{"birthday"}, REQ_FACEBOOK_LOGIN, new DialogListener(){
+//
+//			@Override
+//			public void onComplete(Bundle values) {
+//				Toast.makeText(getApplicationContext(), "complete", Toast.LENGTH_SHORT).show();
+//			}
+//
+//			@Override
+//			public void onFacebookError(FacebookError e) {
+//				Toast.makeText(getApplicationContext(), "facebook error", Toast.LENGTH_SHORT).show();
+//			}
+//
+//			@Override
+//			public void onError(DialogError e) {
+//				Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
+//			}
+//
+//			@Override
+//			public void onCancel() {
+//				Toast.makeText(getApplicationContext(), "cancel", Toast.LENGTH_SHORT).show();
+//			}
+//    		
+//    	});
     }
     
     @Override
@@ -82,11 +81,10 @@ public class Login extends RoboActivity {
         	 facebook.authorizeCallback(requestCode, resultCode, data);
         }else if(requestCode == REQ_SIGN_UP){
         	if(resultCode == RESULT_OK){
-        		goToProfile();
+        		setResult(RESULT_OK);
+        		finish();
         	}
         }
-        
-       
     }
     
 }

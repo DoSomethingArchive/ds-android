@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.dosomething.android.R;
-import org.dosomething.android.widgets.ActionBar;
+import org.dosomething.android.context.UserContext;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -18,11 +18,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
+import com.markupartist.android.widget.ActionBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class Campaign extends RoboActivity {
 	
 	private static final String CAMPAIGN = "campaign";
+	
+	private static final int REQ_LOGIN_FOR_SIGN_UP = 111;
 	
 	@Inject private ImageLoader imageLoader;
 	
@@ -36,6 +39,8 @@ public class Campaign extends RoboActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaign);
+        
+        actionBar.setHomeAction(Campaigns.getHomeAction(this));
         
         org.dosomething.android.transfer.Campaign campaign = (org.dosomething.android.transfer.Campaign) getIntent().getSerializableExtra(CAMPAIGN);
         
@@ -77,9 +82,23 @@ public class Campaign extends RoboActivity {
 		}
 	}
 
-	
 	public void signUp(View v){
-		startActivity(CampaignSignedUp.getIntent(this));
+		if(new UserContext(this).isLoggedIn()){
+			startActivity(CampaignSignedUp.getIntent(this));
+		}else{
+			startActivityForResult(new Intent(this, Login.class), REQ_LOGIN_FOR_SIGN_UP);
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == REQ_LOGIN_FOR_SIGN_UP && resultCode == RESULT_OK){
+			if(new UserContext(this).isLoggedIn()){
+				startActivity(CampaignSignedUp.getIntent(this));
+			}
+		}
 	}
 
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {
