@@ -82,6 +82,10 @@ public class Campaign extends RoboActivity {
 		}
 	}
 
+	public void gallery(View v){
+		startActivity(new Intent(this, CampaignGallery.class));
+	}
+	
 	public void signUp(View v){
 		if(new UserContext(this).isLoggedIn()){
 			startActivity(CampaignSignedUp.getIntent(this));

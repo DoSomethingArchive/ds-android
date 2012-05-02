@@ -2,6 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@color/campaign_share_outer_background"
+    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
+	
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar" 
+        style="@style/ActionBar" 
+        app:title="@string/campaign_how_to_title"/>
+    
+    <GridView
+	    android:id="@+id/gridview"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="0dp"
+	    android:numColumns="auto_fit"
+	    android:columnWidth="@dimen/gallery_item"
+	    android:verticalSpacing="2dp"
+	    android:horizontalSpacing="2dp"
+	    android:stretchMode="columnWidth"
+	    android:gravity="center"
+    	android:layout_weight="1.0"/>
 
 </LinearLayout>

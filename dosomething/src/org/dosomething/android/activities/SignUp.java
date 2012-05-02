@@ -1,5 +1,6 @@
 package org.dosomething.android.activities;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -12,11 +13,14 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
 public class SignUp extends RoboActivity {
+	
+	private static final String DATE_FORMAT = "MM/dd/yyyy";
 	
 	@InjectView(R.id.first_name) private EditText firstName;
 	@InjectView(R.id.last_name) private EditText lastName;
@@ -32,7 +36,15 @@ public class SignUp extends RoboActivity {
         setContentView(R.layout.sign_up);
         
         birthday.setOnFocusChangeListener(birthdayFocusListener);
+        birthday.setOnClickListener(birthdayClickListener);
     }
+    
+    private final OnClickListener birthdayClickListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			showBirthdayPicker();
+		}
+	};
     
     private final OnFocusChangeListener birthdayFocusListener = new OnFocusChangeListener() {
 		@Override
@@ -61,6 +73,7 @@ public class SignUp extends RoboActivity {
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
 			savedBirthday = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
+			birthday.setText(new SimpleDateFormat(DATE_FORMAT).format(savedBirthday));
 		}
 	};
     

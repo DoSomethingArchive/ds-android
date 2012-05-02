@@ -19,4 +19,7 @@
 <color name="profile_no_campaigns_text">#333333</color>
 <color name="campaign_dates_row_background">#2A2C2B</color>
 <color name="campaign_sign_up_row_background">#1C1B19</color>
+<color name="campaign_share_text">#fed200</color>
+<color name="campaign_share_inner_background">#1d1d1b</color>
+<color name="campaign_share_outer_background">#1d59a1</color>
 </resources>
