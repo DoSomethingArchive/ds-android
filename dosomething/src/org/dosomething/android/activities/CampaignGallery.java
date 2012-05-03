@@ -26,7 +26,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class CampaignGallery extends RoboActivity {
 	
-	private static final String GALLERY = "gallery";
+	private static final String CAMPAIGN = "campaign";
 	
 	@Inject LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
@@ -124,8 +124,9 @@ public class CampaignGallery extends RoboActivity {
 	
 	}
 	
-	public Intent getIntent(Context context){
+	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){
 		Intent answer = new Intent(context, CampaignGallery.class);
+		answer.putExtra(CAMPAIGN, campaign);
 		return answer;
 	}
 	

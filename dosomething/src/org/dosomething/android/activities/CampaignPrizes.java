@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import com.markupartist.android.widget.ActionBar;
 
-public class CampaignHowTo extends RoboActivity {
+public class CampaignPrizes extends RoboActivity {
 	
 	private static final String CAMPAIGN = "campaign";
 	
@@ -21,13 +21,13 @@ public class CampaignHowTo extends RoboActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.campaign_how_to);
+        setContentView(R.layout.campaign_prizes);
         
         actionBar.setHomeAction(Campaigns.getHomeAction(this));
     }
 	
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){
-		Intent answer = new Intent(context, CampaignHowTo.class);
+		Intent answer = new Intent(context, CampaignPrizes.class);
 		answer.putExtra(CAMPAIGN, campaign);
 		return answer;
 	}

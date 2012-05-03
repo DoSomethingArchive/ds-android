@@ -21,6 +21,10 @@
     <string name="campaigns_title">Current Campaigns</string>
     <string name="campaign_signed_up_title">Share</string>
     <string name="campaign_how_to_title">How To</string>
+    <string name="campaign_gallery_title">Gallery</string>
+    <string name="campaign_prizes_title">Prizes</string>
+    <string name="campaign_faq_title">FAQ</string>
+    <string name="campaign_resources_title">Resources</string>
     
     <string name="profile_no_campaigns">You are not currently signed up for any campaigns.  Sign up for campaigns to add to your to-do list.</string>
     <string name="profile_no_campaigns_button">GO FIND CAMPAIGNS</string>
@@ -30,5 +34,12 @@
     <string name="campaign_share_thanks">Thanks for signing up!</string>
     <string name="campaign_share_button">SHARE THIS CAMPAIGN</string>
     <string name="campaign_share_chooser">Share via</string>
+    
+    <string name="campaign_how_to">HOW TO</string>
+    <string name="campaign_gallery">GALLERY</string>
+    <string name="campaign_prizes">PRIZES</string>
+    <string name="campaign_locator">LOCATOR</string>
+    <string name="campaign_resources">RESOURCES</string>
+    <string name="campaign_faq">FAQ</string>
     
 </resources>
