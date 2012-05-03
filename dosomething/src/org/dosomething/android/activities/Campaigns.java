@@ -1,11 +1,9 @@
 package org.dosomething.android.activities;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.acra.ErrorReporter;
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;

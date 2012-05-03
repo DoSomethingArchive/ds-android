@@ -202,4 +202,56 @@
         <item name="android:padding">20dp</item>
     </style>
     
+    <style name="FaqRow">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#fff</item>
+    </style>
+    <style name="FaqRowChild">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#fff</item>
+    </style>
+    <style name="FaqRowHeader">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:layout_marginBottom">3dp</item>
+        <item name="android:layout_marginRight">3dp</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">#122B7C</item>
+    </style>
+    <style name="FaqRowBody">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:textColor">#000</item>
+    </style>
+    
+    <style name="HowToRow">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#fff</item>
+    </style>
+    <style name="HowToRowHeader">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#122B7C</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:gravity">left</item>
+        <item name="android:padding">5dp</item>
+    </style>
+    <style name="HowToRowBody">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:gravity">left</item>
+        <item name="android:padding">5dp</item>
+    </style>
+    
 </resources>
