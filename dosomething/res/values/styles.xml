@@ -191,4 +191,15 @@
         <item name="android:background">@drawable/secondary_button_selector</item>
     </style>
     
+    <style name="CampaignButton">
+        <item name="android:background">@drawable/campaign_button_background</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:gravity">left</item>
+        <item name="android:padding">20dp</item>
+    </style>
+    
 </resources>

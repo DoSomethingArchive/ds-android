@@ -148,5 +148,45 @@ public class Campaign implements Serializable {
 	public void setAdditionalImageUrl(String additionalImageUrl) {
 		this.additionalImageUrl = additionalImageUrl;
 	}
+
+	public List<Faq> getFaqs() {
+		return faqs;
+	}
+
+	public void setFaqs(List<Faq> faqs) {
+		this.faqs = faqs;
+	}
+
+	public Gallery getGallery() {
+		return gallery;
+	}
+
+	public void setGallery(Gallery gallery) {
+		this.gallery = gallery;
+	}
+
+	public List<HowTo> getHowTos() {
+		return howTos;
+	}
+
+	public void setHowTos(List<HowTo> howTos) {
+		this.howTos = howTos;
+	}
+
+	public Prize getPrize() {
+		return prize;
+	}
+
+	public void setPrize(Prize prize) {
+		this.prize = prize;
+	}
+
+	public List<Resource> getResources() {
+		return resources;
+	}
+
+	public void setResources(List<Resource> resources) {
+		this.resources = resources;
+	}
 	
 }

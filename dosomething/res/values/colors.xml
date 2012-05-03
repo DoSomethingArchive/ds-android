@@ -22,4 +22,5 @@
 <color name="campaign_share_text">#fed200</color>
 <color name="campaign_share_inner_background">#1d1d1b</color>
 <color name="campaign_share_outer_background">#1d59a1</color>
+<color name="campaign_button_background">#1d59a1</color>
 </resources>
