@@ -30,6 +30,7 @@ import android.widget.ProgressBar;
 
 import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.AbstractAction;
 import com.markupartist.android.widget.ActionBar.Action;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,7 +50,7 @@ public class Campaigns extends RoboActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaigns);
         
-        actionBar.setHomeLogo(R.drawable.action_bar_home_logo);
+        actionBar.setHomeAction(new EmptyAction());
         
         actionBar.addAction(profileButtonAction);
         
@@ -102,6 +103,16 @@ public class Campaigns extends RoboActivity {
 			startActivity(org.dosomething.android.activities.Campaign.getIntent(getApplicationContext(), campaign));
 		}
 	};
+	
+	private class EmptyAction extends AbstractAction {
+
+		public EmptyAction() {
+			super(R.drawable.action_bar_home_logo);
+		}
+
+		@Override
+		public void performAction(View view) { /* ignore*/ }
+	}
 	
 	private class MyTask extends AbstractWebserviceTask {
 

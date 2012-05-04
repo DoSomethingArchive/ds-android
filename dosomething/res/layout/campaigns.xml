@@ -7,7 +7,8 @@
 	
     <com.markupartist.android.widget.ActionBar
         android:id="@+id/actionbar" 
-        style="@style/ActionBar"/>
+        style="@style/ActionBar"
+        app:title="@string/campaigns_title" />
 
     <ListView android:id="@+id/list"
     	android:layout_width="fill_parent"

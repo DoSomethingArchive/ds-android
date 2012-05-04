@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" 
     android:background="@color/campaign_share_outer_background"
-    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
-	
+    android:orientation="vertical" >
+
     <com.markupartist.android.widget.ActionBar
-        android:id="@+id/actionbar" 
-        style="@style/ActionBar" 
-        app:title="@string/campaign_prizes_title"/>
-    
+        android:id="@+id/actionbar"
+        style="@style/ActionBar"
+        app:title="@string/campaign_prizes_title" />
+	
     <ListView android:id="@+id/list"
     	android:layout_width="fill_parent"
     	android:layout_height="0dp"
     	android:layout_weight="1.0"/>
-
+    
 </LinearLayout>
