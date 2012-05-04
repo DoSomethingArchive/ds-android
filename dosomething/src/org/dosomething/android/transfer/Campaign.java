@@ -33,7 +33,8 @@ public class Campaign implements Serializable {
 	private List<HowTo> howTos;
 	private Prize prize;
 	private List<Resource> resources;
-	
+	private List<Challenge> challenges;
+
 	public Campaign() {}
 	
 	public Campaign(JSONObject obj) throws JSONException, ParseException {
@@ -84,6 +85,14 @@ public class Campaign implements Serializable {
 			resources = new ArrayList<Resource>(r.length());
 			for(int i=0; i<r.length(); i++) {
 				resources.add(new Resource(r.getJSONObject(i)));
+			}
+		}
+		
+		JSONArray c = obj.optJSONArray("challenges");
+		if(c!=null) {
+			challenges = new ArrayList<Challenge>(c.length());
+			for(int i=0; i<c.length(); i++) {
+				resources.add(new Resource(c.getJSONObject(i)));
 			}
 		}
 	}
@@ -189,4 +198,11 @@ public class Campaign implements Serializable {
 		this.resources = resources;
 	}
 	
+	public List<Challenge> getChallenges() {
+		return challenges;
+	}
+
+	public void setChallenges(List<Challenge> challenges) {
+		this.challenges = challenges;
+	}
 }

@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
@@ -155,11 +157,12 @@ public class Campaigns extends RoboActivity {
 			for(int i = 0; i < names.length(); i++){
 				String name = names.getString(i); 
 				JSONObject object = json.getJSONObject(name);
-				//try{
+				try{
 					campaigns.add(convert(object));
-				//}catch(Exception e){
-				//	ErrorReporter.getInstance().handleSilentException(e);
-				//}
+				}catch(Exception e){
+					Log.e(Campaigns.class.toString(), "Failed to parse API.", e);
+					Toast.makeText(getApplicationContext(), "Failed to parse API.", 5000).show();
+				}
 				
 			}
 		}

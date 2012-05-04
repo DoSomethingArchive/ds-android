@@ -16,9 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,8 +44,38 @@ public class CampaignPrizes extends RoboActivity {
         Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
         Prize prize = campaign.getPrize();
         
-    	list.setAdapter(new MyAdapter(prize));
+        if(prize.getScholarship()!=null) {
+        	list.addHeaderView(createScholarshipView(prize.getScholarship()));
+        }
+    	list.setAdapter(new MyAdapter(getApplicationContext(), prize.getOthers()));
+    	if(prize.getRulesUrl()!=null) {
+    		list.addFooterView(createRulesView(prize.getRulesUrl()));
+    	}
     }
+	
+	private View createScholarshipView(PrizeItem scholarship) {
+		View v = inflater.inflate(R.layout.prize_row, null);
+		
+		TextView header = (TextView)v.findViewById(R.id.header);
+		header.setText(scholarship.getHeader());
+		
+		ImageView image = (ImageView)v.findViewById(R.id.image);
+		imageLoader.displayImage(scholarship.getImageUrl(), image);
+		
+		TextView body = (TextView)v.findViewById(R.id.body);
+		body.setText(scholarship.getBody());
+		
+		return v;
+	}
+	
+	private View createRulesView(String rules) {
+		View v = inflater.inflate(R.layout.prize_row, null);
+		
+		TextView header = (TextView)v.findViewById(R.id.header);
+		header.setText(rules);
+		
+		return v;
+	}
 	
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){
 		Intent answer = new Intent(context, CampaignPrizes.class);
@@ -55,116 +83,33 @@ public class CampaignPrizes extends RoboActivity {
 		return answer;
 	}
 	
-	private class MyAdapter extends BaseAdapter {
+	private class MyAdapter extends ArrayAdapter<PrizeItem> {
 		
-		private Prize prize;
-		
-		public MyAdapter(Prize prize) {
-			this.prize = prize;
+		public MyAdapter(Context context, List<PrizeItem> objects) {
+			super(context, android.R.layout.simple_list_item_1, objects);
 		}
 		
-		@Override
-		public int getCount() {
-			int count = 0;
-			
-			if(prize.getScholarship()!=null) {
-				count++;
-			}
-			
-			if(prize.getOthers()!=null) {
-				count+=prize.getOthers().size();
-			}
-			
-			if(prize.getRulesUrl()!=null) {
-				count++;
-			}
-			
-			return count;
-		}
-
-		@Override
-		public Object getItem(int index) {
-			
-			return null;
-		}
-
-		@Override
-		public long getItemId(int index) {
-			return index;
-		}
 
 		@Override
 		public View getView(int index, View v, ViewGroup parent) {
 			
-			int othersOffset = (prize.getScholarship()!=null) ? 1 : 0;
-			
-			if(prize.getScholarship()!=null && index==0) {
-				if (v == null) {
-					v = inflater.inflate(R.layout.prize_row, null);
-				}
-				
-				PrizeItem prizeItem = prize.getScholarship();
-				
-				TextView header = (TextView)v.findViewById(R.id.header);
-				header.setText(prizeItem.getHeader());
-				
-				ImageView image = (ImageView)v.findViewById(R.id.image);
-				imageLoader.displayImage(prizeItem.getImageUrl(), image);
-				
-				TextView body = (TextView)v.findViewById(R.id.body);
-				body.setText(prizeItem.getBody());
-				
-			} else if(prize.getOthers()!=null && index-othersOffset < prize.getOthers().size()) {
-				if (v == null) {
-					v = inflater.inflate(R.layout.prize_row, null);
-				}
-				
-				PrizeItem prizeItem = prize.getOthers().get(index-othersOffset);
-				
-				TextView header = (TextView)v.findViewById(R.id.header);
-				header.setText(prizeItem.getHeader());
-				
-				ImageView image = (ImageView)v.findViewById(R.id.image);
-				imageLoader.displayImage(prizeItem.getImageUrl(), image);
-				
-				TextView body = (TextView)v.findViewById(R.id.body);
-				body.setText(prizeItem.getBody());
-			} else {
-				
-				if (v == null) {
-					v = inflater.inflate(R.layout.prize_row, null);
-				}
-				
-				TextView header = (TextView)v.findViewById(R.id.header);
-				header.setText(prize.getRulesUrl());
+			if (v == null) {
+				v = inflater.inflate(R.layout.prize_row, null);
 			}
+			
+			PrizeItem prizeItem = (PrizeItem) getItem(index);
+			
+			TextView header = (TextView)v.findViewById(R.id.header);
+			header.setText(prizeItem.getHeader());
+			
+			ImageView image = (ImageView)v.findViewById(R.id.image);
+			imageLoader.displayImage(prizeItem.getImageUrl(), image);
+			
+			TextView body = (TextView)v.findViewById(R.id.body);
+			body.setText(prizeItem.getBody());
 			
 			return v;
 		}
-
-		
-		
-//		@Override
-//		public View getView(int position, View convertView, ViewGroup parent) {
-//			View v = convertView;
-//			if (v == null) {
-//				v = inflater.inflate(R.layout.prize_row, null);
-//			}
-//			
-//			final PrizeItem prizeItem = getItem(position);
-//			
-//			TextView header = (TextView)v.findViewById(R.id.header);
-//			header.setText(prizeItem.getHeader());
-//			
-//			ImageView image = (ImageView)v.findViewById(R.id.image);
-//			imageLoader.displayImage(prizeItem.getImageUrl(), image);
-//			
-//			TextView body = (TextView)v.findViewById(R.id.body);
-//			body.setText(prizeItem.getBody());
-//			
-//
-//			return v;
-//		}
 		
 	}
 }
