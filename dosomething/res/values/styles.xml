@@ -229,6 +229,7 @@
         <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:textColor">#000</item>
+        <item name="android:autoLink">all</item>
     </style>
     
     <style name="HowToRow">
@@ -252,6 +253,21 @@
         <item name="android:textSize">15dp</item>
         <item name="android:gravity">left</item>
         <item name="android:padding">5dp</item>
+        <item name="android:autoLink">all</item>
+    </style>
+    
+    <style name="ResourceRow">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#fff</item>
+    </style>
+    <style name="ResourceRowBody">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:gravity">center</item>
     </style>
     
 </resources>
