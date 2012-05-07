@@ -92,7 +92,7 @@ public class Campaign implements Serializable {
 		if(c!=null) {
 			challenges = new ArrayList<Challenge>(c.length());
 			for(int i=0; i<c.length(); i++) {
-				resources.add(new Resource(c.getJSONObject(i)));
+				challenges.add(new Challenge(c.getJSONObject(i)));
 			}
 		}
 	}

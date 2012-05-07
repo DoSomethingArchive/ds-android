@@ -39,6 +39,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class Campaigns extends RoboActivity {
 	
+	private static final String TAG = "Campaigns";
 	private static final int REQ_LOGIN_FOR_PROFILE = 112;
 	
 	@Inject private LayoutInflater inflater;
@@ -144,27 +145,40 @@ public class Campaigns extends RoboActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			//String url = API_URL + "?q=campaigns";
+			String url = API_URL + "?q=campaigns";
 			
-			String url = "http://dl.dropbox.com/u/15016480/campaigns.json";
+			//String url = "http://dl.dropbox.com/u/15016480/campaigns.json";
 			
-			JSONObject json = getObject(url);
-			
-			JSONArray names = json.names();
-			
-			campaigns = new ArrayList<Campaign>();
-			
-			for(int i = 0; i < names.length(); i++){
-				String name = names.getString(i); 
-				JSONObject object = json.getJSONObject(name);
+			try{
+				JSONObject json = getObject(url);
+				
 				try{
-					campaigns.add(convert(object));
+					JSONArray names = json.names();
+					
+					campaigns = new ArrayList<Campaign>();
+					
+					for(int i = 0; i < names.length(); i++){
+						String name = names.getString(i); 
+						JSONObject object = json.getJSONObject(name);
+						campaigns.add(convert(object));
+					}
 				}catch(Exception e){
-					Log.e(Campaigns.class.toString(), "Failed to parse API.", e);
-					Toast.makeText(getApplicationContext(), "Failed to parse API.", 5000).show();
+					Log.e(TAG, "Failed to parse API.", e);
+					toastError("Failed to parse API.");
 				}
 				
+			}catch(Exception e){
+				Log.e(TAG, "Failed to download API.", e);
+				toastError("Failed to download API.");
 			}
+		}
+		
+		private void toastError(final String message) {
+			runOnUiThread(new Runnable() {
+				public void run() {
+					Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+				}
+			});
 		}
 
 		private Campaign convert(JSONObject object) throws JSONException, ParseException {
