@@ -4,12 +4,18 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
@@ -18,6 +24,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,8 +91,24 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 	public static JSONObject doPost(String url, JSONObject json) throws IOException, JSONException{
 		return doInputRequest(new HttpPost(url), json);
 	}
-
+	
+	public static JSONObject doPost(String url, Map<String,String> params) throws IOException, JSONException{
+		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+		for(Entry<String,String> entry : params.entrySet()) {
+			pairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+		}
+		StringEntity entity = new UrlEncodedFormEntity(pairs, "UTF-8");
+		
+		return doPost(url, entity, "application/x-www-form-urlencoded");
+	}
+	
 	public static JSONObject doPost(String url, String params) throws IOException, JSONException{
+		StringEntity entity = new StringEntity(params, "UTF-8");
+		
+		return doPost(url, entity, "application/json");
+	}
+	
+	public static JSONObject doPost(String url, StringEntity entity, String contentType) throws IOException, JSONException{
 		HttpEntityEnclosingRequestBase request = new HttpPost(url);
 		JSONObject answer;
 
@@ -93,12 +116,10 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 
 		request.addHeader("Accept", "application/json");
 		request.addHeader("Accept-Encoding", ACCEPT_GZIP);
-		request.addHeader("Content-type", "application/json");
+		request.addHeader("Content-type", contentType);
 		request.addHeader("User-Agent", UA);
 
-		String requestString = params;
-
-		request.setEntity(new StringEntity(requestString, "UTF-8"));
+		request.setEntity(entity);
 
 		HttpResponse response = client.execute(request);
 
@@ -120,6 +141,8 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 			throw new RuntimeException(url + " Got non 200 status: " + responseCode + ".  Response: " + responseString);
 		}
 
+		Log.d(TAG, responseString);
+		
 		if(responseString != null && responseString.length() > 0){
 			answer = new JSONObject(responseString);
 		}else{

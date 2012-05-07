@@ -1,14 +1,26 @@
 package org.dosomething.android.activities;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.transfer.Campaign;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.facebook.android.Facebook;
 
@@ -32,9 +44,7 @@ public class Login extends RoboActivity {
     	String email = this.email.getText().toString();
     	String password = this.password.getText().toString();
     	
-    	new UserContext(this).setLoggedIn(1l);
-
-    	goToProfile();
+    	new MyTask(email, password).execute();
     }
     
     private void goToProfile(){
@@ -86,5 +96,64 @@ public class Login extends RoboActivity {
         	}
         }
     }
+    
+	private class MyTask extends AbstractWebserviceTask {
+
+		private String username;
+		private String password;
+		
+		public MyTask(String username, String password) {
+			this.username = username;
+			this.password = password;
+		}
+
+		@Override
+		protected void onSuccess() {
+			
+			
+			
+			goToProfile();
+		}
+		
+		@Override
+		protected void onFinish() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		protected void onError() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		protected void doWebOperation() throws Exception {
+			String url = "http://www.dosomething.org/?q=rest/user/login.json";
+			
+			Map<String,String> params = new HashMap<String, String>();
+			params.put("username", username);
+			params.put("password", password);
+			
+			JSONObject user = doPost(url, params).getJSONObject("user");
+			
+			new UserContext(getApplicationContext()).setLoggedIn(user.getLong("login"));
+			
+		}
+		
+		private void toastError(final String message) {
+			runOnUiThread(new Runnable() {
+				public void run() {
+					Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+				}
+			});
+		}
+
+		private Campaign convert(JSONObject object) throws JSONException, ParseException {
+			
+			return new Campaign(object);
+		}
+		
+	}
     
 }
