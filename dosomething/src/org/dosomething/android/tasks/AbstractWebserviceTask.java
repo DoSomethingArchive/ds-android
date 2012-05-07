@@ -25,7 +25,6 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -74,25 +73,11 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		}
 	}
 
-	public static JSONObject getObject(String url) throws JSONException, IOException{
-		return new JSONObject(doGet(url));
-	}
-
-	public static JSONArray getArray(String url) throws JSONException, IOException{
-		String responseString = doGet(url);
-
-		if(responseString != null && responseString.length() > 0){
-			return new JSONArray(responseString);
-		}else{
-			return new JSONArray();
-		}
-	}
-
-	public static JSONObject doPost(String url, JSONObject json) throws IOException, JSONException{
+	public static WebserviceResponse doPost(String url, JSONObject json) throws IOException, JSONException{
 		return doInputRequest(new HttpPost(url), json);
 	}
 	
-	public static JSONObject doPost(String url, Map<String,String> params) throws IOException, JSONException{
+	public static WebserviceResponse doPost(String url, Map<String,String> params) throws IOException, JSONException{
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 		for(Entry<String,String> entry : params.entrySet()) {
 			pairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
@@ -102,15 +87,14 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		return doPost(url, entity, "application/x-www-form-urlencoded");
 	}
 	
-	public static JSONObject doPost(String url, String params) throws IOException, JSONException{
+	public static WebserviceResponse doPost(String url, String params) throws IOException, JSONException{
 		StringEntity entity = new StringEntity(params, "UTF-8");
 		
 		return doPost(url, entity, "application/json");
 	}
 	
-	public static JSONObject doPost(String url, StringEntity entity, String contentType) throws IOException, JSONException{
+	public static WebserviceResponse doPost(String url, StringEntity entity, String contentType) throws IOException, JSONException{
 		HttpEntityEnclosingRequestBase request = new HttpPost(url);
-		JSONObject answer;
 
 		HttpClient client = new DefaultHttpClient();
 
@@ -135,29 +119,18 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 			is = new GZIPInputStream(is);
 		}
 
-		String responseString = toString(is);
-
-		if(responseCode < 200 || responseCode >= 300){
-			throw new RuntimeException(url + " Got non 200 status: " + responseCode + ".  Response: " + responseString);
+		if(responseCode >= 500){
+			throw new ErrorResponseCodeException(responseCode, request.getURI().toString());
 		}
 
-		Log.d(TAG, responseString);
-		
-		if(responseString != null && responseString.length() > 0){
-			answer = new JSONObject(responseString);
-		}else{
-			answer = null;
-		}
-
-		return answer;
+		return new WebserviceResponse(responseCode, is);
 	}
 
-	public static JSONObject doPut(String url, JSONObject json) throws IOException, JSONException{
+	public static WebserviceResponse doPut(String url, JSONObject json) throws IOException, JSONException{
 		return doInputRequest(new HttpPut(url), json);
 	}
 
-	private static JSONObject doInputRequest(HttpEntityEnclosingRequestBase request, JSONObject json) throws IOException, JSONException{
-		JSONObject answer;
+	private static WebserviceResponse doInputRequest(HttpEntityEnclosingRequestBase request, JSONObject json) throws IOException, JSONException{
 
 		HttpClient client = new DefaultHttpClient();
 
@@ -184,24 +157,14 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 			is = new GZIPInputStream(is);
 		}
 
-		String responseString = toString(is);
-
-		if(responseCode < 200 || responseCode >= 300){
+		if(responseCode >= 500){
 			throw new ErrorResponseCodeException(responseCode, request.getURI().toString());
 		}
 
-		if(responseString != null && responseString.length() > 0){
-			answer = new JSONObject(responseString);
-		}else{
-			answer = null;
-		}
-
-		return answer;
+		return new WebserviceResponse(responseCode, is);
 	}
 
-	public static String doGet(String url) throws IOException, JSONException{
-		String answer;
-
+	public static WebserviceResponse doGet(String url) throws IOException, JSONException{
 		HttpClient client = new DefaultHttpClient();
 
 		HttpUriRequest request = new HttpGet(url);
@@ -227,9 +190,7 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 			is = new GZIPInputStream(is);
 		}
 
-		answer = toString(is);
-
-		return answer;
+		return new WebserviceResponse(responseCode, is);
 	}
 
 	public static void doDelete(String url) throws IOException{
@@ -249,17 +210,52 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 				throw new ErrorResponseCodeException(responseCode, url);
 			}
 	}
+	
+	
+	public static class WebserviceResponse {
+		private int statusCode;
+		private InputStream body;
+		
+		public WebserviceResponse(int statusCode, InputStream body) {
+			this.statusCode = statusCode;
+			this.body = body;
+		}
+		
+		public String getBodyAsString() throws IOException {
+			String answer = null;
+			
+			if(body!=null) {
+				BufferedInputStream bis = new BufferedInputStream(body);
+				ByteArrayOutputStream buf = new ByteArrayOutputStream();
+				int result = bis.read();
+				while(result != -1) {
+					byte b = (byte)result;
+					buf.write(b);
+					result = bis.read();
+				}
+				answer = buf.toString("UTF-8");
+			}
+			
+			return answer;
+		}
+		
+		public JSONObject getBodyAsJSONObject() throws JSONException, IOException {
+			JSONObject answer = null;
 
-	public static String toString(InputStream in) 
-			throws IOException {
-		BufferedInputStream bis = new BufferedInputStream(in);
-		ByteArrayOutputStream buf = new ByteArrayOutputStream();
-		int result = bis.read();
-		while(result != -1) {
-			byte b = (byte)result;
-			buf.write(b);
-			result = bis.read();
-		}       
-		return buf.toString("UTF-8");
+			String body = getBodyAsString();
+			if(body!=null && body.length() > 0){
+				answer = new JSONObject(body);
+			}
+			
+			return answer;
+		}
+
+		public int getStatusCode() {
+			return statusCode;
+		}
+
+		public InputStream getBody() {
+			return body;
+		}
 	}
 }
