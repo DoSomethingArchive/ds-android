@@ -12,9 +12,9 @@
 <color name="login_background_inputs_bottom">#1E1D1C</color>
 <color name="login_input_background">#333131</color>
 <color name="login_input_text">#999898</color>
-<color name="sign_up_label">#505050</color>
-<color name="sign_up_background">#EFEFEF</color>
-<color name="sign_up_disclaimer_text">#7A7C7F</color>
+<color name="register_label">#505050</color>
+<color name="register_background">#EFEFEF</color>
+<color name="register_disclaimer_text">#7A7C7F</color>
 <color name="profile_background">#EFEFEF</color>
 <color name="profile_no_campaigns_text">#333333</color>
 <color name="campaign_dates_row_background">#2A2C2B</color>

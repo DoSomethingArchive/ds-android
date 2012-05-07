@@ -150,7 +150,7 @@ public class Campaigns extends RoboActivity {
 			//String url = "http://dl.dropbox.com/u/15016480/campaigns.json";
 			
 			try{
-				JSONObject json = getObject(url);
+				JSONObject json = doGet(url).getBodyAsJSONObject();
 				
 				try{
 					JSONArray names = json.names();

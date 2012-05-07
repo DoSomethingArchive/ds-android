@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/register_background"
+    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
+	
+    <com.markupartist.android.widget.ActionBar 
+        android:id="@+id/actionbar" 
+        style="@style/ActionBar" 
+        app:title="@string/register_title" />
+    
+   	<ScrollView 
+		android:orientation="vertical"
+		android:layout_weight="1.0"
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:fillViewport="true">
+    
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:padding="10dp">
+    		
+            <TextView style="@style/RegisterLabel" android:text="@string/username_upper"/>
+		    <EditText android:id="@+id/username_name" style="@style/RegisterInput" android:inputType="text"/>
+		    <TextView style="@style/RegisterLabel" android:text="@string/mobile_upper"/>
+		    <EditText android:id="@+id/mobile" style="@style/RegisterInput" android:inputType="phone"/>
+		    <TextView style="@style/RegisterLabel" android:text="@string/first_name_upper"/>
+		    <EditText android:id="@+id/first_name" style="@style/RegisterInput" android:inputType="textPersonName"/>
+		    <TextView style="@style/RegisterLabel" android:text="@string/last_name_upper"/>
+		    <EditText android:id="@+id/last_name" style="@style/RegisterInput" android:inputType="textPersonName"/>
+		    <TextView style="@style/RegisterLabel" android:text="@string/email_address_upper"/>
+		    <EditText android:id="@+id/email" style="@style/RegisterInput" android:inputType="textEmailAddress"/>
+		    <TextView style="@style/RegisterLabel" android:text="@string/password_upper"/>
+		    <EditText android:id="@+id/password" style="@style/RegisterInput" android:inputType="textPassword"/>
+		    <TextView style="@style/RegisterLabel" android:text="@string/birthday_upper"/>
+		    <EditText android:id="@+id/birthday" style="@style/RegisterInput" android:inputType="date"/>
+			
+		    <TextView style="@style/RegisterDisclaimer" android:text="@string/register_disclaimer"/>
+		    
+    	</LinearLayout>
+    
+    </ScrollView>
+    
+   	<LinearLayout
+   	    android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+   	    android:orientation="horizontal"
+   	    android:padding="10dp">
+   	    <Button android:onClick="cancel" style="@style/RegisterCancelButton" android:text="@string/cancel_upper" android:layout_weight="1.0"/>
+    	<Button android:onClick="register" style="@style/RegisterButton" android:text="@string/go_upper" android:layout_weight="1.0"/>
+   	</LinearLayout>
+
+</LinearLayout>

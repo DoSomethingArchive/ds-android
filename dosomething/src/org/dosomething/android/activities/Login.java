@@ -1,7 +1,6 @@
 package org.dosomething.android.activities;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +8,6 @@ import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,7 +15,6 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -53,7 +50,7 @@ public class Login extends RoboActivity {
     }
     
     public void signUp(View v){
-    	startActivityForResult(new Intent(this, SignUp.class), REQ_SIGN_UP);
+    	startActivityForResult(new Intent(this, Register.class), REQ_SIGN_UP);
     }
     
     public void facebookLogin(View v){
@@ -135,7 +132,7 @@ public class Login extends RoboActivity {
 			params.put("username", username);
 			params.put("password", password);
 			
-			JSONObject user = doPost(url, params).getJSONObject("user");
+			JSONObject user = doPost(url, params).getBodyAsJSONObject().getJSONObject("user");
 			
 			new UserContext(getApplicationContext()).setLoggedIn(user.getLong("login"));
 			

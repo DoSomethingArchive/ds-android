@@ -44,25 +44,25 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">20dp</item>
     </style>
-    <style name="SignUpDisclaimer">
+    <style name="RegisterDisclaimer">
         <item name="android:layout_marginTop">10dp</item>
-        <item name="android:textColor">@color/sign_up_disclaimer_text</item>
+        <item name="android:textColor">@color/register_disclaimer_text</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-    <style name="SignUpInput">
+    <style name="RegisterInput">
         <item name="android:layout_marginTop">2dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-    <style name="SignUpLabel">
+    <style name="RegisterLabel">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/sign_up_label</item>
+        <item name="android:textColor">@color/register_label</item>
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-    <style name="SignUpCancelButton">
+    <style name="RegisterCancelButton">
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/secondary_button_selector</item>
         <item name="android:layout_width">fill_parent</item>
@@ -70,7 +70,7 @@
         <item name="android:layout_marginRight">5dp</item>
         
     </style>
-    <style name="SignUpButton">
+    <style name="RegisterButton">
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/main_button_selector</item>
         <item name="android:layout_width">fill_parent</item>
