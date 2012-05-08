@@ -41,7 +41,9 @@ public class Login extends RoboActivity {
     	String email = this.email.getText().toString();
     	String password = this.password.getText().toString();
     	
-    	new MyTask(email, password).execute();
+    	goToProfile();
+    	
+    	//new MyTask(email, password).execute();
     }
     
     private void goToProfile(){

@@ -24,6 +24,7 @@
     <style name="LoginInput">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
         <item name="android:background">@color/login_input_background</item>
         <item name="android:textColor">@color/login_input_text</item>
         <item name="android:padding">10dp</item>
