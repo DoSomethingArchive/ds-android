@@ -1,6 +1,7 @@
 package org.dosomething.android.activities;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,6 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,23 +25,22 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.Action;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class Profile extends RoboActivity {
 	
 	private static final String TAG = "Profile";
+	private static final String DF = "MM/dd/yy";
 	
 	@Inject private LayoutInflater inflater;
-	@Inject private ImageLoader imageLoader;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.content) private LinearLayout content;
@@ -101,16 +100,16 @@ public class Profile extends RoboActivity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
 			if (v == null) {
-				v = inflater.inflate(R.layout.campaign_row, null);
+				v = inflater.inflate(R.layout.profile_campaign_row, null);
 			}
 			
 			Campaign campaign = getItem(position);
 			
-			v.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
+			TextView txtName = (TextView) v.findViewById(R.id.name);
+			txtName.setText(campaign.getName());
 			
-			ImageView imageView = (ImageView) v.findViewById(R.id.image);
-			
-			imageLoader.displayImage(campaign.getLogoUrl(), imageView);
+			TextView txtEndDate = (TextView) v.findViewById(R.id.end_date);
+			txtEndDate.setText("Ends: " + new SimpleDateFormat(DF).format(campaign.getEndDate()));
 
 			return v;
 		}
