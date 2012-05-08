@@ -23,7 +23,7 @@
 		        android:focusableInTouchMode="true"
 		        android:descendantFocusability="beforeDescendants">
 		    
-			    <EditText android:id="@+id/email" android:hint="@string/email" style="@style/LoginInput"/>
+			    <EditText android:id="@+id/username" android:hint="@string/username" style="@style/LoginInput"/>
 			    <EditText android:id="@+id/password" style="@style/LoginInput" android:hint="@string/password" android:inputType="textPassword" android:layout_marginTop="6dp"/>
 			    <Button android:onClick="logIn" style="@style/LoginButton" android:layout_marginTop="10dp" android:text="@string/log_in_upper"/>
 			    <Button android:onClick="signUp" style="@style/LoginButton" android:layout_marginTop="6dp" android:text="@string/sign_up_upper"/>

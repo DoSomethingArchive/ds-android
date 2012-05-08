@@ -176,7 +176,7 @@ public class Campaigns extends RoboActivity {
 		private void toastError(final String message) {
 			runOnUiThread(new Runnable() {
 				public void run() {
-					Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+					Toast.makeText(Campaigns.this, message, Toast.LENGTH_LONG).show();
 				}
 			});
 		}
