@@ -11,9 +11,11 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -48,7 +50,7 @@ public class CampaignPrizes extends RoboActivity {
         	list.addHeaderView(createScholarshipView(prize.getScholarship()));
         }
     	list.setAdapter(new MyAdapter(getApplicationContext(), prize.getOthers()));
-    	if(prize.getRulesUrl()!=null) {
+    	if(prize.getRulesUrl()!=null && prize.getRulesUrl().length() > 0) {
     		list.addFooterView(createRulesView(prize.getRulesUrl()));
     	}
     }
@@ -68,11 +70,18 @@ public class CampaignPrizes extends RoboActivity {
 		return v;
 	}
 	
-	private View createRulesView(String rules) {
-		View v = inflater.inflate(R.layout.prize_row, null);
+	private View createRulesView(final String rules) {
+		View v = inflater.inflate(R.layout.prize_rules, null);
 		
-		TextView header = (TextView)v.findViewById(R.id.header);
+		TextView header = (TextView)v.findViewById(R.id.text);
 		header.setText(rules);
+		
+		v.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(rules)));
+			}
+		});
 		
 		return v;
 	}
@@ -89,6 +98,10 @@ public class CampaignPrizes extends RoboActivity {
 			super(context, android.R.layout.simple_list_item_1, objects);
 		}
 		
+		@Override
+		public boolean isEnabled(int position) {
+			return false;
+		}
 
 		@Override
 		public View getView(int index, View v, ViewGroup parent) {

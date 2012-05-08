@@ -13,7 +13,7 @@
 <color name="login_input_background">#333131</color>
 <color name="login_input_text">#999898</color>
 <color name="register_label">#505050</color>
-<color name="register_background">#EFEFEF</color>
+<color name="light_background">#EFEFEF</color>
 <color name="register_disclaimer_text">#7A7C7F</color>
 <color name="profile_background">#EFEFEF</color>
 <color name="profile_no_campaigns_text">#333333</color>
@@ -23,4 +23,5 @@
 <color name="campaign_share_inner_background">#1d1d1b</color>
 <color name="campaign_share_outer_background">#1d59a1</color>
 <color name="campaign_button_background">#1d59a1</color>
+<color name="campaign_button_background_active">#164278</color>
 </resources>
