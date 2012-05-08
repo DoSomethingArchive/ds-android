@@ -14,8 +14,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,13 +43,28 @@ public class CampaignResources extends RoboActivity {
         Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
         
         list.setAdapter(new MyAdapter(getApplicationContext(), campaign.getResources()));
-    }
+        list.setOnItemClickListener(itemClickListener);
+	}
 	
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){
 		Intent answer = new Intent(context, CampaignResources.class);
 		answer.putExtra(CAMPAIGN, campaign);
 		return answer;
 	}
+	
+	private final OnItemClickListener itemClickListener = new OnItemClickListener() {
+		@Override
+		public void onItemClick(AdapterView<?> av, View v, int position,
+				long id) {
+			Resource resource = (Resource) list.getAdapter().getItem(position);
+			
+			if(resource.getLinkUrl() != null && resource.getLinkUrl().length() > 0){
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(resource.getLinkUrl()));
+				startActivity(i);
+			}
+		}
+	};
 	
 	private class MyAdapter extends ArrayAdapter<Resource> {
 
@@ -67,17 +83,6 @@ public class CampaignResources extends RoboActivity {
 			
 			TextView body = (TextView)v.findViewById(R.id.body);
 			body.setText(resource.getBody());
-			
-			if(resource.getLinkUrl()!=null) {
-				v.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Intent i = new Intent(Intent.ACTION_VIEW);
-						i.setData(Uri.parse(resource.getLinkUrl()));
-						startActivity(i);
-					}
-				});
-			}
 
 			return v;
 		}
