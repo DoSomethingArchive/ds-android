@@ -1,5 +1,6 @@
 package org.dosomething.android.activities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.dosomething.android.R;
@@ -47,7 +48,12 @@ private static final String CAMPAIGN = "campaign";
         
         list.addHeaderView(getHeader(campaign));
         
-        list.setAdapter(new MyAdapter(getApplicationContext(), campaign.getChallenges()));
+        List<Challenge> challenges = campaign.getChallenges();
+        if(challenges == null){
+        	challenges = new ArrayList<Challenge>();
+        }
+        
+        list.setAdapter(new MyAdapter(getApplicationContext(), challenges));
     }
 	
 	private View getHeader(Campaign campaign) {
