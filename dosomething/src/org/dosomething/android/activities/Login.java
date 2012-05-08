@@ -1,14 +1,11 @@
 package org.dosomething.android.activities;
 
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.transfer.Campaign;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import roboguice.activity.RoboActivity;
@@ -28,7 +25,7 @@ public class Login extends RoboActivity {
     
 	private Facebook facebook = new Facebook("105775762330");
 	
-	@InjectView(R.id.email) private EditText email;
+	@InjectView(R.id.username) private EditText username;
 	@InjectView(R.id.password) private EditText password;
 	
     @Override
@@ -38,7 +35,7 @@ public class Login extends RoboActivity {
     }
     
     public void logIn(View v){
-    	String email = this.email.getText().toString();
+    	String email = this.username.getText().toString();
     	String password = this.password.getText().toString();
     	
     	goToProfile();
@@ -101,6 +98,8 @@ public class Login extends RoboActivity {
 		private String username;
 		private String password;
 		
+		private boolean loginSuccess;
+		
 		public MyTask(String username, String password) {
 			this.username = username;
 			this.password = password;
@@ -109,21 +108,20 @@ public class Login extends RoboActivity {
 		@Override
 		protected void onSuccess() {
 			
-			
-			
-			goToProfile();
+			if(loginSuccess) {
+				goToProfile();
+			} else {
+				Toast.makeText(Login.this, getString(R.string.log_in_auth_failed), Toast.LENGTH_LONG).show();
+			}
 		}
 		
 		@Override
-		protected void onFinish() {
-			// TODO Auto-generated method stub
-			
-		}
+		protected void onFinish() { /*ignore */	}
 
 		@Override
 		protected void onError() {
-			// TODO Auto-generated method stub
 			
+			Toast.makeText(Login.this, getString(R.string.log_in_failed), Toast.LENGTH_LONG).show();
 		}
 
 		@Override
@@ -134,25 +132,18 @@ public class Login extends RoboActivity {
 			params.put("username", username);
 			params.put("password", password);
 			
-			JSONObject user = doPost(url, params).getBodyAsJSONObject().getJSONObject("user");
+			WebserviceResponse response = doPost(url, params);
 			
-			new UserContext(getApplicationContext()).setLoggedIn(user.getLong("login"));
-			
+			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
+				loginSuccess = false;
+			} else {
+				JSONObject obj = response.getBodyAsJSONObject();
+				JSONObject user = obj.getJSONObject("user");
+				String uid = user.getString("uid");
+				
+				new UserContext(getApplicationContext()).setLoggedIn(uid);
+				loginSuccess = true;
+			}
 		}
-		
-		private void toastError(final String message) {
-			runOnUiThread(new Runnable() {
-				public void run() {
-					Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-				}
-			});
-		}
-
-		private Campaign convert(JSONObject object) throws JSONException, ParseException {
-			
-			return new Campaign(object);
-		}
-		
 	}
-    
 }
