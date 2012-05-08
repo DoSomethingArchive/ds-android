@@ -124,7 +124,9 @@ public class Campaign extends RoboActivity {
 	}
 
 	private static String getOrdinalFor(int value) {
-		switch (value) {
+		int mod = value % 10;
+		
+		switch (mod) {
 		case 1:
 			return "st";
 		case 2:
