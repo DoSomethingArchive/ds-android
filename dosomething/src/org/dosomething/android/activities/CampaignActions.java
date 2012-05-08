@@ -10,22 +10,26 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class CampaignActions extends RoboActivity {
 	
 private static final String CAMPAIGN = "campaign";
 	
 	@Inject private LayoutInflater inflater;
+	@Inject private ImageLoader imageLoader;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
@@ -41,9 +45,20 @@ private static final String CAMPAIGN = "campaign";
         
         actionBar.setTitle(campaign.getName());
         
+        list.addHeaderView(getHeader(campaign));
+        
         list.setAdapter(new MyAdapter(getApplicationContext(), campaign.getChallenges()));
     }
 	
+	private View getHeader(Campaign campaign) {
+		View answer = inflater.inflate(R.layout.campaign_actions_header, null);
+		View v = answer.findViewById(R.id.image_container);
+		v.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
+		ImageView imageView = (ImageView) v.findViewById(R.id.image);
+		imageLoader.displayImage(campaign.getLogoUrl(), imageView);
+		return answer;
+	}
+
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){
 		Intent answer = new Intent(context, CampaignActions.class);
 		answer.putExtra(CAMPAIGN, campaign);
