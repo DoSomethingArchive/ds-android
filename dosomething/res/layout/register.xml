@@ -36,6 +36,8 @@
 		    <EditText android:id="@+id/email" style="@style/RegisterInput" android:inputType="textEmailAddress"/>
 		    <TextView style="@style/RegisterLabel" android:text="@string/password_upper"/>
 		    <EditText android:id="@+id/password" style="@style/RegisterInput" android:inputType="textPassword"/>
+		    <TextView style="@style/RegisterLabel" android:text="@string/confirm_password_upper"/>
+		    <EditText android:id="@+id/confirm_password" style="@style/RegisterInput" android:inputType="textPassword"/>
 		    <TextView style="@style/RegisterLabel" android:text="@string/birthday_upper"/>
 		    <EditText android:id="@+id/birthday" style="@style/RegisterInput" android:inputType="date"/>
 			
