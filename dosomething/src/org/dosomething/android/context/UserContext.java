@@ -7,7 +7,7 @@ import android.content.SharedPreferences.Editor;
 public class UserContext {
 	
 	private static final String MY_PREFS = "my_prefs";
-	private static final String ID = "user_id";
+	private static final String UID = "user_uid";
 	
 	private final Context context;
 	
@@ -17,21 +17,21 @@ public class UserContext {
 	
 	public boolean isLoggedIn(){
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
-		long id = settings.getLong(ID, -1);
-		return id != -1;
+		String uid = settings.getString(UID, null);
+		return uid != null;
 	}
 	
-	public void setLoggedIn(Long id){
+	public void setLoggedIn(String uid){
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
 		Editor editor = settings.edit();
-		editor.putLong(ID, id);
+		editor.putString(UID, uid);
 		editor.commit();
 	}
 	
 	public void clear(){
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
 		Editor editor = settings.edit();
-		editor.remove(ID);
+		editor.remove(UID);
 		editor.commit();
 	}
 }
