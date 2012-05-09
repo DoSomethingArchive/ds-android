@@ -5,15 +5,13 @@
     
     <TextView
         android:id="@+id/header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        style="@style/PrizeRowHeader" />
     <ImageView 
         android:id="@+id/image"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>
     <TextView 
         android:id="@+id/body"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        style="@style/PrizeRowBody" />
     
 </LinearLayout>

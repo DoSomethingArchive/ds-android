@@ -1,6 +1,7 @@
 package org.dosomething.android.activities;
 
 import org.dosomething.android.R;
+import org.dosomething.android.transfer.Campaign;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -13,20 +14,25 @@ import com.markupartist.android.widget.ActionBar;
 
 public class CampaignSignedUp extends RoboActivity {
 	
+	private static final String CAMPAIGN = "campaign";
+	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
+	
+	private Campaign campaign;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaign_signed_up);
         
+        campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
+        
         actionBar.setHomeAction(Campaigns.getHomeAction(this));
     }
 	
 	public void share(View v){
-		//TODO: share the main/additional-link url from campaign
 		Intent i = new Intent(android.content.Intent.ACTION_SEND);
-		i.putExtra(android.content.Intent.EXTRA_TEXT, "http://www.dosomething.org");
+		i.putExtra(android.content.Intent.EXTRA_TEXT, campaign.getAdditionalLinkUrl());
 		i.setType("text/plain");
 		startActivity(Intent.createChooser(i, getString(R.string.campaign_share_chooser)));
 	}
@@ -35,8 +41,9 @@ public class CampaignSignedUp extends RoboActivity {
 		finish();
 	}
 
-	public static Intent getIntent(Context context) {
+	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {
 		Intent answer = new Intent(context, CampaignSignedUp.class);
+		answer.putExtra(CAMPAIGN, campaign);
 		return answer;
 	}
 	

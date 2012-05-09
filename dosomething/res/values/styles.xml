@@ -193,7 +193,7 @@
     </style>
     
     <style name="CampaignButton">
-        <item name="android:background">@drawable/campaign_button_background</item>
+        <item name="android:background">@drawable/campaign_button_selector</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">bold</item>
@@ -206,7 +206,6 @@
     <style name="FaqRow">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">#fff</item>
     </style>
     <style name="FaqRowChild">
         <item name="android:layout_width">fill_parent</item>
@@ -236,7 +235,6 @@
     <style name="HowToRow">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">#fff</item>
     </style>
     <style name="HowToRowHeader">
         <item name="android:layout_width">fill_parent</item>
@@ -260,8 +258,9 @@
     <style name="ResourceRow">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">#fff</item>
+        <item name="android:padding">10dp</item>
     </style>
+    
     <style name="ResourceRowBody">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -274,7 +273,25 @@
     <style name="PrizeRow">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">#fff</item>
+    </style>
+    
+    <style name="PrizeRowHeader">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#122B7C</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:gravity">left</item>
+        <item name="android:padding">5dp</item>
+    </style>
+    <style name="PrizeRowBody">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:gravity">left</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:autoLink">all</item>
     </style>
     
     <style name="ActionRow">
@@ -315,6 +332,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16dp</item>
         <item name="android:textColor">#868686</item>
+    </style>
+    
+    <style name="PrizeRulesText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:autoLink">all</item>
+        <item name="android:textColor">#122B7C</item>
+        <item name="android:textStyle">bold</item>
     </style>
     
     <style name="WebFormRow">

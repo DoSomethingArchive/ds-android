@@ -10,13 +10,11 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -57,6 +55,11 @@ public class CampaignHowTo extends RoboActivity {
 			super(context, android.R.layout.simple_list_item_1, objects);
 		}
 		
+		@Override
+		public boolean isEnabled(int position) {
+			return false;
+		}
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;

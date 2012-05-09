@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" 
-    android:background="@color/campaign_share_outer_background"
+    android:background="@color/light_background"
     xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
 	
     <com.markupartist.android.widget.ActionBar
@@ -14,6 +14,8 @@
     <ListView android:id="@+id/list"
     	android:layout_width="fill_parent"
     	android:layout_height="0dp"
-    	android:layout_weight="1.0"/>
+    	android:layout_weight="1.0"
+    	android:clickable="false"
+    	android:cacheColorHint="@color/light_background"/>
 
 </LinearLayout>
