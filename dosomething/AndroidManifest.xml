@@ -35,6 +35,7 @@
         <activity android:name=".activities.ActionsFinder"/>
         <activity android:name=".activities.ActionsResults"/>
         <activity android:name=".activities.Project"/>
+        <activity android:name=".activities.ReportBack" android:windowSoftInputMode="adjustPan"/>
         
     </application>
 
