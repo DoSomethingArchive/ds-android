@@ -34,6 +34,8 @@ public class Campaign implements Serializable {
 	private Prize prize;
 	private List<Resource> resources;
 	private List<Challenge> challenges;
+	private WebForm reportBack;
+	private WebForm signUp;
 
 	public Campaign() {}
 	
@@ -94,6 +96,16 @@ public class Campaign implements Serializable {
 			for(int i=0; i<c.length(); i++) {
 				challenges.add(new Challenge(c.getJSONObject(i)));
 			}
+		}
+		
+		JSONObject rb = obj.optJSONObject("report-back");
+		if(rb!=null) {
+			reportBack = new WebForm(rb);
+		}
+		
+		JSONObject su = obj.optJSONObject("sign-up");
+		if(su!=null) {
+			signUp = new WebForm(su);
 		}
 	}
 	
@@ -205,4 +217,21 @@ public class Campaign implements Serializable {
 	public void setChallenges(List<Challenge> challenges) {
 		this.challenges = challenges;
 	}
+
+	public WebForm getReportBack() {
+		return reportBack;
+	}
+
+	public void setReportBack(WebForm reportBack) {
+		this.reportBack = reportBack;
+	}
+
+	public WebForm getSignUp() {
+		return signUp;
+	}
+
+	public void setSignUp(WebForm signUp) {
+		this.signUp = signUp;
+	}
+	
 }
