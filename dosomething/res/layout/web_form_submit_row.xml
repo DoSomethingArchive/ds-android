@@ -5,7 +5,7 @@
     
     <Button
         android:id="@+id/button"
-        style="@style/WebFormRowInput"
+        style="@style/WebFormRowSubmit"
         android:text="@string/go_upper" />
     
 </LinearLayout>
