@@ -99,11 +99,6 @@ public class Campaign extends RoboActivity {
 		startActivity(CampaignPrizes.getIntent(this, campaign));
 	}
 
-	public void locator(View v){
-		//Toast.makeText(this, "do locator", Toast.LENGTH_LONG).show();
-		startActivity(ReportBack.getIntent(this, campaign));
-	}
-
 	public void resources(View v){
 		startActivity(CampaignResources.getIntent(this, campaign));
 	}
