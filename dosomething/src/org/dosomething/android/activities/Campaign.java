@@ -105,7 +105,8 @@ public class Campaign extends RoboActivity {
 	}
 
 	public void locator(View v){
-		Toast.makeText(this, "do locator", Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, "do locator", Toast.LENGTH_LONG).show();
+		startActivity(ReportBack.getIntent(this, campaign));
 	}
 
 	public void resources(View v){
