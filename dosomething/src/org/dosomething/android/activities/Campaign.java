@@ -18,20 +18,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class Campaign extends RoboActivity {
-	
+
 	private static final String CAMPAIGN = "campaign";
-	
+
 	private static final int REQ_LOGIN_FOR_SIGN_UP = 111;
-	
+
 	@Inject private ImageLoader imageLoader;
-	
+
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.image) private ImageView imgLogo;
 	@InjectView(R.id.image_container) private LinearLayout llImageContainer;
@@ -40,53 +39,49 @@ public class Campaign extends RoboActivity {
 	@InjectView(R.id.howTo) private Button btnHowTo;
 	@InjectView(R.id.gallery) private Button btnGallery;
 	@InjectView(R.id.prizes) private Button btnPrizes;
-	@InjectView(R.id.locator) private Button btnLocator;
 	@InjectView(R.id.resources) private Button btnResources;
 	@InjectView(R.id.faq) private Button btnFaq;
-	
-	private org.dosomething.android.transfer.Campaign campaign;
-	
-	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.campaign);
-        
-        actionBar.setHomeAction(Campaigns.getHomeAction(this));
-        
-        campaign = (org.dosomething.android.transfer.Campaign) getIntent().getSerializableExtra(CAMPAIGN);
-        
-        actionBar.setTitle(campaign.getName());
-        
-        txtDates.setText(formatDateRange(campaign));
-        txtTeaser.setText(campaign.getTeaser());
-        
-        llImageContainer.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
-        imageLoader.displayImage(campaign.getLogoUrl(), imgLogo);
-        
-        if(!nullOrEmpty(campaign.getHowTos())){
-        	btnHowTo.setVisibility(Button.VISIBLE);
-        }
-        
-        if(campaign.getGallery() != null){
-        	btnGallery.setVisibility(Button.VISIBLE);
-        }
-        
-        if(campaign.getPrize() != null){
-        	btnPrizes.setVisibility(Button.VISIBLE);
-        }
-        
-        //TODO:  ?
-        btnLocator.setVisibility(Button.VISIBLE);
-        
-       if(!nullOrEmpty(campaign.getResources())){
-    	   btnResources.setVisibility(Button.VISIBLE);
-       }
-       
-       if(!nullOrEmpty(campaign.getFaqs())){
-    	   btnFaq.setVisibility(Button.VISIBLE);
-       }
 
-    }
+	private org.dosomething.android.transfer.Campaign campaign;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.campaign);
+
+		actionBar.setHomeAction(Campaigns.getHomeAction(this));
+
+		campaign = (org.dosomething.android.transfer.Campaign) getIntent().getSerializableExtra(CAMPAIGN);
+
+		actionBar.setTitle(campaign.getName());
+
+		txtDates.setText(formatDateRange(campaign));
+		txtTeaser.setText(campaign.getTeaser());
+
+		llImageContainer.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
+		imageLoader.displayImage(campaign.getLogoUrl(), imgLogo);
+
+		if(!nullOrEmpty(campaign.getHowTos())){
+			btnHowTo.setVisibility(Button.VISIBLE);
+		}
+
+		if(campaign.getGallery() != null){
+			btnGallery.setVisibility(Button.VISIBLE);
+		}
+
+		if(campaign.getPrize() != null){
+			btnPrizes.setVisibility(Button.VISIBLE);
+		}
+
+		if(!nullOrEmpty(campaign.getResources())){
+			btnResources.setVisibility(Button.VISIBLE);
+		}
+
+		if(!nullOrEmpty(campaign.getFaqs())){
+			btnFaq.setVisibility(Button.VISIBLE);
+		}
+
+	}
 
 	private static final boolean nullOrEmpty(List<?> list){
 		return list == null || list.isEmpty();
@@ -116,25 +111,27 @@ public class Campaign extends RoboActivity {
 	public void faq(View v){
 		startActivity(CampaignFAQ.getIntent(this, campaign));
 	}
-	
+
 	private String formatDateRange(org.dosomething.android.transfer.Campaign campaign){
 		SimpleDateFormat mf = new SimpleDateFormat("MMMMM");
-		
+
 		Calendar scal = Calendar.getInstance();
 		scal.setTime(campaign.getStartDate());
-		
+
 		Calendar ecal = Calendar.getInstance();
 		ecal.setTime(campaign.getEndDate());
-		
+
 		int sday = scal.get(Calendar.DAY_OF_MONTH);
 		int eday = ecal.get(Calendar.DAY_OF_MONTH);
-		
+
 		return mf.format(campaign.getStartDate()) + " " + sday + getOrdinalFor(sday)
 				+ "-" + mf.format(campaign.getEndDate()) + " " + eday + getOrdinalFor(eday);
 	}
 
 	private static String getOrdinalFor(int value) {
-		switch (value) {
+		int mod = value % 10;
+		
+		switch (mod) {
 		case 1:
 			return "st";
 		case 2:
@@ -145,10 +142,10 @@ public class Campaign extends RoboActivity {
 			return "th";
 		}
 	}
-	
+
 	public void signUp(View v){
 		if(new UserContext(this).isLoggedIn()){
-			startActivity(CampaignSignedUp.getIntent(this));
+			startActivity(CampaignSignedUp.getIntent(this, campaign));
 		}else{
 			startActivityForResult(new Intent(this, Login.class), REQ_LOGIN_FOR_SIGN_UP);
 		}
@@ -157,10 +154,10 @@ public class Campaign extends RoboActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		
+
 		if(requestCode == REQ_LOGIN_FOR_SIGN_UP && resultCode == RESULT_OK){
 			if(new UserContext(this).isLoggedIn()){
-				startActivity(CampaignSignedUp.getIntent(this));
+				startActivity(CampaignSignedUp.getIntent(this, campaign));
 			}
 		}
 	}
@@ -170,5 +167,5 @@ public class Campaign extends RoboActivity {
 		answer.putExtra(CAMPAIGN, campaign);
 		return answer;
 	}
-	
+
 }

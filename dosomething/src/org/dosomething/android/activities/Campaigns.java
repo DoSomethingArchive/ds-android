@@ -2,6 +2,8 @@ package org.dosomething.android.activities;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.dosomething.android.R;
@@ -162,6 +164,14 @@ public class Campaigns extends RoboActivity {
 						JSONObject object = json.getJSONObject(name);
 						campaigns.add(convert(object));
 					}
+					
+					Collections.sort(campaigns, new Comparator<Campaign>() {
+						@Override
+						public int compare(Campaign lhs, Campaign rhs) {
+							return rhs.getEndDate().compareTo(lhs.getEndDate());
+						}
+					});
+					
 				}catch(Exception e){
 					Log.e(TAG, "Failed to parse API.", e);
 					toastError("Failed to parse API.");
