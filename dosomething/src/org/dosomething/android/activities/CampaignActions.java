@@ -177,7 +177,7 @@ public class CampaignActions extends RoboActivity {
 								startActivity(CampaignSignedUp.getIntent(context, campaign));
 								break;
 							case REPORT_BACK:
-								//startActivity(new Intent(context, ReportBack.class));
+								startActivity(ReportBack.getIntent(context, campaign));
 								break;
 							case RESOURCES:
 								startActivity(CampaignResources.getIntent(context, campaign));
