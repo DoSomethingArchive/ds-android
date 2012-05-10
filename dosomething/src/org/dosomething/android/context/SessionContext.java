@@ -8,14 +8,20 @@ import org.apache.http.protocol.HttpContext;
 
 public class SessionContext {
 	
-	private final HttpContext httpContext;
+	private HttpContext httpContext;
 	
 	public SessionContext(){
+		init();
+	}
+	
+	private void init(){
 		this.httpContext = new BasicHttpContext();
-		
 		CookieStore cookieStore = new BasicCookieStore();
-		
 		this.httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+	}
+	
+	public void clear(){
+		init();
 	}
 
 	public HttpContext getHttpContext() {
