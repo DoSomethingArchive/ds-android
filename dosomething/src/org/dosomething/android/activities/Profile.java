@@ -71,6 +71,7 @@ public class Profile extends RoboActivity {
 		@Override
 		public void performAction(View view) {
 			new UserContext(Profile.this).clear();
+			sessionContext.clear();
 			startActivity(new Intent(getApplicationContext(), Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		}
 		
