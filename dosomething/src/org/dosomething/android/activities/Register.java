@@ -180,21 +180,11 @@ public class Register extends RoboActivity {
 			WebserviceResponse response = doPost(url, params);
 			
 			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
-				JSONObject obj = response.getBodyAsJSONObject();
-				JSONObject formErrors = obj.getJSONObject("form_errors");
 				
-				StringBuilder message = new StringBuilder();
-				JSONArray names = formErrors.names();
-				for(int i=0; i<names.length(); i++) {
-					String htmlError = formErrors.getString(names.getString(i));
-					String plainText = Html.fromHtml(htmlError).toString();
-					message.append(plainText);
-					if(i+1<names.length()) {
-						message.append("\n");
-					}
+				validationMessage = response.extractFormErrorsAsMessage();
+				if(validationMessage==null) {
+					getString(R.string.auth_failed);
 				}
-				validationMessage = message.toString();
-				
 				registerSuccess = false;
 			} else {
 				JSONObject obj = response.getBodyAsJSONObject();

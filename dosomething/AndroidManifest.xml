@@ -36,6 +36,7 @@
         <activity android:name=".activities.ActionsResults"/>
         <activity android:name=".activities.Project"/>
         <activity android:name=".activities.ReportBack" android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activities.SignUp" android:windowSoftInputMode="adjustPan"/>
         
     </application>
 
