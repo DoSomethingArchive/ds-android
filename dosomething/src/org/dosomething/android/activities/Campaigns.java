@@ -1,19 +1,13 @@
 package org.dosomething.android.activities;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.dosomething.android.R;
+import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
-import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.transfer.Campaign;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -21,7 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +23,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
@@ -42,12 +34,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class Campaigns extends RoboActivity {
 	
-	private static final String TAG = "Campaigns";
+	//private static final String TAG = "Campaigns";
 	private static final int REQ_LOGIN_FOR_PROFILE = 112;
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
 	@Inject private SessionContext sessionContext;
+	@Inject private Cache cache;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
@@ -121,87 +114,23 @@ public class Campaigns extends RoboActivity {
 		public void performAction(View view) { /* ignore*/ }
 	}
 	
-	private class MyTask extends AbstractWebserviceTask {
+	private class MyTask extends AbstractFetchCampaignsTask {
 
 		public MyTask() {
-			super(sessionContext);
-		}
-
-		private List<Campaign> campaigns;
-		
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
+			super(sessionContext, cache, actionBar);
 		}
 
 		@Override
 		protected void onSuccess() {
 			list.setOnItemClickListener(itemClickListener);
-			list.setAdapter(new MyAdapter(getApplicationContext(), campaigns));
-		}
-
-		@Override
-		protected void onFinish() {
-			actionBar.setProgressBarVisibility(ProgressBar.GONE);
+			list.setAdapter(new MyAdapter(getApplicationContext(), getCampaigns()));
 		}
 
 		@Override
 		protected void onError() {
-		
+			Toast.makeText(Campaigns.this, "Unable to list campaigns", Toast.LENGTH_LONG).show();
 		}
 
-		@Override
-		protected void doWebOperation() throws Exception {
-			String url = API_URL + "?q=campaigns";
-			
-			//String url = "http://dl.dropbox.com/u/15016480/campaigns.json";
-			
-			try{
-				JSONObject json = doGet(url).getBodyAsJSONObject();
-				
-				try{
-					JSONArray names = json.names();
-					
-					campaigns = new ArrayList<Campaign>();
-					
-					for(int i = 0; i < names.length(); i++){
-						String name = names.getString(i); 
-						JSONObject object = json.getJSONObject(name);
-						campaigns.add(convert(object));
-					}
-					
-					Collections.sort(campaigns, new Comparator<Campaign>() {
-						@Override
-						public int compare(Campaign lhs, Campaign rhs) {
-							return rhs.getEndDate().compareTo(lhs.getEndDate());
-						}
-					});
-					
-				}catch(Exception e){
-					Log.e(TAG, "Failed to parse API.", e);
-					toastError("Failed to parse API.");
-				}
-				
-			}catch(Exception e){
-				Log.e(TAG, "Failed to download API.", e);
-				toastError("Failed to download API.");
-			}
-		}
-		
-		private void toastError(final String message) {
-			runOnUiThread(new Runnable() {
-				public void run() {
-					Toast.makeText(Campaigns.this, message, Toast.LENGTH_LONG).show();
-				}
-			});
-		}
-
-		private Campaign convert(JSONObject object) throws JSONException, ParseException {
-			
-			return new Campaign(object);
-		}
-		
 	}
 
 	private class MyAdapter extends ArrayAdapter<Campaign> {
