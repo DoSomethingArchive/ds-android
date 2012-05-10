@@ -11,6 +11,8 @@ import org.json.JSONObject;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -32,10 +34,14 @@ public class Login extends RoboActivity {
 	
 	@Inject private SessionContext sessionContext;
 	
+	private Context context;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        
+        context = this;
     }
     
     public void logIn(View v){
@@ -104,10 +110,18 @@ public class Login extends RoboActivity {
 		
 		private boolean loginSuccess;
 		
+		private ProgressDialog pd;
+		
 		public MyTask(String username, String password) {
 			super(sessionContext);
 			this.username = username;
 			this.password = password;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			pd = ProgressDialog.show(context, null, getString(R.string.logging_in));
 		}
 
 		@Override
@@ -121,7 +135,9 @@ public class Login extends RoboActivity {
 		}
 		
 		@Override
-		protected void onFinish() { /*ignore */	}
+		protected void onFinish() {
+			pd.dismiss();
+		}
 
 		@Override
 		protected void onError() {
