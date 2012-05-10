@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.dosomething.android.R;
+import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
@@ -43,6 +44,7 @@ public class Profile extends RoboActivity {
 	private static final String DF = "MM/dd/yy";
 	
 	@Inject private LayoutInflater inflater;
+	@Inject private SessionContext sessionContext;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.content) private LinearLayout content;
@@ -121,6 +123,10 @@ public class Profile extends RoboActivity {
 	private class MyTask extends AbstractWebserviceTask {
 
 		private List<Campaign> campaigns;
+		
+		public MyTask(){
+			super(sessionContext);
+		}
 		
 		@Override
 		protected void onPreExecute() {

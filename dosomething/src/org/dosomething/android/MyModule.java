@@ -1,5 +1,7 @@
 package org.dosomething.android;
 
+import org.dosomething.android.context.SessionContext;
+
 import android.content.Context;
 
 import com.google.inject.AbstractModule;
@@ -40,6 +42,7 @@ public class MyModule extends AbstractModule {
 		//imageLoader.init(ImageLoaderConfiguration.createDefault(context));
 		
 		bind(ImageLoader.class).toInstance(imageLoader);
+		bind(SessionContext.class).toInstance(new SessionContext());
 	}
 
 }

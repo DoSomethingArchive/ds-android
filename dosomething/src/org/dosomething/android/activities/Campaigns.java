@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.dosomething.android.R;
+import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
@@ -46,6 +47,7 @@ public class Campaigns extends RoboActivity {
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
+	@Inject private SessionContext sessionContext;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
@@ -120,6 +122,10 @@ public class Campaigns extends RoboActivity {
 	}
 	
 	private class MyTask extends AbstractWebserviceTask {
+
+		public MyTask() {
+			super(sessionContext);
+		}
 
 		private List<Campaign> campaigns;
 		
