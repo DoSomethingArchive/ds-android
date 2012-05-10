@@ -8,6 +8,7 @@
     <string name="log_in_failed">Login failed. Please try again.</string>
     <string name="register_failed">Registration failed. Please try again.</string>
     <string name="confirm_password_failed">The passwords entered do not match.</string>
+    <string name="auth_failed">User authentication has failed.</string>
     <string name="log_in_upper">LOG IN</string>
     <string name="sign_up_upper">BECOME A MEMBER</string>
     <string name="go_upper">GO</string>
@@ -34,6 +35,7 @@
     <string name="campaign_gallery_title">Gallery</string>
     <string name="campaign_prizes_title">Prizes</string>
     <string name="report_back_title">Tell Us</string>
+    <string name="sign_up_title">Sign Up</string>
     <string name="campaign_faq_title">FAQ</string>
     <string name="campaign_resources_title">Resources</string>
     

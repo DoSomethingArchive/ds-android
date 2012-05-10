@@ -26,10 +26,12 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.context.SessionContext;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.text.Html;
 import android.util.Log;
 
 public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean>{
@@ -109,7 +111,17 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		request.addHeader("Accept-Encoding", ACCEPT_GZIP);
 		request.addHeader("Content-type", contentType);
 		request.addHeader("User-Agent", UA);
-
+		
+		BufferedInputStream bis = new BufferedInputStream(entity.getContent());
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		int result = bis.read();
+		while(result != -1) {
+			byte b = (byte)result;
+			buf.write(b);
+			result = bis.read();
+		}
+		Log.d(TAG, "request="+buf.toString("UTF-8"));
+		
 		request.setEntity(entity);
 
 		HttpResponse response = client.execute(request, sessionContext.getHttpContext());
@@ -250,11 +262,39 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 			JSONObject answer = null;
 
 			String body = getBodyAsString();
-			if(body!=null && body.length() > 0){
-				answer = new JSONObject(body);
+			if(body!=null && body.length() > 0) {
+				if(body.equals("null")) {
+					Log.w(TAG, "Webserice response body = 'null'");
+				} else {
+					answer = new JSONObject(body);
+				}
 			}
 			
 			return answer;
+		}
+		
+		public String extractFormErrorsAsMessage() throws JSONException, IOException {
+			JSONObject obj = getBodyAsJSONObject();
+			if(obj==null) {
+				return null;
+			}
+			
+			JSONObject formErrors = obj.optJSONObject("form_errors");
+			if(formErrors==null) {
+				return null;
+			}
+			
+			StringBuilder message = new StringBuilder();
+			JSONArray names = formErrors.names();
+			for(int i=0; i<names.length(); i++) {
+				String htmlError = formErrors.getString(names.getString(i));
+				String plainText = Html.fromHtml(htmlError).toString();
+				message.append(plainText);
+				if(i+1<names.length()) {
+					message.append("\n");
+				}
+			}
+			return message.toString();
 		}
 
 		public int getStatusCode() {

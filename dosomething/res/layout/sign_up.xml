@@ -9,7 +9,7 @@
     <com.markupartist.android.widget.ActionBar
         android:id="@+id/actionbar"
         style="@style/ActionBar"
-        app:title="@string/report_back_title" />
+        app:title="@string/sign_up_title" />
 	
     <ListView android:id="@+id/list"
     	style="@style/WebFormList"/>

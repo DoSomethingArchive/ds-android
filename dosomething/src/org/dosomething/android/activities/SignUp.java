@@ -8,16 +8,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class ReportBack extends AbstractWebForm {
+public class SignUp extends AbstractWebForm {
 	
 	private static final String CAMPAIGN = "campaign";
 	
 	private WebForm webForm;
 	
+	protected int getContentViewResourceId() {
+		return R.layout.sign_up;
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
-		webForm = campaign.getReportBack();
+		webForm = campaign.getSignUp();
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -26,12 +30,15 @@ public class ReportBack extends AbstractWebForm {
 		return webForm;
 	}
 	
-	protected int getContentViewResourceId() {
-		return R.layout.report_back;
+	@Override
+	protected void onSubmitSuccess() {
+		
+		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
+		startActivity(CampaignActions.getIntent(this, campaign));
 	}
 	
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){
-		Intent answer = new Intent(context, ReportBack.class);
+		Intent answer = new Intent(context, SignUp.class);
 		answer.putExtra(CAMPAIGN, campaign);
 		return answer;
 	}

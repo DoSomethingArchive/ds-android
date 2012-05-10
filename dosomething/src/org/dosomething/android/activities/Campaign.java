@@ -140,7 +140,7 @@ public class Campaign extends RoboActivity {
 
 	public void signUp(View v){
 		if(new UserContext(this).isLoggedIn()){
-			startActivity(CampaignSignedUp.getIntent(this, campaign));
+			startActivity(SignUp.getIntent(this, campaign));
 		}else{
 			startActivityForResult(new Intent(this, Login.class), REQ_LOGIN_FOR_SIGN_UP);
 		}
