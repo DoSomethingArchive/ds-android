@@ -10,24 +10,24 @@ import org.dosomething.android.R;
 import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import com.google.inject.Inject;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.Context;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.inject.Inject;
 
 public class Register extends RoboActivity {
 	
@@ -46,10 +46,14 @@ public class Register extends RoboActivity {
 	
 	private Date savedBirthday;
 	
+	private Context context;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
+        
+        context = this;
         
         birthday.setOnFocusChangeListener(birthdayFocusListener);
         birthday.setOnClickListener(birthdayClickListener);
@@ -122,6 +126,8 @@ public class Register extends RoboActivity {
 		private boolean registerSuccess;
 		private String validationMessage;
 		
+		private ProgressDialog pd;
+		
 		public MyTask(String username, String mobile, String first, String last, String email, String password, String birthday) {
 			super(sessionContext);
 			this.username = username;
@@ -130,6 +136,12 @@ public class Register extends RoboActivity {
 			this.email = email;
 			this.password = password;
 			this.birthday = birthday;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			pd = ProgressDialog.show(context, null, getString(R.string.registering));
 		}
 
 		@Override
@@ -151,8 +163,7 @@ public class Register extends RoboActivity {
 		
 		@Override
 		protected void onFinish() {
-			// TODO Auto-generated method stub
-			
+			pd.dismiss();
 		}
 
 		@Override
