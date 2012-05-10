@@ -103,6 +103,10 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 	}
 	
 	public WebserviceResponse doPost(String url, StringEntity entity, String contentType) throws IOException, JSONException{
+		
+		//java.util.logging.Logger.getLogger("org.apache.http.wire").setLevel(java.util.logging.Level.FINEST);
+		//java.util.logging.Logger.getLogger("org.apache.http.headers").setLevel(java.util.logging.Level.FINEST);
+		
 		HttpEntityEnclosingRequestBase request = new HttpPost(url);
 
 		HttpClient client = new DefaultHttpClient();
@@ -111,16 +115,6 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		request.addHeader("Accept-Encoding", ACCEPT_GZIP);
 		request.addHeader("Content-type", contentType);
 		request.addHeader("User-Agent", UA);
-		
-		BufferedInputStream bis = new BufferedInputStream(entity.getContent());
-		ByteArrayOutputStream buf = new ByteArrayOutputStream();
-		int result = bis.read();
-		while(result != -1) {
-			byte b = (byte)result;
-			buf.write(b);
-			result = bis.read();
-		}
-		Log.d(TAG, "request="+buf.toString("UTF-8"));
 		
 		request.setEntity(entity);
 
