@@ -41,7 +41,7 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 
 			String url = API_URL + "?q=campaigns";
 
-			//String url = "http://dl.dropbox.com/u/15016480/campaigns.json";
+			//String url = "http://dl.dropbox.com/u/35637124/json.txt";
 
 			JSONObject json = doGet(url).getBodyAsJSONObject();
 

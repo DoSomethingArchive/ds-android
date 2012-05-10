@@ -1,6 +1,8 @@
 package org.dosomething.android.activities;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,12 +22,15 @@ import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Base64OutputStream;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -92,8 +97,13 @@ public abstract class AbstractWebForm extends RoboActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode==PICK_IMAGE_REQUEST && pendingImageResult!=null) {
-			Uri targetUri = data.getData();
-			pendingImageResult.setSelectedImage(targetUri.getPath());
+			Uri uri = data.getData();
+			String[] projection = { MediaStore.Images.Media.DATA };
+            Cursor cursor = managedQuery(uri, projection, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+			pendingImageResult.setSelectedImage(path);
 		}
 	}
 	
@@ -107,8 +117,26 @@ public abstract class AbstractWebForm extends RoboActivity {
 	
 	private void onSubmitClick() {
 		
-		
-		nextFileUploadOrSubmit();
+		if(validateRequired()) {
+			nextFileUploadOrSubmit();
+		}
+	}
+	
+	private boolean validateRequired() {
+		boolean answer = true;
+		for(WebFormFieldBinding binding : fields) {
+			if(binding.getWebFormField().isRequired() && binding.getValue().trim().length()==0) {
+				new AlertDialog.Builder(AbstractWebForm.this)
+					.setMessage(getString(R.string.required_field, binding.getWebFormField().getLabel()))
+					.setCancelable(false)
+					.setPositiveButton(getString(R.string.ok_upper), null)
+					.create()
+					.show();
+				answer = false;
+				break;
+			}
+		}
+		return answer;
 	}
 	
 	private void nextFileUploadOrSubmit() {
@@ -188,6 +216,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 					}
 					Spinner spinner = (Spinner)view.findViewById(R.id.field);
 					spinner.setAdapter(new ArrayAdapter<String>(AbstractWebForm.this, android.R.layout.simple_spinner_item, options));
+					break;
 				}
 				case R.layout.web_form_image_row : {
 					Button button = (Button)view.findViewById(R.id.field);
@@ -196,6 +225,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 							AbstractWebForm.this.onBeginImageActivity(WebFormFieldBinding.this);
 						}
 					});
+					break;
 				}
 			}
 		}
@@ -231,13 +261,16 @@ public abstract class AbstractWebForm extends RoboActivity {
 				case R.layout.web_form_select_row: {
 					Spinner field = (Spinner)view.findViewById(R.id.field);
 					answer = webFormField.getSelectOptions().get(field.getSelectedItemPosition()).getValue();
+					break;
 				}
 				case R.layout.web_form_image_row: {
 					answer = uploadFid;
+					break;
 				}
 				default: {
 					EditText field = (EditText)view.findViewById(R.id.field);
 					answer = field.getText().toString();
+					break;
 				}
 			}
 			
@@ -308,8 +341,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 		protected void doWebOperation() throws Exception {
 			String url = "http://www.dosomething.org/?q=rest/file.json";
 			
-			Bitmap bitmap = BitmapFactory.decodeFile(path);
-			bitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, false);
+			Bitmap bitmap = getCompressedBitmap(path, 600);
 			
 			ByteArrayOutputStream byteos = new ByteArrayOutputStream();
 			Base64OutputStream baseos = new Base64OutputStream(byteos, Base64.DEFAULT);
@@ -318,17 +350,44 @@ public abstract class AbstractWebForm extends RoboActivity {
 			
 			Map<String,String> params = new HashMap<String, String>();
 			params.put("file", byteos.toString("UTF-8"));
-			params.put("filename", path);
+			params.put("filename", new File(path).getName());
 			
 			WebserviceResponse response = doPost(url, params);
 			
 			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
+				Log.e("asdf", "response="+response.getBodyAsString());
 				uploadSuccess = false;
 			} else {
 				JSONObject obj = response.getBodyAsJSONObject();
 				fid = obj.getString("fid");
 				uploadSuccess = true;
 			}
+		}
+		
+		public Bitmap getCompressedBitmap(String path, int size) throws Exception {
+            Bitmap b = null;
+
+            //Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+
+            FileInputStream fis = new FileInputStream(path);
+            BitmapFactory.decodeStream(fis, null, o);
+            fis.close();
+
+            int scale = 1;
+            if (o.outHeight > size || o.outWidth > size) {
+                    scale = (int)Math.pow(2, (int) Math.round(Math.log(size / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
+            }
+
+            //Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            fis = new FileInputStream(path);
+            b = BitmapFactory.decodeStream(fis, null, o2);
+            fis.close();
+
+            return b;
 		}
 		
 	}
@@ -387,7 +446,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 				
 				validationMessage = response.extractFormErrorsAsMessage();
 				if(validationMessage==null) {
-					getString(R.string.auth_failed);
+					validationMessage = getString(R.string.auth_failed);
 				}
 				submitSuccess = false;
 			} else {
