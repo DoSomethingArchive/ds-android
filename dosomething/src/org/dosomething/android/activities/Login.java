@@ -3,9 +3,6 @@ package org.dosomething.android.activities;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.cookie.Cookie;
 import org.dosomething.android.R;
 import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
@@ -16,7 +13,6 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -143,13 +139,13 @@ public class Login extends RoboActivity {
 			
 			WebserviceResponse response = doPost(url, params);
 			
-			CookieStore cookieStore = (CookieStore) sessionContext.getHttpContext().getAttribute(ClientContext.COOKIE_STORE);
-			
-			if(cookieStore.getCookies() != null){
-				for(Cookie cookie : cookieStore.getCookies()){
-					Log.e("ME", cookie.getName() + " : " + cookie.getValue());
-				}
-			}
+//			CookieStore cookieStore = (CookieStore) sessionContext.getHttpContext().getAttribute(ClientContext.COOKIE_STORE);
+//			
+//			if(cookieStore.getCookies() != null){
+//				for(Cookie cookie : cookieStore.getCookies()){
+//					Log.e("ME", cookie.getName() + " : " + cookie.getValue());
+//				}
+//			}
 			
 			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
 				loginSuccess = false;
