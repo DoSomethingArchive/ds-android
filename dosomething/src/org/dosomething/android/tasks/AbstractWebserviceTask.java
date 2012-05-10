@@ -25,6 +25,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.dosomething.android.context.SessionContext;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,6 +46,12 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 	protected abstract void onError();
 
 	protected abstract void doWebOperation() throws Exception;
+	
+	private final SessionContext sessionContext;
+	
+	public AbstractWebserviceTask(SessionContext sessionContext){
+		this.sessionContext = sessionContext;
+	}
 
 	@Override
 	protected Boolean doInBackground(Void... params) {
@@ -73,11 +80,11 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		}
 	}
 
-	public static WebserviceResponse doPost(String url, JSONObject json) throws IOException, JSONException{
+	public WebserviceResponse doPost(String url, JSONObject json) throws IOException, JSONException{
 		return doInputRequest(new HttpPost(url), json);
 	}
 	
-	public static WebserviceResponse doPost(String url, Map<String,String> params) throws IOException, JSONException{
+	public WebserviceResponse doPost(String url, Map<String,String> params) throws IOException, JSONException{
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 		for(Entry<String,String> entry : params.entrySet()) {
 			pairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
@@ -87,13 +94,13 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		return doPost(url, entity, "application/x-www-form-urlencoded");
 	}
 	
-	public static WebserviceResponse doPost(String url, String params) throws IOException, JSONException{
+	public WebserviceResponse doPost(String url, String params) throws IOException, JSONException{
 		StringEntity entity = new StringEntity(params, "UTF-8");
 		
 		return doPost(url, entity, "application/json");
 	}
 	
-	public static WebserviceResponse doPost(String url, StringEntity entity, String contentType) throws IOException, JSONException{
+	public WebserviceResponse doPost(String url, StringEntity entity, String contentType) throws IOException, JSONException{
 		HttpEntityEnclosingRequestBase request = new HttpPost(url);
 
 		HttpClient client = new DefaultHttpClient();
@@ -105,7 +112,7 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 
 		request.setEntity(entity);
 
-		HttpResponse response = client.execute(request);
+		HttpResponse response = client.execute(request, sessionContext.getHttpContext());
 
 		int responseCode = response.getStatusLine().getStatusCode();
 
@@ -126,11 +133,11 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		return new WebserviceResponse(responseCode, is);
 	}
 
-	public static WebserviceResponse doPut(String url, JSONObject json) throws IOException, JSONException{
+	public WebserviceResponse doPut(String url, JSONObject json) throws IOException, JSONException{
 		return doInputRequest(new HttpPut(url), json);
 	}
 
-	private static WebserviceResponse doInputRequest(HttpEntityEnclosingRequestBase request, JSONObject json) throws IOException, JSONException{
+	private WebserviceResponse doInputRequest(HttpEntityEnclosingRequestBase request, JSONObject json) throws IOException, JSONException{
 
 		HttpClient client = new DefaultHttpClient();
 
@@ -143,7 +150,7 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 
 		request.setEntity(new StringEntity(requestString, "UTF-8"));
 
-		HttpResponse response = client.execute(request);
+		HttpResponse response = client.execute(request, sessionContext.getHttpContext());
 
 		int responseCode = response.getStatusLine().getStatusCode();
 
@@ -164,7 +171,7 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		return new WebserviceResponse(responseCode, is);
 	}
 
-	public static WebserviceResponse doGet(String url) throws IOException, JSONException{
+	public WebserviceResponse doGet(String url) throws IOException, JSONException{
 		HttpClient client = new DefaultHttpClient();
 
 		HttpUriRequest request = new HttpGet(url);
@@ -172,7 +179,7 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		request.addHeader("Accept-Encoding", ACCEPT_GZIP);
 		request.addHeader("User-Agent", UA);
 
-		HttpResponse response = client.execute(request);
+		HttpResponse response = client.execute(request, sessionContext.getHttpContext());
 
 		int responseCode = response.getStatusLine().getStatusCode();
 		
@@ -193,7 +200,7 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		return new WebserviceResponse(responseCode, is);
 	}
 
-	public static void doDelete(String url) throws IOException{
+	public void doDelete(String url) throws IOException{
 		HttpClient client = new DefaultHttpClient();
 
 			HttpDelete request = new HttpDelete(url);
@@ -202,7 +209,7 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 			request.addHeader("Content-type", "application/json");
 			request.addHeader("User-Agent", UA);
 
-			HttpResponse response = client.execute(request);
+			HttpResponse response = client.execute(request, sessionContext.getHttpContext());
 
 			int responseCode = response.getStatusLine().getStatusCode();
 

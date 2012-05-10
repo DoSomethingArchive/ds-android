@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.acra.util.Base64;
 import org.dosomething.android.R;
+import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.WebForm;
@@ -49,7 +50,7 @@ public class ReportBack extends RoboActivity {
 	private static final int PICK_IMAGE_REQUEST = 0xFF0;
 	
 	@Inject private LayoutInflater inflater;
-	@Inject private ImageLoader imageLoader;
+	@Inject private SessionContext sessionContext;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
@@ -272,6 +273,7 @@ public class ReportBack extends RoboActivity {
 		private String fid;
 		
 		public MyFileUpload(int fieldIndex, String path){
+			super(sessionContext);
 			this.fieldIndex = fieldIndex;
 			this.path = path;
 		}
@@ -333,6 +335,7 @@ public class ReportBack extends RoboActivity {
 		private Map<String, String> params;
 		
 		public MySubmitTask(Map<String, String> params) {
+			super(sessionContext);
 			this.params = params;
 		}
 		

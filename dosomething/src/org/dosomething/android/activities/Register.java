@@ -7,10 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.dosomething.android.R;
+import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.google.inject.Inject;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -30,6 +33,7 @@ public class Register extends RoboActivity {
 	
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
 	
+	@Inject private SessionContext sessionContext;
 	
 	@InjectView(R.id.username_name) private EditText username;
 	@InjectView(R.id.mobile) private EditText mobile;
@@ -119,6 +123,7 @@ public class Register extends RoboActivity {
 		private String validationMessage;
 		
 		public MyTask(String username, String mobile, String first, String last, String email, String password, String birthday) {
+			super(sessionContext);
 			this.username = username;
 			this.first = first;
 			this.last = last;
