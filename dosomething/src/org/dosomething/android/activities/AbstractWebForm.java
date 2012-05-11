@@ -334,7 +334,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 		@Override
 		protected void onError() {
 			new AlertDialog.Builder(AbstractWebForm.this)
-				.setMessage("upload failded")
+				.setMessage(getString(R.string.auth_failed))
 				.setCancelable(false)
 				.setPositiveButton(getString(R.string.ok_upper), null)
 				.create()
