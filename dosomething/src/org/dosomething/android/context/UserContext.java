@@ -15,6 +15,12 @@ public class UserContext {
 		this.context = context;
 	}
 	
+	public String getUserUid(){
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		String uid = settings.getString(UID, null);
+		return uid;
+	}
+	
 	public boolean isLoggedIn(){
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
 		String uid = settings.getString(UID, null);
