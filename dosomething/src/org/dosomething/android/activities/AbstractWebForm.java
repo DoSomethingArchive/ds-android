@@ -38,6 +38,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -98,12 +99,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode==PICK_IMAGE_REQUEST && pendingImageResult!=null) {
 			Uri uri = data.getData();
-			String[] projection = { MediaStore.Images.Media.DATA };
-            Cursor cursor = managedQuery(uri, projection, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            String path = cursor.getString(column_index);
-			pendingImageResult.setSelectedImage(path);
+			pendingImageResult.setSelectedImage(uri);
 		}
 	}
 	
@@ -230,8 +226,16 @@ public abstract class AbstractWebForm extends RoboActivity {
 			}
 		}
 		
-		public void setSelectedImage(String selectedImage) {
-			this.selectedImage = selectedImage;
+		public void setSelectedImage(Uri uri) {
+			String[] projection = { MediaStore.Images.Media.DATA };
+            Cursor cursor = managedQuery(uri, projection, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            this.selectedImage = path;
+            
+			ImageView image = (ImageView)view.findViewById(R.id.image);
+			image.setImageURI(uri);
 		}
 		
 		public String getUploadFid() {
