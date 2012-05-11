@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
+import org.dosomething.android.dao.MyDAO;
+import org.dosomething.android.domain.UserCampaign;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -41,6 +43,7 @@ public class Campaign extends RoboActivity {
 	@InjectView(R.id.prizes) private Button btnPrizes;
 	@InjectView(R.id.resources) private Button btnResources;
 	@InjectView(R.id.faq) private Button btnFaq;
+	@InjectView(R.id.sign_up) private Button btnSignUp;
 
 	private org.dosomething.android.transfer.Campaign campaign;
 
@@ -61,6 +64,15 @@ public class Campaign extends RoboActivity {
 		llImageContainer.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
 		imageLoader.displayImage(campaign.getLogoUrl(), imgLogo);
 
+		String userUid = new UserContext(this).getUserUid();
+		if(userUid != null){
+			UserCampaign userCampaign = new MyDAO(this).findUserCampaign(userUid, campaign.getId());
+			if(userCampaign != null){
+				btnSignUp.setEnabled(false);
+				btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
+			}
+		}
+		
 		if(!nullOrEmpty(campaign.getHowTos())){
 			btnHowTo.setVisibility(Button.VISIBLE);
 		}
@@ -139,7 +151,9 @@ public class Campaign extends RoboActivity {
 	}
 
 	public void signUp(View v){
-		if(new UserContext(this).isLoggedIn()){
+		String uid = new UserContext(this).getUserUid();
+		
+		if(uid != null){
 			startActivity(SignUp.getIntent(this, campaign));
 		}else{
 			startActivityForResult(new Intent(this, Login.class), REQ_LOGIN_FOR_SIGN_UP);
@@ -152,7 +166,7 @@ public class Campaign extends RoboActivity {
 
 		if(requestCode == REQ_LOGIN_FOR_SIGN_UP && resultCode == RESULT_OK){
 			if(new UserContext(this).isLoggedIn()){
-				startActivity(CampaignSignedUp.getIntent(this, campaign));
+				startActivity(SignUp.getIntent(this, campaign));
 			}
 		}
 	}

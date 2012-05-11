@@ -46,6 +46,7 @@
     <string name="profile_no_campaigns_button">GO FIND CAMPAIGNS</string>
     
     <string name="campaign_sign_up_button">SIGN UP!</string>
+    <string name="campaign_sign_up_button_already_signed_up">Already Signed Up</string>
     
     <string name="campaign_share_thanks">Thanks for signing up!</string>
     <string name="campaign_share_button">SHARE THIS CAMPAIGN</string>

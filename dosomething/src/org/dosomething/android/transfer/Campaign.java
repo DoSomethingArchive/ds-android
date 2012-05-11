@@ -17,6 +17,7 @@ public class Campaign implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy");
 	
+	private String id;
 	private String name;
 	private String logoUrl;
 	private Date startDate;
@@ -39,9 +40,11 @@ public class Campaign implements Serializable {
 
 	public Campaign() {}
 	
-	public Campaign(JSONObject obj) throws JSONException, ParseException {
+	public Campaign(String id, JSONObject obj) throws JSONException, ParseException {
 		
 		JSONObject co = obj.getJSONObject("campaign");
+		
+		this.id = id;
 		
 		name = co.getString("campaign-name");
 		backgroundColor = "#" + co.getString("logo-bg-color");
@@ -109,6 +112,12 @@ public class Campaign implements Serializable {
 		}
 	}
 	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}

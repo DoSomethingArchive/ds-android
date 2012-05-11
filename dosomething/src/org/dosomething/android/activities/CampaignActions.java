@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.dao.MyDAO;
+import org.dosomething.android.domain.CompletedCampaignAction;
+import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Challenge;
 
@@ -44,7 +48,11 @@ public class CampaignActions extends RoboActivity {
 	private Context context;
 	private Campaign campaign;
 	
-	private Set<ChallengeType> completedChallenges;
+	private Set<String> completedChallenges;
+	
+	private MyDAO dao;
+	
+	private UserCampaign userCampaign;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,14 +67,31 @@ public class CampaignActions extends RoboActivity {
         
         actionBar.setTitle(campaign.getName());
         
+        dao = new MyDAO(this);
+        
+        completedChallenges = new HashSet<String>();
+        
+        String userUid = new UserContext(this).getUserUid();
+        
+        userCampaign = dao.findUserCampaign(userUid, campaign.getId());
+        
+        if(userCampaign != null){
+        	for(CompletedCampaignAction action : dao.getCompletedActions(userCampaign.getId())){
+        		completedChallenges.add(action.getActionText());
+        	}
+        }
+        
         list.addHeaderView(getHeader(campaign));
-        
-        completedChallenges = new HashSet<ChallengeType>();
-        completedChallenges.add(ChallengeType.SIGN_UP);
-        
+
         List<Challenge> challenges = campaign.getChallenges();
         if(challenges == null){
         	challenges = new ArrayList<Challenge>();
+        }
+        
+        for(Challenge challenge : challenges){
+        	if("sign-up".equals(challenge.getCompletionPage())){
+        		completedChallenges.add(challenge.getText());
+        	}
         }
         
         list.setAdapter(new MyAdapter(getApplicationContext(), challenges));
@@ -129,16 +154,8 @@ public class CampaignActions extends RoboActivity {
 			
 			CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox1);
 			
-			ChallengeType type = ChallengeType.findByValue(challenge.getCompletionPage());
-			
-			boolean checked = false;
-			
-			if(type != null){
-				if(completedChallenges.contains(type)){
-					checked = true;
-				}
-			}
-			
+			boolean checked = completedChallenges.contains(challenge.getText());
+
 			checkBox.setChecked(checked);
 			
 			checkBox.setOnCheckedChangeListener(new MyCheckedChangeListener(challenge));
@@ -149,6 +166,20 @@ public class CampaignActions extends RoboActivity {
 			return v;
 		}
 		
+	}
+	
+	private synchronized void addActionCompleted(String actionText){
+		if(userCampaign != null){
+			completedChallenges.add(actionText);
+			dao.addCompletedAction(new CompletedCampaignAction(userCampaign.getId(), actionText));
+		}
+	}
+	
+	private synchronized void removeActionCompleted(String actionText){
+		if(userCampaign != null){
+			completedChallenges.remove(actionText);
+			dao.removeCompletedAction(userCampaign.getId(), actionText);
+		}
 	}
 	
 	private final class MyCheckedChangeListener implements OnCheckedChangeListener {
@@ -162,7 +193,14 @@ public class CampaignActions extends RoboActivity {
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView,
 				boolean isChecked) {
+			String text = challenge.getText();
+			
 			if(isChecked){
+				
+				if(text != null){
+					addActionCompleted(text);
+				}
+				
 				String completion = challenge.getCompletionPage();
 				if(completion != null){
 					if(completion.startsWith("http")){
@@ -193,6 +231,10 @@ public class CampaignActions extends RoboActivity {
 	
 					}
 					
+				}
+			}else{
+				if(text != null){
+					removeActionCompleted(text);
 				}
 			}
 		}

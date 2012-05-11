@@ -52,7 +52,7 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 			for(int i = 0; i < names.length(); i++){
 				String name = names.getString(i); 
 				JSONObject object = json.getJSONObject(name);
-				campaigns.add(convert(object));
+				campaigns.add(convert(name, object));
 			}
 
 			Collections.sort(campaigns, new Comparator<Campaign>() {
@@ -72,10 +72,9 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 		return this.campaigns;
 	}
 	
-	private Campaign convert(JSONObject object) throws JSONException, ParseException {
-		return new Campaign(object);
+	private Campaign convert(String id, JSONObject object) throws JSONException, ParseException {
+		return new Campaign(id, object);
 	}
-	
 	
 	@Override
 	protected void onPreExecute() {

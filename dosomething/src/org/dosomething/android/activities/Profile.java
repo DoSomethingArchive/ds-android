@@ -1,12 +1,17 @@
 package org.dosomething.android.activities;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.dosomething.android.R;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
+import org.dosomething.android.dao.MyDAO;
+import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.transfer.Campaign;
 
@@ -43,10 +48,14 @@ public class Profile extends RoboActivity {
 	
 	private ListView list;
 	
+	private Context context;
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+        
+        context = this;
         
         actionBar.addAction(logoutAction);
         
@@ -121,7 +130,21 @@ public class Profile extends RoboActivity {
 		
 		@Override
 		protected void onSuccess() {
-			List<Campaign> campaigns = getCampaigns();
+			List<Campaign> campaigns = new ArrayList<Campaign>();
+			
+			List<UserCampaign> userCampaigns = new MyDAO(context).findUserCampaigns(new UserContext(context).getUserUid());
+			
+			Set<String> userCampaignIds = new HashSet<String>();
+			
+			for(UserCampaign campaign : userCampaigns){
+				userCampaignIds.add(campaign.getCampaignId());
+			}
+			
+			for(Campaign campaign : getCampaigns()){
+				if(userCampaignIds.contains(campaign.getId())){
+					campaigns.add(campaign);
+				}
+			}
 			
 			if(campaigns.isEmpty()){
 				content.addView(inflater.inflate(R.layout.profile_no_campaigns, null));
@@ -130,7 +153,7 @@ public class Profile extends RoboActivity {
 				content.addView(list, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT, 1));
 			
 				list.setOnItemClickListener(itemClickListener);
-				list.setAdapter(new MyAdapter(getApplicationContext(), campaigns));
+				list.setAdapter(new MyAdapter(context, campaigns));
 			}
 		}
 

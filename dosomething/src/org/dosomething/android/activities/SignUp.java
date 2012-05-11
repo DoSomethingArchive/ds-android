@@ -1,6 +1,8 @@
 package org.dosomething.android.activities;
 
 import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.dao.MyDAO;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.WebForm;
 
@@ -32,8 +34,8 @@ public class SignUp extends AbstractWebForm {
 	
 	@Override
 	protected void onSubmitSuccess() {
-		
 		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
+		new MyDAO(this).setSignedUp(new UserContext(this).getUserUid(), campaign.getId());
 		startActivity(CampaignActions.getIntent(this, campaign));
 	}
 	
