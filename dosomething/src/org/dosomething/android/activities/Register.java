@@ -199,8 +199,7 @@ public class Register extends RoboActivity {
 				registerSuccess = false;
 			} else {
 				JSONObject obj = response.getBodyAsJSONObject();
-				JSONObject user = obj.getJSONObject("user");
-				new UserContext(getApplicationContext()).setLoggedIn(user.getString("uid"));
+				new UserContext(getApplicationContext()).setLoggedIn(obj.getString("uid"));
 				registerSuccess = true;
 			}
 		}

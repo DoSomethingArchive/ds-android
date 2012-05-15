@@ -10,6 +10,7 @@
     <string name="confirm_password_failed">The passwords entered do not match.</string>
     <string name="auth_failed">User authentication has failed.</string>
     <string name="facebook_auth_failed">Facebook login failed. Please try again.</string>
+    <string name="form_submit_failed">The form submit has failed . Please try again.</string>
     <string name="log_in_upper">LOG IN</string>
     <string name="sign_up_upper">BECOME A MEMBER</string>
     <string name="go_upper">GO</string>

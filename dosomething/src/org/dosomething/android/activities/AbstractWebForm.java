@@ -72,10 +72,20 @@ public abstract class AbstractWebForm extends RoboActivity {
 		
 		actionBar.setHomeAction(Campaigns.getHomeAction(this));
         
+
         fields = new ArrayList<WebFormFieldBinding>();
         for(WebFormField wff : getWebForm().getFields()) {
-			fields.add(new WebFormFieldBinding(wff));
+        	WebFormFieldBinding binding = new WebFormFieldBinding(wff);
+			fields.add(binding);
+			
+			if(savedInstanceState!=null) {
+				String formValue = savedInstanceState.getString(wff.getName());
+				if(formValue!=null) {
+					binding.setFormValue(formValue);
+				}
+			}
         }
+		
         
         View submitView = inflater.inflate(R.layout.web_form_submit_row, null);
         Button submitButton = (Button)submitView.findViewById(R.id.button);
@@ -89,6 +99,15 @@ public abstract class AbstractWebForm extends RoboActivity {
         list.setAdapter(new MyFormListAdapter(getApplicationContext(), fields));
     }
 	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		
+		for(WebFormFieldBinding binding : fields) {
+			outState.putString(binding.getWebFormField().getName(), binding.getFormValue());
+		}
+	}
+	
 	private void onBeginImageActivity(WebFormFieldBinding binding) {
 		pendingImageResult = binding;
 		Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -99,7 +118,13 @@ public abstract class AbstractWebForm extends RoboActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode==PICK_IMAGE_REQUEST && pendingImageResult!=null) {
 			Uri uri = data.getData();
-			pendingImageResult.setSelectedImage(uri);
+			String[] projection = { MediaStore.Images.Media.DATA };
+            Cursor cursor = managedQuery(uri, projection, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            
+			pendingImageResult.setSelectedImage(path);
 		}
 	}
 	
@@ -121,7 +146,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 	private boolean validateRequired() {
 		boolean answer = true;
 		for(WebFormFieldBinding binding : fields) {
-			if(binding.getWebFormField().isRequired() && binding.getValue().trim().length()==0) {
+			if(binding.getWebFormField().isRequired() && (binding.getFormValue()==null || binding.getFormValue().trim().length()==0)) {
 				new AlertDialog.Builder(AbstractWebForm.this)
 					.setMessage(getString(R.string.required_field, binding.getWebFormField().getLabel()))
 					.setCancelable(false)
@@ -160,7 +185,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 		params.put("nid", getWebForm().getNodeId());
 		
 		for(WebFormFieldBinding binding : fields) {
-			params.put(binding.getWebFormField().getName(), binding.getValue());
+			params.put(binding.getWebFormField().getName(), binding.getFormValue());
 		}
 		
 		new MySubmitTask(params).execute();
@@ -199,15 +224,20 @@ public abstract class AbstractWebForm extends RoboActivity {
 				layoutResource = R.layout.web_form_text_row;
 			}
 			
+			attatchView();
+		}
+		
+		public void attatchView() {
+			
 			view = inflater.inflate(layoutResource, null);
 			
 			TextView label = (TextView)view.findViewById(R.id.label);
-			label.setText(wff.getLabel());
+			label.setText(webFormField.getLabel());
 			
 			switch(layoutResource) {
 				case R.layout.web_form_select_row : {
 					List<String> options = new ArrayList<String>();
-					for(WebFormSelectOptions wfso : wff.getSelectOptions()) {
+					for(WebFormSelectOptions wfso : webFormField.getSelectOptions()) {
 						options.add(wfso.getLabel());
 					}
 					Spinner spinner = (Spinner)view.findViewById(R.id.field);
@@ -221,21 +251,22 @@ public abstract class AbstractWebForm extends RoboActivity {
 							AbstractWebForm.this.onBeginImageActivity(WebFormFieldBinding.this);
 						}
 					});
+					updateImagePreview();
 					break;
 				}
 			}
 		}
 		
-		public void setSelectedImage(Uri uri) {
-			String[] projection = { MediaStore.Images.Media.DATA };
-            Cursor cursor = managedQuery(uri, projection, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            String path = cursor.getString(column_index);
-            this.selectedImage = path;
-            
-			ImageView image = (ImageView)view.findViewById(R.id.image);
-			image.setImageURI(uri);
+		public void setSelectedImage(String path) {
+			selectedImage = path;	
+			updateImagePreview();
+		}
+		
+		private void updateImagePreview() {
+			if(selectedImage!=null) {
+				ImageView image = (ImageView)view.findViewById(R.id.image);
+				image.setImageURI(Uri.parse(new File(selectedImage).toString()));
+			}
 		}
 		
 		public String getUploadFid() {
@@ -258,7 +289,37 @@ public abstract class AbstractWebForm extends RoboActivity {
 			return webFormField;
 		}
 		
-		public String getValue() {
+		public void setFormValue(String value) {
+			
+			switch(layoutResource) {
+				case R.layout.web_form_select_row: {
+					Spinner field = (Spinner)view.findViewById(R.id.field);
+					int selectIndex = 0;
+					List<WebFormSelectOptions> selectOptions = webFormField.getSelectOptions();
+					for(int i=0; i<selectOptions.size(); i++) {
+						WebFormSelectOptions wfso = selectOptions.get(i);
+						if(wfso.getValue().equals(value)) {
+							selectIndex = i;
+							break;
+						}
+					}
+					field.setSelection(selectIndex);
+					break;
+				}
+				case R.layout.web_form_image_row: {
+					selectedImage = value;
+					updateImagePreview();
+					break;
+				}
+				default: {
+					EditText field = (EditText)view.findViewById(R.id.field);
+					field.setText(value);
+					break;
+				}
+			}
+		}
+		
+		public String getFormValue() {
 			
 			String answer;
 			switch(layoutResource) {
@@ -268,7 +329,11 @@ public abstract class AbstractWebForm extends RoboActivity {
 					break;
 				}
 				case R.layout.web_form_image_row: {
-					answer = uploadFid;
+					if(uploadFid==null) {
+						answer = selectedImage;
+					} else {
+						answer = uploadFid;
+					}
 					break;
 				}
 				default: {
@@ -436,7 +501,12 @@ public abstract class AbstractWebForm extends RoboActivity {
 
 		@Override
 		protected void onError() {
-		
+			new AlertDialog.Builder(AbstractWebForm.this)
+				.setMessage(getString(R.string.form_submit_failed))
+				.setCancelable(false)
+				.setPositiveButton(getString(R.string.ok_upper), null)
+				.create()
+				.show();
 		}
 
 		@Override

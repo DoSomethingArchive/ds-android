@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -152,13 +153,15 @@ public class CampaignActions extends RoboActivity {
 			
 			final Challenge challenge = (Challenge) getItem(index);
 			
+			v.setOnClickListener(new MyActionClickListener(challenge));
+			
 			CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox1);
 			
 			boolean checked = completedChallenges.contains(challenge.getText());
-
+			
 			checkBox.setChecked(checked);
 			
-			checkBox.setOnCheckedChangeListener(new MyCheckedChangeListener(challenge));
+			checkBox.setOnCheckedChangeListener(new MyActionCheckListener(challenge));
 			
 			TextView body = (TextView)v.findViewById(R.id.body);
 			body.setText(challenge.getText());
@@ -182,55 +185,21 @@ public class CampaignActions extends RoboActivity {
 		}
 	}
 	
-	private final class MyCheckedChangeListener implements OnCheckedChangeListener {
-
+	private final class MyActionCheckListener implements OnCheckedChangeListener {
+		
 		private final Challenge challenge;
 		
-		private MyCheckedChangeListener(Challenge challenge){
+		private MyActionCheckListener(Challenge challenge){
 			this.challenge = challenge;
 		}
 		
 		@Override
-		public void onCheckedChanged(CompoundButton buttonView,
-				boolean isChecked) {
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 			String text = challenge.getText();
 			
-			if(isChecked){
-				
+			if(isChecked) {
 				if(text != null){
 					addActionCompleted(text);
-				}
-				
-				String completion = challenge.getCompletionPage();
-				if(completion != null){
-					if(completion.startsWith("http")){
-						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(completion)));
-					}else{
-						
-						ChallengeType type = ChallengeType.findByValue(challenge.getCompletionPage());
-						
-						if(type != null){
-							switch(type){
-							case SIGN_UP:
-								startActivity(CampaignSignedUp.getIntent(context, campaign));
-								break;
-							case REPORT_BACK:
-								startActivity(ReportBack.getIntent(context, campaign));
-								break;
-							case RESOURCES:
-								startActivity(CampaignResources.getIntent(context, campaign));
-								break;
-							case SHARE:
-								Intent i = new Intent(android.content.Intent.ACTION_SEND);
-								i.putExtra(android.content.Intent.EXTRA_TEXT, campaign.getAdditionalLinkUrl());
-								i.setType("text/plain");
-								startActivity(Intent.createChooser(i, getString(R.string.campaign_share_chooser)));
-								break;
-							}
-						}
-	
-					}
-					
 				}
 			}else{
 				if(text != null){
@@ -238,7 +207,55 @@ public class CampaignActions extends RoboActivity {
 				}
 			}
 		}
-		
 	}
 	
+	private final class MyActionClickListener implements OnClickListener {
+
+		private final Challenge challenge;
+		
+		private MyActionClickListener(Challenge challenge){
+			this.challenge = challenge;
+		}
+		
+		@Override
+		public void onClick(View v) {
+			String text = challenge.getText();
+				
+			if(text != null){
+				addActionCompleted(text);
+			}
+			
+			String completion = challenge.getCompletionPage();
+			if(completion != null){
+				if(completion.startsWith("http")){
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(completion)));
+				}else{
+					
+					ChallengeType type = ChallengeType.findByValue(challenge.getCompletionPage());
+					
+					if(type != null){
+						switch(type){
+						case SIGN_UP:
+							startActivity(CampaignSignedUp.getIntent(context, campaign));
+							break;
+						case REPORT_BACK:
+							startActivity(ReportBack.getIntent(context, campaign));
+							break;
+						case RESOURCES:
+							startActivity(CampaignResources.getIntent(context, campaign));
+							break;
+						case SHARE:
+							Intent i = new Intent(android.content.Intent.ACTION_SEND);
+							i.putExtra(android.content.Intent.EXTRA_TEXT, campaign.getAdditionalLinkUrl());
+							i.setType("text/plain");
+							startActivity(Intent.createChooser(i, getString(R.string.campaign_share_chooser)));
+							break;
+						}
+					}
+
+				}
+				
+			}
+		}
+	}
 }
