@@ -40,7 +40,7 @@ public class MyDAO {
 		SQLHelper sql = new SQLHelper(context);
 		
 		Cursor c = sql.getReadableDatabase().query("user_campaign", new String[]{"id", "campaign_id", "uid"}, "uid = ?", new String[]{uid}, null, null, null);
-		if(c.moveToNext()){
+		while(c.moveToNext()){
 			answer.add(new UserCampaign(c));
 		}
 		

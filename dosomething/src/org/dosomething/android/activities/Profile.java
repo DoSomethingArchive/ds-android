@@ -66,7 +66,7 @@ public class Profile extends RoboActivity {
 
 		@Override
 		public int getDrawable() {
-			return R.drawable.action_bar_profile;
+			return R.drawable.action_bar_logout;
 		}
 
 		@Override
