@@ -104,8 +104,8 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 	
 	public WebserviceResponse doPost(String url, StringEntity entity, String contentType) throws IOException, JSONException{
 		
-		//java.util.logging.Logger.getLogger("org.apache.http.wire").setLevel(java.util.logging.Level.FINEST);
-		//java.util.logging.Logger.getLogger("org.apache.http.headers").setLevel(java.util.logging.Level.FINEST);
+		java.util.logging.Logger.getLogger("org.apache.http.wire").setLevel(java.util.logging.Level.FINEST);
+		java.util.logging.Logger.getLogger("org.apache.http.headers").setLevel(java.util.logging.Level.FINEST);
 		
 		HttpEntityEnclosingRequestBase request = new HttpPost(url);
 
