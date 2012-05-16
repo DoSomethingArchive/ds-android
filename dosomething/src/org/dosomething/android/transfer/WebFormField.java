@@ -15,6 +15,7 @@ public class WebFormField implements Serializable{
 	private String label;
 	private String type;
 	private String name;
+	private String selectType;
 	private boolean required;
 	private List<WebFormSelectOptions> selectOptions;
 	
@@ -25,6 +26,7 @@ public class WebFormField implements Serializable{
 		label = obj.optString("label");
 		type = obj.optString("type");
 		name = obj.optString("name");
+		selectType = obj.optString("select-type");
 		required = obj.optBoolean("required", false);
 		
 		JSONArray o = obj.optJSONArray("select-options");
@@ -74,5 +76,13 @@ public class WebFormField implements Serializable{
 
 	public void setSelectOptions(List<WebFormSelectOptions> selectOptions) {
 		this.selectOptions = selectOptions;
+	}
+
+	public String getSelectType() {
+		return selectType;
+	}
+
+	public void setSelectType(String selectType) {
+		this.selectType = selectType;
 	}
 }

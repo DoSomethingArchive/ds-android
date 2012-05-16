@@ -1,8 +1,10 @@
 package org.dosomething.android.activities;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
 import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
@@ -171,9 +173,9 @@ public class Login extends RoboActivity {
 		protected void doWebOperation() throws Exception {
 			String url = "http://www.dosomething.org/?q=rest/user/login.json";
 			
-			Map<String,String> params = new HashMap<String, String>();
-			params.put("username", username);
-			params.put("password", password);
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("username", username));
+			params.add(new BasicNameValuePair("password", password));
 			
 			WebserviceResponse response = doPost(url, params);
 			
@@ -242,8 +244,8 @@ public class Login extends RoboActivity {
 		protected void doWebOperation() throws Exception {
 			String url = "http://www.dosomething.org/?q=rest/user/fblogin.json";
 			
-			Map<String,String> params = new HashMap<String, String>();
-			params.put("access_token", accessToken);
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("access_token", accessToken));
 			
 			WebserviceResponse response = doPost(url, params);
 			

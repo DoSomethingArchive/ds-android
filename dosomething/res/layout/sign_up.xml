@@ -11,7 +11,18 @@
         style="@style/ActionBar"
         app:title="@string/sign_up_title" />
 	
-    <ListView android:id="@+id/list"
-    	style="@style/WebFormList"/>
+    <ScrollView 
+		android:orientation="vertical"
+		android:layout_weight="1.0"
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:fillViewport="true">
+    
+        <LinearLayout
+            android:id="@+id/web_form"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+			android:layout_height="wrap_content"/>
+    </ScrollView>
     
 </LinearLayout>

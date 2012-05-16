@@ -6,10 +6,11 @@
     <TextView
         android:id="@+id/label"
         style="@style/WebFormRowLabel" />
-    
-    <EditText
-        android:id="@+id/field_date"
-        style="@style/WebFormRowInput"
-        android:inputType="date" />
+
+    <LinearLayout
+        android:id="@+id/field_select_multi"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
     
 </LinearLayout>

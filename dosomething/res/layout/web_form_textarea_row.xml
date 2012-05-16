@@ -8,8 +8,9 @@
         style="@style/WebFormRowLabel" />
     
     <EditText
-        android:id="@+id/field"
+        android:id="@+id/field_textarea"
         style="@style/WebFormRowInput"
-        android:inputType="text" />
+        android:inputType="textMultiLine"
+        android:minLines="3" />
     
 </LinearLayout>

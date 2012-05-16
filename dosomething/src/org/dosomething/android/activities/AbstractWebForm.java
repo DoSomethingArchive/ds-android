@@ -7,11 +7,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.acra.util.Base64;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
 import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
@@ -25,7 +25,6 @@ import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -40,13 +39,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -55,7 +55,8 @@ import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
 
 public abstract class AbstractWebForm extends RoboActivity {
-
+	
+	private static final String TAG = "AbstractWebForm";
 	private static final String CAMPAIGN = "campaign";
 	private static final int PICK_IMAGE_REQUEST = 0xFF0;
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
@@ -64,7 +65,6 @@ public abstract class AbstractWebForm extends RoboActivity {
 	@Inject private SessionContext sessionContext;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
-	@InjectView(R.id.list) private ListView list;
 	
 	private List<WebFormFieldBinding> fields;
 	
@@ -79,21 +79,15 @@ public abstract class AbstractWebForm extends RoboActivity {
 		setContentView(getContentViewResourceId());
 		
 		actionBar.setHomeAction(Campaigns.getHomeAction(this));
-        
+		
+		LinearLayout webform = (LinearLayout)findViewById(R.id.web_form);
 
         fields = new ArrayList<WebFormFieldBinding>();
         for(WebFormField wff : getWebForm().getFields()) {
         	WebFormFieldBinding binding = new WebFormFieldBinding(wff);
 			fields.add(binding);
-			
-			if(savedInstanceState!=null) {
-				String formValue = savedInstanceState.getString(wff.getName());
-				if(formValue!=null) {
-					binding.setFormValue(formValue);
-				}
-			}
+			webform.addView(binding.getView());
         }
-		
         
         View submitView = inflater.inflate(R.layout.web_form_submit_row, null);
         Button submitButton = (Button)submitView.findViewById(R.id.button);
@@ -102,17 +96,29 @@ public abstract class AbstractWebForm extends RoboActivity {
         		onSubmitClick();
         	}
         });
-        list.addFooterView(submitView);
-        
-        list.setAdapter(new MyFormListAdapter(getApplicationContext(), fields));
+        webform.addView(submitView);
     }
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		
+		if(savedInstanceState!=null) {
+			for(WebFormFieldBinding binding : fields) {
+				ArrayList<String> formValue = savedInstanceState.getStringArrayList(binding.getWebFormField().getName());
+				if(formValue!=null) {
+					binding.setFormValue(formValue);
+				}
+	        }
+		}
+	}
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		
 		for(WebFormFieldBinding binding : fields) {
-			outState.putString(binding.getWebFormField().getName(), binding.getFormValue());
+			outState.putStringArrayList(binding.getWebFormField().getName(), (ArrayList<String>)binding.getFormValue());
 		}
 	}
 	
@@ -154,7 +160,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 	private boolean validateRequired() {
 		boolean answer = true;
 		for(WebFormFieldBinding binding : fields) {
-			if(binding.getWebFormField().isRequired() && (binding.getFormValue()==null || binding.getFormValue().trim().length()==0)) {
+			if(binding.getWebFormField().isRequired() && (binding.getFormValue().isEmpty() || binding.getFormValue().get(0).trim().length()==0)) {
 				new AlertDialog.Builder(AbstractWebForm.this)
 					.setMessage(getString(R.string.required_field, binding.getWebFormField().getLabel()))
 					.setCancelable(false)
@@ -188,12 +194,14 @@ public abstract class AbstractWebForm extends RoboActivity {
 	
 	private void submitForm() {
 		
-		Map<String, String> params = new HashMap<String, String>();
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		
-		params.put("nid", getWebForm().getNodeId());
+		params.add(new BasicNameValuePair("nid", getWebForm().getNodeId()));
 		
 		for(WebFormFieldBinding binding : fields) {
-			params.put(binding.getWebFormField().getName(), binding.getFormValue());
+			for(String value : binding.getFormValue()) {
+				params.add(new BasicNameValuePair(binding.getWebFormField().getName(), value));
+			}
 		}
 		
 		new MySubmitTask(params).execute();
@@ -220,19 +228,26 @@ public abstract class AbstractWebForm extends RoboActivity {
 			
 			String type = webFormField.getType();
 			if(type.equals("select")) {
-				layoutResource = R.layout.web_form_select_row;
+				String selectType = webFormField.getSelectType();
+				if(selectType!=null && selectType.equals("multiple")) {
+					layoutResource = R.layout.web_form_select_multi_row;
+				} else {
+					layoutResource = R.layout.web_form_select_single_row;
+				}
 			} else if(type.equals("number")) { 
 				layoutResource = R.layout.web_form_number_row;
-			} else if(type.equals("tel")) { 
-				layoutResource = R.layout.web_form_tel_row;
+			} else if(type.equals("phone") || type.equals("tel")) { 
+				layoutResource = R.layout.web_form_phone_row;
 			} else if(type.equals("email")) { 
 				layoutResource = R.layout.web_form_email_row;
 			} else if(type.equals("date")) { 
 				layoutResource = R.layout.web_form_date_row;
 			} else if(type.equals("file")) { 
 				layoutResource = R.layout.web_form_image_row;
+			} else if(type.equals("textarea")) {
+				layoutResource = R.layout.web_form_textarea_row;
 			} else {
-				layoutResource = R.layout.web_form_text_row;
+				layoutResource = R.layout.web_form_textfield_row;
 			}
 			
 			attatchView();
@@ -246,33 +261,44 @@ public abstract class AbstractWebForm extends RoboActivity {
 			label.setText(webFormField.getLabel());
 			
 			switch(layoutResource) {
-				case R.layout.web_form_select_row : {
+				case R.layout.web_form_select_single_row : {
 					List<String> options = new ArrayList<String>();
 					for(WebFormSelectOptions wfso : webFormField.getSelectOptions()) {
 						options.add(wfso.getLabel());
 					}
-					Spinner spinner = (Spinner)view.findViewById(R.id.field);
+					Spinner spinner = (Spinner)view.findViewById(R.id.field_select_single);
 					spinner.setAdapter(new ArrayAdapter<String>(AbstractWebForm.this, android.R.layout.simple_spinner_item, options));
 					break;
 				}
+				case R.layout.web_form_select_multi_row : {
+					LinearLayout layout = (LinearLayout)view.findViewById(R.id.field_select_multi);
+					for(WebFormSelectOptions wfso : webFormField.getSelectOptions()) {
+						CheckBox checkbox = new CheckBox(AbstractWebForm.this);
+						checkbox.setTextColor(R.color.web_form_checkbox_label);
+						checkbox.setText(wfso.getLabel());
+						checkbox.setTag(wfso.getValue());
+						layout.addView(checkbox, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+					}
+					break;
+				}
 				case R.layout.web_form_date_row : {
-					EditText field = (EditText)view.findViewById(R.id.field);
-//					field.setOnClickListener(new OnClickListener() {
-//						public void onClick(View v) {
-//							showBirthdayPicker();
-//						}
-//					});
+					EditText field = (EditText)view.findViewById(R.id.field_date);
+					field.setOnClickListener(new OnClickListener() {
+						public void onClick(View arg0) {
+							showDatePicker();
+						}
+					});
 					field.setOnFocusChangeListener(new OnFocusChangeListener() {
 						public void onFocusChange(View v, boolean hasFocus) {
 							if(hasFocus){
-								showBirthdayPicker();
+								showDatePicker();
 							}
 						}
 					});
 					break;
 				}
 				case R.layout.web_form_image_row : {
-					Button button = (Button)view.findViewById(R.id.field);
+					Button button = (Button)view.findViewById(R.id.button);
 					button.setOnClickListener(new OnClickListener() {
 						public void onClick(View v) {
 							AbstractWebForm.this.onBeginImageActivity(WebFormFieldBinding.this);
@@ -284,12 +310,12 @@ public abstract class AbstractWebForm extends RoboActivity {
 			}
 		}
 		
-		private void showBirthdayPicker(){
+		private void showDatePicker(){
 			if(!editDialogOpen){
 		    	new DatePickerDialog(AbstractWebForm.this, new OnDateSetListener() {
 					public void onDateSet(DatePicker datePickerView, int year, int monthOfYear, int dayOfMonth) {
 						Date date  = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
-						EditText field = (EditText)view.findViewById(R.id.field);
+						EditText field = (EditText)view.findViewById(R.id.field_date);
 						field.setText(new SimpleDateFormat(DATE_FORMAT).format(date));
 						editDialogOpen = false;
 					}
@@ -331,13 +357,14 @@ public abstract class AbstractWebForm extends RoboActivity {
 			return webFormField;
 		}
 		
-		public void setFormValue(String value) {
+		public void setFormValue(List<String> values) {
 			
 			switch(layoutResource) {
-				case R.layout.web_form_select_row: {
-					Spinner field = (Spinner)view.findViewById(R.id.field);
+				case R.layout.web_form_select_single_row: {
+					Spinner field = (Spinner)view.findViewById(R.id.field_select_single);
 					int selectIndex = 0;
 					List<WebFormSelectOptions> selectOptions = webFormField.getSelectOptions();
+					String value = values.get(0);
 					for(int i=0; i<selectOptions.size(); i++) {
 						WebFormSelectOptions wfso = selectOptions.get(i);
 						if(wfso.getValue().equals(value)) {
@@ -348,58 +375,123 @@ public abstract class AbstractWebForm extends RoboActivity {
 					field.setSelection(selectIndex);
 					break;
 				}
+				case R.layout.web_form_select_multi_row: {
+					LinearLayout layout = (LinearLayout)view.findViewById(R.id.field_select_multi);
+					for(String value : values) {
+						for(int i=0; i<layout.getChildCount(); i++) {
+							CheckBox checkbox = (CheckBox)layout.getChildAt(i);
+							if(value.equals(checkbox.getTag())) {
+								checkbox.setChecked(true);
+								break;
+							}
+						}
+					}
+					break;
+				}
 				case R.layout.web_form_image_row: {
-					selectedImage = value;
+					selectedImage = values.get(0);
 					updateImagePreview();
 					break;
 				}
-				default: {
-					EditText field = (EditText)view.findViewById(R.id.field);
-					field.setText(value);
+				case R.layout.web_form_date_row : {
+					EditText field = (EditText)view.findViewById(R.id.field_date);
+					field.setText(values.get(0));
 					break;
+				}
+				case R.layout.web_form_email_row : {
+					EditText field = (EditText)view.findViewById(R.id.field_email);
+					field.setText(values.get(0));
+					break;
+				}
+				case R.layout.web_form_number_row : {
+					EditText field = (EditText)view.findViewById(R.id.field_number);
+					field.setText(values.get(0));
+					break;
+				}
+				case R.layout.web_form_phone_row : {
+					EditText field = (EditText)view.findViewById(R.id.field_phone);
+					field.setText(values.get(0));
+					break;
+				}
+				case R.layout.web_form_textarea_row : {
+					EditText field = (EditText)view.findViewById(R.id.field_textarea);
+					field.setText(values.get(0));
+					break;
+				}
+				case R.layout.web_form_textfield_row : {
+					EditText field = (EditText)view.findViewById(R.id.field_textfield);
+					field.setText(values.get(0));
+					break;
+				}
+				default: {
+					throw new RuntimeException();
 				}
 			}
 		}
 		
-		public String getFormValue() {
+		public List<String> getFormValue() {
 			
-			String answer;
+			List<String> answer = new ArrayList<String>(1);
 			switch(layoutResource) {
-				case R.layout.web_form_select_row: {
-					Spinner field = (Spinner)view.findViewById(R.id.field);
-					answer = webFormField.getSelectOptions().get(field.getSelectedItemPosition()).getValue();
+				case R.layout.web_form_select_single_row: {
+					Spinner field = (Spinner)view.findViewById(R.id.field_select_single);
+					answer.add(webFormField.getSelectOptions().get(field.getSelectedItemPosition()).getValue());
+					break;
+				}
+				case R.layout.web_form_select_multi_row: {
+					LinearLayout layout = (LinearLayout)view.findViewById(R.id.field_select_multi);
+					for(int i=0; i<layout.getChildCount(); i++) {
+						CheckBox checkbox = (CheckBox)layout.getChildAt(i);
+						if(checkbox.isChecked()) {
+							answer.add((String)checkbox.getTag());
+						}
+					}
 					break;
 				}
 				case R.layout.web_form_image_row: {
 					if(uploadFid==null) {
-						answer = selectedImage;
+						answer.add(selectedImage);
 					} else {
-						answer = uploadFid;
+						answer.add(uploadFid);
 					}
 					break;
 				}
-				default: {
-					EditText field = (EditText)view.findViewById(R.id.field);
-					answer = field.getText().toString();
+				case R.layout.web_form_date_row : {
+					EditText field = (EditText)view.findViewById(R.id.field_date);
+					answer.add(field.getText().toString());
 					break;
+				}
+				case R.layout.web_form_email_row : {
+					EditText field = (EditText)view.findViewById(R.id.field_email);
+					answer.add(field.getText().toString());
+					break;
+				}
+				case R.layout.web_form_number_row : {
+					EditText field = (EditText)view.findViewById(R.id.field_number);
+					answer.add(field.getText().toString());
+					break;
+				}
+				case R.layout.web_form_phone_row : {
+					EditText field = (EditText)view.findViewById(R.id.field_phone);
+					answer.add(field.getText().toString());
+					break;
+				}
+				case R.layout.web_form_textarea_row : {
+					EditText field = (EditText)view.findViewById(R.id.field_textarea);
+					answer.add(field.getText().toString());
+					break;
+				}
+				case R.layout.web_form_textfield_row : {
+					EditText field = (EditText)view.findViewById(R.id.field_textfield);
+					answer.add(field.getText().toString());
+					break;
+				}
+				default: {
+					throw new RuntimeException();
 				}
 			}
 			
 			return answer;
-		}
-	}
-	
-	
-	private class MyFormListAdapter extends ArrayAdapter<WebFormFieldBinding> {
-
-		public MyFormListAdapter(Context context, List<WebFormFieldBinding> bindings){
-			super(context, android.R.layout.simple_list_item_1, bindings);
-		}
-		
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			
-			return ((WebFormFieldBinding)getItem(position)).getView();
 		}
 	}
 	
@@ -459,9 +551,9 @@ public abstract class AbstractWebForm extends RoboActivity {
 			bitmap.compress(CompressFormat.JPEG, 50, baseos);
 			
 			
-			Map<String,String> params = new HashMap<String, String>();
-			params.put("file", byteos.toString("UTF-8"));
-			params.put("filename", new File(path).getName());
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("file", byteos.toString("UTF-8")));
+			params.add(new BasicNameValuePair("filename", new File(path).getName()));
 			
 			WebserviceResponse response = doPost(url, params);
 			
@@ -505,12 +597,12 @@ public abstract class AbstractWebForm extends RoboActivity {
 	
 	private class MySubmitTask extends AbstractWebserviceTask {
 		
-		private Map<String, String> params;
+		private List<NameValuePair> params;
 		
 		private String validationMessage;
 		private boolean submitSuccess = false;
 		
-		public MySubmitTask(Map<String, String> params) {
+		public MySubmitTask(List<NameValuePair> params) {
 			super(sessionContext);
 			this.params = params;
 		}

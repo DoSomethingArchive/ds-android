@@ -1,11 +1,13 @@
 package org.dosomething.android.activities;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
 import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
@@ -16,8 +18,8 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -177,16 +179,16 @@ public class Register extends RoboActivity {
 			
 			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 			
-			Map<String,String> params = new HashMap<String, String>();
-			params.put("name", username);
-			params.put("pass", password);
-			params.put("mail", email);
-			params.put("profile_main[field_user_birthday][und][0][value][date]", birthday);
-			params.put("profile_main[field_user_official_rules][und]", "1"); // must be 1
-			params.put("profile_main[field_user_anniversary][und][0][value][date]", dateFormat.format(new Date()));
-			params.put("profile_main[field_user_first_name][und][0][value]", first);
-			params.put("profile_main[field_user_last_name][und][0][value]", last);
-			params.put("profile_main[field_user_mobile][und][0][value]", mobile);
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("name", username));
+			params.add(new BasicNameValuePair("pass", password));
+			params.add(new BasicNameValuePair("mail", email));
+			params.add(new BasicNameValuePair("profile_main[field_user_birthday][und][0][value][date]", birthday));
+			params.add(new BasicNameValuePair("profile_main[field_user_official_rules][und]", "1")); // must be 1
+			params.add(new BasicNameValuePair("profile_main[field_user_anniversary][und][0][value][date]", dateFormat.format(new Date())));
+			params.add(new BasicNameValuePair("profile_main[field_user_first_name][und][0][value]", first));
+			params.add(new BasicNameValuePair("profile_main[field_user_last_name][und][0][value]", last));
+			params.add(new BasicNameValuePair("profile_main[field_user_mobile][und][0][value]", mobile));
 			
 			WebserviceResponse response = doPost(url, params);
 			
