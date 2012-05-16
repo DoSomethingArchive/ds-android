@@ -8,7 +8,7 @@
         style="@style/WebFormRowLabel" />
     
     <EditText
-        android:id="@+id/field"
+        android:id="@+id/field_number"
         style="@style/WebFormRowInput"
         android:inputType="number" />
     

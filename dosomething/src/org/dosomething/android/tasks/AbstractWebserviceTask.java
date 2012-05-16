@@ -86,12 +86,8 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		return doInputRequest(new HttpPost(url), json);
 	}
 	
-	public WebserviceResponse doPost(String url, Map<String,String> params) throws IOException, JSONException{
-		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-		for(Entry<String,String> entry : params.entrySet()) {
-			pairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
-		}
-		StringEntity entity = new UrlEncodedFormEntity(pairs, "UTF-8");
+	public WebserviceResponse doPost(String url, List<NameValuePair> params) throws IOException, JSONException{
+		StringEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
 		
 		return doPost(url, entity, "application/x-www-form-urlencoded");
 	}

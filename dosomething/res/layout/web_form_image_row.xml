@@ -27,7 +27,7 @@
 	        android:src="@drawable/secondary_button_active" />
 
 	    <Button
-	        android:id="@+id/field"
+	        android:id="@+id/button"
 	        style="@style/WebFormRowInput"
 	        android:layout_height="wrap_content"
 	        android:layout_centerVertical="true"
