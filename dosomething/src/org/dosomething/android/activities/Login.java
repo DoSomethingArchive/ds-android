@@ -70,7 +70,7 @@ public class Login extends RoboActivity {
     
     public void facebookLogin(View v){
 
-    	facebook.authorize(this, new String[]{"email","birthday"}, REQ_FACEBOOK_LOGIN, new DialogListener(){
+    	facebook.authorize(this, new String[]{"email","user_birthday"}, REQ_FACEBOOK_LOGIN, new DialogListener(){
 
 			@Override
 			public void onComplete(Bundle values) {
