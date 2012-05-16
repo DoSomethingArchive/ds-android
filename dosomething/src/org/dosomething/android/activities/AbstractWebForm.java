@@ -3,7 +3,10 @@ package org.dosomething.android.activities;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,8 @@ import org.json.JSONObject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -34,9 +39,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -51,6 +58,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 
 	private static final String CAMPAIGN = "campaign";
 	private static final int PICK_IMAGE_REQUEST = 0xFF0;
+	private static final String DATE_FORMAT = "MM/dd/yyyy";
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private SessionContext sessionContext;
@@ -204,6 +212,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 		private WebFormField webFormField;
 		private String selectedImage;
 		private String uploadFid;
+		private boolean editDialogOpen = false;
 		
 		
 		public WebFormFieldBinding(WebFormField wff) {
@@ -218,9 +227,11 @@ public abstract class AbstractWebForm extends RoboActivity {
 				layoutResource = R.layout.web_form_tel_row;
 			} else if(type.equals("email")) { 
 				layoutResource = R.layout.web_form_email_row;
+			} else if(type.equals("date")) { 
+				layoutResource = R.layout.web_form_date_row;
 			} else if(type.equals("file")) { 
 				layoutResource = R.layout.web_form_image_row;
-			}	else {
+			} else {
 				layoutResource = R.layout.web_form_text_row;
 			}
 			
@@ -244,6 +255,22 @@ public abstract class AbstractWebForm extends RoboActivity {
 					spinner.setAdapter(new ArrayAdapter<String>(AbstractWebForm.this, android.R.layout.simple_spinner_item, options));
 					break;
 				}
+				case R.layout.web_form_date_row : {
+					EditText field = (EditText)view.findViewById(R.id.field);
+//					field.setOnClickListener(new OnClickListener() {
+//						public void onClick(View v) {
+//							showBirthdayPicker();
+//						}
+//					});
+					field.setOnFocusChangeListener(new OnFocusChangeListener() {
+						public void onFocusChange(View v, boolean hasFocus) {
+							if(hasFocus){
+								showBirthdayPicker();
+							}
+						}
+					});
+					break;
+				}
 				case R.layout.web_form_image_row : {
 					Button button = (Button)view.findViewById(R.id.field);
 					button.setOnClickListener(new OnClickListener() {
@@ -256,6 +283,21 @@ public abstract class AbstractWebForm extends RoboActivity {
 				}
 			}
 		}
+		
+		private void showBirthdayPicker(){
+			if(!editDialogOpen){
+		    	new DatePickerDialog(AbstractWebForm.this, new OnDateSetListener() {
+					public void onDateSet(DatePicker datePickerView, int year, int monthOfYear, int dayOfMonth) {
+						Date date  = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
+						EditText field = (EditText)view.findViewById(R.id.field);
+						field.setText(new SimpleDateFormat(DATE_FORMAT).format(date));
+						editDialogOpen = false;
+					}
+				}, 1995, 0, 1).show();
+		    	editDialogOpen = true;
+			}
+	    }
+		
 		
 		public void setSelectedImage(String path) {
 			selectedImage = path;	
