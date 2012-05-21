@@ -4,10 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.http.Header;
@@ -24,8 +21,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.dosomething.android.context.SessionContext;
+import org.dosomething.android.context.UserContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,10 +45,10 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 
 	protected abstract void doWebOperation() throws Exception;
 	
-	private final SessionContext sessionContext;
+	private final UserContext userContext;
 	
-	public AbstractWebserviceTask(SessionContext sessionContext){
-		this.sessionContext = sessionContext;
+	public AbstractWebserviceTask(UserContext userContext){
+		this.userContext = userContext;
 	}
 
 	@Override
@@ -112,9 +108,13 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		request.addHeader("Content-type", contentType);
 		request.addHeader("User-Agent", UA);
 		
+		if(userContext.isLoggedIn()) {
+			request.addHeader("Cookie", userContext.getSessionName()+"="+userContext.getSessionId());
+		}
+		
 		request.setEntity(entity);
 
-		HttpResponse response = client.execute(request, sessionContext.getHttpContext());
+		HttpResponse response = client.execute(request);
 
 		int responseCode = response.getStatusLine().getStatusCode();
 
@@ -147,12 +147,16 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		request.addHeader("Accept-Encoding", ACCEPT_GZIP);
 		request.addHeader("Content-type", "application/json");
 		request.addHeader("User-Agent", UA);
+		
+		if(userContext.isLoggedIn()) {
+			request.addHeader("Cookie", userContext.getSessionName()+"="+userContext.getSessionId());
+		}
 
 		String requestString = json.toString();
 
 		request.setEntity(new StringEntity(requestString, "UTF-8"));
 
-		HttpResponse response = client.execute(request, sessionContext.getHttpContext());
+		HttpResponse response = client.execute(request);
 
 		int responseCode = response.getStatusLine().getStatusCode();
 
@@ -181,7 +185,11 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		request.addHeader("Accept-Encoding", ACCEPT_GZIP);
 		request.addHeader("User-Agent", UA);
 
-		HttpResponse response = client.execute(request, sessionContext.getHttpContext());
+		if(userContext.isLoggedIn()) {
+			request.addHeader("Cookie", userContext.getSessionName()+"="+userContext.getSessionId());
+		}
+		
+		HttpResponse response = client.execute(request);
 
 		int responseCode = response.getStatusLine().getStatusCode();
 		
@@ -210,8 +218,12 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 			request.addHeader("Accept-Encoding", ACCEPT_GZIP);
 			request.addHeader("Content-type", "application/json");
 			request.addHeader("User-Agent", UA);
-
-			HttpResponse response = client.execute(request, sessionContext.getHttpContext());
+			
+			if(userContext.isLoggedIn()) {
+				request.addHeader("Cookie", userContext.getSessionName()+"="+userContext.getSessionId());
+			}
+			
+			HttpResponse response = client.execute(request);
 
 			int responseCode = response.getStatusLine().getStatusCode();
 

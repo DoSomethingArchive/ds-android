@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.dosomething.android.R;
 import org.dosomething.android.cache.Cache;
-import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.transfer.Campaign;
@@ -39,7 +38,7 @@ public class Campaigns extends RoboActivity {
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
-	@Inject private SessionContext sessionContext;
+	@Inject private UserContext userContext;
 	@Inject private Cache cache;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
@@ -117,7 +116,7 @@ public class Campaigns extends RoboActivity {
 	private class MyTask extends AbstractFetchCampaignsTask {
 
 		public MyTask() {
-			super(sessionContext, cache, actionBar);
+			super(userContext, cache, actionBar);
 		}
 
 		@Override

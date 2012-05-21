@@ -13,7 +13,7 @@ import org.acra.util.Base64;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
-import org.dosomething.android.context.SessionContext;
+import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.WebForm;
 import org.dosomething.android.transfer.WebFormField;
@@ -62,7 +62,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
 	
 	@Inject private LayoutInflater inflater;
-	@Inject private SessionContext sessionContext;
+	@Inject private UserContext userContext;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	
@@ -504,7 +504,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 		private String fid;
 		
 		public MyFileUpload(int fieldIndex, String path){
-			super(sessionContext);
+			super(userContext);
 			this.fieldIndex = fieldIndex;
 			this.path = path;
 		}
@@ -603,7 +603,7 @@ public abstract class AbstractWebForm extends RoboActivity {
 		private boolean submitSuccess = false;
 		
 		public MySubmitTask(List<NameValuePair> params) {
-			super(sessionContext);
+			super(userContext);
 			this.params = params;
 		}
 		
