@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.dosomething.android.R;
 import org.dosomething.android.cache.Cache;
-import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
 import org.dosomething.android.domain.UserCampaign;
@@ -40,7 +39,7 @@ public class Profile extends RoboActivity {
 	private static final String DF = "MM/dd/yy";
 	
 	@Inject private LayoutInflater inflater;
-	@Inject private SessionContext sessionContext;
+	@Inject private UserContext userContext;
 	@Inject private Cache cache;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
@@ -72,7 +71,7 @@ public class Profile extends RoboActivity {
 		@Override
 		public void performAction(View view) {
 			new UserContext(Profile.this).clear();
-			sessionContext.clear();
+			userContext.clear();
 			startActivity(new Intent(getApplicationContext(), Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		}
 		
@@ -125,7 +124,7 @@ public class Profile extends RoboActivity {
 	private class MyTask extends AbstractFetchCampaignsTask {
 
 		public MyTask(){
-			super(sessionContext, cache, actionBar);
+			super(userContext, cache, actionBar);
 		}
 		
 		@Override

@@ -1,7 +1,7 @@
 package org.dosomething.android;
 
 import org.dosomething.android.cache.Cache;
-import org.dosomething.android.context.SessionContext;
+import org.dosomething.android.context.UserContext;
 
 import android.content.Context;
 
@@ -43,7 +43,7 @@ public class MyModule extends AbstractModule {
 		//imageLoader.init(ImageLoaderConfiguration.createDefault(context));
 		
 		bind(ImageLoader.class).toInstance(imageLoader);
-		bind(SessionContext.class).toInstance(new SessionContext());
+		bind(UserContext.class).toInstance(new UserContext(context));
 		bind(Cache.class).toInstance(new Cache());
 	}
 

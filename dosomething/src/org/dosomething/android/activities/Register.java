@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
-import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.json.JSONObject;
@@ -22,6 +21,7 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -35,7 +35,7 @@ public class Register extends RoboActivity {
 	
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
 	
-	@Inject private SessionContext sessionContext;
+	@Inject private UserContext userContext;
 	
 	@InjectView(R.id.username_name) private EditText username;
 	@InjectView(R.id.mobile) private EditText mobile;
@@ -131,7 +131,7 @@ public class Register extends RoboActivity {
 		private ProgressDialog pd;
 		
 		public MyTask(String username, String mobile, String first, String last, String email, String password, String birthday) {
-			super(sessionContext);
+			super(userContext);
 			this.username = username;
 			this.first = first;
 			this.last = last;
@@ -201,7 +201,10 @@ public class Register extends RoboActivity {
 				registerSuccess = false;
 			} else {
 				JSONObject obj = response.getBodyAsJSONObject();
-				new UserContext(getApplicationContext()).setLoggedIn(obj.getString("uid"));
+				JSONObject user = obj.getJSONObject("user");
+				
+				userContext.setLoggedIn(username, user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
+				
 				registerSuccess = true;
 			}
 		}

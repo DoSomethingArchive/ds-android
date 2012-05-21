@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
-import org.dosomething.android.context.SessionContext;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.json.JSONObject;
@@ -40,7 +39,7 @@ public class Login extends RoboActivity {
 	@InjectView(R.id.username) private EditText username;
 	@InjectView(R.id.password) private EditText password;
 	
-	@Inject private SessionContext sessionContext;
+	@Inject private UserContext userContext;
 	
 	private Context context;
 	
@@ -132,7 +131,7 @@ public class Login extends RoboActivity {
 		private ProgressDialog pd;
 		
 		public MyLoginTask(String username, String password) {
-			super(sessionContext);
+			super(userContext);
 			this.username = username;
 			this.password = password;
 		}
@@ -194,7 +193,8 @@ public class Login extends RoboActivity {
 				JSONObject user = obj.getJSONObject("user");
 				String uid = user.getString("uid");
 				
-				new UserContext(getApplicationContext()).setLoggedIn(uid);
+				Log.d("asdf", response.getBodyAsString());
+				
 				loginSuccess = true;
 			}
 		}
@@ -209,7 +209,7 @@ public class Login extends RoboActivity {
 		private ProgressDialog pd;
 		
 		public MyFacebookLoginTask(String accessToken) {
-			super(sessionContext);
+			super(userContext);
 			this.accessToken = accessToken;
 		}
 		
@@ -260,11 +260,12 @@ public class Login extends RoboActivity {
 			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
 				loginSuccess = false;
 			} else {
+				
 				JSONObject obj = response.getBodyAsJSONObject();
 				JSONObject user = obj.getJSONObject("user");
-				String uid = user.getString("uid");
 				
-				new UserContext(getApplicationContext()).setLoggedIn(uid);
+				userContext.setLoggedIn(user.getString("name"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
+				
 				loginSuccess = true;
 			}
 		}

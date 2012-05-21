@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.dosomething.android.cache.Cache;
-import org.dosomething.android.context.SessionContext;
+import org.dosomething.android.context.UserContext;
 import org.dosomething.android.transfer.Campaign;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,8 +24,8 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 	
 	private List<Campaign> campaigns;
 	
-	public AbstractFetchCampaignsTask(SessionContext context, Cache cache, ActionBar actionBar){
-		super(context);
+	public AbstractFetchCampaignsTask(UserContext userContext, Cache cache, ActionBar actionBar){
+		super(userContext);
 		this.cache = cache;
 		this.actionBar = actionBar;
 	}
