@@ -191,9 +191,8 @@ public class Login extends RoboActivity {
 			} else {
 				JSONObject obj = response.getBodyAsJSONObject();
 				JSONObject user = obj.getJSONObject("user");
-				String uid = user.getString("uid");
 				
-				Log.d("asdf", response.getBodyAsString());
+				userContext.setLoggedIn(user.getString("name"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
 				
 				loginSuccess = true;
 			}
