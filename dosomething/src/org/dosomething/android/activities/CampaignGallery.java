@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.GalleryItem;
+import org.dosomething.android.transfer.GalleryItem.GalleryItemType;
+import org.dosomething.android.transfer.WebForm;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -14,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +42,14 @@ public class CampaignGallery extends RoboActivity {
 	
 	@Inject LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
+	@Inject private UserContext userContext;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.gridview) private GridView gridview;
 	
 	private Context context;
 	private int imagePixels;
+	private Campaign campaign;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,63 +58,29 @@ public class CampaignGallery extends RoboActivity {
         
         context = this;
         
+        campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
+        
         imagePixels = getResources().getDimensionPixelSize(R.dimen.gallery_item);
         
         actionBar.setHomeAction(Campaigns.getHomeAction(this));
         
-        List<GridItem> items = new ArrayList<CampaignGallery.GridItem>();
-        
-        for(int i = 1; i < 30; i++){
-        	items.add(new GridItem("http://placekitten.com/300/300", "http://google.com"));
-        }
-        
-        gridview.setAdapter(new MyGridAdapter(this, items));
         gridview.setOnItemClickListener(listener);
+        
+        new MyFeedTask().execute();
     }
 	
 	private OnItemClickListener listener = new OnItemClickListener() {
 
 		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-				long arg3) {
-			GridItem item = (GridItem) gridview.getAdapter().getItem(position);
-			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getTargetUrl())));
+		public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+			GalleryItem item = (GalleryItem) gridview.getAdapter().getItem(position);
+			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getUrl())));
 		}
 	};
 	
-	private class GridItem {
-		
-		private String imageUrl;
-		private String targetUrl;
-		
-		private GridItem(){}
-		
-		private GridItem(String imageUrl, String targetUrl) {
-			super();
-			this.imageUrl = imageUrl;
-			this.targetUrl = targetUrl;
-		}
+	private class MyGridAdapter extends ArrayAdapter<GalleryItem> {
 
-		public String getImageUrl() {
-			return imageUrl;
-		}
-
-		public void setImageUrl(String imageUrl) {
-			this.imageUrl = imageUrl;
-		}
-
-		public String getTargetUrl() {
-			return targetUrl;
-		}
-
-		public void setTargetUrl(String targetUrl) {
-			this.targetUrl = targetUrl;
-		}
-	}
-	
-	private class MyGridAdapter extends ArrayAdapter<GridItem> {
-
-		private MyGridAdapter(Context context, List<GridItem> items) {
+		private MyGridAdapter(Context context, List<GalleryItem> items) {
 			super(context, android.R.layout.simple_list_item_1, items);
 		}
 
@@ -119,9 +96,9 @@ public class CampaignGallery extends RoboActivity {
 				answer.setScaleType(ImageView.ScaleType.CENTER_CROP);
 			}
 			
-			GridItem item = getItem(position);
+			GalleryItem item = getItem(position);
 			
-			imageLoader.displayImage(item.getImageUrl(), answer);
+			imageLoader.displayImage(item.getThumb(), answer);
 			return answer;
 		}
 	
@@ -133,38 +110,51 @@ public class CampaignGallery extends RoboActivity {
 		return answer;
 	}
 	
-	
-	private static class GalleryItem {
+	private class MyFeedTask extends AbstractWebserviceTask {
 		
-		private String title;
-		private String link;
+		List<GalleryItem> items = new ArrayList<GalleryItem>();
 		
-		public String getTitle() {
-			return title;
+		public MyFeedTask() {
+			super(userContext);
 		}
-		public void setTitle(String title) {
-			this.title = title;
-		}
-		public String getLink() {
-			return link;
-		}
-		public void setLink(String link) {
-			this.link = link;
-		}
-	}
-	
-	private static class XMLHandler extends DefaultHandler {
-		
+
 		@Override
-		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+		protected void onSuccess() {
 			
-			
+			gridview.setAdapter(new MyGridAdapter(CampaignGallery.this, items));
 		}
-		
+
 		@Override
-		public void endElement(String uri, String localName, String qName) throws SAXException {
+		protected void onFinish() {
+			// TODO Auto-generated method stub
 			
 		}
-		
+
+		@Override
+		protected void onError() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		protected void doWebOperation() throws Exception {
+			WebForm reportback = campaign.getReportBack();
+			if(reportback==null) {
+				return;
+			}
+			String reportbackId = reportback.getNodeId();
+			
+			String url = "http://www.dosomething.org/feed/campaign_photos/" + reportbackId;
+			
+			Log.d("adsf", url);
+
+			JSONObject obj = doGet(url).getBodyAsJSONObject();
+			JSONArray projectReports = obj.getJSONArray("project_reports");
+			
+			for(int i=0; i<projectReports.length(); i++) {
+				JSONObject report = projectReports.getJSONObject(i);
+				items.add(new GalleryItem(GalleryItemType.IMAGE, report));
+			}
+		}
 	}
 }
