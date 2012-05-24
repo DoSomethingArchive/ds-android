@@ -69,16 +69,6 @@ public class Campaign extends RoboActivity {
 		llImageContainer.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
 		imageLoader.displayImage(campaign.getLogoUrl(), imgLogo);
 		
-		if(userContext.isLoggedIn()){
-			UserCampaign userCampaign = new MyDAO(this).findUserCampaign(userContext.getUserUid(), campaign.getId());
-			if(userCampaign != null){
-				btnSignUp.setEnabled(false);
-				btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
-				
-				btnActions.setVisibility(Button.VISIBLE);
-			}
-		}
-		
 		if(!nullOrEmpty(campaign.getHowTos())){
 			btnHowTo.setVisibility(Button.VISIBLE);
 		}
@@ -98,7 +88,23 @@ public class Campaign extends RoboActivity {
 		if(!nullOrEmpty(campaign.getFaqs())){
 			btnFaq.setVisibility(Button.VISIBLE);
 		}
-
+		
+		// onResume is called next
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		if(userContext.isLoggedIn()){
+			UserCampaign userCampaign = new MyDAO(this).findUserCampaign(userContext.getUserUid(), campaign.getId());
+			if(userCampaign != null){
+				btnSignUp.setEnabled(false);
+				btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
+				
+				btnActions.setVisibility(Button.VISIBLE);
+			}
+		}
 	}
 
 	private static final boolean nullOrEmpty(List<?> list){
@@ -175,7 +181,7 @@ public class Campaign extends RoboActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if(requestCode == REQ_LOGIN_FOR_SIGN_UP && resultCode == RESULT_OK){
-			if(new UserContext(this).isLoggedIn()){
+			if(userContext.isLoggedIn()){
 				startActivity(SignUp.getIntent(this, campaign));
 			}
 		}
