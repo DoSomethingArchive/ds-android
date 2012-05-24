@@ -40,8 +40,10 @@
 		    <EditText android:id="@+id/confirm_password" style="@style/RegisterInput" android:inputType="textPassword"/>
 		    <TextView style="@style/RegisterLabel" android:text="@string/birthday_upper"/>
 		    <EditText android:id="@+id/birthday" style="@style/RegisterInput" android:inputType="date"/>
-			
+		    
 		    <TextView style="@style/RegisterDisclaimer" android:text="@string/register_disclaimer"/>
+		    
+		    <TextView style="@style/RequiredInstructions" android:text="@string/required_instructions"/>
 		    
     	</LinearLayout>
     

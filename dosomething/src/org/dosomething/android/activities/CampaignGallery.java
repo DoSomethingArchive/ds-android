@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dosomething.android.R;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -130,4 +133,38 @@ public class CampaignGallery extends RoboActivity {
 		return answer;
 	}
 	
+	
+	private static class GalleryItem {
+		
+		private String title;
+		private String link;
+		
+		public String getTitle() {
+			return title;
+		}
+		public void setTitle(String title) {
+			this.title = title;
+		}
+		public String getLink() {
+			return link;
+		}
+		public void setLink(String link) {
+			this.link = link;
+		}
+	}
+	
+	private static class XMLHandler extends DefaultHandler {
+		
+		@Override
+		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+			
+			
+		}
+		
+		@Override
+		public void endElement(String uri, String localName, String qName) throws SAXException {
+			
+		}
+		
+	}
 }

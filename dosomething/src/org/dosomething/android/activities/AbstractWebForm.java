@@ -65,6 +65,8 @@ public abstract class AbstractWebForm extends RoboActivity {
 	@Inject private UserContext userContext;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
+	@InjectView(R.id.required_instructions) private TextView lblRequiredInstructions;
+	@InjectView(R.id.submit) private Button btnSubmit;
 	
 	private List<WebFormFieldBinding> fields;
 	
@@ -81,22 +83,26 @@ public abstract class AbstractWebForm extends RoboActivity {
 		actionBar.setHomeAction(Campaigns.getHomeAction(this));
 		
 		LinearLayout webform = (LinearLayout)findViewById(R.id.web_form);
-
+		
+		boolean anyRequired = false;
         fields = new ArrayList<WebFormFieldBinding>();
         for(WebFormField wff : getWebForm().getFields()) {
         	WebFormFieldBinding binding = new WebFormFieldBinding(wff);
 			fields.add(binding);
 			webform.addView(binding.getView());
+			
+			anyRequired = anyRequired || wff.isRequired();
         }
         
-        View submitView = inflater.inflate(R.layout.web_form_submit_row, null);
-        Button submitButton = (Button)submitView.findViewById(R.id.button);
-        submitButton.setOnClickListener(new OnClickListener() {
+        if(anyRequired) {
+        	lblRequiredInstructions.setVisibility(TextView.VISIBLE);
+        }
+        
+        btnSubmit.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		onSubmitClick();
         	}
         });
-        webform.addView(submitView);
     }
 	
 	@Override
@@ -258,7 +264,11 @@ public abstract class AbstractWebForm extends RoboActivity {
 			view = inflater.inflate(layoutResource, null);
 			
 			TextView label = (TextView)view.findViewById(R.id.label);
-			label.setText(webFormField.getLabel());
+			String labelText = webFormField.getLabel();
+			if(webFormField.isRequired()) {
+				labelText += " *";
+			}
+			label.setText(labelText);
 			
 			switch(layoutResource) {
 				case R.layout.web_form_select_single_row : {

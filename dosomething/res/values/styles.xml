@@ -51,6 +51,12 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+    <style name="RequiredInstructions">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textColor">@color/required_instructions_text</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
     <style name="RegisterInput">
         <item name="android:layout_marginTop">2dp</item>
         <item name="android:layout_width">fill_parent</item>

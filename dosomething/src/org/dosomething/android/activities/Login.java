@@ -31,8 +31,9 @@ import com.google.inject.Inject;
 public class Login extends RoboActivity {
 	
 	private static final String TAG = "Login";
-	private static final int REQ_SIGN_UP = 111;
 	private static final int REQ_FACEBOOK_LOGIN = 111;
+	private static final int REQ_SIGN_UP = 112;
+	
     
 	private Facebook facebook = new Facebook("105775762330");
 	
@@ -178,14 +179,6 @@ public class Login extends RoboActivity {
 			
 			WebserviceResponse response = doPost(url, params);
 			
-//			CookieStore cookieStore = (CookieStore) sessionContext.getHttpContext().getAttribute(ClientContext.COOKIE_STORE);
-//			
-//			if(cookieStore.getCookies() != null){
-//				for(Cookie cookie : cookieStore.getCookies()){
-//					Log.e("ME", cookie.getName() + " : " + cookie.getValue());
-//				}
-//			}
-			
 			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
 				loginSuccess = false;
 			} else {
@@ -247,14 +240,6 @@ public class Login extends RoboActivity {
 			params.add(new BasicNameValuePair("access_token", accessToken));
 			
 			WebserviceResponse response = doPost(url, params);
-			
-//			CookieStore cookieStore = (CookieStore) sessionContext.getHttpContext().getAttribute(ClientContext.COOKIE_STORE);
-//			
-//			if(cookieStore.getCookies() != null){
-//				for(Cookie cookie : cookieStore.getCookies()){
-//					Log.e("ME", cookie.getName() + " : " + cookie.getValue());
-//				}
-//			}
 			
 			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
 				loginSuccess = false;
