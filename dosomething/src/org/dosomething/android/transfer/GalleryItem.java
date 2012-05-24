@@ -18,12 +18,12 @@ public class GalleryItem implements Serializable {
 		
 		switch (type) {
 		case IMAGE:
-			url = obj.getString("Pictures");
-			thumb = obj.getString("field_webform_pictures_1");
+			url = obj.getString("image");
+			thumb = obj.getString("thumbnail");
 			break;
 		case VIDEO:
-			url = obj.getString("Pictures");
-			thumb = obj.getString("field_webform_pictures_1");
+			url = obj.getString("video");
+			thumb = obj.getString("thumbnail");
 			break;
 		default:
 			throw new RuntimeException();

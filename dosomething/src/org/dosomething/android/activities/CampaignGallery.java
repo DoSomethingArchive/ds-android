@@ -149,11 +149,23 @@ public class CampaignGallery extends RoboActivity {
 			Log.d("adsf", url);
 
 			JSONObject obj = doGet(url).getBodyAsJSONObject();
-			JSONArray projectReports = obj.getJSONArray("project_reports");
 			
-			for(int i=0; i<projectReports.length(); i++) {
-				JSONObject report = projectReports.getJSONObject(i);
-				items.add(new GalleryItem(GalleryItemType.IMAGE, report));
+			JSONArray imageItems = obj.optJSONArray("image_items");
+			if(imageItems!=null) {
+				for(int i=0; i<imageItems.length(); i++) {
+					JSONObject imageItemWrapper = imageItems.getJSONObject(i);
+					JSONObject imageItem = imageItemWrapper.getJSONObject("image_item");
+					items.add(new GalleryItem(GalleryItemType.IMAGE, imageItem));
+				}
+			}
+			
+			JSONArray videoItems = obj.optJSONArray("video_items");
+			if(videoItems!=null) {
+				for(int i=0; i<videoItems.length(); i++) {
+					JSONObject videoItemWrapper = videoItems.getJSONObject(i);
+					JSONObject videoItem = videoItemWrapper.getJSONObject("video_item");
+					items.add(new GalleryItem(GalleryItemType.VIDEO, videoItem));
+				}
 			}
 		}
 	}
