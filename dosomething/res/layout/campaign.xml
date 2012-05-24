@@ -38,6 +38,7 @@
                 <Button android:id="@+id/sign_up" android:onClick="signUp" style="@style/CampaignSignUpButton" android:text="@string/campaign_sign_up_button" android:background="@drawable/main_button_selector"/>
             </LinearLayout>
             
+            <Button android:id="@+id/actions" android:onClick="actions" style="@style/CampaignButton" android:visibility="gone" android:text="@string/campaign_actions"/>
             <Button android:id="@+id/howTo" android:onClick="howTo" style="@style/CampaignButton" android:visibility="gone" android:text="@string/campaign_how_to"/>
             <Button android:id="@+id/gallery" android:onClick="gallery" style="@style/CampaignButton" android:visibility="gone" android:text="@string/campaign_gallery"/>
             <Button android:id="@+id/prizes" android:onClick="prizes" style="@style/CampaignButton" android:visibility="gone" android:text="@string/campaign_prizes"/>

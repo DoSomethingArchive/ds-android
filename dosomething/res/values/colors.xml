@@ -15,6 +15,7 @@
 <color name="register_label">#505050</color>
 <color name="light_background">#EFEFEF</color>
 <color name="register_disclaimer_text">#7A7C7F</color>
+<color name="required_instructions_text">#7A7C7F</color>
 <color name="profile_background">#EFEFEF</color>
 <color name="profile_no_campaigns_text">#333333</color>
 <color name="campaign_dates_row_background">#2A2C2B</color>

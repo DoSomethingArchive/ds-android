@@ -32,12 +32,14 @@ public class Campaign extends RoboActivity {
 	private static final int REQ_LOGIN_FOR_SIGN_UP = 111;
 
 	@Inject private ImageLoader imageLoader;
+	@Inject private UserContext userContext;
 
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.image) private ImageView imgLogo;
 	@InjectView(R.id.image_container) private LinearLayout llImageContainer;
 	@InjectView(R.id.dates) private TextView txtDates;
 	@InjectView(R.id.teaser) private TextView txtTeaser;
+	@InjectView(R.id.actions) private Button btnActions;
 	@InjectView(R.id.howTo) private Button btnHowTo;
 	@InjectView(R.id.gallery) private Button btnGallery;
 	@InjectView(R.id.prizes) private Button btnPrizes;
@@ -46,11 +48,14 @@ public class Campaign extends RoboActivity {
 	@InjectView(R.id.sign_up) private Button btnSignUp;
 
 	private org.dosomething.android.transfer.Campaign campaign;
+	private Context context;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.campaign);
+		
+		context = this;
 
 		actionBar.setHomeAction(Campaigns.getHomeAction(this));
 
@@ -63,13 +68,14 @@ public class Campaign extends RoboActivity {
 
 		llImageContainer.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
 		imageLoader.displayImage(campaign.getLogoUrl(), imgLogo);
-
-		String userUid = new UserContext(this).getUserUid();
-		if(userUid != null){
-			UserCampaign userCampaign = new MyDAO(this).findUserCampaign(userUid, campaign.getId());
+		
+		if(userContext.isLoggedIn()){
+			UserCampaign userCampaign = new MyDAO(this).findUserCampaign(userContext.getUserUid(), campaign.getId());
 			if(userCampaign != null){
 				btnSignUp.setEnabled(false);
 				btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
+				
+				btnActions.setVisibility(Button.VISIBLE);
 			}
 		}
 		
@@ -99,6 +105,10 @@ public class Campaign extends RoboActivity {
 		return list == null || list.isEmpty();
 	}
 
+	public void actions(View v){
+		startActivity(CampaignActions.getIntent(this, campaign));
+	}
+	
 	public void howTo(View v){
 		startActivity(CampaignHowTo.getIntent(this, campaign));
 	}

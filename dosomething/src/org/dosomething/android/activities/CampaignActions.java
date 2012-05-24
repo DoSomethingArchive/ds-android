@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
+import com.markupartist.android.widget.ActionBar.Action;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class CampaignActions extends RoboActivity {
@@ -42,6 +43,7 @@ public class CampaignActions extends RoboActivity {
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
+	@Inject private UserContext userContext;
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
@@ -55,6 +57,18 @@ public class CampaignActions extends RoboActivity {
 	
 	private UserCampaign userCampaign;
 	
+	private final Action logoutAction = new Action(){
+		@Override
+		public int getDrawable() {
+			return R.drawable.action_bar_logout;
+		}
+		@Override
+		public void performAction(View view) {
+			userContext.clear();
+			startActivity(new Intent(getApplicationContext(), Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		}
+	};
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +77,8 @@ public class CampaignActions extends RoboActivity {
         context = this;
         
         actionBar.setHomeAction(Campaigns.getHomeAction(this));
+        
+        actionBar.addAction(logoutAction);
         
         campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
         
