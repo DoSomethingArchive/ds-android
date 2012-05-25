@@ -15,6 +15,7 @@ public class GalleryItem implements Serializable {
 	public GalleryItem() {}
 	
 	public GalleryItem(GalleryItemType type, JSONObject obj) throws JSONException {
+		this.type = type;
 		
 		switch (type) {
 		case IMAGE:
