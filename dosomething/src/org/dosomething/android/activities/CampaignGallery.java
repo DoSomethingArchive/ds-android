@@ -2,6 +2,8 @@ package org.dosomething.android.activities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
@@ -18,6 +20,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -31,6 +34,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
@@ -38,6 +42,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class CampaignGallery extends RoboActivity {
 	
+	private static final String TAG = "CampaignGallery";
 	private static final String CAMPAIGN = "campaign";
 	
 	@Inject LayoutInflater inflater;
@@ -66,15 +71,30 @@ public class CampaignGallery extends RoboActivity {
         
         gridview.setOnItemClickListener(listener);
         
-        new MyFeedTask().execute();
+        new MyFeedTask(campaign.getGallery().getFeed()).execute();
     }
 	
 	private OnItemClickListener listener = new OnItemClickListener() {
-
 		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			GalleryItem item = (GalleryItem) gridview.getAdapter().getItem(position);
-			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getUrl())));
+			switch (item.getType()) {
+			case IMAGE:
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getUrl())));
+				break;
+			case VIDEO:
+				Pattern pattern = Pattern.compile("<embed src=\"([^\"]+)\"");
+				Matcher matcher = pattern.matcher(item.getUrl());
+				if(matcher.find() && matcher.groupCount()==1) {
+					String url = matcher.group(1);
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+				} else {
+					Log.e(TAG, "embed with src could not be found.");
+				}
+				break;
+			default:
+				throw new RuntimeException();
+			}
 		}
 	};
 	
@@ -112,12 +132,19 @@ public class CampaignGallery extends RoboActivity {
 	
 	private class MyFeedTask extends AbstractWebserviceTask {
 		
-		List<GalleryItem> items = new ArrayList<GalleryItem>();
+		private String feedUrl;
+		private List<GalleryItem> items = new ArrayList<GalleryItem>();
 		
-		public MyFeedTask() {
+		public MyFeedTask(String feedUrl) {
 			super(userContext);
+			this.feedUrl = feedUrl;
 		}
-
+		
+		@Override
+		protected void onPreExecute() {
+			actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
+		}
+		
 		@Override
 		protected void onSuccess() {
 			
@@ -126,29 +153,23 @@ public class CampaignGallery extends RoboActivity {
 
 		@Override
 		protected void onFinish() {
-			// TODO Auto-generated method stub
-			
+			actionBar.setProgressBarVisibility(ProgressBar.GONE);
 		}
 
 		@Override
 		protected void onError() {
-			// TODO Auto-generated method stub
-			
+			new AlertDialog.Builder(CampaignGallery.this)
+				.setMessage(getString(R.string.gallery_feed_failed))
+				.setCancelable(false)
+				.setPositiveButton(getString(R.string.ok_upper), null)
+				.create()
+				.show();
 		}
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			WebForm reportback = campaign.getReportBack();
-			if(reportback==null) {
-				return;
-			}
-			String reportbackId = reportback.getNodeId();
-			
-			String url = "http://www.dosomething.org/feed/campaign_photos/" + reportbackId;
-			
-			Log.d("adsf", url);
 
-			JSONObject obj = doGet(url).getBodyAsJSONObject();
+			JSONObject obj = doGet(feedUrl).getBodyAsJSONObject();
 			
 			JSONArray imageItems = obj.optJSONArray("image_items");
 			if(imageItems!=null) {

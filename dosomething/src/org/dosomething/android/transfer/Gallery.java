@@ -16,8 +16,8 @@ public class Gallery implements Serializable{
 	
 	public Gallery(JSONObject obj) throws JSONException {
 		
-		//type = obj.getString("type");
-		//feed = obj.getString("feed");
+		type = obj.getString("type");
+		feed = obj.getString("feed");
 		
 	}
 
