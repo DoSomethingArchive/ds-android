@@ -14,7 +14,6 @@ import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.transfer.Campaign;
 
-import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +32,7 @@ import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.Action;
 
-public class Profile extends RoboActivity {
+public class Profile extends AbstractActivity {
 	
 	//private static final String TAG = "Profile";
 	private static final String DF = "MM/dd/yy";
@@ -48,6 +47,11 @@ public class Profile extends RoboActivity {
 	private ListView list;
 	
 	private Context context;
+	
+	@Override
+	protected String getPageName() {
+		return "profile";
+	}
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {

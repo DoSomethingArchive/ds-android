@@ -13,7 +13,6 @@ import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Challenge;
 
-import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
@@ -37,7 +36,7 @@ import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.Action;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class CampaignActions extends RoboActivity {
+public class CampaignActions extends AbstractActivity {
 	
 	private static final String CAMPAIGN = "campaign";
 	
@@ -223,6 +222,11 @@ public class CampaignActions extends RoboActivity {
 				}
 			}
 		}
+	}
+	
+	@Override
+	protected String getPageName() {
+		return "campaign-actions";
 	}
 	
 	private final class MyActionClickListener implements OnClickListener {

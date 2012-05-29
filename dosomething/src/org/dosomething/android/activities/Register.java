@@ -13,7 +13,6 @@ import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.json.JSONObject;
 
-import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -21,7 +20,6 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -31,7 +29,7 @@ import android.widget.Toast;
 
 import com.google.inject.Inject;
 
-public class Register extends RoboActivity {
+public class Register extends AbstractActivity {
 	
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
 	
@@ -49,6 +47,11 @@ public class Register extends RoboActivity {
 	private Date savedBirthday;
 	
 	private Context context;
+	
+	@Override
+	protected String getPageName() {
+		return "register";
+	}
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {

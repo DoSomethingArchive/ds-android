@@ -20,7 +20,6 @@ import org.dosomething.android.transfer.WebFormField;
 import org.dosomething.android.transfer.WebFormSelectOptions;
 import org.json.JSONObject;
 
-import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -54,10 +53,10 @@ import android.widget.TextView;
 import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
 
-public abstract class AbstractWebForm extends RoboActivity {
+public abstract class AbstractWebForm extends AbstractActivity {
 	
-	private static final String TAG = "AbstractWebForm";
-	private static final String CAMPAIGN = "campaign";
+//	private static final String TAG = "AbstractWebForm";
+//	private static final String CAMPAIGN = "campaign";
 	private static final int PICK_IMAGE_REQUEST = 0xFF0;
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
 	

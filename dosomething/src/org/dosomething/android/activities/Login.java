@@ -10,7 +10,6 @@ import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.json.JSONObject;
 
-import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -28,7 +27,7 @@ import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 import com.google.inject.Inject;
 
-public class Login extends RoboActivity {
+public class Login extends AbstractActivity {
 	
 	private static final String TAG = "Login";
 	private static final int REQ_FACEBOOK_LOGIN = 111;
@@ -43,6 +42,11 @@ public class Login extends RoboActivity {
 	@Inject private UserContext userContext;
 	
 	private Context context;
+	
+	@Override
+	protected String getPageName() {
+		return "login";
+	}
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
