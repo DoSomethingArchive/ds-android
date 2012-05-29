@@ -34,8 +34,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 
+import com.commonsware.cwac.endless.EndlessAdapter;
 import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -71,6 +73,8 @@ public class CampaignGallery extends RoboActivity {
         
         gridview.setOnItemClickListener(listener);
         
+        //gridview.setAdapter(new MyGridAdapter(CampaignGallery.this, items));
+        
         new MyFeedTask(campaign.getGallery().getFeed()).execute();
     }
 	
@@ -98,6 +102,39 @@ public class CampaignGallery extends RoboActivity {
 		}
 	};
 	
+	private class MyEndlessGridAdapter extends EndlessAdapter {
+		
+		private List<GalleryItem> items;
+		private int page = 0;
+		
+		public MyEndlessGridAdapter(Context context, ListAdapter wrapped, int pendingResource) {
+			super(context, wrapped, pendingResource);
+			
+		}
+
+		@Override
+		protected boolean cacheInBackground() throws Exception {
+			
+			//TODO need code here
+			//items = getPa
+			
+			return false;
+		}
+
+		@Override
+		protected void appendCachedData() {
+			
+			page++;
+			
+			MyGridAdapter adapter = (MyGridAdapter) getWrappedAdapter();
+			
+			for(GalleryItem item : items) {
+				adapter.add(item);
+			}
+		}
+		
+	}
+	
 	private class MyGridAdapter extends ArrayAdapter<GalleryItem> {
 
 		private MyGridAdapter(Context context, List<GalleryItem> items) {
@@ -121,7 +158,6 @@ public class CampaignGallery extends RoboActivity {
 			imageLoader.displayImage(item.getThumb(), answer);
 			return answer;
 		}
-	
 	}
 	
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){
@@ -133,7 +169,7 @@ public class CampaignGallery extends RoboActivity {
 	private class MyFeedTask extends AbstractWebserviceTask {
 		
 		private String feedUrl;
-		private List<GalleryItem> items = new ArrayList<GalleryItem>();
+		private List<GalleryItem> loadedItems = new ArrayList<GalleryItem>();
 		
 		public MyFeedTask(String feedUrl) {
 			super(userContext);
@@ -148,7 +184,8 @@ public class CampaignGallery extends RoboActivity {
 		@Override
 		protected void onSuccess() {
 			
-			gridview.setAdapter(new MyGridAdapter(CampaignGallery.this, items));
+			//TODO i need to put this somewhere
+			//items.addAll(loadedItems);
 		}
 
 		@Override
@@ -168,7 +205,7 @@ public class CampaignGallery extends RoboActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-
+			
 			JSONObject obj = doGet(feedUrl).getBodyAsJSONObject();
 			
 			JSONArray imageItems = obj.optJSONArray("image_items");
@@ -176,7 +213,7 @@ public class CampaignGallery extends RoboActivity {
 				for(int i=0; i<imageItems.length(); i++) {
 					JSONObject imageItemWrapper = imageItems.getJSONObject(i);
 					JSONObject imageItem = imageItemWrapper.getJSONObject("image_item");
-					items.add(new GalleryItem(GalleryItemType.IMAGE, imageItem));
+					loadedItems.add(new GalleryItem(GalleryItemType.IMAGE, imageItem));
 				}
 			}
 			
@@ -185,7 +222,7 @@ public class CampaignGallery extends RoboActivity {
 				for(int i=0; i<videoItems.length(); i++) {
 					JSONObject videoItemWrapper = videoItems.getJSONObject(i);
 					JSONObject videoItem = videoItemWrapper.getJSONObject("video_item");
-					items.add(new GalleryItem(GalleryItemType.VIDEO, videoItem));
+					loadedItems.add(new GalleryItem(GalleryItemType.VIDEO, videoItem));
 				}
 			}
 		}
