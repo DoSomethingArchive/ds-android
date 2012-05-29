@@ -8,7 +8,6 @@ import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.transfer.Campaign;
 
-import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +30,7 @@ import com.markupartist.android.widget.ActionBar.Action;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class Campaigns extends RoboActivity {
+public class Campaigns extends AbstractActivity {
 	
 	//private static final String TAG = "Campaigns";
 	private static final int REQ_LOGIN_FOR_PROFILE = 112;
@@ -43,6 +42,11 @@ public class Campaigns extends RoboActivity {
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
+	
+	@Override
+	protected String getPageName() {
+		return "campaigns";
+	}
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {

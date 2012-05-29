@@ -16,6 +16,11 @@ public class SignUp extends AbstractWebForm {
 	
 	private WebForm webForm;
 	
+	@Override
+	protected String getPageName() {
+		return "sign-up";
+	}
+	
 	protected int getContentViewResourceId() {
 		return R.layout.sign_up;
 	}

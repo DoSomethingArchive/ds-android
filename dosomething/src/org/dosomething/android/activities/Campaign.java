@@ -9,7 +9,6 @@ import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
 import org.dosomething.android.domain.UserCampaign;
 
-import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +24,7 @@ import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class Campaign extends RoboActivity {
+public class Campaign extends AbstractActivity {
 
 	private static final String CAMPAIGN = "campaign";
 
@@ -48,14 +47,11 @@ public class Campaign extends RoboActivity {
 	@InjectView(R.id.sign_up) private Button btnSignUp;
 
 	private org.dosomething.android.transfer.Campaign campaign;
-	private Context context;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.campaign);
-		
-		context = this;
 
 		actionBar.setHomeAction(Campaigns.getHomeAction(this));
 
@@ -191,6 +187,11 @@ public class Campaign extends RoboActivity {
 		Intent answer = new Intent(context, Campaign.class);
 		answer.putExtra(CAMPAIGN, campaign);
 		return answer;
+	}
+	
+	@Override
+	protected String getPageName() {
+		return "campaign";
 	}
 
 }

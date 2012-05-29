@@ -176,8 +176,8 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 
 		return new WebserviceResponse(responseCode, is);
 	}
-
-	public WebserviceResponse doGet(String url) throws IOException, JSONException{
+	
+	public static WebserviceResponse doGet(String url, UserContext userContext) throws IOException, JSONException{
 		HttpClient client = new DefaultHttpClient();
 
 		HttpUriRequest request = new HttpGet(url);
@@ -185,8 +185,10 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		request.addHeader("Accept-Encoding", ACCEPT_GZIP);
 		request.addHeader("User-Agent", UA);
 
-		if(userContext.isLoggedIn()) {
-			request.addHeader("Cookie", userContext.getSessionName()+"="+userContext.getSessionId());
+		if(userContext != null){
+			if(userContext.isLoggedIn()) {
+				request.addHeader("Cookie", userContext.getSessionName()+"="+userContext.getSessionId());
+			}
 		}
 		
 		HttpResponse response = client.execute(request);
@@ -208,6 +210,10 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		}
 
 		return new WebserviceResponse(responseCode, is);
+	}
+
+	public WebserviceResponse doGet(String url) throws IOException, JSONException{
+		return doGet(url, this.userContext);
 	}
 
 	public void doDelete(String url) throws IOException{

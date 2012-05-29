@@ -15,6 +15,11 @@ public class ReportBack extends AbstractWebForm {
 	private WebForm webForm;
 	
 	@Override
+	protected String getPageName() {
+		return "report-back";
+	}
+	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
 		webForm = campaign.getReportBack();
@@ -35,5 +40,5 @@ public class ReportBack extends AbstractWebForm {
 		answer.putExtra(CAMPAIGN, campaign);
 		return answer;
 	}
-	
+
 }

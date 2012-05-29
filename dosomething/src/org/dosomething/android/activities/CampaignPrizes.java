@@ -7,7 +7,6 @@ import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Prize;
 import org.dosomething.android.transfer.PrizeItem;
 
-import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +25,7 @@ import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class CampaignPrizes extends RoboActivity {
+public class CampaignPrizes extends AbstractActivity {
 	
 	private static final String CAMPAIGN = "campaign";
 	
@@ -35,6 +34,11 @@ public class CampaignPrizes extends RoboActivity {
 	
 	@InjectView(R.id.actionbar) private ActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
+	
+	@Override
+	protected String getPageName() {
+		return "campaign-prizes";
+	}
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
