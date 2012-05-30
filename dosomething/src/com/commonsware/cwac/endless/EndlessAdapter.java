@@ -176,7 +176,6 @@ abstract public class EndlessAdapter extends AdapterWrapper {
     return(false);
   }
 
-  @TargetApi(11)
   private <T> void executeAsyncTask(AsyncTask<T, ?, ?> task,
                                     T... params) {
     //if (!isSerialized
