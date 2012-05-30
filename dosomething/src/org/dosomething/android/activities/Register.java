@@ -206,7 +206,7 @@ public class Register extends AbstractActivity {
 				JSONObject obj = response.getBodyAsJSONObject();
 				JSONObject user = obj.getJSONObject("user");
 				
-				userContext.setLoggedIn(username, user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
+				userContext.setLoggedIn(username, user.getString("mail"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
 				
 				registerSuccess = true;
 			}
