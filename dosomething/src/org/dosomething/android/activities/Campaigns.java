@@ -190,7 +190,7 @@ public class Campaigns extends AbstractActivity {
 	private class MyTask extends AbstractFetchCampaignsTask {
 
 		public MyTask() {
-			super(userContext, cache, actionBar);
+			super(Campaigns.this, userContext, cache, actionBar);
 		}
 
 		@Override

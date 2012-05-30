@@ -77,9 +77,6 @@ public class CampaignPrizes extends AbstractActivity {
 	private View createRulesView(final String rules) {
 		View v = inflater.inflate(R.layout.prize_rules, null);
 		
-		TextView header = (TextView)v.findViewById(R.id.text);
-		header.setText(rules);
-		
 		v.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
