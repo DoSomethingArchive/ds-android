@@ -189,7 +189,7 @@ public class Login extends AbstractActivity {
 				JSONObject obj = response.getBodyAsJSONObject();
 				JSONObject user = obj.getJSONObject("user");
 				
-				userContext.setLoggedIn(user.getString("name"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
+				userContext.setLoggedIn(user.getString("name"), user.getString("mail"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
 				
 				loginSuccess = true;
 			}
@@ -248,11 +248,10 @@ public class Login extends AbstractActivity {
 			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
 				loginSuccess = false;
 			} else {
-				
 				JSONObject obj = response.getBodyAsJSONObject();
 				JSONObject user = obj.getJSONObject("user");
 				
-				userContext.setLoggedIn(user.getString("name"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
+				userContext.setLoggedIn(user.getString("name"), user.getString("mail"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
 				
 				loginSuccess = true;
 			}
