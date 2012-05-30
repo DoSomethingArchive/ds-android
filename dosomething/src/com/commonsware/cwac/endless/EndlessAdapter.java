@@ -17,7 +17,6 @@ package com.commonsware.cwac.endless;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
