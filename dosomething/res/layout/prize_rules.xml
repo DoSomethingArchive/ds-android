@@ -7,6 +7,7 @@
     
     <TextView
         android:id="@+id/text"
-        style="@style/PrizeRulesText"/>
+        style="@style/PrizeRulesText"
+        android:text="@string/campaign_prizes_rules"/>
 
 </LinearLayout>
