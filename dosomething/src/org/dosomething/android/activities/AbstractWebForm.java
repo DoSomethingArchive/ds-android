@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -102,6 +103,8 @@ public abstract class AbstractWebForm extends AbstractActivity {
         		onSubmitClick();
         	}
         });
+        
+        prePopulate();
     }
 	
 	@Override
@@ -124,6 +127,16 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		
 		for(WebFormFieldBinding binding : fields) {
 			outState.putStringArrayList(binding.getWebFormField().getName(), (ArrayList<String>)binding.getFormValue());
+		}
+	}
+	
+	private void prePopulate() {
+		for(WebFormFieldBinding binding : fields) {
+			if(binding.getWebFormField().getName().equals("email")) {
+				binding.setFormValue(Collections.singletonList(userContext.getEmail()));
+			} else if(binding.getWebFormField().getName().equals("name")) {
+				binding.setFormValue(Collections.singletonList(userContext.getUserName()));
+			}
 		}
 	}
 	
