@@ -13,9 +13,11 @@ import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,6 +47,9 @@ public class Campaign extends AbstractActivity {
 	@InjectView(R.id.resources) private Button btnResources;
 	@InjectView(R.id.faq) private Button btnFaq;
 	@InjectView(R.id.sign_up) private Button btnSignUp;
+	@InjectView(R.id.frmVideo) private FrameLayout frmVideo;
+	@InjectView(R.id.imgVideoThumb) private ImageView imgVideoThumb;
+	@InjectView(R.id.imgThumb) private ImageView imgThumb;
 
 	private org.dosomething.android.transfer.Campaign campaign;
 
@@ -84,8 +89,20 @@ public class Campaign extends AbstractActivity {
 		if(!nullOrEmpty(campaign.getFaqs())){
 			btnFaq.setVisibility(Button.VISIBLE);
 		}
-		
+
+		if(!nullOrEmpty(campaign.getVideoThumbnail()) && !nullOrEmpty(campaign.getVideoUrl())){
+			imageLoader.displayImage(campaign.getVideoThumbnail(), imgVideoThumb);
+			frmVideo.setVisibility(ImageView.VISIBLE);
+		}else if(!nullOrEmpty(campaign.getImage())){
+			imageLoader.displayImage(campaign.getImage(), imgThumb);
+			imgThumb.setVisibility(ImageView.VISIBLE);
+		}
+
 		// onResume is called next
+	}
+	
+	public void playVideo(View v){
+		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(campaign.getVideoUrl())));
 	}
 	
 	@Override
@@ -105,6 +122,10 @@ public class Campaign extends AbstractActivity {
 
 	private static final boolean nullOrEmpty(List<?> list){
 		return list == null || list.isEmpty();
+	}
+	
+	private static boolean nullOrEmpty(String str){
+		return str == null || str.trim().length() == 0;
 	}
 
 	public void actions(View v){

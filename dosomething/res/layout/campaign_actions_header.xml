@@ -8,7 +8,8 @@
         android:id="@+id/image_container"
     	android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:orientation="vertical" >
+	    android:orientation="vertical"
+	    android:onClick="viewCampaign">
 	    
         <ImageView android:id="@+id/image" style="@style/CampaignRowImage"/>
         

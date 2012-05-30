@@ -112,6 +112,10 @@ public class CampaignActions extends AbstractActivity {
         
         list.setAdapter(new MyAdapter(getApplicationContext(), challenges));
     }
+
+	public void viewCampaign(View v){
+		startActivity(org.dosomething.android.activities.Campaign.getIntent(this, campaign));
+	}
 	
 	private View getHeader(Campaign campaign) {
 		View answer = inflater.inflate(R.layout.campaign_actions_header, null);
@@ -265,10 +269,7 @@ public class CampaignActions extends AbstractActivity {
 							startActivity(CampaignResources.getIntent(context, campaign));
 							break;
 						case SHARE:
-							Intent i = new Intent(android.content.Intent.ACTION_SEND);
-							i.putExtra(android.content.Intent.EXTRA_TEXT, campaign.getAdditionalLinkUrl());
-							i.setType("text/plain");
-							startActivity(Intent.createChooser(i, getString(R.string.campaign_share_chooser)));
+							startActivity(Intent.createChooser(campaign.getShareIntent(), getString(R.string.campaign_share_chooser)));
 							break;
 						}
 					}

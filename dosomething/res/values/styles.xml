@@ -124,7 +124,7 @@
     </style>
     <style name="CampaignRowImage">
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">130dp</item>
+        <item name="android:layout_height">156dp</item>
         <item name="android:layout_margin">2dp</item>
         <item name="android:scaleType">centerInside</item>
         <item name="android:gravity">center</item>
@@ -167,7 +167,7 @@
     </style>
     <style name="CampaignImage">
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">190dp</item>
+        <item name="android:layout_height">180dp</item>
         <item name="android:layout_margin">2dp</item>
         <item name="android:scaleType">centerInside</item>
         <item name="android:gravity">center</item>
@@ -303,7 +303,7 @@
     <style name="ActionRow">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">#efefef</item>
+        <item name="android:background">@drawable/action_row_selector</item>
         <item name="android:padding">10dp</item>
     </style>
     

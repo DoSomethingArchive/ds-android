@@ -35,10 +35,7 @@ public class CampaignSignedUp extends AbstractActivity {
     }
 	
 	public void share(View v){
-		Intent i = new Intent(android.content.Intent.ACTION_SEND);
-		i.putExtra(android.content.Intent.EXTRA_TEXT, campaign.getAdditionalLinkUrl());
-		i.setType("text/plain");
-		startActivity(Intent.createChooser(i, getString(R.string.campaign_share_chooser)));
+		startActivity(Intent.createChooser(campaign.getShareIntent(), getString(R.string.campaign_share_chooser)));
 	}
 	
 	public void done(View v){
