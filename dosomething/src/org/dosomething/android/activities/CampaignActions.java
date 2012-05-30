@@ -17,6 +17,7 @@ import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,7 +33,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
-import com.markupartist.android.widget.ActionBar;
+import com.google.inject.name.Named;
 import com.markupartist.android.widget.ActionBar.Action;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -43,8 +44,9 @@ public class CampaignActions extends AbstractActivity {
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
 	@Inject private UserContext userContext;
+	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 	
-	@InjectView(R.id.actionbar) private ActionBar actionBar;
+	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
 	
 	private Context context;
@@ -123,6 +125,10 @@ public class CampaignActions extends AbstractActivity {
 		v.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
 		ImageView imageView = (ImageView) v.findViewById(R.id.image);
 		imageLoader.displayImage(campaign.getLogoUrl(), imageView);
+		
+		TextView headerText = (TextView)answer.findViewById(R.id.actions_header);
+		headerText.setTypeface(headerTypeface, Typeface.BOLD);
+		
 		return answer;
 	}
 

@@ -5,8 +5,27 @@
     android:orientation="vertical"
     android:padding="15dp">
     
-    <TextView android:id="@+id/name" style="@style/ProfileCampaignRowTitle"/>
-    
-    <TextView android:id="@+id/end_date" style="@style/ProfileCampaignRowEndDate"/>
+    <TextView
+        android:id="@+id/name"
+        style="@style/ProfileCampaignRowTitle"
+        android:layout_width="126dp" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/completed"
+            style="@style/ProfileCampaignStatus"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:id="@+id/end_date"
+            style="@style/ProfileCampaignStatus"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" />
+
+    </RelativeLayout>
     
 </LinearLayout>

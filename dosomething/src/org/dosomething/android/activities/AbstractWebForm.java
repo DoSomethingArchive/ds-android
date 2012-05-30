@@ -28,6 +28,7 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -52,7 +53,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
-import com.markupartist.android.widget.ActionBar;
+import com.google.inject.name.Named;
 
 public abstract class AbstractWebForm extends AbstractActivity {
 	
@@ -63,8 +64,9 @@ public abstract class AbstractWebForm extends AbstractActivity {
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private UserContext userContext;
+	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 	
-	@InjectView(R.id.actionbar) private ActionBar actionBar;
+	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.required_instructions) private TextView lblRequiredInstructions;
 	@InjectView(R.id.submit) private Button btnSubmit;
 	
@@ -98,6 +100,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
         	lblRequiredInstructions.setVisibility(TextView.VISIBLE);
         }
         
+        btnSubmit.setTypeface(headerTypeface, Typeface.BOLD);
         btnSubmit.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		onSubmitClick();

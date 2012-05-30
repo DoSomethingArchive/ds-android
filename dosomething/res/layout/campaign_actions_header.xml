@@ -15,6 +15,6 @@
         
     </LinearLayout>
 
-    <TextView android:text="@string/campaign_action_list" style="@style/CampaignActionListTitle"/>
+    <TextView android:id="@+id/actions_header" android:text="@string/campaign_action_list" style="@style/CampaignActionListTitle"/>
     
 </LinearLayout>

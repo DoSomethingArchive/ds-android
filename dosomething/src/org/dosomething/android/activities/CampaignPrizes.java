@@ -10,6 +10,7 @@ import org.dosomething.android.transfer.PrizeItem;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.markupartist.android.widget.ActionBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -31,8 +33,9 @@ public class CampaignPrizes extends AbstractActivity {
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
+	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 	
-	@InjectView(R.id.actionbar) private ActionBar actionBar;
+	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
 	
 	@Override
@@ -114,6 +117,7 @@ public class CampaignPrizes extends AbstractActivity {
 			PrizeItem prizeItem = (PrizeItem) getItem(index);
 			
 			TextView header = (TextView)v.findViewById(R.id.header);
+			header.setTypeface(headerTypeface, Typeface.BOLD);
 			header.setText(prizeItem.getHeader());
 			
 			ImageView image = (ImageView)v.findViewById(R.id.image);

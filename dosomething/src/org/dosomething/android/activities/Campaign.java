@@ -13,6 +13,7 @@ import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
-import com.markupartist.android.widget.ActionBar;
+import com.google.inject.name.Named;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class Campaign extends AbstractActivity {
@@ -34,8 +35,9 @@ public class Campaign extends AbstractActivity {
 
 	@Inject private ImageLoader imageLoader;
 	@Inject private UserContext userContext;
+	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 
-	@InjectView(R.id.actionbar) private ActionBar actionBar;
+	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.image) private ImageView imgLogo;
 	@InjectView(R.id.image_container) private LinearLayout llImageContainer;
 	@InjectView(R.id.dates) private TextView txtDates;
@@ -65,27 +67,37 @@ public class Campaign extends AbstractActivity {
 		actionBar.setTitle(campaign.getName());
 
 		txtDates.setText(formatDateRange(campaign));
+		txtDates.setTypeface(headerTypeface, Typeface.BOLD);
+		
 		txtTeaser.setText(campaign.getTeaser());
 
 		llImageContainer.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
 		imageLoader.displayImage(campaign.getLogoUrl(), imgLogo);
 		
+		btnSignUp.setTypeface(headerTypeface, Typeface.BOLD);
+		btnActions.setTypeface(headerTypeface, Typeface.BOLD);
+		
+		btnHowTo.setTypeface(headerTypeface, Typeface.BOLD);
 		if(!nullOrEmpty(campaign.getHowTos())){
 			btnHowTo.setVisibility(Button.VISIBLE);
 		}
 
+		btnGallery.setTypeface(headerTypeface, Typeface.BOLD);
 		if(campaign.getGallery() != null){
 			btnGallery.setVisibility(Button.VISIBLE);
 		}
-
+		
+		btnPrizes.setTypeface(headerTypeface, Typeface.BOLD);
 		if(campaign.getPrize() != null){
 			btnPrizes.setVisibility(Button.VISIBLE);
 		}
 
+		btnResources.setTypeface(headerTypeface, Typeface.BOLD);
 		if(!nullOrEmpty(campaign.getResources())){
 			btnResources.setVisibility(Button.VISIBLE);
 		}
 
+		btnFaq.setTypeface(headerTypeface, Typeface.BOLD);
 		if(!nullOrEmpty(campaign.getFaqs())){
 			btnFaq.setVisibility(Button.VISIBLE);
 		}

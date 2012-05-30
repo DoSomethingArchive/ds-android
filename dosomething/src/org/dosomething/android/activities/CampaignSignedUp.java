@@ -15,7 +15,7 @@ public class CampaignSignedUp extends AbstractActivity {
 	
 	private static final String CAMPAIGN = "campaign";
 	
-	@InjectView(R.id.actionbar) private ActionBar actionBar;
+	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	
 	private Campaign campaign;
 	

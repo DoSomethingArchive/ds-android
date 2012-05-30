@@ -5,7 +5,7 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
 	
-    <com.markupartist.android.widget.ActionBar
+    <org.dosomething.android.activities.CustomActionBar
         android:id="@+id/actionbar" 
         style="@style/ActionBar"
         app:title="@string/campaigns_title" />

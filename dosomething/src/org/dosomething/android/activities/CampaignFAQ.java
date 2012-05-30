@@ -9,6 +9,7 @@ import org.dosomething.android.transfer.Faq;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +19,16 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
-import com.markupartist.android.widget.ActionBar;
+import com.google.inject.name.Named;
 
 public class CampaignFAQ extends AbstractActivity {
 	
 	private static final String CAMPAIGN = "campaign";
 	
 	@Inject private LayoutInflater inflater;
+	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 	
-	@InjectView(R.id.actionbar) private ActionBar actionBar;
+	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.list) private ExpandableListView list;
 	
 	@Override
@@ -116,6 +118,7 @@ public class CampaignFAQ extends AbstractActivity {
 			Faq faq = (Faq) getGroup(groupPosition);
 			
 			TextView header = (TextView)v.findViewById(R.id.header);
+			header.setTypeface(headerTypeface, Typeface.BOLD);
 			header.setText(faq.getHeader());
 
 			return v;

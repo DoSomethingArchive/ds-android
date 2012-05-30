@@ -46,7 +46,7 @@ public class CampaignGallery extends AbstractActivity {
 	@Inject private ImageLoader imageLoader;
 	@Inject private UserContext userContext;
 	
-	@InjectView(R.id.actionbar) private ActionBar actionBar;
+	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.gridview) private GridView gridview;
 	
 	private Context context;

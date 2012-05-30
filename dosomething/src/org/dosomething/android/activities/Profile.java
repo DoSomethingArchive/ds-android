@@ -2,14 +2,15 @@ package org.dosomething.android.activities;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import org.dosomething.android.R;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
+import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.transfer.Campaign;
@@ -17,6 +18,7 @@ import org.dosomething.android.transfer.Campaign;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +31,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
-import com.markupartist.android.widget.ActionBar;
+import com.google.inject.name.Named;
 import com.markupartist.android.widget.ActionBar.Action;
 
 public class Profile extends AbstractActivity {
@@ -39,9 +41,11 @@ public class Profile extends AbstractActivity {
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private UserContext userContext;
+	@Inject private @Named("DINComp-CondBold")Typeface headerTypeface;
 	@Inject private Cache cache;
+	@Inject private MyDAO dao;
 	
-	@InjectView(R.id.actionbar) private ActionBar actionBar;
+	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.content) private LinearLayout content;
 	
 	private ListView list;
@@ -99,9 +103,14 @@ public class Profile extends AbstractActivity {
 	};
 	
 	private class MyAdapter extends ArrayAdapter<Campaign> {
-
-		public MyAdapter(Context context, List<Campaign> objects){
-			super(context, android.R.layout.simple_list_item_1, objects);
+		
+		private List<UserCampaign> userCampaigns;
+		private List<Campaign> campaigns;
+		
+		public MyAdapter(Context context, List<UserCampaign> userCampaigns, List<Campaign> campaigns){
+			super(context, android.R.layout.simple_list_item_1, campaigns);
+			this.userCampaigns = userCampaigns;
+			this.campaigns = campaigns;
 		}
 		
 		@Override
@@ -111,10 +120,17 @@ public class Profile extends AbstractActivity {
 				v = inflater.inflate(R.layout.profile_campaign_row, null);
 			}
 			
-			Campaign campaign = getItem(position);
+			UserCampaign userCampaign = userCampaigns.get(position);
+			Campaign campaign = campaigns.get(position);
 			
 			TextView txtName = (TextView) v.findViewById(R.id.name);
+			txtName.setTypeface(headerTypeface, Typeface.BOLD);
 			txtName.setText(campaign.getName());
+			
+			List<CompletedCampaignAction> completeActions = dao.getCompletedActions(userCampaign.getId());
+			
+			TextView txtCompleted = (TextView) v.findViewById(R.id.completed);
+			txtCompleted.setText("Completed: " + completeActions.size() + " of " + campaign.getChallenges().size());
 			
 			TextView txtEndDate = (TextView) v.findViewById(R.id.end_date);
 			txtEndDate.setText("Ends: " + new SimpleDateFormat(DF).format(campaign.getEndDate()));
@@ -133,18 +149,18 @@ public class Profile extends AbstractActivity {
 		@Override
 		protected void onSuccess() {
 			List<Campaign> campaigns = new ArrayList<Campaign>();
+			List<UserCampaign> userCampaigns = new ArrayList<UserCampaign>();
 			
-			List<UserCampaign> userCampaigns = new MyDAO(context).findUserCampaigns(new UserContext(context).getUserUid());
-			
-			Set<String> userCampaignIds = new HashSet<String>();
-			
-			for(UserCampaign campaign : userCampaigns){
-				userCampaignIds.add(campaign.getCampaignId());
+			Map<String, UserCampaign> userCampaignsMap = new HashMap<String, UserCampaign>();
+			List<UserCampaign> allUserCampaigns = dao.findUserCampaigns(new UserContext(context).getUserUid());
+			for(UserCampaign userCampaign : allUserCampaigns){
+				userCampaignsMap.put(userCampaign.getCampaignId(), userCampaign);
 			}
 			
 			for(Campaign campaign : getCampaigns()){
-				if(userCampaignIds.contains(campaign.getId())){
+				if(userCampaignsMap.containsKey(campaign.getId())){
 					campaigns.add(campaign);
+					userCampaigns.add(userCampaignsMap.get(campaign.getId()));
 				}
 			}
 			
@@ -155,7 +171,7 @@ public class Profile extends AbstractActivity {
 				content.addView(list, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT, 1));
 			
 				list.setOnItemClickListener(itemClickListener);
-				list.setAdapter(new MyAdapter(context, campaigns));
+				list.setAdapter(new MyAdapter(context, userCampaigns, campaigns));
 			}
 		}
 

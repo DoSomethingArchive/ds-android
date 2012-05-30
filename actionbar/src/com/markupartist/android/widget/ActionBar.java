@@ -117,6 +117,10 @@ public class ActionBar extends RelativeLayout implements OnClickListener {
     public void setTitle(int resid) {
         mTitleView.setText(resid);
     }
+    
+    public TextView getTitleView() {
+    	return mTitleView;
+    }
 
     /**
      * Set the enabled state of the progress bar.
