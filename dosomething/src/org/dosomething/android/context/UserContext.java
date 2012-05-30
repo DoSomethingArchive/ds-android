@@ -1,7 +1,5 @@
 package org.dosomething.android.context;
 
-import java.util.Date;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -10,6 +8,7 @@ public class UserContext {
 	
 	private static final String MY_PREFS = "my_prefs";
 	private static final String USER_NAME = "user_name";
+	private static final String EMAIL = "email";
 	private static final String UID = "user_uid";
 	private static final String SESSION_ID = "session_id";
 	private static final String SESSION_NAME = "session_name";
@@ -26,6 +25,12 @@ public class UserContext {
 	public String getUserName(){
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
 		String uid = settings.getString(USER_NAME, null);
+		return uid;
+	}
+	
+	public String getEmail(){
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		String uid = settings.getString(EMAIL, null);
 		return uid;
 	}
 	
@@ -56,13 +61,14 @@ public class UserContext {
 		return (uid != null && expires_at != 0 && expires_at > deadline);
 	}
 	
-	public void setLoggedIn(String userName, String uid, String sessionId, String sessionName, long expiresMins){
+	public void setLoggedIn(String userName, String email, String uid, String sessionId, String sessionName, long expiresMins){
 		
 		long expiresAt = System.currentTimeMillis() + (expiresMins * 60 * 1000);
 		
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
 		Editor editor = settings.edit();
 		editor.putString(USER_NAME, userName);
+		editor.putString(EMAIL, email);
 		editor.putString(UID, uid);
 		editor.putString(SESSION_ID, sessionId);
 		editor.putString(SESSION_NAME, sessionName);
@@ -74,6 +80,7 @@ public class UserContext {
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
 		Editor editor = settings.edit();
 		editor.remove(USER_NAME);
+		editor.remove(EMAIL);
 		editor.remove(UID);
 		editor.remove(SESSION_ID);
 		editor.remove(SESSION_NAME);
