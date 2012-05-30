@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
     
-    <com.markupartist.android.widget.ActionBar
+    <org.dosomething.android.activities.CustomActionBar
         android:id="@+id/actionbar" 
         style="@style/ActionBar"/>
     

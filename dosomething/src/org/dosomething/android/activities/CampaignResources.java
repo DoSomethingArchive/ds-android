@@ -29,7 +29,7 @@ public class CampaignResources extends AbstractActivity {
 	
 	@Inject private LayoutInflater inflater;
 	
-	@InjectView(R.id.actionbar) private ActionBar actionBar;
+	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
 	
 	@Override

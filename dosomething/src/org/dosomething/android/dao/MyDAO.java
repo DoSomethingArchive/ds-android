@@ -6,6 +6,8 @@ import java.util.List;
 import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
 
+import com.google.inject.Inject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,6 +16,7 @@ public class MyDAO {
 	
 	private final Context context;
 	
+	@Inject
 	public MyDAO(Context context){
 		this.context = context;
 	}

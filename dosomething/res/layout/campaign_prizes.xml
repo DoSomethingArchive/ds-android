@@ -6,7 +6,7 @@
     android:background="@color/light_background"
     android:orientation="vertical" >
 
-    <com.markupartist.android.widget.ActionBar
+    <org.dosomething.android.activities.CustomActionBar
         android:id="@+id/actionbar"
         style="@style/ActionBar"
         app:title="@string/campaign_prizes_title" />

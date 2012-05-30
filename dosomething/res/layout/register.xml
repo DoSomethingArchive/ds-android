@@ -6,7 +6,7 @@
     android:background="@color/light_background"
     xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
 	
-    <com.markupartist.android.widget.ActionBar 
+    <org.dosomething.android.activities.CustomActionBar
         android:id="@+id/actionbar" 
         style="@style/ActionBar" 
         app:title="@string/register_title" />
@@ -54,8 +54,8 @@
 		android:layout_height="wrap_content"
    	    android:orientation="horizontal"
    	    android:padding="10dp">
-   	    <Button android:onClick="cancel" style="@style/RegisterCancelButton" android:text="@string/cancel_upper" android:layout_weight="1.0"/>
-    	<Button android:onClick="register" style="@style/RegisterButton" android:text="@string/go_upper" android:layout_weight="1.0"/>
+   	    <Button android:id="@+id/cancel" android:onClick="cancel" style="@style/RegisterCancelButton" android:text="@string/cancel_upper" android:layout_weight="1.0"/>
+    	<Button android:id="@+id/submit" android:onClick="register" style="@style/RegisterButton" android:text="@string/go_upper" android:layout_weight="1.0"/>
    	</LinearLayout>
 
 </LinearLayout>

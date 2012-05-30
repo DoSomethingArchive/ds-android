@@ -19,22 +19,27 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 public class Register extends AbstractActivity {
 	
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
 	
 	@Inject private UserContext userContext;
+	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 	
+	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.username_name) private EditText username;
 	@InjectView(R.id.mobile) private EditText mobile;
 	@InjectView(R.id.first_name) private EditText firstName;
@@ -43,6 +48,8 @@ public class Register extends AbstractActivity {
 	@InjectView(R.id.password) private EditText password;
 	@InjectView(R.id.confirm_password) private EditText confirmPassword;
 	@InjectView(R.id.birthday) private EditText birthday;
+	@InjectView(R.id.cancel) private Button cancel;
+	@InjectView(R.id.submit) private Button submit;
 	
 	private Date savedBirthday;
 	
@@ -60,8 +67,13 @@ public class Register extends AbstractActivity {
         
         context = this;
         
+        actionBar.setHomeAction(Campaigns.getHomeAction(context));
+        
         birthday.setOnFocusChangeListener(birthdayFocusListener);
         birthday.setOnClickListener(birthdayClickListener);
+        
+        cancel.setTypeface(headerTypeface, Typeface.BOLD);
+        submit.setTypeface(headerTypeface, Typeface.BOLD);
     }
     
     private final OnClickListener birthdayClickListener = new OnClickListener() {

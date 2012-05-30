@@ -26,7 +26,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
-import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.AbstractAction;
 import com.markupartist.android.widget.ActionBar.Action;
 import com.markupartist.android.widget.ActionBar.IntentAction;
@@ -42,7 +41,7 @@ public class Campaigns extends AbstractActivity {
 	@Inject private UserContext userContext;
 	@Inject private Cache cache;
 	
-	@InjectView(R.id.actionbar) private ActionBar actionBar;
+	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
 	
 	private final OnItemClickListener itemClickListener = new MyItemClickListener();
@@ -69,7 +68,9 @@ public class Campaigns extends AbstractActivity {
 	            showSplashScreen();
 	        }
 	    } else {
-	        showSplashScreen();
+	    	if (getIntent().hasCategory("android.intent.category.LAUNCHER")) {
+	    		showSplashScreen();
+	    	}
 	    }
         
         fetchCampaigns();

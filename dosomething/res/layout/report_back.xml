@@ -8,7 +8,7 @@
     android:descendantFocusability="beforeDescendants"
 	android:focusableInTouchMode="true" >
 
-    <com.markupartist.android.widget.ActionBar
+    <org.dosomething.android.activities.CustomActionBar
         android:id="@+id/actionbar"
         style="@style/ActionBar"
         app:title="@string/report_back_title" />
