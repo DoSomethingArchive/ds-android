@@ -127,7 +127,7 @@ public class Profile extends AbstractActivity {
 	private class MyTask extends AbstractFetchCampaignsTask {
 
 		public MyTask(){
-			super(userContext, cache, actionBar);
+			super(context, userContext, cache, actionBar);
 		}
 		
 		@Override

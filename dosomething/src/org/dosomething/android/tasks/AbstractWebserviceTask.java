@@ -26,6 +26,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.text.Html;
 import android.util.Log;
@@ -175,6 +178,12 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 		}
 
 		return new WebserviceResponse(responseCode, is);
+	}
+	
+	public static boolean isOnline(Context context) { 
+	    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);    
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();    
+	    return netInfo != null && netInfo.isConnectedOrConnecting();
 	}
 	
 	public static WebserviceResponse doGet(String url, UserContext userContext) throws IOException, JSONException{
