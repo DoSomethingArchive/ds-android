@@ -11,6 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
+
 
 public class Campaign implements Serializable {
 	
@@ -25,9 +27,12 @@ public class Campaign implements Serializable {
 	private String teaser;
 	private String backgroundColor;
 	private String videoUrl;
+	private String videoThumbnail;
 	private String additionalText;
-	private String additionalLinkUrl;
-	private String additionalImageUrl;
+	private String link;
+	private String image;
+	private String shareTitle;
+	private String shareMessage;
 	
 	private List<Faq> faqs;
 	private Gallery gallery;
@@ -55,9 +60,12 @@ public class Campaign implements Serializable {
 		JSONObject m = obj.getJSONObject("main");
 		teaser = m.getString("teaser");
 		videoUrl = m.optString("video");
+		videoThumbnail = m.optString("video-thumbnail");
 		additionalText = m.optString("additional-text");
-		additionalLinkUrl = m.optString("additional-link");
-		additionalImageUrl = m.optString("additional-image");
+		link = m.optString("link");
+		image = m.optString("image");
+		shareTitle = m.optString("share-title");
+		shareMessage = m.optString("share-message");
 		
 		JSONArray f = obj.optJSONArray("faq");
 		if(f!=null) {
@@ -110,6 +118,22 @@ public class Campaign implements Serializable {
 		if(su!=null) {
 			signUp = new WebForm(su);
 		}
+	}
+	
+	public Intent getShareIntent(){
+		Intent answer = new Intent(android.content.Intent.ACTION_SEND);
+		
+		if(!nullOrEmpty(shareTitle)){
+			answer.putExtra(android.content.Intent.EXTRA_SUBJECT, shareTitle);
+		}
+		
+		answer.putExtra(android.content.Intent.EXTRA_TEXT, shareMessage);
+		answer.setType("text/plain");
+		return answer;
+	}
+	
+	private static boolean nullOrEmpty(String str){
+		return str == null || str.trim().length() == 0;
 	}
 	
 	public String getId() {
@@ -166,17 +190,29 @@ public class Campaign implements Serializable {
 	public void setAdditionalText(String additionalText) {
 		this.additionalText = additionalText;
 	}
-	public String getAdditionalLinkUrl() {
-		return additionalLinkUrl;
+
+	public String getVideoThumbnail() {
+		return videoThumbnail;
 	}
-	public void setAdditionalLinkUrl(String additionalLinkUrl) {
-		this.additionalLinkUrl = additionalLinkUrl;
+
+	public void setVideoThumbnail(String videoThumbnail) {
+		this.videoThumbnail = videoThumbnail;
 	}
-	public String getAdditionalImageUrl() {
-		return additionalImageUrl;
+
+	public String getLink() {
+		return link;
 	}
-	public void setAdditionalImageUrl(String additionalImageUrl) {
-		this.additionalImageUrl = additionalImageUrl;
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public List<Faq> getFaqs() {
@@ -241,6 +277,22 @@ public class Campaign implements Serializable {
 
 	public void setSignUp(WebForm signUp) {
 		this.signUp = signUp;
+	}
+
+	public String getShareTitle() {
+		return shareTitle;
+	}
+
+	public void setShareTitle(String shareTitle) {
+		this.shareTitle = shareTitle;
+	}
+
+	public String getShareMessage() {
+		return shareMessage;
+	}
+
+	public void setShareMessage(String shareMessage) {
+		this.shareMessage = shareMessage;
 	}
 	
 }
