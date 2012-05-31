@@ -20,12 +20,12 @@ public class Prize implements Serializable{
 	
 	public Prize(JSONObject obj) throws JSONException {
 		
-		JSONObject s = obj.getJSONObject("scholarships");
+		JSONObject s = obj.optJSONObject("scholarships");
 		if(s!=null) {
 			scholarship = new PrizeItem(s);
 		}
 		
-		JSONArray p = obj.getJSONArray("prizes");
+		JSONArray p = obj.optJSONArray("prizes");
 		if(p!=null) {
 			others = new ArrayList<PrizeItem>(p.length());
 			for(int i=0; i<p.length(); i++) {

@@ -57,15 +57,17 @@ public class Campaign implements Serializable {
 		endDate = df.parse(co.getString("end-date"));
 		logoUrl = co.getString("logo");
 		
-		JSONObject m = obj.getJSONObject("main");
-		teaser = m.getString("teaser");
-		videoUrl = m.optString("video");
-		videoThumbnail = m.optString("video-thumbnail");
-		additionalText = m.optString("additional-text");
-		link = m.optString("link");
-		image = m.optString("image");
-		shareTitle = m.optString("share-title");
-		shareMessage = m.optString("share-message");
+		JSONObject m = obj.optJSONObject("main");
+		if(m!=null) {
+			teaser = m.optString("teaser");
+			videoUrl = m.optString("video");
+			videoThumbnail = m.optString("video-thumbnail");
+			additionalText = m.optString("additional-text");
+			link = m.optString("link");
+			image = m.optString("image");
+			shareTitle = m.optString("share-title");
+			shareMessage = m.optString("share-message");
+		}
 		
 		JSONArray f = obj.optJSONArray("faq");
 		if(f!=null) {
