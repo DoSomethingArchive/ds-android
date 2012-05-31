@@ -21,12 +21,17 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Html.TagHandler;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
@@ -48,6 +53,7 @@ public class Register extends AbstractActivity {
 	@InjectView(R.id.password) private EditText password;
 	@InjectView(R.id.confirm_password) private EditText confirmPassword;
 	@InjectView(R.id.birthday) private EditText birthday;
+	@InjectView(R.id.disclaimer) private TextView disclaimer;
 	@InjectView(R.id.cancel) private Button cancel;
 	@InjectView(R.id.submit) private Button submit;
 	
@@ -71,6 +77,9 @@ public class Register extends AbstractActivity {
         
         birthday.setOnFocusChangeListener(birthdayFocusListener);
         birthday.setOnClickListener(birthdayClickListener);
+        
+        disclaimer.setMovementMethod(LinkMovementMethod.getInstance());
+        disclaimer.setText(Html.fromHtml(getString(R.string.register_disclaimer)));
         
         cancel.setTypeface(headerTypeface, Typeface.BOLD);
         submit.setTypeface(headerTypeface, Typeface.BOLD);
