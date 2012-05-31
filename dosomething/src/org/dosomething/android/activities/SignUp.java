@@ -1,9 +1,13 @@
 package org.dosomething.android.activities;
 
+import java.util.List;
+
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
+import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.Challenge;
 import org.dosomething.android.transfer.WebForm;
 
 import android.content.Context;
@@ -40,7 +44,22 @@ public class SignUp extends AbstractWebForm {
 	@Override
 	protected void onSubmitSuccess() {
 		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
-		new MyDAO(this).setSignedUp(new UserContext(this).getUserUid(), campaign.getId());
+		
+		MyDAO dao = new MyDAO(this);
+		
+		Long userCampaignId = dao.setSignedUp(new UserContext(this).getUserUid(), campaign.getId());
+		
+		List<Challenge> challenges = campaign.getChallenges();
+		
+		if(challenges != null){
+			for(Challenge challenge : challenges){
+				if("sign-up".equals(challenge.getCompletionPage())){
+					dao.addCompletedAction(new CompletedCampaignAction(userCampaignId, challenge.getText()));
+					break;
+				}
+			}
+		}
+		
 		startActivity(CampaignActions.getIntent(this, campaign));
 	}
 	
