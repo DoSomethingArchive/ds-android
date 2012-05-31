@@ -106,12 +106,6 @@ public class CampaignActions extends AbstractActivity {
         	challenges = new ArrayList<Challenge>();
         }
         
-        for(Challenge challenge : challenges){
-        	if("sign-up".equals(challenge.getCompletionPage())){
-        		completedChallenges.add(challenge.getText());
-        	}
-        }
-        
         list.setAdapter(new MyAdapter(getApplicationContext(), challenges));
     }
 
