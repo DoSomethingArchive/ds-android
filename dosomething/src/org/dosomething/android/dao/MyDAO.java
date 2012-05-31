@@ -66,6 +66,8 @@ public class MyDAO {
 	}
 	
 	public void addCompletedAction(CompletedCampaignAction action){
+		removeCompletedAction(action.getUserCampaignId(), action.getActionText());
+		
 		ContentValues cv = new ContentValues();
 		cv.put("user_campaign_id", action.getUserCampaignId());
 		cv.put("action_text", action.getActionText());
