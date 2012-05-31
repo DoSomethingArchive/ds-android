@@ -53,16 +53,18 @@ public class MyDAO {
 		return answer;
 	}
 	
-	public void setSignedUp(String uid, String campaignId){
+	public Long setSignedUp(String uid, String campaignId){
 		ContentValues cv = new ContentValues();
 		cv.put("uid", uid);
 		cv.put("campaign_id", campaignId);
 		
 		SQLHelper sql = new SQLHelper(context);
         
-        sql.getWritableDatabase().insertOrThrow("user_campaign", null, cv);
+        Long answer = sql.getWritableDatabase().insertOrThrow("user_campaign", null, cv);
          
         sql.close();
+        
+        return answer;
 	}
 	
 	public void addCompletedAction(CompletedCampaignAction action){
