@@ -34,7 +34,7 @@
     <string name="registering">Registering&#8230;</string>
     
     <string name="register_title">Become A Member</string>
-    <string name="register_disclaimer">By tapping "Go", you accept the <u>terms of use</u> and <u>privacy policy</u>.</string>
+    <string name="register_disclaimer">By tapping "Go", you accept the &lt;a href="http://www.dosomething.org/about/terms-of-service">terms of use&lt;/a> and &lt;a href="http://www.dosomething.org/about/privacy">privacy policy&lt;/a>.</string>
     <string name="profile_title">Participation Profile</string>
     <string name="campaigns_title">Current Campaigns</string>
     <string name="campaign_signed_up_title">Share</string>
