@@ -309,7 +309,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 				case R.layout.web_form_date_row : {
 					EditText field = (EditText)view.findViewById(R.id.field_date);
 					field.setOnClickListener(new OnClickListener() {
-						public void onClick(View arg0) {
+						public void onClick(View v) {
 							showDatePicker();
 						}
 					});

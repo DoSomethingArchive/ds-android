@@ -95,7 +95,9 @@ public class Register extends AbstractActivity {
     private final OnFocusChangeListener birthdayFocusListener = new OnFocusChangeListener() {
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
-			showBirthdayPicker();
+			if(hasFocus) {
+				showBirthdayPicker();
+			}
 		}
 	};
     
@@ -128,8 +130,7 @@ public class Register extends AbstractActivity {
     private final OnDateSetListener dateListener = new OnDateSetListener() {
 		
 		@Override
-		public void onDateSet(DatePicker view, int year, int monthOfYear,
-				int dayOfMonth) {
+		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 			savedBirthday = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
 			birthday.setText(new SimpleDateFormat(DATE_FORMAT).format(savedBirthday));
 		}
