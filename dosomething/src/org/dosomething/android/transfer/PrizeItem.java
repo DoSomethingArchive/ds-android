@@ -17,9 +17,9 @@ public class PrizeItem implements Serializable{
 	
 	public PrizeItem(JSONObject obj) throws JSONException {
 		
-		header = obj.optString("item-header");
-		imageUrl = obj.optString("item-image");
-		body = obj.optString("item-body");	
+		header = obj.optString("item-header",null);
+		imageUrl = obj.optString("item-image",null);
+		body = obj.optString("item-body",null);	
 	}
 	
 	public String getHeader() {

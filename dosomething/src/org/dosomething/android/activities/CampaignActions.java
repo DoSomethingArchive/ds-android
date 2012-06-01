@@ -20,11 +20,13 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -172,15 +174,18 @@ public class CampaignActions extends AbstractActivity {
 			
 			final Challenge challenge = (Challenge) getItem(index);
 			
-			v.setOnClickListener(new MyActionClickListener(challenge));
+			Log.d("asdf", "text="+challenge.getText() + "  complete="+challenge.getCompletionPage());
 			
-			CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox1);
+			boolean completed = completedChallenges.contains(challenge.getText());
+			boolean actionable = !completed && challenge.getCompletionPage()!=null;
 			
-			boolean checked = completedChallenges.contains(challenge.getText());
+			Button button = (Button) v.findViewById(R.id.button);
+			button.setOnClickListener(new MyActionClickListener(challenge));
+			button.setVisibility(actionable ? Button.VISIBLE : Button.GONE);
 			
-			checkBox.setChecked(checked);
-			
-			checkBox.setOnCheckedChangeListener(new MyActionCheckListener(challenge));
+			CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox);
+			checkBox.setChecked(completed);
+			checkBox.setOnCheckedChangeListener(new MyActionCheckListener(challenge, button));
 			
 			TextView body = (TextView)v.findViewById(R.id.body);
 			body.setText(challenge.getText());
@@ -206,24 +211,30 @@ public class CampaignActions extends AbstractActivity {
 	
 	private final class MyActionCheckListener implements OnCheckedChangeListener {
 		
+		private final Button actionButton;
 		private final Challenge challenge;
 		
-		private MyActionCheckListener(Challenge challenge){
+		private MyActionCheckListener(Challenge challenge, Button actionButton){
+			this.actionButton = actionButton;
 			this.challenge = challenge;
 		}
 		
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			String text = challenge.getText();
+			String challengeText = challenge.getText();
+			
 			
 			if(isChecked) {
-				if(text != null){
-					addActionCompleted(text);
+				if(challengeText != null){
+					addActionCompleted(challengeText);
 				}
+				actionButton.setVisibility(Button.GONE);
 			}else{
-				if(text != null){
-					removeActionCompleted(text);
+				if(challengeText != null){
+					removeActionCompleted(challengeText);
 				}
+				boolean actionable = challenge.getCompletionPage()!=null;
+				actionButton.setVisibility(actionable ? Button.VISIBLE : Button.GONE);
 			}
 		}
 	}

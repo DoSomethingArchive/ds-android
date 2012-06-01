@@ -16,8 +16,8 @@ public class WebFormSelectOptions implements Serializable{
 	
 	public WebFormSelectOptions(JSONObject obj) throws JSONException {
 		
-		label = obj.optString("label");
-		value = obj.optString("value");
+		label = obj.optString("label",null);
+		value = obj.optString("value",null);
 	}
 
 	public String getLabel() {

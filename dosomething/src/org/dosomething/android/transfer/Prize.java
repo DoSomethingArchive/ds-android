@@ -33,7 +33,7 @@ public class Prize implements Serializable{
 			}
 		}
 		
-		rulesUrl = obj.optString("rules");
+		rulesUrl = obj.optString("rules",null);
 	}
 	
 	public PrizeItem getScholarship() {
