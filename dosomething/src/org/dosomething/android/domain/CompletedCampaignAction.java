@@ -44,4 +44,10 @@ public class CompletedCampaignAction {
 	public void setActionText(String actionText) {
 		this.actionText = actionText;
 	}
+
+	@Override
+	public String toString() {
+		return "CompletedCampaignAction [id=" + id + ", userCampaignId="
+				+ userCampaignId + ", actionText=" + actionText + "]";
+	}
 }

@@ -11,6 +11,8 @@ import com.google.inject.Inject;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class MyDAO {
 	
@@ -44,7 +46,8 @@ public class MyDAO {
 		
 		Cursor c = sql.getReadableDatabase().query("user_campaign", new String[]{"id", "campaign_id", "uid"}, "uid = ?", new String[]{uid}, null, null, null);
 		while(c.moveToNext()){
-			answer.add(new UserCampaign(c));
+			UserCampaign uc = new UserCampaign(c);
+			answer.add(uc);
 		}
 		
 		c.close();
@@ -59,9 +62,18 @@ public class MyDAO {
 		cv.put("campaign_id", campaignId);
 		
 		SQLHelper sql = new SQLHelper(context);
+		SQLiteDatabase db = sql.getWritableDatabase();
+		
+		Cursor cursor = db.query("user_campaign", new String[]{"id"}, "uid=? and campaign_id=?", new String[]{uid, campaignId}, null, null, null, "1");
+		
+		Long answer;
+		if(cursor.moveToFirst()) {
+			answer = cursor.getLong(0);
+		} else {
+			answer = db.insertOrThrow("user_campaign", null, cv);
+		}
         
-        Long answer = sql.getWritableDatabase().insertOrThrow("user_campaign", null, cv);
-         
+		cursor.close();
         sql.close();
         
         return answer;
@@ -90,7 +102,8 @@ public class MyDAO {
 
 		if(cursor != null){
 			while(cursor.moveToNext()){
-				answer.add(new CompletedCampaignAction(cursor));
+				CompletedCampaignAction c = new CompletedCampaignAction(cursor);
+				answer.add(c);
 			}
 
 			cursor.close();
