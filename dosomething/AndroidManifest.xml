@@ -27,7 +27,7 @@
         <activity android:name=".activities.Profile"/>
         <activity android:name=".activities.CampaignActions"/>
         <activity android:name=".activities.Campaign"/>
-        <activity android:name=".activities.CampaignSignedUp"/>
+        <activity android:name=".activities.CampaignShare"/>
         <activity android:name=".activities.CampaignHowTo"/>
         <activity android:name=".activities.CampaignPrizes"/>
         <activity android:name=".activities.CampaignResources"/>

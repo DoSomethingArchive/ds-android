@@ -60,7 +60,8 @@ public class SignUp extends AbstractWebForm {
 			}
 		}
 		
-		startActivity(CampaignActions.getIntent(this, campaign));
+		startActivity(CampaignShare.getIntentForSignedUp(this, campaign));
+		finish();
 	}
 	
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){

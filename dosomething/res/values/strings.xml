@@ -37,7 +37,7 @@
     <string name="register_disclaimer">By tapping "Go", you accept the &lt;a href="http://www.dosomething.org/about/terms-of-service">terms of use&lt;/a> and &lt;a href="http://www.dosomething.org/about/privacy">privacy policy&lt;/a>.</string>
     <string name="profile_title">Participation Profile</string>
     <string name="campaigns_title">Current Campaigns</string>
-    <string name="campaign_signed_up_title">Share</string>
+    <string name="campaign_share_title">Share</string>
     <string name="campaign_how_to_title">How To</string>
     <string name="campaign_gallery_title">Gallery</string>
     <string name="campaign_prizes_title">Prizes</string>
@@ -52,9 +52,10 @@
     <string name="campaign_sign_up_button">SIGN UP!</string>
     <string name="campaign_sign_up_button_already_signed_up">Already Signed Up</string>
     
-    <string name="campaign_share_thanks">Thanks for signing up!</string>
     <string name="campaign_share_button">SHARE THIS CAMPAIGN</string>
-    <string name="campaign_share_chooser">Share via</string>
+    <string name="campaign_share_signup_header">Thanks for signing up!</string>
+    <string name="campaign_share_report_header">Thanks for rocking this campaign!</string>
+    <string name="campaign_share_chooser">Share on</string>
     
     <string name="campaign_actions">ACTIONS</string>
     <string name="campaign_how_to">HOW TO</string>

@@ -8,7 +8,8 @@
     <TextView
         android:id="@+id/name"
         style="@style/ProfileCampaignRowTitle"
-        android:layout_width="126dp" />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
 
     <RelativeLayout
         android:layout_width="fill_parent"

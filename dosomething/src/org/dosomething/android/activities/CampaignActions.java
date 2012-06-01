@@ -260,7 +260,7 @@ public class CampaignActions extends AbstractActivity {
 					if(type != null){
 						switch(type){
 						case SIGN_UP:
-							startActivity(CampaignSignedUp.getIntent(context, campaign));
+							startActivity(CampaignShare.getIntentForSignedUp(context, campaign));
 							break;
 						case REPORT_BACK:
 							startActivity(ReportBack.getIntent(context, campaign));

@@ -30,7 +30,7 @@
 	            android:layout_width="fill_parent"
 				android:layout_height="wrap_content"/>
             
-            <TextView android:id="@+id/required_instructions" style="@style/RegisterDisclaimer" android:text="@string/register_disclaimer" android:visibility="gone"/>
+            <TextView android:id="@+id/required_instructions" style="@style/RegisterDisclaimer" android:text="@string/required_instructions" android:visibility="gone"/>
             
             <Button
 		        android:id="@+id/submit"

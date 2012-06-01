@@ -9,7 +9,7 @@
     <org.dosomething.android.activities.CustomActionBar
         android:id="@+id/actionbar" 
         style="@style/ActionBar" 
-        app:title="@string/campaign_signed_up_title"/>
+        app:title="@string/campaign_share_title"/>
     
     <LinearLayout 
         android:orientation="vertical"
@@ -19,7 +19,7 @@
     	android:padding="26dp"
     	android:background="@color/campaign_share_inner_background">
         
-        <TextView style="@style/CampaignShareText" android:text="@string/campaign_share_thanks"/>
+        <TextView android:id="@+id/header" style="@style/CampaignShareText"/>
         <Button android:onClick="share" style="@style/CampaignShareButton" android:text="@string/campaign_share_button"/>
         <Button android:onClick="done" style="@style/CampaignShareContinueButton" android:text="@string/continue_upper"/>
         
