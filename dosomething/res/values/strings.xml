@@ -16,6 +16,8 @@
     <string name="sign_up_upper">BECOME A MEMBER</string>
     <string name="go_upper">GO</string>
     <string name="ok_upper">OK</string>
+    <string name="yes_upper">YES</string>
+    <string name="no_upper">NO</string>
     <string name="continue_upper">CONTINUE</string>
     <string name="cancel_upper">CANCEL</string>
     <string name="username_upper">USERNAME *</string>
@@ -32,6 +34,7 @@
     <string name="required_instructions">* Required Field</string>
     <string name="logging_in">Logging in&#8230;</string>
     <string name="registering">Registering&#8230;</string>
+    <string name="logout_confirm">Are you sure you want to logout?</string>
     
     <string name="register_title">Become A Member</string>
     <string name="register_disclaimer">By tapping "Go", you accept the &lt;a href="http://www.dosomething.org/about/terms-of-service">terms of use&lt;/a> and &lt;a href="http://www.dosomething.org/about/privacy">privacy policy&lt;/a>.</string>
