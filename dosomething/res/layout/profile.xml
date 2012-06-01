@@ -11,8 +11,15 @@
         style="@style/ActionBar" 
         app:title="@string/profile_title"/>
     
-    <LinearLayout android:id="@+id/content"
-        android:layout_width="fill_parent"
-    	android:layout_height="fill_parent"/>
+    <ScrollView 
+		android:orientation="vertical"
+		android:layout_weight="1.0"
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:fillViewport="true">
+	    <LinearLayout android:id="@+id/content"
+	        android:layout_width="fill_parent"
+	    	android:layout_height="fill_parent"/>
+    </ScrollView>
     
 </LinearLayout>
