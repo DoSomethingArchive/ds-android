@@ -46,6 +46,7 @@ public class Campaigns extends AbstractActivity {
 	
 	private final OnItemClickListener itemClickListener = new MyItemClickListener();
 	private Dialog splashDialog;
+	private Action logoutAction;
 	
 	@Override
 	protected String getPageName() {
@@ -73,8 +74,26 @@ public class Campaigns extends AbstractActivity {
 	    	}
 	    }
         
-        fetchCampaigns();
+        // onResume is always called next
     }
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		renderLogout();
+		fetchCampaigns();
+	}
+	
+	private void renderLogout() {
+		if(userContext.isLoggedIn() && logoutAction==null) {
+			logoutAction = Login.getLogoutAction(this, userContext);
+			actionBar.addAction(logoutAction, actionBar.getActionCount());
+		} else if(!userContext.isLoggedIn() && logoutAction!=null) {
+			actionBar.removeAction(logoutAction);
+			logoutAction = null;
+		}
+	}
 	
 	private final Action profileButtonAction = new Action(){
 
@@ -223,6 +242,11 @@ public class Campaigns extends AbstractActivity {
 			Campaign campaign = getItem(position);
 			
 			v.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
+			
+			if(campaign.getBackgroundUrl()!=null) {
+				ImageView bgImageView = (ImageView) v.findViewById(R.id.background);
+				imageLoader.displayImage(campaign.getBackgroundUrl(), bgImageView);
+			}
 			
 			ImageView imageView = (ImageView) v.findViewById(R.id.image);
 			

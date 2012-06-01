@@ -66,7 +66,7 @@ public class Profile extends AbstractActivity {
         
         actionBar.setHomeAction(Campaigns.getHomeAction(this));
         
-        actionBar.addAction(logoutAction);
+        actionBar.addAction(Login.getLogoutAction(this, userContext));
         
         // onResume is always call next
     }
@@ -78,22 +78,6 @@ public class Profile extends AbstractActivity {
 		content.removeAllViews();
 		new MyTask().execute();
 	}
-	
-	
-	private final Action logoutAction = new Action(){
-
-		@Override
-		public int getDrawable() {
-			return R.drawable.action_bar_logout;
-		}
-
-		@Override
-		public void performAction(View view) {
-			userContext.clear();
-			startActivity(new Intent(getApplicationContext(), Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-		}
-		
-	};
 	
 	public void findCampaigns(View v){
 		finish();

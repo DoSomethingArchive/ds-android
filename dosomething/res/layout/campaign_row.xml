@@ -4,6 +4,14 @@
     android:layout_height="160dp"
     android:orientation="vertical" >
     
-    <ImageView android:id="@+id/image" style="@style/CampaignRowImage"/>
+    <FrameLayout 
+        android:id="@+id/frame"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+        <ImageView android:id="@+id/background" style="@style/CampaignRowBackground"/>
+        <ImageView android:id="@+id/image" style="@style/CampaignRowImage"/>
+    </FrameLayout>
+    
+    
     
 </LinearLayout>

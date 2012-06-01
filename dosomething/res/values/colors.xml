@@ -18,6 +18,7 @@
 <color name="required_instructions_text">#7A7C7F</color>
 <color name="profile_background">#EFEFEF</color>
 <color name="profile_no_campaigns_text">#333333</color>
+<color name="campaign_actions_background">#EFEFEF</color>
 <color name="campaign_dates_row_background">#2A2C2B</color>
 <color name="campaign_sign_up_row_background">#1C1B19</color>
 <color name="campaign_share_text">#fed200</color>
