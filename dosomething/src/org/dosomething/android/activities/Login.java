@@ -14,6 +14,8 @@ import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -147,8 +149,17 @@ public class Login extends AbstractActivity {
 
 		@Override
 		public void performAction(View view) {
-			userContext.clear();
-			context.startActivity(new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+			new AlertDialog.Builder(context)
+				.setMessage(context.getString(R.string.logout_confirm))
+				.setPositiveButton(context.getString(R.string.yes_upper), new OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						userContext.clear();
+						context.startActivity(new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+					}
+				})
+				.setNegativeButton(context.getString(R.string.no_upper), null)
+				.create()
+				.show();
 		}
     }
     
