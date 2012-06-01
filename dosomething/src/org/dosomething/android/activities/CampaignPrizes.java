@@ -68,6 +68,7 @@ public class CampaignPrizes extends AbstractActivity {
 		header.setText(scholarship.getHeader());
 		
 		ImageView image = (ImageView)v.findViewById(R.id.image);
+		header.setTypeface(headerTypeface, Typeface.BOLD);
 		imageLoader.displayImage(scholarship.getImageUrl(), image);
 		
 		TextView body = (TextView)v.findViewById(R.id.body);
