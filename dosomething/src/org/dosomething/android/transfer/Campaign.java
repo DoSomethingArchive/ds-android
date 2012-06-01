@@ -26,6 +26,8 @@ public class Campaign implements Serializable {
 	private Date endDate;
 	private String teaser;
 	private String backgroundColor;
+	private String backgroundUrl;
+
 	private String videoUrl;
 	private String videoThumbnail;
 	private String additionalText;
@@ -56,6 +58,7 @@ public class Campaign implements Serializable {
 		startDate = df.parse(co.getString("start-date"));
 		endDate = df.parse(co.getString("end-date"));
 		logoUrl = co.getString("logo");
+		backgroundUrl = co.optString("logo-bg-image",null);
 		
 		JSONObject m = obj.optJSONObject("main");
 		if(m!=null) {
@@ -296,5 +299,11 @@ public class Campaign implements Serializable {
 	public void setShareMessage(String shareMessage) {
 		this.shareMessage = shareMessage;
 	}
-	
+	public String getBackgroundUrl() {
+		return backgroundUrl;
+	}
+
+	public void setBackgroundUrl(String backgroundUrl) {
+		this.backgroundUrl = backgroundUrl;
+	}
 }

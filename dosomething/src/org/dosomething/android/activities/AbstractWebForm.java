@@ -84,6 +84,8 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		
 		actionBar.setHomeAction(Campaigns.getHomeAction(this));
 		
+		actionBar.addAction(Login.getLogoutAction(this, userContext));
+		
 		LinearLayout webform = (LinearLayout)findViewById(R.id.web_form);
 		
 		boolean anyRequired = false;

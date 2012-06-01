@@ -26,6 +26,7 @@ import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 import com.google.inject.Inject;
+import com.markupartist.android.widget.ActionBar.Action;
 
 public class Login extends AbstractActivity {
 	
@@ -125,6 +126,32 @@ public class Login extends AbstractActivity {
         	}
         }
     }
+    
+    public static Action getLogoutAction(Context context, UserContext userContext) {
+    	return new MyLogoutAction(context, userContext);
+    }
+    
+    private static class MyLogoutAction implements Action {
+    	private Context context;
+    	private UserContext userContext;
+    	
+    	public MyLogoutAction(Context context, UserContext userContext) {
+			this.context = context;
+			this.userContext = userContext;
+		}
+    	
+    	@Override
+		public int getDrawable() {
+			return R.drawable.action_bar_logout;
+		}
+
+		@Override
+		public void performAction(View view) {
+			userContext.clear();
+			context.startActivity(new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		}
+    }
+    
     
 	private class MyLoginTask extends AbstractWebserviceTask {
 

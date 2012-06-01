@@ -60,18 +60,6 @@ public class CampaignActions extends AbstractActivity {
 	
 	private UserCampaign userCampaign;
 	
-	private final Action logoutAction = new Action(){
-		@Override
-		public int getDrawable() {
-			return R.drawable.action_bar_logout;
-		}
-		@Override
-		public void performAction(View view) {
-			userContext.clear();
-			startActivity(new Intent(getApplicationContext(), Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-		}
-	};
-	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +69,7 @@ public class CampaignActions extends AbstractActivity {
         
         actionBar.setHomeAction(Campaigns.getHomeAction(this));
         
-        actionBar.addAction(logoutAction);
+        actionBar.addAction(Login.getLogoutAction(this, userContext));
         
         campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
         
