@@ -68,8 +68,17 @@ public class Profile extends AbstractActivity {
         
         actionBar.addAction(logoutAction);
         
-        new MyTask().execute();
+        // onResume is always call next
     }
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		content.removeAllViews();
+		new MyTask().execute();
+	}
+	
 	
 	private final Action logoutAction = new Action(){
 
