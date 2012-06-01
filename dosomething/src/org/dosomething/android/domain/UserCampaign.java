@@ -44,4 +44,9 @@ public class UserCampaign {
 		this.uid = uid;
 	}
 
+	@Override
+	public String toString() {
+		return "UserCampaign [id=" + id + ", campaignId=" + campaignId
+				+ ", uid=" + uid + "]";
+	}
 }
