@@ -1,7 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.util.List;
-
 import org.dosomething.android.R;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Prize;
@@ -16,10 +14,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
@@ -35,7 +31,7 @@ public class CampaignPrizes extends AbstractActivity {
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 	
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
-	@InjectView(R.id.list) private ListView list;
+	@InjectView(R.id.content) private LinearLayout content;
 	
 	@Override
 	protected String getPageName() {
@@ -53,11 +49,17 @@ public class CampaignPrizes extends AbstractActivity {
         Prize prize = campaign.getPrize();
         
         if(prize.getScholarship()!=null) {
-        	list.addHeaderView(createScholarshipView(prize.getScholarship()));
+        	content.addView(createScholarshipView(prize.getScholarship()));
         }
-    	list.setAdapter(new MyAdapter(getApplicationContext(), prize.getOthers()));
+    	
+        if(prize.getOthers()!=null) {
+        	for(PrizeItem prizeItem : prize.getOthers()) {
+        		content.addView(createPrizeView(prizeItem));
+        	}
+        }
+        
     	if(prize.getRulesUrl()!=null && prize.getRulesUrl().length() > 0) {
-    		list.addFooterView(createRulesView(prize.getRulesUrl()));
+    		content.addView(createRulesView(prize.getRulesUrl()));
     	}
     }
 	
@@ -73,6 +75,22 @@ public class CampaignPrizes extends AbstractActivity {
 		
 		TextView body = (TextView)v.findViewById(R.id.body);
 		body.setText(scholarship.getBody());
+		
+		return v;
+	}
+	
+	private View createPrizeView(PrizeItem prizeItem) {
+		View v = inflater.inflate(R.layout.prize_row, null);
+		
+		TextView header = (TextView)v.findViewById(R.id.header);
+		header.setTypeface(headerTypeface, Typeface.BOLD);
+		header.setText(prizeItem.getHeader());
+		
+		ImageView image = (ImageView)v.findViewById(R.id.image);
+		imageLoader.displayImage(prizeItem.getImageUrl(), image);
+		
+		TextView body = (TextView)v.findViewById(R.id.body);
+		body.setText(prizeItem.getBody());
 		
 		return v;
 	}
@@ -94,40 +112,5 @@ public class CampaignPrizes extends AbstractActivity {
 		Intent answer = new Intent(context, CampaignPrizes.class);
 		answer.putExtra(CAMPAIGN, campaign);
 		return answer;
-	}
-	
-	private class MyAdapter extends ArrayAdapter<PrizeItem> {
-		
-		public MyAdapter(Context context, List<PrizeItem> objects) {
-			super(context, android.R.layout.simple_list_item_1, objects);
-		}
-		
-		@Override
-		public boolean isEnabled(int position) {
-			return false;
-		}
-
-		@Override
-		public View getView(int index, View v, ViewGroup parent) {
-			
-			if (v == null) {
-				v = inflater.inflate(R.layout.prize_row, null);
-			}
-			
-			PrizeItem prizeItem = (PrizeItem) getItem(index);
-			
-			TextView header = (TextView)v.findViewById(R.id.header);
-			header.setTypeface(headerTypeface, Typeface.BOLD);
-			header.setText(prizeItem.getHeader());
-			
-			ImageView image = (ImageView)v.findViewById(R.id.image);
-			imageLoader.displayImage(prizeItem.getImageUrl(), image);
-			
-			TextView body = (TextView)v.findViewById(R.id.body);
-			body.setText(prizeItem.getBody());
-			
-			return v;
-		}
-		
 	}
 }
