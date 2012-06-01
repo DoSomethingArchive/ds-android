@@ -23,10 +23,10 @@ public class WebFormField implements Serializable{
 	
 	public WebFormField(JSONObject obj) throws JSONException {
 		
-		label = obj.optString("label");
-		type = obj.optString("type");
-		name = obj.optString("name");
-		selectType = obj.optString("select-type");
+		label = obj.optString("label",null);
+		type = obj.optString("type",null);
+		name = obj.optString("name",null);
+		selectType = obj.optString("select-type",null);
 		required = obj.optBoolean("required", false);
 		
 		JSONArray o = obj.optJSONArray("select-options");

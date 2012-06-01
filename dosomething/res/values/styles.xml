@@ -320,6 +320,7 @@
         <item name="android:textColor">#868686</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">15dp</item>
+        <item name="android:gravity">left|center_vertical</item>
     </style>
     
     <style name="CampaignActionListTitle">

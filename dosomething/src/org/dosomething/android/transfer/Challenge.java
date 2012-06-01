@@ -17,8 +17,7 @@ public class Challenge implements Serializable {
 	public Challenge(JSONObject obj) throws JSONException {
 		
 		text = obj.getString("text");
-		completionPage = obj.optString("completion-page");
-		
+		completionPage = obj.optString("completion-page",null);
 	}
 	
 	public String getText() {

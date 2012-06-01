@@ -59,14 +59,14 @@ public class Campaign implements Serializable {
 		
 		JSONObject m = obj.optJSONObject("main");
 		if(m!=null) {
-			teaser = m.optString("teaser");
-			videoUrl = m.optString("video");
-			videoThumbnail = m.optString("video-thumbnail");
-			additionalText = m.optString("additional-text");
-			link = m.optString("link");
-			image = m.optString("image");
-			shareTitle = m.optString("share-title");
-			shareMessage = m.optString("share-message");
+			teaser = m.optString("teaser",null);
+			videoUrl = m.optString("video",null);
+			videoThumbnail = m.optString("video-thumbnail",null);
+			additionalText = m.optString("additional-text",null);
+			link = m.optString("link",null);
+			image = m.optString("image",null);
+			shareTitle = m.optString("share-title",null);
+			shareMessage = m.optString("share-message",null);
 		}
 		
 		JSONArray f = obj.optJSONArray("faq");

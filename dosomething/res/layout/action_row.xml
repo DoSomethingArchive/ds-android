@@ -3,16 +3,25 @@
     style="@style/ActionRow" >
 
     <CheckBox
-        android:id="@+id/checkBox1"
+        android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
-
+        android:layout_centerVertical="true" />
+    
     <TextView
         android:id="@+id/body"
         style="@style/ActionRowBody"
+        android:layout_toLeftOf="@+id/button"
+        android:layout_toRightOf="@+id/checkBox"
+        android:layout_centerVertical="true" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/checkBox1" />
+        android:layout_alignParentRight="true"
+        android:text="@string/action_complete_button" />
 
 </RelativeLayout>

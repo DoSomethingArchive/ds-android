@@ -57,6 +57,8 @@
     <string name="campaign_share_report_header">Thanks for rocking this campaign!</string>
     <string name="campaign_share_chooser">Share on</string>
     
+    <string name="action_complete_button">Do It!</string>
+    
     <string name="campaign_actions">ACTIONS</string>
     <string name="campaign_how_to">HOW TO</string>
     <string name="campaign_gallery">GALLERY</string>

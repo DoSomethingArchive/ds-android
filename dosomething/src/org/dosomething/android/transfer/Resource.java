@@ -16,8 +16,8 @@ public class Resource implements Serializable{
 	
 	public Resource(JSONObject obj) throws JSONException {
 		
-		body = obj.optString("item-body");
-		linkUrl = obj.optString("item-link");
+		body = obj.optString("item-body",null);
+		linkUrl = obj.optString("item-link",null);
 	}
 
 	public String getBody() {
