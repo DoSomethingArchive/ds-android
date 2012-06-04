@@ -23,9 +23,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.Html.TagHandler;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -195,7 +193,7 @@ public class Register extends AbstractActivity {
 		}
 
 		@Override
-		protected void onError() {
+		protected void onError(Exception e) {
 			Toast.makeText(Register.this, getString(R.string.register_failed), Toast.LENGTH_LONG).show();
 		}
 

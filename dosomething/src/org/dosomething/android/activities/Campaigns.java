@@ -6,11 +6,13 @@ import org.dosomething.android.R;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
+import org.dosomething.android.tasks.NoInternetException;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.widget.CustomActionBar;
 import org.dosomething.android.widget.ProgressBarImageLoadingListener;
 
 import roboguice.inject.InjectView;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -29,12 +31,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
-import com.markupartist.android.widget.ActionBar.AbstractAction;
 import com.markupartist.android.widget.ActionBar.Action;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
 public class Campaigns extends AbstractActivity {
 	
@@ -213,8 +212,20 @@ public class Campaigns extends AbstractActivity {
 		}
 
 		@Override
-		protected void onError() {
-			Toast.makeText(Campaigns.this, "Unable to list campaigns", Toast.LENGTH_LONG).show();
+		protected void onError(Exception e) {
+			String message;
+			if(e instanceof NoInternetException) {
+				message = getString(R.string.campaigns_no_internet);
+			} else {
+				message = getString(R.string.campaigns_failed);
+			}
+			
+			new AlertDialog.Builder(Campaigns.this)
+				.setMessage(message)
+				.setCancelable(false)
+				.setPositiveButton(getString(R.string.ok_upper), null)
+				.create()
+				.show();
 		}
 
 	}

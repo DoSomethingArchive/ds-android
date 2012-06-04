@@ -33,7 +33,7 @@ import android.os.AsyncTask;
 import android.text.Html;
 import android.util.Log;
 
-public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean>{
+public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Exception>{
 
 
 	private static final String TAG = "AbstractWebserviceTask";
@@ -44,7 +44,7 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 
 	protected abstract void onSuccess();
 	protected abstract void onFinish();
-	protected abstract void onError();
+	protected abstract void onError(Exception e);
 
 	protected abstract void doWebOperation() throws Exception;
 	
@@ -55,26 +55,26 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Boolean
 	}
 
 	@Override
-	protected Boolean doInBackground(Void... params) {
-		boolean result = false;
+	protected Exception doInBackground(Void... params) {
+		Exception exception = null;
 
 		try{
 			doWebOperation();
-			result = true;
 		}catch(Exception e){
-			Log.e(TAG, "Unable to call webservice", e);
+			Log.d(TAG, "Exception during webservice. ", e);
+			exception = e;
 		}
 
-		return result;
+		return exception;
 	}
 
 	@Override
-	protected void onPostExecute(Boolean result) {
+	protected void onPostExecute(Exception exception) {
 		try{
-			if(result){
+			if(exception==null){
 				onSuccess();
 			}else{
-				onError();
+				onError(exception);
 			}
 		}finally{
 			onFinish();

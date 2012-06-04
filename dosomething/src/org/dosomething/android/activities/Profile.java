@@ -33,7 +33,6 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.markupartist.android.widget.ActionBar.Action;
 
 public class Profile extends AbstractActivity {
 	
@@ -172,7 +171,7 @@ public class Profile extends AbstractActivity {
 		}
 
 		@Override
-		protected void onError() {}
+		protected void onError(Exception e) {}
 		
 	}
 	
