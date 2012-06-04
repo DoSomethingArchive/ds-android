@@ -35,7 +35,6 @@ import android.widget.ProgressBar;
 
 import com.commonsware.cwac.endless.EndlessAdapter;
 import com.google.inject.Inject;
-import com.markupartist.android.widget.ActionBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class CampaignGallery extends AbstractActivity {
@@ -222,7 +221,7 @@ public class CampaignGallery extends AbstractActivity {
 		}
 
 		@Override
-		protected void onError() {
+		protected void onError(Exception e) {
 			new AlertDialog.Builder(CampaignGallery.this)
 				.setMessage(getString(R.string.gallery_feed_failed))
 				.setCancelable(false)

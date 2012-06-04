@@ -12,6 +12,8 @@
     <string name="facebook_auth_failed">Facebook login failed. Please try again.</string>
     <string name="form_submit_failed">The form submit has failed. Please try again.</string>
     <string name="gallery_feed_failed">The gallery has failed to load. Please try again.</string>
+    <string name="campaigns_failed">The current campaigns have failed to load. Please try again.</string>
+    <string name="campaigns_no_internet">An internet connection is required. Please enable an internet connection and try again.</string>
     <string name="log_in_upper">LOG IN</string>
     <string name="sign_up_upper">BECOME A MEMBER</string>
     <string name="go_upper">GO</string>

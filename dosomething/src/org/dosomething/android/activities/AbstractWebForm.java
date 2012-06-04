@@ -544,7 +544,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 			if(uploadSuccess) {
 				AbstractWebForm.this.onFileUploadSuccess(fieldIndex, fid);
 			} else {
-				onError();
+				onError(null);
 			}
 		}
 
@@ -560,7 +560,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		}
 
 		@Override
-		protected void onError() {
+		protected void onError(Exception e) {
 			new AlertDialog.Builder(AbstractWebForm.this)
 				.setMessage(getString(R.string.auth_failed))
 				.setCancelable(false)
@@ -663,7 +663,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		}
 
 		@Override
-		protected void onError() {
+		protected void onError(Exception e) {
 			new AlertDialog.Builder(AbstractWebForm.this)
 				.setMessage(getString(R.string.form_submit_failed))
 				.setCancelable(false)

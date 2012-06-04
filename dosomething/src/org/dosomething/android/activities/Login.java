@@ -201,7 +201,7 @@ public class Login extends AbstractActivity {
 		}
 
 		@Override
-		protected void onError() {
+		protected void onError(Exception e) {
 			
 			new AlertDialog.Builder(Login.this)
 				.setMessage(getString(R.string.facebook_auth_failed))
@@ -269,7 +269,7 @@ public class Login extends AbstractActivity {
 		}
 
 		@Override
-		protected void onError() {
+		protected void onError(Exception e) {
 			
 			Toast.makeText(Login.this, getString(R.string.log_in_failed), Toast.LENGTH_LONG).show();
 		}

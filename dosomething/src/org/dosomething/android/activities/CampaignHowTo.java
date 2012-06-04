@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.markupartist.android.widget.ActionBar;
 
 public class CampaignHowTo extends AbstractActivity {
 	
