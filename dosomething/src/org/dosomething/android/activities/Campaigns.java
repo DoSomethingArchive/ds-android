@@ -60,8 +60,6 @@ public class Campaigns extends AbstractActivity {
         
         MyModel model = (MyModel) getLastNonConfigurationInstance();
         
-        actionBar.setHomeAction(new EmptyAction());
-        
         actionBar.addAction(profileButtonAction);
         
 	    if (model != null) {
@@ -129,7 +127,7 @@ public class Campaigns extends AbstractActivity {
 	}
 	
 	public static Action getHomeAction(Context context){
-		return new IntentAction(context, new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), R.drawable.action_bar_home_logo);
+		return new IntentAction(context, new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), R.drawable.action_bar_home);
 	}
 	 
 	@Override
@@ -196,16 +194,6 @@ public class Campaigns extends AbstractActivity {
 			startActivity(org.dosomething.android.activities.Campaign.getIntent(getApplicationContext(), campaign));
 		}
 	};
-	
-	private class EmptyAction extends AbstractAction {
-
-		public EmptyAction() {
-			super(R.drawable.action_bar_home_logo);
-		}
-
-		@Override
-		public void performAction(View view) { /* ignore*/ }
-	}
 	
 	private class MyTask extends AbstractFetchCampaignsTask {
 

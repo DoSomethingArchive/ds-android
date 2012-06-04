@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<color name="actionbar_separator">#FFFFFF</color>
+<color name="actionbar_separator">#173781</color>
 <color name="actionbar_title">#FFFFFF</color>
 <color name="actionbar_background_start">#173781</color>
 <color name="actionbar_background_end">#173781</color>
-<color name="actionbar_background_item_pressed_start">#173781</color>
-<color name="actionbar_background_item_pressed_end">#173781</color>
+<color name="actionbar_background_item_pressed_start">#2458C9</color>
+<color name="actionbar_background_item_pressed_end">#2458C9</color>
 <color name="login_background_top">#18408B</color>
 <color name="login_background_bottom">#2262AC</color>
 <color name="login_background_inputs_top">#18408B</color>

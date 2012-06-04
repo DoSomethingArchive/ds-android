@@ -64,7 +64,7 @@ public class Profile extends AbstractActivity {
         
         context = this;
         
-        actionBar.setHomeAction(Campaigns.getHomeAction(this));
+        actionBar.addAction(Campaigns.getHomeAction(this));
         
         actionBar.addAction(Login.getLogoutAction(this, userContext));
         

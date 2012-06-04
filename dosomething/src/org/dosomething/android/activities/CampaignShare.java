@@ -34,6 +34,8 @@ public class CampaignShare extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaign_share);
         
+        actionBar.addAction(Campaigns.getHomeAction(this));
+        
         campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
         type = getIntent().getExtras().getInt(TYPE);
         
@@ -47,8 +49,6 @@ public class CampaignShare extends AbstractActivity {
 		default:
 			throw new RuntimeException();
 		}
-        
-        actionBar.setHomeAction(Campaigns.getHomeAction(this));
     }
 	
 	public void share(View v){
