@@ -11,6 +11,7 @@ import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.GalleryItem;
 import org.dosomething.android.transfer.GalleryItem.GalleryItemType;
+import org.dosomething.android.widget.CustomActionBar;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

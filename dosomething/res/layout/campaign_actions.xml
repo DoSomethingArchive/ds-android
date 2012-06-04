@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="@color/campaign_actions_background">
     
-    <org.dosomething.android.activities.CustomActionBar
+    <org.dosomething.android.widget.CustomActionBar
         android:id="@+id/actionbar" 
         style="@style/ActionBar"/>
     

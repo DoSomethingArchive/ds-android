@@ -8,7 +8,7 @@
     android:descendantFocusability="beforeDescendants"
 	android:focusableInTouchMode="true" >
 
-    <org.dosomething.android.activities.CustomActionBar
+    <org.dosomething.android.widget.CustomActionBar
         android:id="@+id/actionbar"
         style="@style/ActionBar"
         app:title="@string/report_back_title" />

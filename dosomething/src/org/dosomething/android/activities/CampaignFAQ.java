@@ -5,6 +5,7 @@ import java.util.List;
 import org.dosomething.android.R;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Faq;
+import org.dosomething.android.widget.CustomActionBar;
 
 import roboguice.inject.InjectView;
 import android.content.Context;

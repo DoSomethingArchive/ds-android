@@ -7,6 +7,8 @@ import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.widget.CustomActionBar;
+import org.dosomething.android.widget.ProgressBarImageLoadingListener;
 
 import roboguice.inject.InjectView;
 import android.app.Dialog;
@@ -23,6 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
@@ -30,6 +33,8 @@ import com.markupartist.android.widget.ActionBar.AbstractAction;
 import com.markupartist.android.widget.ActionBar.Action;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
 public class Campaigns extends AbstractActivity {
 	
@@ -239,7 +244,8 @@ public class Campaigns extends AbstractActivity {
 			}
 			
 			ImageView imageView = (ImageView) v.findViewById(R.id.image);
-			imageLoader.displayImage(campaign.getLogoUrl(), imageView);
+			ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+			imageLoader.displayImage(campaign.getLogoUrl(), imageView, new ProgressBarImageLoadingListener(progressBar));
 
 			return v;
 		}
