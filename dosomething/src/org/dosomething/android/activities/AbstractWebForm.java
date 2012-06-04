@@ -137,9 +137,10 @@ public abstract class AbstractWebForm extends AbstractActivity {
 	
 	private void prePopulate() {
 		for(WebFormFieldBinding binding : fields) {
-			if(binding.getWebFormField().getName().equals("email")) {
+			String name = binding.getWebFormField().getName();
+			if(name.equals("email") || name.equals("field_webform_email[und][0][email]")) {
 				binding.setFormValue(Collections.singletonList(userContext.getEmail()));
-			} else if(binding.getWebFormField().getName().equals("name")) {
+			} else if(name.equals("name") || name.equals("user_name")) {
 				binding.setFormValue(Collections.singletonList(userContext.getUserName()));
 			}
 		}

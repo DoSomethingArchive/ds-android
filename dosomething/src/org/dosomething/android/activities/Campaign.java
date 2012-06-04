@@ -39,6 +39,7 @@ public class Campaign extends AbstractActivity {
 
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.image) private ImageView imgLogo;
+	@InjectView(R.id.background) private ImageView imgBackground;
 	@InjectView(R.id.image_container) private LinearLayout llImageContainer;
 	@InjectView(R.id.dates) private TextView txtDates;
 	@InjectView(R.id.teaser) private TextView txtTeaser;
@@ -72,6 +73,9 @@ public class Campaign extends AbstractActivity {
 		txtTeaser.setText(campaign.getTeaser());
 
 		llImageContainer.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
+		if(!nullOrEmpty(campaign.getBackgroundUrl())) {
+			imageLoader.displayImage(campaign.getBackgroundUrl(), imgBackground);
+		}
 		imageLoader.displayImage(campaign.getLogoUrl(), imgLogo);
 		
 		btnSignUp.setTypeface(headerTypeface, Typeface.BOLD);

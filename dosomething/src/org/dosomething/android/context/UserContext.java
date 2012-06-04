@@ -1,5 +1,7 @@
 package org.dosomething.android.context;
 
+import com.google.inject.Inject;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -18,6 +20,7 @@ public class UserContext {
 	
 	private final Context context;
 	
+	@Inject
 	public UserContext(Context context){
 		this.context = context;
 	}
