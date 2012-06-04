@@ -249,7 +249,6 @@ public class Campaigns extends AbstractActivity {
 			}
 			
 			ImageView imageView = (ImageView) v.findViewById(R.id.image);
-			
 			imageLoader.displayImage(campaign.getLogoUrl(), imageView);
 
 			return v;
