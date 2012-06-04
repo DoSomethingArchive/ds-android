@@ -12,6 +12,8 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import com.nostra13.universalimageloader.cache.disc.impl.FileCountLimitedDiscCache;
+import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiscCache;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -27,6 +29,9 @@ public class MyModule extends AbstractModule {
 		this.context = context;
 	}
 	
+	/**
+	 * This configures the applications class to impl mappings for injected things.
+	 */
 	@Override
 	protected void configure() {
 
@@ -50,6 +55,9 @@ public class MyModule extends AbstractModule {
 			.in(Singleton.class);
 	}
 	
+	/**
+	 * Provides a new configured ImageLoader when needed for injection.
+	 */
 	public static class ImageLoaderProvider implements Provider<ImageLoader> {
 		
 		private Context context;
@@ -64,21 +72,21 @@ public class MyModule extends AbstractModule {
 			ImageLoader imageLoader = ImageLoader.getInstance();
 			
 			DisplayImageOptions displayOptions = new DisplayImageOptions.Builder()
-				.cacheInMemory()
-				.cacheOnDisc()
+				.cacheInMemory() // allow images to memory cache by default
+				.cacheOnDisc() // allow images to disc cache by default
 				.decodingType(DecodingType.MEMORY_SAVING)
 				.build();
 			
 			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-				.maxImageWidthForMemoryCache(480)
-	            .maxImageHeightForMemoryCache(800)
-		        .httpConnectTimeout(5000)
-		        .httpReadTimeout(30000)
+				.maxImageWidthForMemoryCache(480/*px*/)
+	            .maxImageHeightForMemoryCache(800/*px*/)
+		        .httpConnectTimeout(5000/*millis = 5sec*/)
+		        .httpReadTimeout(30000/*millis = 30sec*/)
 		        .threadPoolSize(5)
 		        .threadPriority(Thread.MIN_PRIORITY + 2)
 		        .denyCacheImageMultipleSizesInMemory()
-		        .discCache(new FileCountLimitedDiscCache(StorageUtils.getIndividualCacheDirectory(context), 30))
-		        .memoryCache(new UsingFreqLimitedMemoryCache(2000000))
+		        .discCache(new LimitedAgeDiscCache(StorageUtils.getIndividualCacheDirectory(context), new Md5FileNameGenerator(), 604800/*seconds = 7days*/))
+		        .memoryCache(new UsingFreqLimitedMemoryCache(2097152/*bytes = 2mb*/))
 		        .defaultDisplayImageOptions(displayOptions)
 		        .build();
 			
@@ -89,6 +97,9 @@ public class MyModule extends AbstractModule {
 		
 	}
 	
+	/**
+	 * Provides a new Din Typeface object when needed for injection.
+	 */
 	public static class DinCompCondBoldProvider implements Provider<Typeface> {
 		
 		private Context context;
