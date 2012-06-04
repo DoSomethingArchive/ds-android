@@ -70,7 +70,7 @@ public class CampaignGallery extends AbstractActivity {
         
         imagePixels = getResources().getDimensionPixelSize(R.dimen.gallery_item);
         
-        actionBar.setHomeAction(Campaigns.getHomeAction(this));
+        actionBar.addAction(Campaigns.getHomeAction(this));
         
         gridview.setOnItemClickListener(listener);
         

@@ -41,7 +41,7 @@ public class CampaignFAQ extends AbstractActivity {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.campaign_faq);
 	    
-	    actionBar.setHomeAction(Campaigns.getHomeAction(this));
+	    actionBar.addAction(Campaigns.getHomeAction(this));
 	    
 	    Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
 	    

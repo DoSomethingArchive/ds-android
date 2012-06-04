@@ -61,7 +61,7 @@ public class Campaign extends AbstractActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.campaign);
 
-		actionBar.setHomeAction(Campaigns.getHomeAction(this));
+		actionBar.addAction(Campaigns.getHomeAction(this));
 
 		campaign = (org.dosomething.android.transfer.Campaign) getIntent().getSerializableExtra(CAMPAIGN);
 

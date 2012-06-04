@@ -82,7 +82,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(getContentViewResourceId());
 		
-		actionBar.setHomeAction(Campaigns.getHomeAction(this));
+		actionBar.addAction(Campaigns.getHomeAction(this));
 		
 		actionBar.addAction(Login.getLogoutAction(this, userContext));
 		

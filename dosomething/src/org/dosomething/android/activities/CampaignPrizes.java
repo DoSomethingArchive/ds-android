@@ -43,7 +43,7 @@ public class CampaignPrizes extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaign_prizes);
         
-        actionBar.setHomeAction(Campaigns.getHomeAction(this));
+        actionBar.addAction(Campaigns.getHomeAction(this));
         
         Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
         Prize prize = campaign.getPrize();
