@@ -6,7 +6,7 @@
     android:background="@color/light_background"
     xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
 	
-    <org.dosomething.android.activities.CustomActionBar
+    <org.dosomething.android.widget.CustomActionBar
         android:id="@+id/actionbar" 
         style="@style/ActionBar" 
         app:title="@string/campaign_how_to_title"/>

@@ -6,7 +6,7 @@
     android:background="@color/light_background"
     android:orientation="vertical" >
 
-    <org.dosomething.android.activities.CustomActionBar
+    <org.dosomething.android.widget.CustomActionBar
         android:id="@+id/actionbar"
         style="@style/ActionBar"
         app:title="@string/campaign_prizes_title" />

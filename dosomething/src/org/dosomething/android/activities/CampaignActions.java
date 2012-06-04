@@ -12,6 +12,7 @@ import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Challenge;
+import org.dosomething.android.widget.CustomActionBar;
 
 import roboguice.inject.InjectView;
 import android.content.Context;

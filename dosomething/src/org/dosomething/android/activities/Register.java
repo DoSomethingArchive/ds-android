@@ -11,6 +11,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.widget.CustomActionBar;
 import org.json.JSONObject;
 
 import roboguice.inject.InjectView;

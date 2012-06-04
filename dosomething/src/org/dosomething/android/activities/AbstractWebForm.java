@@ -19,6 +19,7 @@ import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.WebForm;
 import org.dosomething.android.transfer.WebFormField;
 import org.dosomething.android.transfer.WebFormSelectOptions;
+import org.dosomething.android.widget.CustomActionBar;
 import org.json.JSONObject;
 
 import roboguice.inject.InjectView;

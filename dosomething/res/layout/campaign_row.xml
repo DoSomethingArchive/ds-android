@@ -10,6 +10,11 @@
         android:layout_height="fill_parent" >
         <ImageView android:id="@+id/background" style="@style/CampaignRowBackground"/>
         <ImageView android:id="@+id/image" style="@style/CampaignRowImage"/>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
     </FrameLayout>
     
     

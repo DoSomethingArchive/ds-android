@@ -1,4 +1,4 @@
-package org.dosomething.android.activities;
+package org.dosomething.android.widget;
 
 import roboguice.RoboGuice;
 import android.content.Context;

@@ -8,6 +8,7 @@ import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
 import org.dosomething.android.domain.UserCampaign;
+import org.dosomething.android.widget.CustomActionBar;
 
 import roboguice.inject.InjectView;
 import android.content.Context;
