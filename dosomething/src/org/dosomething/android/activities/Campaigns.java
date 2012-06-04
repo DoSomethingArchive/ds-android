@@ -231,9 +231,11 @@ public class Campaigns extends AbstractActivity {
 			
 			v.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
 			
+			ImageView bgImageView = (ImageView) v.findViewById(R.id.background);
 			if(campaign.getBackgroundUrl()!=null) {
-				ImageView bgImageView = (ImageView) v.findViewById(R.id.background);
 				imageLoader.displayImage(campaign.getBackgroundUrl(), bgImageView);
+			} else {
+				bgImageView.setImageDrawable(null);
 			}
 			
 			ImageView imageView = (ImageView) v.findViewById(R.id.image);

@@ -22,14 +22,14 @@
 			
             <LinearLayout android:id="@+id/image_container"
 			    android:layout_width="fill_parent"
-			    android:layout_height="184dp"
+			    android:layout_height="156dp"
 			    android:orientation="vertical">
 			    
 			    <FrameLayout 
 			        android:id="@+id/frame"
 			        android:layout_width="fill_parent"
 			        android:layout_height="fill_parent" >
-			        <ImageView android:id="@+id/background" style="@style/CampaignRowBackground"/>
+			        <ImageView android:id="@+id/background" style="@style/CampaignImageBackground"/>
 			        <ImageView android:id="@+id/image" style="@style/CampaignImage"/>
 			    </FrameLayout>
 			    
