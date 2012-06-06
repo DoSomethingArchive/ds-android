@@ -12,7 +12,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.DecodingType;
 
 /**
  * Activity for displaying an image from a campaign's gallery 
@@ -40,8 +42,14 @@ public class GalleryImageItemDisplay extends AbstractActivity {
 
 		Bundle bundle = getIntent().getExtras();
 		String imgurl = bundle.getString(GALLERY_IMG_URL);
-		if (imgurl != "") {
-	        imageLoader.displayImage(imgurl, imageView);
+		if (imgurl!=null && !imgurl.equals("")) {
+			// make a DisplayImageOptions without cacheInMemory or cacheOnDisc, because the large image will hurt the cache
+			DisplayImageOptions imageLoaderOptions = 
+					new DisplayImageOptions.Builder()
+						.decodingType(DecodingType.MEMORY_SAVING)
+						.build();
+			
+	        imageLoader.displayImage(imgurl, imageView, imageLoaderOptions);
 			ProgressBar progressBar = (ProgressBar)findViewById(R.id.galleryImageItemDisplayProgress);
 			imageLoader.displayImage(imgurl, imageView, new ProgressBarImageLoadingListener(progressBar));
 		}
