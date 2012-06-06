@@ -10,6 +10,7 @@
         android:layout_height="fill_parent" >
         <ImageView android:id="@+id/background" style="@style/CampaignRowBackground"/>
         <ImageView android:id="@+id/image" style="@style/CampaignRowImage"/>
+        <TextView android:id="@+id/callout" style="@style/CampaignCallout"/>
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"

@@ -10,12 +10,9 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/body"
+        style="@style/ResourceRowImage"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:src="@android:drawable/ic_menu_info_details"
+        android:layout_centerVertical="true"
         android:contentDescription="@string/link_description" />
     
 </RelativeLayout>
