@@ -17,6 +17,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -28,9 +29,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.markupartist.android.widget.ActionBar.Action;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -44,6 +46,7 @@ public class Campaigns extends AbstractActivity {
 	@Inject private ImageLoader imageLoader;
 	@Inject private UserContext userContext;
 	@Inject private Cache cache;
+	@Inject @Named("DINComp-CondBold")Typeface calloutTypeface;
 	
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.list) private ListView list;
@@ -257,6 +260,16 @@ public class Campaigns extends AbstractActivity {
 			ImageView imageView = (ImageView) v.findViewById(R.id.image);
 			ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 			imageLoader.displayImage(campaign.getLogoUrl(), imageView, new ProgressBarImageLoadingListener(progressBar));
+			
+			TextView textView = (TextView) v.findViewById(R.id.callout);
+			if(campaign.getCallout() != null && campaign.getCallout().length() > 0) {
+				textView.setText(campaign.getCallout());
+				textView.setTypeface(calloutTypeface);
+				textView.setVisibility(TextView.VISIBLE);
+			}
+			else {
+				textView.setVisibility(TextView.INVISIBLE);
+			}
 
 			return v;
 		}

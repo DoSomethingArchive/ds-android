@@ -27,6 +27,7 @@ public class Campaign implements Serializable {
 	private String teaser;
 	private String backgroundColor;
 	private String backgroundUrl;
+	private String callout;
 
 	private String videoUrl;
 	private String videoThumbnail;
@@ -59,6 +60,7 @@ public class Campaign implements Serializable {
 		endDate = df.parse(co.getString("end-date"));
 		logoUrl = co.getString("logo");
 		backgroundUrl = co.optString("logo-bg-image",null);
+		callout = co.optString("call-to-action",null);
 		
 		JSONObject m = obj.optJSONObject("main");
 		if(m!=null) {
@@ -305,5 +307,9 @@ public class Campaign implements Serializable {
 
 	public void setBackgroundUrl(String backgroundUrl) {
 		this.backgroundUrl = backgroundUrl;
+	}
+	
+	public String getCallout() {
+		return callout;
 	}
 }
