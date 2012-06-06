@@ -49,6 +49,10 @@ public class CampaignPrizes extends AbstractActivity {
         Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
         Prize prize = campaign.getPrize();
         
+        if(prize.getMainText()!=null && prize.getMainText().length() > 0) {
+        	content.addView(createMainTextView(prize.getMainText()));
+        }
+        
         if(prize.getScholarship()!=null) {
         	content.addView(createScholarshipView(prize.getScholarship()));
         }
@@ -105,6 +109,15 @@ public class CampaignPrizes extends AbstractActivity {
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(rules)));
 			}
 		});
+		
+		return v;
+	}
+	
+	private View createMainTextView(final String mainText) {
+		View v = inflater.inflate(R.layout.prize_main_text, null);
+		
+		TextView body = (TextView)v.findViewById(R.id.body);
+		body.setText(mainText);
 		
 		return v;
 	}

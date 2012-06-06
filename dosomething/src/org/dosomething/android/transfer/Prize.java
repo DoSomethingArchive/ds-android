@@ -15,6 +15,7 @@ public class Prize implements Serializable{
 	private PrizeItem scholarship;
 	private List<PrizeItem> others;
 	private String rulesUrl;
+	private String mainText;
 	
 	public Prize() {}
 	
@@ -34,6 +35,8 @@ public class Prize implements Serializable{
 		}
 		
 		rulesUrl = obj.optString("rules",null);
+		
+		mainText = obj.optString("main-text",null);
 	}
 	
 	public PrizeItem getScholarship() {
@@ -53,5 +56,8 @@ public class Prize implements Serializable{
 	}
 	public void setRulesUrl(String rulesUrl) {
 		this.rulesUrl = rulesUrl;
+	}
+	public String getMainText() {
+		return this.mainText;
 	}
 }
