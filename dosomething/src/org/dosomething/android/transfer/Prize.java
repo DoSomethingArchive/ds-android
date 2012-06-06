@@ -58,6 +58,6 @@ public class Prize implements Serializable{
 		this.rulesUrl = rulesUrl;
 	}
 	public String getMainText() {
-		return this.mainText;
+		return mainText;
 	}
 }

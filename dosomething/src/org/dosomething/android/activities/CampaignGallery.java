@@ -41,6 +41,7 @@ public class CampaignGallery extends AbstractActivity {
 	
 	private static final String TAG = "CampaignGallery";
 	private static final String CAMPAIGN = "campaign";
+	private static final String GALLERY_IMG_URL = "gallery-img-url";
 	
 	@Inject LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
@@ -85,7 +86,11 @@ public class CampaignGallery extends AbstractActivity {
 			GalleryItem item = (GalleryItem) gridview.getAdapter().getItem(position);
 			switch (item.getType()) {
 			case IMAGE:
-				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getUrl())));
+				Intent intent = new Intent(context, GalleryImageItemDisplay.class);
+				Bundle bundle = new Bundle();
+				bundle.putString(GALLERY_IMG_URL, item.getUrl());
+				intent.putExtras(bundle);
+				startActivity(intent);
 				break;
 			case VIDEO:
 				Pattern pattern = Pattern.compile("<embed src=\"([^\"]+)\"");
