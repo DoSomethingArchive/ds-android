@@ -155,7 +155,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(requestCode==PICK_IMAGE_REQUEST && pendingImageResult!=null) {
+		if(requestCode==PICK_IMAGE_REQUEST && pendingImageResult!=null && data!=null) {
 			Uri uri = data.getData();
 			String[] projection = { MediaStore.Images.Media.DATA };
             Cursor cursor = managedQuery(uri, projection, null, null, null);
