@@ -268,7 +268,8 @@ public class Campaigns extends AbstractActivity {
 				textView.setVisibility(TextView.VISIBLE);
 			}
 			else {
-				textView.setVisibility(TextView.INVISIBLE);
+				// we use GONE instead of INVISIBLE because we dont want it to leave a blank space
+				textView.setVisibility(TextView.GONE);
 			}
 
 			return v;
