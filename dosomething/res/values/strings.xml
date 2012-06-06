@@ -75,5 +75,6 @@
     <string name="campaign_action_list">Campaign Action List</string>
     
     <string name="campaign_prizes_rules">Official Rules and Regulations</string>
+    <string name="gallery_image_item_display_error">Unable to load the image</string>
     
 </resources>
