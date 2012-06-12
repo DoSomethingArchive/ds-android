@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
 import org.dosomething.android.domain.UserCampaign;
@@ -116,6 +117,12 @@ public class Campaign extends AbstractActivity {
 		}
 
 		// onResume is called next
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		Analytics.logCampaignPageView(this, this.getPageName(), campaign);
 	}
 	
 	public void playVideo(View v){

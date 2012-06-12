@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.widget.CustomActionBar;
@@ -83,6 +84,12 @@ public class Register extends AbstractActivity {
         cancel.setTypeface(headerTypeface, Typeface.BOLD);
         submit.setTypeface(headerTypeface, Typeface.BOLD);
     }
+    
+    @Override
+	public void onStart() {
+		super.onStart();
+		Analytics.logPageView(this, this.getPageName());
+	}
     
     private final OnClickListener birthdayClickListener = new OnClickListener() {
 		@Override
