@@ -3,7 +3,6 @@ package org.dosomething.android.activities;
 import java.util.List;
 
 import org.dosomething.android.R;
-import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
@@ -82,12 +81,6 @@ public class Campaigns extends AbstractActivity {
         
         // onResume is always called next
     }
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		Analytics.logPageView(this, "campaigns");
-	}
 	
 	@Override
 	protected void onResume() {

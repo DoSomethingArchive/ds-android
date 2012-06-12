@@ -6,7 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dosomething.android.R;
-import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
@@ -80,12 +79,6 @@ public class CampaignGallery extends AbstractActivity {
         
         new MyFeedTask(feedUrl).execute();
     }
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		Analytics.logCampaignPageView(this, this.getPageName(), campaign);
-	}
 	
 	private OnItemClickListener listener = new OnItemClickListener() {
 		@Override

@@ -3,7 +3,6 @@ package org.dosomething.android.activities;
 import java.util.List;
 
 import org.dosomething.android.R;
-import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Faq;
 import org.dosomething.android.widget.CustomActionBar;
@@ -48,13 +47,6 @@ public class CampaignFAQ extends AbstractActivity {
 	    Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
 	    
 	    list.setAdapter(new MyAdapter(campaign.getFaqs()));
-	}
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
-		Analytics.logCampaignPageView(this, this.getPageName(), campaign);
 	}
 	
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){

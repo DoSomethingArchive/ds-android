@@ -6,10 +6,8 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
-import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.transfer.Campaign;
 import org.json.JSONObject;
 
 import roboguice.inject.InjectView;
@@ -60,12 +58,6 @@ public class Login extends AbstractActivity {
         
         context = this;
     }
-    
-    @Override
-	public void onStart() {
-		super.onStart();
-		Analytics.logPageView(this, this.getPageName());
-	}
     
     public void logIn(View v){
     	String email = this.username.getText().toString();

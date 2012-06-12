@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.dosomething.android.R;
-import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
 import org.dosomething.android.domain.CompletedCampaignAction;
@@ -99,12 +98,6 @@ public class CampaignActions extends AbstractActivity {
         
         list.setAdapter(new MyAdapter(getApplicationContext(), challenges));
     }
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		Analytics.logCampaignPageView(this, this.getPageName(), campaign);
-	}
 
 	public void viewCampaign(View v){
 		startActivity(org.dosomething.android.activities.Campaign.getIntent(this, campaign));
