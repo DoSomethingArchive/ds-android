@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.dosomething.android.R;
-import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
@@ -71,12 +70,6 @@ public class Profile extends AbstractActivity {
         
         // onResume is always call next
     }
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		Analytics.logPageView(this, this.getPageName());
-	}
 	
 	@Override
 	protected void onResume() {
