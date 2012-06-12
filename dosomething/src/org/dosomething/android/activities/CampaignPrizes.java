@@ -1,6 +1,7 @@
 package org.dosomething.android.activities;
 
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Prize;
 import org.dosomething.android.transfer.PrizeItem;
@@ -67,6 +68,13 @@ public class CampaignPrizes extends AbstractActivity {
     		content.addView(createRulesView(prize.getRulesUrl()));
     	}
     }
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
+		Analytics.logCampaignPageView(this, this.getPageName(), campaign);
+	}
 	
 	private View createScholarshipView(PrizeItem scholarship) {
 		View v = inflater.inflate(R.layout.prize_row, null);

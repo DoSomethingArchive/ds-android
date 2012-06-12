@@ -3,6 +3,7 @@ package org.dosomething.android.activities;
 import java.util.List;
 
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
 import org.dosomething.android.domain.CompletedCampaignAction;
@@ -30,6 +31,13 @@ public class ReportBack extends AbstractWebForm {
 		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
 		webForm = campaign.getReportBack();
 		super.onCreate(savedInstanceState);
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
+		Analytics.logCampaignPageView(this, this.getPageName(), campaign);
 	}
 	
 	@Override

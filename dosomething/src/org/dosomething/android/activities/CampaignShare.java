@@ -1,6 +1,7 @@
 package org.dosomething.android.activities;
 
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.widget.CustomActionBar;
 
@@ -51,6 +52,12 @@ public class CampaignShare extends AbstractActivity {
 			throw new RuntimeException();
 		}
     }
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		Analytics.logCampaignPageView(this, this.getPageName(), campaign);
+	}
 	
 	public void share(View v){
 		startActivity(Intent.createChooser(campaign.getShareIntent(), getString(R.string.campaign_share_chooser)));
