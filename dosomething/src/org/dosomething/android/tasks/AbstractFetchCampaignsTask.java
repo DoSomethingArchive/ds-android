@@ -104,7 +104,7 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 		Collections.sort(campaigns, new Comparator<Campaign>() {
 			@Override
 			public int compare(Campaign lhs, Campaign rhs) {
-				return rhs.getEndDate().compareTo(lhs.getEndDate());
+				return lhs.getOrder() - rhs.getOrder();
 			}
 		});
 	}
