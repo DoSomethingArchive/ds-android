@@ -28,6 +28,7 @@ public class Campaign implements Serializable {
 	private String backgroundColor;
 	private String backgroundUrl;
 	private String callout;
+	private int order;
 
 	private String videoUrl;
 	private String videoThumbnail;
@@ -61,6 +62,7 @@ public class Campaign implements Serializable {
 		logoUrl = co.getString("logo");
 		backgroundUrl = co.optString("logo-bg-image",null);
 		callout = co.optString("call-to-action",null);
+		order = co.getInt("order");
 		
 		JSONObject m = obj.optJSONObject("main");
 		if(m!=null) {
@@ -311,5 +313,9 @@ public class Campaign implements Serializable {
 	
 	public String getCallout() {
 		return callout;
+	}
+	
+	public int getOrder() {
+		return order;
 	}
 }
