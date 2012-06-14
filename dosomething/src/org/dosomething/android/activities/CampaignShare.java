@@ -57,6 +57,11 @@ public class CampaignShare extends AbstractActivity {
 	}
 	
 	public void done(View v){
+		// Only start CampaignActions activity when coming from SIGNED_UP. Safe
+		// to assume the user is already coming from the CampaignActions activity
+		// when the type is REPORTED_BACK.
+		if (type == SIGNED_UP)
+			startActivity(CampaignActions.getIntent(this, campaign));
 		finish();
 	}
 
