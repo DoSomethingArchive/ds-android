@@ -1,8 +1,10 @@
 package org.dosomething.android.activities;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
 import org.dosomething.android.domain.CompletedCampaignAction;
@@ -50,6 +52,10 @@ public class ReportBack extends AbstractWebForm {
 				}
 			}
 		}
+		
+		HashMap<String, String> param = new HashMap<String, String>();
+		param.put("campaign", campaign.getName());
+		Analytics.logEvent("report-back-submit", param);
 		
 		startActivity(CampaignShare.getIntentForReportedBack(this, campaign));
 		finish();
