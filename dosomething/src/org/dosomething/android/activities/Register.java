@@ -4,11 +4,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.widget.CustomActionBar;
@@ -174,6 +176,10 @@ public class Register extends AbstractActivity {
 		protected void onSuccess() {
 			
 			if(registerSuccess) {
+				HashMap<String, String> param = new HashMap<String, String>();
+				param.put("success", "true");
+				Analytics.logEvent(getPageName(), param);
+				
 				setResult(RESULT_OK);
 		    	finish();
 			} else {
