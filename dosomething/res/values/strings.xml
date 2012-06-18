@@ -51,7 +51,7 @@
     <string name="campaign_faq_title">FAQ</string>
     <string name="campaign_resources_title">Resources</string>
     
-    <string name="profile_no_campaigns">You are not currently signed up for any campaigns.  Sign up for campaigns to add to your to-do list.</string>
+    <string name="profile_no_campaigns">Hey! It looks like you haven\'t signed up for any of our campaigns.\n\nClick the button below to discover the national campaigns we\'re currently running about causes teens care about. Sign up for some and check back here to see what you\'ve done and what you can do next!</string>
     <string name="profile_no_campaigns_button">GO FIND CAMPAIGNS</string>
     
     <string name="campaign_sign_up_button">SIGN UP!</string>

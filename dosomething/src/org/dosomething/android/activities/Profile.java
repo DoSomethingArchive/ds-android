@@ -17,10 +17,12 @@ import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.widget.CustomActionBar;
 
 import roboguice.inject.InjectView;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,10 +35,12 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.markupartist.android.widget.ActionBar.Action;
 
 public class Profile extends AbstractActivity {
 	
 	//private static final String TAG = "Profile";
+	private static final int REQ_LOGIN_FOR_PROFILE = 112;
 	private static final String DF = "MM/dd/yy";
 	
 	@Inject private LayoutInflater inflater;
@@ -51,6 +55,8 @@ public class Profile extends AbstractActivity {
 	private ListView list;
 	
 	private Context context;
+	private Dialog splashDialog;
+	private Action profileAction;
 	
 	@Override
 	protected String getPageName() {
@@ -66,25 +72,80 @@ public class Profile extends AbstractActivity {
         
         actionBar.addAction(Campaigns.getHomeAction(this));
         
-        actionBar.addAction(Login.getLogoutAction(this, userContext));
+        MyModel model = (MyModel) getLastNonConfigurationInstance();
+        if (model != null) {
+	        if (model.isShowSplashScreen()) {
+	            showSplashScreen();
+	        }
+	    } else {
+	    	if (getIntent().hasCategory("android.intent.category.LAUNCHER")) {
+	    		showSplashScreen();
+	    	}
+	    }
         
         // onResume is always call next
     }
+	
+	private final Action loginAction = new Action(){
+
+		@Override
+		public int getDrawable() {
+			return R.drawable.action_bar_login;
+		}
+
+		@Override
+		public void performAction(View view) {
+			Context ctx = getApplicationContext();
+			startActivityForResult(new Intent(ctx, Login.class), REQ_LOGIN_FOR_PROFILE);
+		}
+	};
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == REQ_LOGIN_FOR_PROFILE && resultCode == RESULT_OK){
+			if(new UserContext(this).isLoggedIn()){
+				startActivity(Profile.getIntent(getApplicationContext()));
+			}
+		}
+	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
 		content.removeAllViews();
-		new MyTask().execute();
+		
+		if (profileAction != null) {
+			actionBar.removeAction(profileAction);
+			profileAction = null;
+		}
+		
+		if (userContext.isLoggedIn()) {
+			// Add logout action
+			profileAction = Login.getLogoutAction(this, userContext);
+			actionBar.addAction(profileAction);
+			
+			// And find campaigns the user's signed up for
+			new MyTask().execute();
+		}
+		else {
+			// Add login action
+			profileAction = loginAction;
+			actionBar.addAction(profileAction);
+			
+			// Show the "no campaigns" layout
+			content.addView(inflater.inflate(R.layout.profile_no_campaigns, null));
+		}
 	}
 	
 	public void findCampaigns(View v){
-		finish();
+		startActivity(new Intent(this, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 
 	public static Intent getIntent(Context context) {
-		return new Intent(context, Profile.class);
+		return new Intent(context, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	}
 	
 	private final OnItemClickListener itemClickListener = new OnItemClickListener() {
@@ -147,15 +208,18 @@ public class Profile extends AbstractActivity {
 			List<UserCampaign> userCampaigns = new ArrayList<UserCampaign>();
 			
 			Map<String, UserCampaign> userCampaignsMap = new HashMap<String, UserCampaign>();
-			List<UserCampaign> allUserCampaigns = dao.findUserCampaigns(new UserContext(context).getUserUid());
-			for(UserCampaign userCampaign : allUserCampaigns){
-				userCampaignsMap.put(userCampaign.getCampaignId(), userCampaign);
-			}
-			
-			for(Campaign campaign : getCampaigns()){
-				if(userCampaignsMap.containsKey(campaign.getId())){
-					campaigns.add(campaign);
-					userCampaigns.add(userCampaignsMap.get(campaign.getId()));
+			String uid = new UserContext(context).getUserUid();
+			if (uid != null) {
+				List<UserCampaign> allUserCampaigns = dao.findUserCampaigns(uid);
+				for(UserCampaign userCampaign : allUserCampaigns){
+					userCampaignsMap.put(userCampaign.getCampaignId(), userCampaign);
+				}
+				
+				for(Campaign campaign : getCampaigns()){
+					if(userCampaignsMap.containsKey(campaign.getId())){
+						campaigns.add(campaign);
+						userCampaigns.add(userCampaignsMap.get(campaign.getId()));
+					}
 				}
 			}
 			
@@ -173,6 +237,60 @@ public class Profile extends AbstractActivity {
 		@Override
 		protected void onError(Exception e) {}
 		
+	}
+	
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+	    MyModel model = new MyModel();
+	    
+	    if (splashDialog != null) {
+	        model.setShowSplashScreen(true);
+	        removeSplashScreen();
+	    }
+	    return model;
+	}
+	
+	/**
+	 * Removes the Dialog that displays the splash screen
+	 */
+	protected void removeSplashScreen() {
+	    if (splashDialog != null) {
+	    	splashDialog.dismiss();
+	    	splashDialog = null;
+	    }
+	}
+	 
+	/**
+	 * Shows the splash screen over the full Activity
+	 */
+	protected void showSplashScreen() {
+		splashDialog = new Dialog(this, R.style.SplashScreen);
+		splashDialog.setContentView(R.layout.splash_screen);
+		splashDialog.setCancelable(false);
+		splashDialog.show();
+	 
+	    // Set Runnable to remove splash screen just in case
+	    final Handler handler = new Handler();
+	    handler.postDelayed(new Runnable() {
+	      @Override
+	      public void run() {
+	        removeSplashScreen();
+	      }
+	    }, 3000);
+	}
+	
+	/**
+	 * Simple class for storing important data across config changes
+	 */
+	private class MyModel {
+	    private boolean showSplashScreen = false;
+
+		public boolean isShowSplashScreen() {
+			return showSplashScreen;
+		}
+		public void setShowSplashScreen(boolean showSplashScreen) {
+			this.showSplashScreen = showSplashScreen;
+		}
 	}
 	
 }
