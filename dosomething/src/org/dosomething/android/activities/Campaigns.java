@@ -13,13 +13,11 @@ import org.dosomething.android.widget.ProgressBarImageLoadingListener;
 
 import roboguice.inject.InjectView;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +50,6 @@ public class Campaigns extends AbstractActivity {
 	@InjectView(R.id.list) private ListView list;
 	
 	private final OnItemClickListener itemClickListener = new MyItemClickListener();
-	private Dialog splashDialog;
 	private Action logoutAction;
 	
 	@Override
@@ -65,19 +62,7 @@ public class Campaigns extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaigns);
         
-        MyModel model = (MyModel) getLastNonConfigurationInstance();
-        
         actionBar.addAction(profileButtonAction);
-        
-	    if (model != null) {
-	        if (model.isShowSplashScreen()) {
-	            showSplashScreen();
-	        }
-	    } else {
-	    	if (getIntent().hasCategory("android.intent.category.LAUNCHER")) {
-	    		showSplashScreen();
-	    	}
-	    }
         
         // onResume is always called next
     }
@@ -110,11 +95,8 @@ public class Campaigns extends AbstractActivity {
 		@Override
 		public void performAction(View view) {
 			Context context = getApplicationContext();
-			if(new UserContext(context).isLoggedIn()){
-				startActivity(Profile.getIntent(context));
-			}else{
-				startActivityForResult(new Intent(context, Login.class), REQ_LOGIN_FOR_PROFILE);
-			}
+			startActivity(Profile.getIntent(context));
+			finish();
 		}
 	};
 	
@@ -136,61 +118,6 @@ public class Campaigns extends AbstractActivity {
 	public static Action getHomeAction(Context context){
 		return new IntentAction(context, new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), R.drawable.action_bar_home);
 	}
-	 
-	@Override
-	public Object onRetainNonConfigurationInstance() {
-	    MyModel model = new MyModel();
-	    
-	    if (splashDialog != null) {
-	        model.setShowSplashScreen(true);
-	        removeSplashScreen();
-	    }
-	    return model;
-	}
-	 
-	/**
-	 * Removes the Dialog that displays the splash screen
-	 */
-	protected void removeSplashScreen() {
-	    if (splashDialog != null) {
-	    	splashDialog.dismiss();
-	    	splashDialog = null;
-	    }
-	}
-	 
-	/**
-	 * Shows the splash screen over the full Activity
-	 */
-	protected void showSplashScreen() {
-		splashDialog = new Dialog(this, R.style.SplashScreen);
-		splashDialog.setContentView(R.layout.splash_screen);
-		splashDialog.setCancelable(false);
-		splashDialog.show();
-	 
-	    // Set Runnable to remove splash screen just in case
-	    final Handler handler = new Handler();
-	    handler.postDelayed(new Runnable() {
-	      @Override
-	      public void run() {
-	        removeSplashScreen();
-	      }
-	    }, 3000);
-	}
-	 
-	/**
-	 * Simple class for storing important data across config changes
-	 */
-	private class MyModel {
-	    private boolean showSplashScreen = false;
-
-		public boolean isShowSplashScreen() {
-			return showSplashScreen;
-		}
-		public void setShowSplashScreen(boolean showSplashScreen) {
-			this.showSplashScreen = showSplashScreen;
-		}
-	}
-	
 	
 	private class MyItemClickListener implements OnItemClickListener {
 		@Override

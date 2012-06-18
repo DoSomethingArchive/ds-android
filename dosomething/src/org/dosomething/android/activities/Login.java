@@ -69,7 +69,7 @@ public class Login extends AbstractActivity {
     }
     
     private void goToProfile(){
-    	startActivity(new Intent(this, Profile.class));
+    	startActivity(new Intent(this, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     	finish();
     }
     
@@ -154,7 +154,7 @@ public class Login extends AbstractActivity {
 				.setPositiveButton(context.getString(R.string.yes_upper), new OnClickListener() {
 					public void onClick(DialogInterface arg0, int arg1) {
 						userContext.clear();
-						context.startActivity(new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+						context.startActivity(new Intent(context, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 					}
 				})
 				.setNegativeButton(context.getString(R.string.no_upper), null)
