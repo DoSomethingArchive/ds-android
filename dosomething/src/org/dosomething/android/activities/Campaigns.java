@@ -50,7 +50,6 @@ public class Campaigns extends AbstractActivity {
 	@InjectView(R.id.list) private ListView list;
 	
 	private final OnItemClickListener itemClickListener = new MyItemClickListener();
-	private Action logoutAction;
 	
 	@Override
 	protected String getPageName() {
@@ -71,18 +70,7 @@ public class Campaigns extends AbstractActivity {
 	protected void onResume() {
 		super.onResume();
 		
-		renderLogout();
 		fetchCampaigns();
-	}
-	
-	private void renderLogout() {
-		if(userContext.isLoggedIn() && logoutAction==null) {
-			logoutAction = Login.getLogoutAction(this, userContext);
-			actionBar.addAction(logoutAction, actionBar.getActionCount());
-		} else if(!userContext.isLoggedIn() && logoutAction!=null) {
-			actionBar.removeAction(logoutAction);
-			logoutAction = null;
-		}
 	}
 	
 	private final Action profileButtonAction = new Action(){
