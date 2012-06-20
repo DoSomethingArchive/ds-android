@@ -17,12 +17,10 @@ import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.widget.CustomActionBar;
 
 import roboguice.inject.InjectView;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +53,6 @@ public class Profile extends AbstractActivity {
 	private ListView list;
 	
 	private Context context;
-	private Dialog splashDialog;
 	private Action profileAction;
 	
 	@Override
@@ -71,17 +68,6 @@ public class Profile extends AbstractActivity {
         context = this;
         
         actionBar.addAction(Campaigns.getHomeAction(this));
-        
-        MyModel model = (MyModel) getLastNonConfigurationInstance();
-        if (model != null) {
-	        if (model.isShowSplashScreen()) {
-	            showSplashScreen();
-	        }
-	    } else {
-	    	if (getIntent().hasCategory("android.intent.category.LAUNCHER")) {
-	    		showSplashScreen();
-	    	}
-	    }
         
         // onResume is always call next
     }
@@ -237,60 +223,6 @@ public class Profile extends AbstractActivity {
 		@Override
 		protected void onError(Exception e) {}
 		
-	}
-	
-	@Override
-	public Object onRetainNonConfigurationInstance() {
-	    MyModel model = new MyModel();
-	    
-	    if (splashDialog != null) {
-	        model.setShowSplashScreen(true);
-	        removeSplashScreen();
-	    }
-	    return model;
-	}
-	
-	/**
-	 * Removes the Dialog that displays the splash screen
-	 */
-	protected void removeSplashScreen() {
-	    if (splashDialog != null) {
-	    	splashDialog.dismiss();
-	    	splashDialog = null;
-	    }
-	}
-	 
-	/**
-	 * Shows the splash screen over the full Activity
-	 */
-	protected void showSplashScreen() {
-		splashDialog = new Dialog(this, R.style.SplashScreen);
-		splashDialog.setContentView(R.layout.splash_screen);
-		splashDialog.setCancelable(false);
-		splashDialog.show();
-	 
-	    // Set Runnable to remove splash screen just in case
-	    final Handler handler = new Handler();
-	    handler.postDelayed(new Runnable() {
-	      @Override
-	      public void run() {
-	        removeSplashScreen();
-	      }
-	    }, 3000);
-	}
-	
-	/**
-	 * Simple class for storing important data across config changes
-	 */
-	private class MyModel {
-	    private boolean showSplashScreen = false;
-
-		public boolean isShowSplashScreen() {
-			return showSplashScreen;
-		}
-		public void setShowSplashScreen(boolean showSplashScreen) {
-			this.showSplashScreen = showSplashScreen;
-		}
 	}
 	
 }
