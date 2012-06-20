@@ -16,6 +16,7 @@
     <string name="campaigns_no_internet">An internet connection is required. Please enable an internet connection and try again.</string>
     <string name="log_in_upper">LOG IN</string>
     <string name="sign_up_upper">BECOME A MEMBER</string>
+    <string name="get_started_upper">GET STARTED</string>
     <string name="go_upper">GO</string>
     <string name="ok_upper">OK</string>
     <string name="yes_upper">YES</string>
@@ -77,4 +78,19 @@
     <string name="campaign_prizes_rules">Official Rules and Regulations</string>
     <string name="gallery_image_item_display_error">Unable to load the image</string>
     
+    <string name="cause_title">Select Your Causes</string>
+    <string name="cause_call_to_action">Help us to know more about you! Select the top 3 causes YOU care about below.</string>
+    <string name="cause_animals">Animals</string>
+    <string name="cause_bullying_violence">Bullying and Violence</string>
+    <string name="cause_disasters">Disasters</string>
+    <string name="cause_discrimination">Discrimination</string>
+    <string name="cause_education">Education</string>
+    <string name="cause_environment">Environment</string>
+    <string name="cause_homelessness_poverty">Homelessness and Poverty</string>
+    <string name="cause_human_rights">Human Rights</string>
+    <string name="cause_our_troops">Our Troops</string>
+    <string name="cause_health">Physical and Mental Health</string>
+    <string name="cause_sex_relationships">Sex and Relationships</string>
+    
+    <string name="welcome_text">DoSomething.org harnesses the awesome energy of teens and unleashes it on the causes they care about.</string>
 </resources>

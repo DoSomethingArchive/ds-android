@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/profile_background"
+    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
+    
+    <org.dosomething.android.widget.CustomActionBar
+        android:id="@+id/actionbar" 
+        style="@style/ActionBar" 
+        app:title="@string/cause_title"/>
+    
+    <ScrollView 
+        android:orientation="vertical"
+        android:layout_weight="1.0"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true">
+        
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+		    <TextView
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:gravity="center"
+		        android:textColor="@color/cause_text"
+		        android:textStyle="bold"
+		        android:text="@string/cause_call_to_action"/>
+		    
+		    <RelativeLayout
+		        android:orientation="horizontal"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content">
+		        
+		        <ImageView android:id="@+id/scroll_left"
+		            style="@style/ScrollArrow"
+		            android:layout_alignParentLeft="true"
+		            android:src="@drawable/scroll_left"/>
+		        
+		        <ImageView android:id="@+id/scroll_right"
+                    style="@style/ScrollArrow"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/scroll_right"/>
+		        
+			    <HorizontalScrollView
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_toRightOf="@id/scroll_left"
+			        android:layout_toLeftOf="@id/scroll_right">
+			        <LinearLayout
+			            android:orientation="horizontal"
+			            android:layout_width="fill_parent"
+			            android:layout_height="fill_parent">
+			            <ToggleButton android:id="@+id/animals_btn"
+			                style="@style/CauseToggleButton"
+			                android:onClick="onCauseSelected"/>
+			            <ToggleButton android:id="@+id/bullying_violence_btn" 
+			                style="@style/CauseToggleButton"
+			                android:onClick="onCauseSelected"/>
+			            <ToggleButton android:id="@+id/disasters_btn"
+			                style="@style/CauseToggleButton"
+			                android:onClick="onCauseSelected"/>
+			            <ToggleButton android:id="@+id/discrimination_btn"
+			                style="@style/CauseToggleButton"
+			                android:onClick="onCauseSelected"/>
+			            <ToggleButton android:id="@+id/education_btn"
+			                style="@style/CauseToggleButton"
+			                android:onClick="onCauseSelected"/>
+			            <ToggleButton android:id="@+id/environment_btn"
+			                style="@style/CauseToggleButton"
+			                android:onClick="onCauseSelected"/>
+			            <ToggleButton android:id="@+id/homelessness_poverty_btn"
+			                style="@style/CauseToggleButton"
+			                android:onClick="onCauseSelected"/>
+			            <ToggleButton android:id="@+id/human_rights_btn"
+			                style="@style/CauseToggleButton"
+			                android:onClick="onCauseSelected"/>
+			            <ToggleButton android:id="@+id/our_troops_btn"
+			                style="@style/CauseToggleButton"
+			                android:onClick="onCauseSelected"/>
+			            <ToggleButton android:id="@+id/health_btn"
+			                style="@style/CauseToggleButton"
+			                android:onClick="onCauseSelected"/>
+			            <ToggleButton android:id="@+id/sex_relationships_btn"
+			                style="@style/CauseToggleButton"
+			                android:onClick="onCauseSelected"/>
+			        </LinearLayout>
+			    </HorizontalScrollView>
+		    </RelativeLayout>
+		
+		    <LinearLayout style="@style/CauseListContainer">
+			    <LinearLayout style="@style/CauseListRow">
+			        <TextView
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            style="@style/CauseListText"
+			            android:text="1. "/>
+				     <TextView android:id="@+id/cause1"
+				         android:layout_width="fill_parent"
+				         android:layout_height="wrap_content"
+				         style="@style/CauseListText"/>
+			    </LinearLayout>
+			    <LinearLayout style="@style/CauseListRow">
+				     <TextView
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content"
+				            style="@style/CauseListText"
+				            android:text="2. "/>
+				     <TextView android:id="@+id/cause2"
+				         android:layout_width="fill_parent"
+				         android:layout_height="wrap_content"
+				         style="@style/CauseListText"/>
+			    </LinearLayout>
+			    <LinearLayout style="@style/CauseListRow">
+			        <TextView
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            style="@style/CauseListText"
+			            android:text="3. "/>
+				     <TextView android:id="@+id/cause3"
+				         android:layout_width="fill_parent"
+				         android:layout_height="wrap_content"
+				         style="@style/CauseListText"/>
+			    </LinearLayout>
+		    </LinearLayout>
+		
+		    <Button
+		        style="@style/CauseSubmitButton"
+		        android:text="@string/go_upper"
+		        android:onClick="continueToProfile"/>
+	    </LinearLayout>
+    </ScrollView>
+    
+</LinearLayout>

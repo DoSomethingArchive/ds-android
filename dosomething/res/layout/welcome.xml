@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/splash_background"
+    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
+    <!-- 
+    <ScrollView 
+        android:orientation="vertical"
+        android:layout_weight="1.0"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true">-->
+        
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:src="@drawable/login_logo" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                style="@style/WelcomeInner">
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="10dp"
+	                android:gravity="center"
+	                android:textColor="@color/cause_text"
+	                android:textStyle="bold"
+	                android:text="@string/welcome_text"/>
+	            <Button
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                android:layout_gravity="center_horizontal"
+	                android:layout_margin="10dp"
+                    android:background="@drawable/main_button_selector"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+	                android:text="@string/get_started_upper"
+	                android:onClick="continueToCauses"/>
+            </LinearLayout>
+        </LinearLayout>
+    <!-- </ScrollView>-->
+    
+</LinearLayout>

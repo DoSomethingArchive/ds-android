@@ -238,6 +238,43 @@
         <item name="android:padding">20dp</item>
     </style>
     
+    <style name="CauseListContainer">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">20dp</item>
+    </style>
+    <style name="CauseListRow">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
+    <style name="CauseSubmitButton">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:background">@drawable/main_button_selector</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+    <style name="CauseListText">
+        <item name="android:textColor">@color/cause_text</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+    <style name="CauseToggleButton">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">150dp</item>
+        <item name="android:textOn"></item>
+        <item name="android:textOff"></item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:background">@drawable/cause_toggle_button</item>
+    </style>
+    
     <style name="FaqRow">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -384,6 +421,13 @@
         <item name="android:textStyle">bold</item>
     </style>
     
+    <style name="ScrollArrow">
+        <item name="android:layout_width">18dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+    </style>
     
     <style name="WebFormList">
         <item name="android:layout_width">fill_parent</item>
@@ -416,5 +460,18 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/main_button_selector</item>
     </style>
-    
+
+    <style name="WelcomeInner">
+        <item name="android:background">@drawable/profile_no_campaigns_background</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingBottom">20dp</item>
+    </style>    
 </resources>
