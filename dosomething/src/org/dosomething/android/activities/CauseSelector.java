@@ -1,6 +1,7 @@
 package org.dosomething.android.activities;
 
 import org.dosomething.android.R;
+import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.widget.CustomActionBar;
 
 import roboguice.inject.InjectView;
@@ -116,6 +117,8 @@ public class CauseSelector extends AbstractActivity {
 			break;
 		}
 		
+		DSPreferences prefs = new DSPreferences(this);
+		
 		// Add cause to the list
 		if (isChecked) {
 			if (textCause1.getText().length() == 0) {
@@ -128,6 +131,9 @@ public class CauseSelector extends AbstractActivity {
 				textCause3.setText(strCause);
 				disableButtons();
 			}
+			
+			// Save to SharedPreferences
+			prefs.setCause(id);
 		}
 		// Remove cause from the list
 		else {
@@ -163,6 +169,9 @@ public class CauseSelector extends AbstractActivity {
 			}
 			
 			enableButtons();
+			
+			// Remove from SharedPreferences
+			prefs.unsetCause(id);
 		}
 	}
 	
