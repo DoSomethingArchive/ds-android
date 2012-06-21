@@ -1,19 +1,15 @@
 package org.dosomething.android.activities;
 
 import org.dosomething.android.R;
+import org.dosomething.android.cache.DSPreferences;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
 public class Welcome extends AbstractActivity {
-
-	private static final String DS_PREFS = "ds_prefs";
-	private static final String HAS_RUN = "has_run";
 	
 	private Dialog splashDialog;
 	private boolean skipWelcome = true;
@@ -39,9 +35,11 @@ public class Welcome extends AbstractActivity {
 	    	}
 	    }
         
-        if (isInitialLaunch()) {
+        DSPreferences prefs = new DSPreferences(this);
+        // If initial app execution, stay on the Welcome activity
+        if (prefs != null && !prefs.getHasRun()) {
         	// Set boolean to indicate that this app has now been run
-        	setRanInitialLaunch();
+        	prefs.setHasRun();
         	skipWelcome = false;
         }
         else {
@@ -53,19 +51,6 @@ public class Welcome extends AbstractActivity {
 	public void continueToCauses(View v) {
 		startActivity(new Intent(this, CauseSelector.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		finish();
-	}
-	
-	private boolean isInitialLaunch() {
-		SharedPreferences settings = this.getSharedPreferences(DS_PREFS, 0);
-		boolean bHasRun = settings.getBoolean(HAS_RUN, false);
-		return !bHasRun;
-	}
-	
-	private void setRanInitialLaunch() {
-		SharedPreferences settings = this.getSharedPreferences(DS_PREFS, 0);
-		Editor editor = settings.edit();
-		editor.putBoolean(HAS_RUN, true);
-		editor.commit();
 	}
 	
 	@Override
