@@ -63,8 +63,8 @@ public class CauseSelector extends AbstractActivity {
 		}
 	};
 	
-	public void continueToProfile(View v) {
-		startActivity(new Intent(this, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+	public void continueToConfirmation(View v) {
+		startActivity(new Intent(this, CauseConfirm.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		finish();
 	}
 

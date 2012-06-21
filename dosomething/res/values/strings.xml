@@ -52,7 +52,7 @@
     <string name="campaign_faq_title">FAQ</string>
     <string name="campaign_resources_title">Resources</string>
     
-    <string name="profile_no_campaigns">Hey! It looks like you haven\'t signed up for any of our campaigns.\n\nClick the button below to discover the national campaigns we\'re currently running about causes teens care about. Sign up for some and check back here to see what you\'ve done and what you can do next!</string>
+    <string name="profile_no_campaigns">Hey! It looks like you haven\'t signed up for any of our campaigns.\n\nSign up for some and check back here to see what you\'ve done and what you can do next!</string>
     <string name="profile_no_campaigns_button">GO FIND CAMPAIGNS</string>
     
     <string name="campaign_sign_up_button">SIGN UP!</string>
@@ -78,6 +78,7 @@
     <string name="campaign_prizes_rules">Official Rules and Regulations</string>
     <string name="gallery_image_item_display_error">Unable to load the image</string>
     
+    <string name="cause_confirm">Thanks for letting us know the causes you care about!\n\nCheck out our national campaigns for you and your friends to get involved in and get a shot at winning scholarships and prizes.</string>
     <string name="cause_title">Select Your Causes</string>
     <string name="cause_call_to_action">Help us to know more about you! Select the top 3 causes YOU care about below.</string>
     <string name="cause_animals">Animals</string>

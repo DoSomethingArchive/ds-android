@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/profile_background"
+    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
+    
+    <org.dosomething.android.widget.CustomActionBar
+        android:id="@+id/actionbar" 
+        style="@style/ActionBar" 
+        app:title="@string/cause_title"/>
+        
+    <LinearLayout style="@style/ProfileNoCampaignsInner">
+    
+        <TextView 
+            style="@style/ProfileNoCampaignsText"
+            android:text="@string/cause_confirm"/>
+        <Button 
+            style="@style/ProfileNoCampaignsButton"  
+            android:text="@string/go_upper"
+            android:onClick="continueToProfile"/>
+
+    </LinearLayout>
+    
+</LinearLayout>
