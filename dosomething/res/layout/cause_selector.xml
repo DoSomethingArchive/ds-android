@@ -131,7 +131,7 @@
 		    <Button
 		        style="@style/CauseSubmitButton"
 		        android:text="@string/go_upper"
-		        android:onClick="continueToProfile"/>
+		        android:onClick="continueToConfirmation"/>
 	    </LinearLayout>
     </ScrollView>
     
