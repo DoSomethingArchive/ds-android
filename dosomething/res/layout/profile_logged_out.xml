@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ProfileNoCampaignsLayout">
+    
+    <LinearLayout style="@style/ProfileNoCampaignsInner">
+    
+        <TextView 
+            style="@style/ProfileNoCampaignsText" 
+            android:text="Login or Register to participate in our national campaigns and track your progress."/>
+        <Button 
+            style="@style/ProfileNoCampaignsButton" 
+            android:onClick="goLoginRegister" 
+            android:text="@string/login_upper"/>
+        
+        <TextView 
+            style="@style/ProfileNoCampaignsText" 
+            android:text="Or browse our campaigns to see what you can get involved in!"/>
+        <Button 
+            style="@style/ProfileNoCampaignsButton" 
+            android:onClick="findCampaigns" 
+            android:text="@string/profile_browse_campaigns"/>
+
+    </LinearLayout>
+    
+</LinearLayout>

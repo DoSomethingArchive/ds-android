@@ -11,6 +11,7 @@
         <ImageView android:id="@+id/background" style="@style/CampaignRowBackground"/>
         <ImageView android:id="@+id/image" style="@style/CampaignRowImage"/>
         <TextView android:id="@+id/callout" style="@style/CampaignCallout"/>
+        <ImageView android:id="@+id/cause_tag" style="@style/CampaignCauseTag"/>
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"

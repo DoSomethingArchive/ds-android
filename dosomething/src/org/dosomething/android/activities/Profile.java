@@ -30,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -40,6 +41,7 @@ public class Profile extends AbstractActivity {
 	//private static final String TAG = "Profile";
 	private static final int REQ_LOGIN_FOR_PROFILE = 112;
 	private static final String DF = "MM/dd/yy";
+	private static final String FROM_CAUSE_SEL = "from_cause_sel";
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private UserContext userContext;
@@ -68,6 +70,12 @@ public class Profile extends AbstractActivity {
         context = this;
         
         actionBar.addAction(Campaigns.getHomeAction(this));
+        
+        if (getIntent() != null && getIntent().getExtras() != null) {
+	        boolean bFromCauseSel = getIntent().getExtras().getBoolean(FROM_CAUSE_SEL);
+	        if (bFromCauseSel)
+	        	Toast.makeText(this, "Thanks for letting us know! Keep an eye out for opportunities tagged with your causes.", Toast.LENGTH_LONG).show();
+        }
         
         // onResume is always call next
     }
@@ -122,12 +130,16 @@ public class Profile extends AbstractActivity {
 			actionBar.addAction(profileAction);
 			
 			// Show the "no campaigns" layout
-			content.addView(inflater.inflate(R.layout.profile_no_campaigns, null));
+			content.addView(inflater.inflate(R.layout.profile_logged_out, null));
 		}
 	}
 	
-	public void findCampaigns(View v){
+	public void findCampaigns(View v) {
 		startActivity(new Intent(this, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+	}
+	
+	public void goLoginRegister(View v) {
+		startActivityForResult(new Intent(this, Login.class), REQ_LOGIN_FOR_PROFILE);
 	}
 
 	public static Intent getIntent(Context context) {
