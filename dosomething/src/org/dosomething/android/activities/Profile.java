@@ -69,16 +69,30 @@ public class Profile extends AbstractActivity {
         
         context = this;
         
+        actionBar.addAction(causeAction);
         actionBar.addAction(Campaigns.getHomeAction(this));
         
         if (getIntent() != null && getIntent().getExtras() != null) {
 	        boolean bFromCauseSel = getIntent().getExtras().getBoolean(FROM_CAUSE_SEL);
 	        if (bFromCauseSel)
-	        	Toast.makeText(this, "Thanks for letting us know! Keep an eye out for opportunities tagged with your causes.", Toast.LENGTH_LONG).show();
+	        	Toast.makeText(this, R.string.cause_confirm, Toast.LENGTH_LONG).show();
         }
         
         // onResume is always call next
     }
+	
+	private final Action causeAction = new Action() {
+		@Override
+		public int getDrawable() {
+			return R.drawable.action_bar_cause;
+		}
+
+		@Override
+		public void performAction(View view) {
+			Context ctx = getApplicationContext();
+			startActivity(new Intent(ctx, CauseSelector.class));
+		}
+	};
 	
 	private final Action loginAction = new Action(){
 

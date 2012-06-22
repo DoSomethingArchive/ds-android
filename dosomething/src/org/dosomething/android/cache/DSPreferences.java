@@ -91,6 +91,21 @@ public class DSPreferences {
 		editor.commit();
 	}
 	
+	public int getCause1() {
+		SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+		return settings.getInt(CAUSE_1, -1);
+	}
+	
+	public int getCause2() {
+		SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+		return settings.getInt(CAUSE_2, -1);
+	}
+	
+	public int getCause3() {
+		SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+		return settings.getInt(CAUSE_3, -1);
+	}
+	
 	public int[] getCauses() {
 		SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
 		int[] ids = new int[3];
@@ -130,6 +145,39 @@ public class DSPreferences {
 			return CAUSE_HEALTH;
 		case R.id.sex_relationships_btn:
 			return CAUSE_RELATIONSHIPS;
+		default:
+			return -1;
+		}
+	}
+	
+	/**
+	 * Translates a cause's Campaigns or Action Finder feed id to the app's 
+	 * corresponding internal resource id.
+	 */
+	public int getCauseResId(int feed_id) {
+		switch(feed_id) {
+		case CAUSE_ANIMALS:
+			return R.id.animals_btn;
+		case CAUSE_BULLYING:
+			return R.id.bullying_violence_btn;
+		case CAUSE_DISASTERS:
+			return R.id.disasters_btn;
+		case CAUSE_DISCRIMINATION:
+			return R.id.discrimination_btn;
+		case CAUSE_EDUCATION:
+			return R.id.education_btn;
+		case CAUSE_ENVIRONMENT:
+			return R.id.environment_btn;
+		case CAUSE_POVERTY:
+			return R.id.homelessness_poverty_btn;
+		case CAUSE_HUMAN_RIGHTS:
+			return R.id.human_rights_btn;
+		case CAUSE_TROOPS:
+			return R.id.our_troops_btn;
+		case CAUSE_HEALTH:
+			return R.id.health_btn;
+		case CAUSE_RELATIONSHIPS:
+			return R.id.sex_relationships_btn;
 		default:
 			return -1;
 		}
