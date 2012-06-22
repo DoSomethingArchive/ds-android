@@ -2,16 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/ProfileNoCampaignsLayout">
     
-    <LinearLayout style="@style/ProfileNoCampaignsInner">
-    
+    <LinearLayout style="@style/ProfileLoggedOutInner">
         <TextView 
             style="@style/ProfileNoCampaignsText" 
             android:text="Login or Register to participate in our national campaigns and track your progress."/>
         <Button 
             style="@style/ProfileNoCampaignsButton" 
             android:onClick="goLoginRegister" 
-            android:text="@string/login_upper"/>
-        
+            android:text="@string/profile_login_button"/>
+    </LinearLayout>
+    
+    <LinearLayout style="@style/ProfileLoggedOutInner">    
         <TextView 
             style="@style/ProfileNoCampaignsText" 
             android:text="Or browse our campaigns to see what you can get involved in!"/>
@@ -19,7 +20,6 @@
             style="@style/ProfileNoCampaignsButton" 
             android:onClick="findCampaigns" 
             android:text="@string/profile_browse_campaigns"/>
-
     </LinearLayout>
     
 </LinearLayout>

@@ -112,6 +112,16 @@
         <item name="android:paddingRight">15dp</item>
         <item name="android:paddingBottom">40dp</item>
     </style>
+    <style name="ProfileLoggedOutInner">
+        <item name="android:background">@drawable/white_border_background</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:padding">15dp</item>
+    </style>
     
     <style name="ProfileNoCampaignsText">
         <item name="android:layout_width">fill_parent</item>
@@ -125,7 +135,7 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">20dp</item>
-        <item name="android:layout_marginBottom">25dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
         <item name="android:background">@drawable/main_button_selector</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16dp</item>

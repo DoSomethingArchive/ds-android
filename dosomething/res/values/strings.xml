@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Do Something</string>
-    <string name="username">Username</string>
+    <string name="username">Email/Username</string>
     <string name="password">Password</string>
     <string name="facebook_log_in">Login with Facebook</string>
     <string name="log_in_auth_failed">Password is incorrect. Please try again.</string>
@@ -23,11 +23,10 @@
     <string name="no_upper">NO</string>
     <string name="continue_upper">CONTINUE</string>
     <string name="cancel_upper">CANCEL</string>
-    <string name="login_upper">LOGIN</string>
     <string name="username_upper">USERNAME *</string>
-    <string name="mobile_upper">MOBILE NUMBER *</string>
-    <string name="first_name_upper">FIRST NAME</string>
-    <string name="last_name_upper">LAST NAME</string>
+    <string name="mobile_upper">CELL PHONE NUMBER</string>
+    <string name="first_name_upper">FIRST NAME *</string>
+    <string name="last_name_upper">LAST NAME *</string>
     <string name="email_address_upper">EMAIL ADDRESS *</string>
     <string name="password_upper">PASSWORD *</string>
     <string name="confirm_password_upper">CONFIRM PASSWORD *</string>
@@ -42,9 +41,10 @@
     
     <string name="register_title">Become A Member</string>
     <string name="register_disclaimer">By tapping "Go", you accept the &lt;a href="http://www.dosomething.org/about/terms-of-service">terms of use&lt;/a> and &lt;a href="http://www.dosomething.org/about/privacy">privacy policy&lt;/a>.</string>
-    <string name="profile_browse_campaigns">BROWSE CAMPAIGNS</string>
+    <string name="profile_browse_campaigns">FIND WAYS TO GET INVOLVED</string>
+    <string name="profile_login_button">GET STARTED NOW</string>
     <string name="profile_title">Participation Profile</string>
-    <string name="campaigns_title">Current Campaigns</string>
+    <string name="campaigns_title">Ways To Get Involved</string>
     <string name="campaign_share_title">Share</string>
     <string name="campaign_how_to_title">How To</string>
     <string name="campaign_gallery_title">Gallery</string>
@@ -95,5 +95,5 @@
     <string name="cause_health">Physical and Mental Health</string>
     <string name="cause_sex_relationships">Sex and Relationships</string>
     
-    <string name="welcome_text">DoSomething.org harnesses the awesome energy of teens and unleashes it on the causes they care about.</string>
+    <string name="welcome_text">DoSomething.org provides easy and fun ways for teens to take action around the causes they care about!</string>
 </resources>
