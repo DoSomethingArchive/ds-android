@@ -157,7 +157,7 @@
         <item name="android:layout_height">30dp</item>
         <item name="android:background">@drawable/cause_tag_background</item>
         <item name="android:layout_gravity">right</item>
-        <item name="android:padding">2dp</item>
+        <item name="android:layout_margin">3dp</item>
     </style>
     <style name="CampaignDatesRow">
         <item name="android:orientation">vertical</item>

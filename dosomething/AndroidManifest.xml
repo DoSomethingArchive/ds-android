@@ -33,7 +33,6 @@
         <activity android:name=".activities.CampaignResources"/>
         <activity android:name=".activities.CampaignFAQ"/>
         <activity android:name=".activities.CampaignGallery"/>
-        <activity android:name=".activities.CauseConfirm"/>
         <activity android:name=".activities.CauseSelector"/>
         <activity android:name=".activities.GalleryImageItemDisplay"/>
         <activity android:name=".activities.ActionsFinder"/>

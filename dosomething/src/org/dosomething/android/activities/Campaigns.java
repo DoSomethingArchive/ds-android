@@ -216,27 +216,27 @@ public class Campaigns extends AbstractActivity {
 		private int getCauseDrawable(int cause_id) {
 			switch(cause_id) {
 			case DSPreferences.CAUSE_ANIMALS:
-				return R.drawable.cause_animals;
+				return R.drawable.cause_animals_tag;
 			case DSPreferences.CAUSE_BULLYING:
-				return R.drawable.cause_bullying;
+				return R.drawable.cause_bullying_tag;
 			case DSPreferences.CAUSE_DISASTERS:
-				return R.drawable.cause_disasters;
+				return R.drawable.cause_disasters_tag;
 			case DSPreferences.CAUSE_DISCRIMINATION:
-				return R.drawable.cause_discrimination;
+				return R.drawable.cause_discrimination_tag;
 			case DSPreferences.CAUSE_EDUCATION:
-				return R.drawable.cause_education;
+				return R.drawable.cause_education_tag;
 			case DSPreferences.CAUSE_ENVIRONMENT:
-				return R.drawable.cause_environment;
+				return R.drawable.cause_environment_tag;
 			case DSPreferences.CAUSE_HEALTH:
-				return R.drawable.cause_health;
+				return R.drawable.cause_health_tag;
 			case DSPreferences.CAUSE_HUMAN_RIGHTS:
-				return R.drawable.cause_human_rights;
+				return R.drawable.cause_human_rights_tag;
 			case DSPreferences.CAUSE_POVERTY:
-				return R.drawable.cause_poverty;
+				return R.drawable.cause_poverty_tag;
 			case DSPreferences.CAUSE_RELATIONSHIPS:
-				return R.drawable.cause_relationships;
+				return R.drawable.cause_relationships_tag;
 			case DSPreferences.CAUSE_TROOPS:
-				return R.drawable.cause_troops;
+				return R.drawable.cause_troops_tag;
 			default:
 				return -1;
 			}

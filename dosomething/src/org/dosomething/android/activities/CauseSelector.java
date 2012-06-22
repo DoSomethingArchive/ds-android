@@ -8,14 +8,11 @@ import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.widget.CustomActionBar;
 
 import roboguice.inject.InjectView;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
-import com.markupartist.android.widget.ActionBar.Action;
 
 public class CauseSelector extends AbstractActivity {
 
@@ -35,7 +32,6 @@ public class CauseSelector extends AbstractActivity {
 	
 	private static final String FROM_CAUSE_SEL = "from_cause_sel";
 
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.cause1) private TextView textCause1;
 	@InjectView(R.id.cause2) private TextView textCause2;
 	@InjectView(R.id.cause3) private TextView textCause3;
@@ -49,27 +45,28 @@ public class CauseSelector extends AbstractActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cause_selector);
-
-		actionBar.addAction(profileButtonAction);
-		
-		DSPreferences prefs = new DSPreferences(this);
-		prefs.clearCauses();
 	}
 	
-	private final Action profileButtonAction = new Action(){
-
-		@Override
-		public int getDrawable() {
-			return R.drawable.action_bar_profile;
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		// Update text and toggle buttons if previously selected
+		DSPreferences prefs = new DSPreferences(this);
+		updateCauseDisplayForId(prefs.getCause1());
+		updateCauseDisplayForId(prefs.getCause2());
+		updateCauseDisplayForId(prefs.getCause3());
+	}
+	
+	private void updateCauseDisplayForId(int cause_id) {
+		DSPreferences prefs = new DSPreferences(this);
+		int res_id = prefs.getCauseResId(cause_id);
+		ToggleButton tb = (ToggleButton) findViewById(res_id);
+		if (tb != null) {
+			tb.setChecked(true);
+			updateCauseList(res_id, true);
 		}
-
-		@Override
-		public void performAction(View view) {
-			Context context = getApplicationContext();
-			startActivity(Profile.getIntent(context));
-			finish();
-		}
-	};
+	}
 	
 	public void continueToProfile(View v) {
 		HashMap<String, String> param = new HashMap<String, String>();

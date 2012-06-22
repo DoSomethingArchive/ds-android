@@ -80,7 +80,7 @@
     <string name="campaign_prizes_rules">Official Rules and Regulations</string>
     <string name="gallery_image_item_display_error">Unable to load the image</string>
     
-    <string name="cause_confirm">Thanks for letting us know the causes you care about!\n\nCheck out our national campaigns for you and your friends to get involved in and get a shot at winning scholarships and prizes.</string>
+    <string name="cause_confirm">Thanks for letting us know! Keep an eye out for our campaigns tagged with your causes.</string>
     <string name="cause_title">Select Your Causes</string>
     <string name="cause_call_to_action">Help us to know more about you! Select the top 3 causes YOU care about below.</string>
     <string name="cause_animals">Animals</string>
