@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,8 +75,12 @@ public class Profile extends AbstractActivity {
         
         if (getIntent() != null && getIntent().getExtras() != null) {
 	        boolean bFromCauseSel = getIntent().getExtras().getBoolean(FROM_CAUSE_SEL);
-	        if (bFromCauseSel)
-	        	Toast.makeText(this, R.string.cause_confirm, Toast.LENGTH_LONG).show();
+	        if (bFromCauseSel) {
+	        	Toast toast = Toast.makeText(this, R.string.cause_confirm, Toast.LENGTH_LONG);
+	        	toast.setGravity(Gravity.TOP, 0, 50);
+	        	toast.show();
+	        	getIntent().removeExtra(FROM_CAUSE_SEL);
+	        }
         }
         
         // onResume is always call next
