@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Do Something</string>
-    <string name="username">Email/Username</string>
+    <string name="username">Email / Username</string>
     <string name="password">Password</string>
     <string name="facebook_log_in">Login with Facebook</string>
     <string name="log_in_auth_failed">Password is incorrect. Please try again.</string>
@@ -95,5 +95,5 @@
     <string name="cause_health">Physical and Mental Health</string>
     <string name="cause_sex_relationships">Sex and Relationships</string>
     
-    <string name="welcome_text">DoSomething.org provides easy and fun ways for teens to take action around the causes they care about!</string>
+    <string name="welcome_text">DoSomething.org provides easy and fun ways for young people to take action around the causes they care about!</string>
 </resources>
