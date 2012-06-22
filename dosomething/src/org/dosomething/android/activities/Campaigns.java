@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.dosomething.android.R;
 import org.dosomething.android.cache.Cache;
+import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.tasks.NoInternetException;
@@ -186,8 +187,59 @@ public class Campaigns extends AbstractActivity {
 				// we use GONE instead of INVISIBLE because we dont want it to leave a blank space
 				textView.setVisibility(TextView.GONE);
 			}
+			
+			ImageView imageCause = (ImageView) v.findViewById(R.id.cause_tag);
+			imageCause.setVisibility(ImageView.GONE);	// GONE by default
+			
+			int[] tags = campaign.getCauseTags();
+			if(tags != null && tags.length > 0) {
+				boolean bValidTag = false;
+				DSPreferences prefs = new DSPreferences(getApplicationContext());
+				int[] userCauses = prefs.getCauses();
+				
+				for(int i=0; i<tags.length && !bValidTag; i++) {
+					for(int j=0; j<userCauses.length && !bValidTag; j++) {
+						if(tags[i] == userCauses[j] && getCauseDrawable(tags[i]) > 0) {
+							imageCause.setImageResource(getCauseDrawable(tags[i]));
+							imageCause.setVisibility(ImageView.VISIBLE);
+							
+							bValidTag = true;
+							break;
+						}
+					}
+				}
+			}
 
 			return v;
+		}
+		
+		private int getCauseDrawable(int cause_id) {
+			switch(cause_id) {
+			case DSPreferences.CAUSE_ANIMALS:
+				return R.drawable.cause_animals;
+			case DSPreferences.CAUSE_BULLYING:
+				return R.drawable.cause_bullying;
+			case DSPreferences.CAUSE_DISASTERS:
+				return R.drawable.cause_disasters;
+			case DSPreferences.CAUSE_DISCRIMINATION:
+				return R.drawable.cause_discrimination;
+			case DSPreferences.CAUSE_EDUCATION:
+				return R.drawable.cause_education;
+			case DSPreferences.CAUSE_ENVIRONMENT:
+				return R.drawable.cause_environment;
+			case DSPreferences.CAUSE_HEALTH:
+				return R.drawable.cause_health;
+			case DSPreferences.CAUSE_HUMAN_RIGHTS:
+				return R.drawable.cause_human_rights;
+			case DSPreferences.CAUSE_POVERTY:
+				return R.drawable.cause_poverty;
+			case DSPreferences.CAUSE_RELATIONSHIPS:
+				return R.drawable.cause_relationships;
+			case DSPreferences.CAUSE_TROOPS:
+				return R.drawable.cause_troops;
+			default:
+				return -1;
+			}
 		}
 		
 	}

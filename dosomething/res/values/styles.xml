@@ -100,7 +100,7 @@
     </style>
     
     <style name="ProfileNoCampaignsInner">
-        <item name="android:background">@drawable/profile_no_campaigns_background</item>
+        <item name="android:background">@drawable/white_border_background</item>
         <item name="android:orientation">vertical</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -125,6 +125,7 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">25dp</item>
         <item name="android:background">@drawable/main_button_selector</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16dp</item>
@@ -150,6 +151,13 @@
         <item name="android:textColor">#FECC05</item>
         <item name="android:textSize">20dp</item>
         <item name="android:padding">5dp</item>
+    </style>
+    <style name="CampaignCauseTag">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:background">@drawable/cause_tag_background</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:padding">2dp</item>
     </style>
     <style name="CampaignDatesRow">
         <item name="android:orientation">vertical</item>
@@ -239,7 +247,9 @@
     </style>
     
     <style name="CauseListContainer">
+        <item name="android:background">@drawable/white_border_background</item>
         <item name="android:orientation">vertical</item>
+        <item name="android:padding">10dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">20dp</item>
@@ -264,15 +274,14 @@
     <style name="CauseListText">
         <item name="android:textColor">@color/cause_text</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">16dp</item>
     </style>
     <style name="CauseToggleButton">
-        <item name="android:layout_width">150dp</item>
-        <item name="android:layout_height">150dp</item>
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">100dp</item>
         <item name="android:textOn"></item>
         <item name="android:textOff"></item>
         <item name="android:layout_margin">10dp</item>
-        <item name="android:background">@drawable/cause_toggle_button</item>
     </style>
     
     <style name="FaqRow">
@@ -462,7 +471,7 @@
     </style>
 
     <style name="WelcomeInner">
-        <item name="android:background">@drawable/profile_no_campaigns_background</item>
+        <item name="android:background">@drawable/white_border_background</item>
         <item name="android:orientation">vertical</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>

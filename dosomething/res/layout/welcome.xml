@@ -18,11 +18,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:src="@drawable/login_logo" />
+            <ImageView style="@style/LoginLogo" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -36,6 +32,7 @@
 	                android:layout_marginTop="10dp"
 	                android:gravity="center"
 	                android:textColor="@color/cause_text"
+	                android:textSize="16dp"
 	                android:textStyle="bold"
 	                android:text="@string/welcome_text"/>
 	            <Button

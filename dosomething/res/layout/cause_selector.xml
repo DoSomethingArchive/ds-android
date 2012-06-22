@@ -26,8 +26,13 @@
 		    <TextView
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
+		        android:layout_marginTop="20dp"
+		        android:layout_marginLeft="20dp"
+		        android:layout_marginRight="20dp"
+		        android:layout_marginBottom="10dp"
 		        android:gravity="center"
 		        android:textColor="@color/cause_text"
+		        android:textSize="16dp"
 		        android:textStyle="bold"
 		        android:text="@string/cause_call_to_action"/>
 		    
@@ -57,36 +62,47 @@
 			            android:layout_height="fill_parent">
 			            <ToggleButton android:id="@+id/animals_btn"
 			                style="@style/CauseToggleButton"
+			                android:background="@drawable/cause_animals_button"
 			                android:onClick="onCauseSelected"/>
 			            <ToggleButton android:id="@+id/bullying_violence_btn" 
 			                style="@style/CauseToggleButton"
+			                android:background="@drawable/cause_bullying_button"
 			                android:onClick="onCauseSelected"/>
 			            <ToggleButton android:id="@+id/disasters_btn"
 			                style="@style/CauseToggleButton"
+			                android:background="@drawable/cause_disasters_button"
 			                android:onClick="onCauseSelected"/>
 			            <ToggleButton android:id="@+id/discrimination_btn"
 			                style="@style/CauseToggleButton"
+			                android:background="@drawable/cause_discrimination_button"
 			                android:onClick="onCauseSelected"/>
 			            <ToggleButton android:id="@+id/education_btn"
 			                style="@style/CauseToggleButton"
+			                android:background="@drawable/cause_education_button"
 			                android:onClick="onCauseSelected"/>
 			            <ToggleButton android:id="@+id/environment_btn"
 			                style="@style/CauseToggleButton"
+			                android:background="@drawable/cause_environment_button"
 			                android:onClick="onCauseSelected"/>
 			            <ToggleButton android:id="@+id/homelessness_poverty_btn"
 			                style="@style/CauseToggleButton"
+			                android:background="@drawable/cause_poverty_button"
 			                android:onClick="onCauseSelected"/>
 			            <ToggleButton android:id="@+id/human_rights_btn"
 			                style="@style/CauseToggleButton"
+			                android:background="@drawable/cause_human_rights_button"
 			                android:onClick="onCauseSelected"/>
 			            <ToggleButton android:id="@+id/our_troops_btn"
 			                style="@style/CauseToggleButton"
+			                android:background="@drawable/cause_troops_button"
 			                android:onClick="onCauseSelected"/>
 			            <ToggleButton android:id="@+id/health_btn"
 			                style="@style/CauseToggleButton"
+			                android:background="@drawable/cause_health_button"
 			                android:onClick="onCauseSelected"/>
 			            <ToggleButton android:id="@+id/sex_relationships_btn"
 			                style="@style/CauseToggleButton"
+			                android:background="@drawable/cause_relationships_button"
 			                android:onClick="onCauseSelected"/>
 			        </LinearLayout>
 			    </HorizontalScrollView>
@@ -130,8 +146,8 @@
 		
 		    <Button
 		        style="@style/CauseSubmitButton"
-		        android:text="@string/go_upper"
-		        android:onClick="continueToConfirmation"/>
+		        android:text="@string/continue_upper"
+		        android:onClick="continueToProfile"/>
 	    </LinearLayout>
     </ScrollView>
     

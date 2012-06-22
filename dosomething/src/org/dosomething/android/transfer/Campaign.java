@@ -28,6 +28,7 @@ public class Campaign implements Serializable {
 	private String backgroundColor;
 	private String backgroundUrl;
 	private String callout;
+	private int[] cause_tags;
 	private int order;
 
 	private String videoUrl;
@@ -63,6 +64,18 @@ public class Campaign implements Serializable {
 		backgroundUrl = co.optString("logo-bg-image",null);
 		callout = co.optString("call-to-action",null);
 		order = co.getInt("order");
+		
+		JSONArray ct = co.optJSONArray("causes-tags");
+		if(ct!=null) {
+			int numTags = ct.length();
+			if(numTags > 0)
+				cause_tags = new int[11];	// 11 for number of causes
+			
+			for(int i=0; i<numTags; i++) {
+				int tag = ct.getInt(i);
+				cause_tags[i] = tag;
+			}
+		}
 		
 		JSONObject m = obj.optJSONObject("main");
 		if(m!=null) {
@@ -313,6 +326,10 @@ public class Campaign implements Serializable {
 	
 	public String getCallout() {
 		return callout;
+	}
+	
+	public int[] getCauseTags() {
+		return cause_tags;
 	}
 	
 	public int getOrder() {

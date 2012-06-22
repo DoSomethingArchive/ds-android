@@ -23,6 +23,7 @@
     <string name="no_upper">NO</string>
     <string name="continue_upper">CONTINUE</string>
     <string name="cancel_upper">CANCEL</string>
+    <string name="login_upper">LOGIN</string>
     <string name="username_upper">USERNAME *</string>
     <string name="mobile_upper">MOBILE NUMBER *</string>
     <string name="first_name_upper">FIRST NAME</string>
@@ -41,6 +42,7 @@
     
     <string name="register_title">Become A Member</string>
     <string name="register_disclaimer">By tapping "Go", you accept the &lt;a href="http://www.dosomething.org/about/terms-of-service">terms of use&lt;/a> and &lt;a href="http://www.dosomething.org/about/privacy">privacy policy&lt;/a>.</string>
+    <string name="profile_browse_campaigns">BROWSE CAMPAIGNS</string>
     <string name="profile_title">Participation Profile</string>
     <string name="campaigns_title">Current Campaigns</string>
     <string name="campaign_share_title">Share</string>
@@ -53,7 +55,7 @@
     <string name="campaign_resources_title">Resources</string>
     
     <string name="profile_no_campaigns">Hey! It looks like you haven\'t signed up for any of our campaigns.\n\nSign up for some and check back here to see what you\'ve done and what you can do next!</string>
-    <string name="profile_no_campaigns_button">GO FIND CAMPAIGNS</string>
+    <string name="profile_no_campaigns_button">GET INVOLVED NOW</string>
     
     <string name="campaign_sign_up_button">SIGN UP!</string>
     <string name="campaign_sign_up_button_already_signed_up">Already Signed Up</string>

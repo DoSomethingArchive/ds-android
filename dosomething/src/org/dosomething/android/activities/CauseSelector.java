@@ -1,6 +1,9 @@
 package org.dosomething.android.activities;
 
+import java.util.HashMap;
+
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.widget.CustomActionBar;
 
@@ -29,6 +32,8 @@ public class CauseSelector extends AbstractActivity {
 		R.id.health_btn,
 		R.id.sex_relationships_btn
 	};
+	
+	private static final String FROM_CAUSE_SEL = "from_cause_sel";
 
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.cause1) private TextView textCause1;
@@ -46,6 +51,9 @@ public class CauseSelector extends AbstractActivity {
 		setContentView(R.layout.cause_selector);
 
 		actionBar.addAction(profileButtonAction);
+		
+		DSPreferences prefs = new DSPreferences(this);
+		prefs.clearCauses();
 	}
 	
 	private final Action profileButtonAction = new Action(){
@@ -63,8 +71,22 @@ public class CauseSelector extends AbstractActivity {
 		}
 	};
 	
-	public void continueToConfirmation(View v) {
-		startActivity(new Intent(this, CauseConfirm.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+	public void continueToProfile(View v) {
+		HashMap<String, String> param = new HashMap<String, String>();
+		if (textCause1.getText().length() > 0) {
+			param.put("cause-1", textCause1.getText().toString());
+		}
+		else if (textCause2.getText().length() > 0) {
+			param.put("cause-2", textCause2.getText().toString());
+		}
+		else if (textCause3.getText().length() > 0) {
+			param.put("cause-3", textCause3.getText().toString());
+		}
+		Analytics.logEvent("causes-selected", param);
+		
+		Intent intent = new Intent(this, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtra(FROM_CAUSE_SEL, true);
+		startActivity(intent);
 		finish();
 	}
 
