@@ -45,11 +45,11 @@
             </LinearLayout>
             
             <FrameLayout android:id="@+id/frmVideo" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:onClick="playVideo">
-                <ImageView android:id="@+id/imgVideoThumb" android:layout_width="fill_parent" android:layout_height="wrap_content" android:scaleType="centerInside" android:gravity="center"/>
+                <ImageView android:id="@+id/imgVideoThumb" android:layout_width="fill_parent" android:layout_height="wrap_content" android:scaleType="centerInside" android:gravity="center" android:adjustViewBounds="true"/>
            		<ImageView android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:src="@drawable/play"/>
             </FrameLayout>
             
-            <ImageView android:id="@+id/imgThumb" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:scaleType="centerInside" android:gravity="center"/>
+            <ImageView android:id="@+id/imgThumb" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:scaleType="centerInside" android:gravity="center" android:adjustViewBounds="true"/>
             
             <Button android:id="@+id/actions" android:onClick="actions" style="@style/CampaignButton" android:visibility="gone" android:text="@string/campaign_actions"/>
             <Button android:id="@+id/howTo" android:onClick="howTo" style="@style/CampaignButton" android:visibility="gone" android:text="@string/campaign_how_to"/>

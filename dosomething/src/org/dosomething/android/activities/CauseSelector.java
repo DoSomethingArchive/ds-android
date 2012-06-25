@@ -5,7 +5,6 @@ import java.util.HashMap;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.cache.DSPreferences;
-import org.dosomething.android.widget.CustomActionBar;
 
 import roboguice.inject.InjectView;
 import android.content.Intent;
