@@ -77,7 +77,7 @@ public class Profile extends AbstractActivity {
 	        boolean bFromCauseSel = getIntent().getExtras().getBoolean(FROM_CAUSE_SEL);
 	        if (bFromCauseSel) {
 	        	Toast toast = Toast.makeText(this, R.string.cause_confirm, Toast.LENGTH_LONG);
-	        	toast.setGravity(Gravity.TOP, 0, 50);
+	        	toast.setGravity(Gravity.TOP, 0, 64);
 	        	toast.show();
 	        	getIntent().removeExtra(FROM_CAUSE_SEL);
 	        }
