@@ -1,11 +1,13 @@
 package org.dosomething.android.activities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.json.JSONObject;
@@ -109,6 +111,10 @@ public class Login extends AbstractActivity {
 
 			@Override
 			public void onCancel() {
+				HashMap<String, String> param = new HashMap<String, String>();
+				param.put("facebook", "authorize-cancelled");
+				Analytics.logEvent(getPageName(), param);
+				
 				Log.d(TAG, "facebook authorize cancelled");
 			}
     		
@@ -204,7 +210,7 @@ public class Login extends AbstractActivity {
 		protected void onError(Exception e) {
 			
 			new AlertDialog.Builder(Login.this)
-				.setMessage(getString(R.string.facebook_auth_failed))
+				.setMessage(getString(R.string.log_in_failed))
 				.setCancelable(false)
 				.setPositiveButton(getString(R.string.ok_upper), null)
 				.create()
@@ -257,6 +263,10 @@ public class Login extends AbstractActivity {
 		protected void onSuccess() {
 			
 			if(loginSuccess) {
+				HashMap<String, String> param = new HashMap<String, String>();
+				param.put("facebook", "login-success");
+				Analytics.logEvent(getPageName(), param);
+				
 				goToProfile();
 			} else {
 				Toast.makeText(Login.this, getString(R.string.log_in_auth_failed), Toast.LENGTH_LONG).show();

@@ -5,8 +5,8 @@
     <string name="password">Password</string>
     <string name="facebook_log_in">Login with Facebook</string>
     <string name="log_in_auth_failed">Password is incorrect. Please try again.</string>
-    <string name="log_in_failed">Login failed. Please try again.</string>
-    <string name="register_failed">Registration failed. Please try again.</string>
+    <string name="log_in_failed">Login failed. Please check your internet connection and try again.</string>
+    <string name="register_failed">Registration failed. Please check your internet connection and try again.</string>
     <string name="confirm_password_failed">The passwords entered do not match.</string>
     <string name="auth_failed">User authentication has failed.</string>
     <string name="facebook_auth_failed">Facebook login failed. Please try again.</string>
