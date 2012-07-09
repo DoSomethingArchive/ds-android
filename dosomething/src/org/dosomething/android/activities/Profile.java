@@ -13,8 +13,12 @@ import org.dosomething.android.dao.MyDAO;
 import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.Challenge;
 import org.dosomething.android.widget.CustomActionBar;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import roboguice.inject.InjectView;
 import android.content.Context;
@@ -140,8 +144,8 @@ public class Profile extends AbstractActivity {
 			profileAction = Login.getLogoutAction(this, userContext);
 			actionBar.addAction(profileAction);
 			
-			// And find campaigns the user's signed up for
-			new MyTask().execute();
+			// Start process to find campaigns the user's signed up for
+			new UserTask().execute();
 		}
 		else {
 			// Add login action
@@ -213,10 +217,59 @@ public class Profile extends AbstractActivity {
 		
 	}
 	
-	private class MyTask extends AbstractFetchCampaignsTask {
+	/**
+	 * Task to get user's profile info from server.
+	 */
+	private class UserTask extends AbstractWebserviceTask {
+		private ArrayList<Integer> gids = new ArrayList<Integer>();
+		
+		public UserTask() {
+			super(userContext);
+		}
+		
+		@Override
+		protected void doWebOperation() throws Exception {
+			String uid = new UserContext(context).getUserUid();
+			String url = "http://www.dosomething.org/?q=rest/user/"+uid+".json";
+			
+			WebserviceResponse response = doGet(url);
+			if (!response.hasErrorStatusCode()) {
+				// gid's found in group_audience object show what campaigns, clubs,
+				// and other OG groups the user is signed up for
+				JSONObject jsonResponse = response.getBodyAsJSONObject();
+				JSONObject group_audience = jsonResponse.getJSONObject("group_audience");
+				JSONArray groups_array = group_audience.getJSONArray("und");
+				if (groups_array != null) {
+					for (int i = 0; i < groups_array.length(); i++) {
+						JSONObject group = groups_array.getJSONObject(i);
+						int gid = group.getInt("gid");
+						gids.add(new Integer(gid));
+					}
+				}
+			}
+		}
 
-		public MyTask(){
+		@Override
+		protected void onSuccess() {
+		}
+
+		@Override
+		protected void onFinish() {
+			// Start task to retrieve campaigns
+			new CampaignTask(gids).execute();
+		}
+
+		@Override
+		protected void onError(Exception e) {
+		}
+	}
+	
+	private class CampaignTask extends AbstractFetchCampaignsTask {
+		private ArrayList<Integer> gids;
+
+		public CampaignTask(ArrayList<Integer> gids){
 			super(context, userContext, cache, actionBar);
+			this.gids = gids;
 		}
 		
 		@Override
@@ -233,7 +286,44 @@ public class Profile extends AbstractActivity {
 				}
 				
 				for(Campaign campaign : getCampaigns()){
+					boolean addCampaign = false;
 					if(userCampaignsMap.containsKey(campaign.getId())){
+						addCampaign = true;
+					}
+					else {
+						// User OG id's to determine if user signed up for this campaign on the website
+						for (int i = 0; i < gids.size(); i++) {
+							// TODO: trigger Toast message if campaign is found
+							if (campaign.getGid() == gids.get(i).intValue()) {
+								
+								// Save campaign as being signed up for
+								Long userCampaignId = dao.setSignedUp(uid, campaign.getId());
+								// And mark the sign-up challenge as completed
+								List<Challenge> challenges = campaign.getChallenges();
+								if (challenges != null){
+									for (Challenge challenge : challenges) {
+										if ("sign-up".equals(challenge.getCompletionPage())) {
+											dao.addCompletedAction(new CompletedCampaignAction(userCampaignId, challenge.getText()));
+											break;
+										}
+									}
+								}
+								
+								// Add to userCampaignsMap HashMap
+								UserCampaign newUserCampaign = dao.findUserCampaign(uid, campaign.getId());
+								if (newUserCampaign != null) {
+									userCampaignsMap.put(newUserCampaign.getCampaignId(), newUserCampaign);
+									
+									// Only add to list for display if this succeeds. Otherwise, will crash
+									addCampaign = true;
+								}
+								
+								break;
+							}
+						}
+					}
+					
+					if (addCampaign) {
 						campaigns.add(campaign);
 						userCampaigns.add(userCampaignsMap.get(campaign.getId()));
 					}
@@ -252,7 +342,10 @@ public class Profile extends AbstractActivity {
 		}
 
 		@Override
-		protected void onError(Exception e) {}
+		protected void onError(Exception e) {
+			Toast toast = Toast.makeText(context, R.string.profile_load_error, Toast.LENGTH_LONG);
+			toast.show();
+		}
 		
 	}
 	
