@@ -321,5 +321,12 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Excepti
 		public InputStream getBody() {
 			return body;
 		}
+		
+		public boolean hasErrorStatusCode() {
+			if (statusCode >= 400 && statusCode < 500)
+				return true;
+			else
+				return false;
+		}
 	}
 }

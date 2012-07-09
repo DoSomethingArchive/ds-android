@@ -6,13 +6,12 @@ import java.util.List;
 import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
 
-import com.google.inject.Inject;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+
+import com.google.inject.Inject;
 
 public class MyDAO {
 	
