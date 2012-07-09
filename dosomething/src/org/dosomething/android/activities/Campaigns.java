@@ -1,5 +1,7 @@
 package org.dosomething.android.activities;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.dosomething.android.R;
@@ -182,6 +184,22 @@ public class Campaigns extends AbstractActivity {
 				textView.setText(campaign.getCallout());
 				textView.setTypeface(calloutTypeface);
 				textView.setVisibility(TextView.VISIBLE);
+				
+				// Change text color and background color if it's a past campaign
+				Calendar cal = Calendar.getInstance();
+				Date todayDate = cal.getTime();
+				if (todayDate.after(campaign.getEndDate())) {
+					int bgColor = getResources().getColor(R.color.campaigns_past_campaign_callout_background);
+					textView.setBackgroundColor(bgColor);
+					int textColor = getResources().getColor(R.color.campaigns_past_campaign_callout_text);
+					textView.setTextColor(textColor);
+				}
+				else {
+					int bgColor = getResources().getColor(R.color.campaigns_callout_background);
+					textView.setBackgroundColor(bgColor);
+					int textColor = getResources().getColor(R.color.campaigns_callout_text);
+					textView.setTextColor(textColor);
+				}
 			}
 			else {
 				// we use GONE instead of INVISIBLE because we dont want it to leave a blank space
