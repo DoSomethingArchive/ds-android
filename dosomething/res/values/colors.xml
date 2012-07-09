@@ -28,4 +28,8 @@
 <color name="campaign_button_background_active">#164278</color>
 <color name="cause_text">#333333</color>
 <color name="web_form_checkbox_label">#000000</color>
+<color name="campaigns_callout_background">#FF522053</color>
+<color name="campaigns_callout_text">#FFFECC05</color>
+<color name="campaigns_past_campaign_callout_background">#DD868686</color>
+<color name="campaigns_past_campaign_callout_text">#FFEFEFEF</color>
 </resources>
