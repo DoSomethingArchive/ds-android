@@ -189,6 +189,7 @@ public class Campaigns extends AbstractActivity {
 				Calendar cal = Calendar.getInstance();
 				Date todayDate = cal.getTime();
 				if (todayDate.after(campaign.getEndDate())) {
+					// TODO: for past campaigns, maybe also set "Past Campaigns" text, even if none was set
 					int bgColor = getResources().getColor(R.color.campaigns_past_campaign_callout_background);
 					textView.setBackgroundColor(bgColor);
 					int textColor = getResources().getColor(R.color.campaigns_past_campaign_callout_text);

@@ -34,6 +34,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +62,7 @@ public class Profile extends AbstractActivity {
 	
 	private Context context;
 	private Action profileAction;
+	private boolean initializingActivity = true;
 	
 	@Override
 	protected String getPageName() {
@@ -145,7 +147,15 @@ public class Profile extends AbstractActivity {
 			actionBar.addAction(profileAction);
 			
 			// Start process to find campaigns the user's signed up for
-			new UserTask().execute();
+			if (initializingActivity) {
+				// Only query for user data on initial activity load
+				new UserTask().execute();
+				initializingActivity = false;
+			}
+			else {
+				// When activity is just being brought to the front again, skip user sync
+				new CampaignTask().execute();
+			}
 		}
 		else {
 			// Add login action
@@ -252,9 +262,21 @@ public class Profile extends AbstractActivity {
 		@Override
 		protected void onSuccess() {
 		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			if(actionBar != null){
+				actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
+			}
+		}
 
 		@Override
 		protected void onFinish() {
+			if(actionBar != null){
+				actionBar.setProgressBarVisibility(ProgressBar.GONE);
+			}
+			
 			// Start task to retrieve campaigns
 			new CampaignTask(gids).execute();
 		}
@@ -266,6 +288,10 @@ public class Profile extends AbstractActivity {
 	
 	private class CampaignTask extends AbstractFetchCampaignsTask {
 		private ArrayList<Integer> gids;
+		
+		public CampaignTask() {
+			super(context, userContext, cache, actionBar);
+		}
 
 		public CampaignTask(ArrayList<Integer> gids){
 			super(context, userContext, cache, actionBar);
@@ -292,7 +318,7 @@ public class Profile extends AbstractActivity {
 					}
 					else {
 						// User OG id's to determine if user signed up for this campaign on the website
-						for (int i = 0; i < gids.size(); i++) {
+						for (int i = 0; gids != null && i < gids.size(); i++) {
 							// TODO: trigger Toast message if campaign is found
 							if (campaign.getGid() == gids.get(i).intValue()) {
 								
