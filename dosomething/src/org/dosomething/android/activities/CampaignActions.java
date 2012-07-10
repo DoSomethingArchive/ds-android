@@ -156,6 +156,9 @@ public class CampaignActions extends AbstractActivity {
 
 		@Override
 		public View getView(int index, View v, ViewGroup parent) {
+			// ArrayAdapter will recycle Views once they go off-screen, so no
+			// need to re-inflate Views. But will need to remove event listeners
+			// so actions don't get triggered incorrectly for old rows.
 			if (v == null) {
 				v = inflater.inflate(R.layout.action_row, null);
 			}
@@ -168,10 +171,12 @@ public class CampaignActions extends AbstractActivity {
 			boolean actionable = !completed && challenge.getCompletionPage()!=null;
 			
 			Button button = (Button) v.findViewById(R.id.button);
+			button.setOnClickListener(null);	// clear any previous listeners
 			button.setOnClickListener(new MyActionClickListener(challenge));
 			button.setVisibility(actionable ? Button.VISIBLE : Button.GONE);
 			
 			CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox);
+			checkBox.setOnCheckedChangeListener(null);	// clear any previous listeners
 			checkBox.setChecked(completed);
 			checkBox.setOnCheckedChangeListener(new MyActionCheckListener(challenge, button));
 			
