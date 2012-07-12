@@ -97,5 +97,6 @@
     <string name="cause_health">Physical and Mental Health</string>
     <string name="cause_sex_relationships">Sex and Relationships</string>
     
+    <string name="splash_version">v</string>
     <string name="welcome_text">DoSomething.org provides easy and fun ways for young people to take action around the causes they care about!</string>
 </resources>

@@ -5,11 +5,19 @@ import org.dosomething.android.cache.DSPreferences;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
+
+import com.google.inject.Inject;
 
 public class Welcome extends AbstractActivity {
+	
+	@Inject private LayoutInflater inflater;
 	
 	private Dialog splashDialog;
 	private boolean skipWelcome = true;
@@ -84,8 +92,22 @@ public class Welcome extends AbstractActivity {
 	 * Shows the splash screen over the full Activity
 	 */
 	protected void showSplashScreen() {
+		// Set the versionName in the splash screen
+		String version = "";
+		try {
+			PackageInfo pInfo = this.getPackageManager().getPackageInfo(this.getPackageName(), 0);
+			version = pInfo.versionName;
+		}
+		catch (NameNotFoundException e) {
+		}
+
+		View v = inflater.inflate(R.layout.splash_screen, null);
+		if (version.length() > 0) {
+			TextView tv = (TextView)v.findViewById(R.id.versionName);
+			tv.setText(getString(R.string.splash_version)+version);
+		}
 		splashDialog = new Dialog(this, R.style.SplashScreen);
-		splashDialog.setContentView(R.layout.splash_screen);
+		splashDialog.setContentView(v);
 		splashDialog.setCancelable(false);
 		splashDialog.show();
 	 
