@@ -303,6 +303,8 @@ public class Profile extends AbstractActivity {
 			List<Campaign> campaigns = new ArrayList<Campaign>();
 			List<UserCampaign> userCampaigns = new ArrayList<UserCampaign>();
 			
+			boolean foundSignUpOnServer = false;
+			
 			Map<String, UserCampaign> userCampaignsMap = new HashMap<String, UserCampaign>();
 			String uid = new UserContext(context).getUserUid();
 			if (uid != null) {
@@ -319,7 +321,6 @@ public class Profile extends AbstractActivity {
 					else {
 						// User OG id's to determine if user signed up for this campaign on the website
 						for (int i = 0; gids != null && i < gids.size(); i++) {
-							// TODO: trigger Toast message if campaign is found
 							if (campaign.getGid() == gids.get(i).intValue()) {
 								
 								// Save campaign as being signed up for
@@ -342,6 +343,7 @@ public class Profile extends AbstractActivity {
 									
 									// Only add to list for display if this succeeds. Otherwise, will crash
 									addCampaign = true;
+									foundSignUpOnServer = true;
 								}
 								
 								break;
@@ -353,6 +355,11 @@ public class Profile extends AbstractActivity {
 						campaigns.add(campaign);
 						userCampaigns.add(userCampaignsMap.get(campaign.getId()));
 					}
+				}
+				
+				if (foundSignUpOnServer) {
+					Toast toast = Toast.makeText(context, R.string.profile_campaign_synced, Toast.LENGTH_LONG);
+					toast.show();
 				}
 			}
 			
