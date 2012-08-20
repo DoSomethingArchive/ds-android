@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.dosomething.android"
-    android:versionCode="2"
-    android:versionName="1.1">
+    android:versionCode="3"
+    android:versionName="1.2">
 
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="7" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8" />
+
+    <permission 
+        android:name="org.dosomething.android.permission.C2D_MESSAGE" 
+        android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="org.dosomething.android.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     
     <application
         android:icon="@drawable/ic_launcher"
@@ -41,6 +50,31 @@
         <activity android:name=".activities.Project"/>
         <activity android:name=".activities.ReportBack"/>
         <activity android:name=".activities.SignUp"/>
+        
+        <receiver android:name="com.xtify.sdk.c2dm.C2DMBroadcastReceiver" >
+            <intent-filter android:permission="com.google.android.c2dm.permission.SEND" >
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="org.dosomething.android" />
+            </intent-filter>
+            <intent-filter android:permission="com.google.android.c2dm.permission.SEND" >
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="org.dosomething.android" />
+            </intent-filter>
+        </receiver>
+         
+        <receiver android:name="com.xtify.sdk.NotifActionReceiver" />
+        <receiver android:name="com.xtify.sdk.wi.AlarmReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        
+        <service android:name="com.xtify.sdk.location.LocationUpdateService" />
+        <service android:name="com.xtify.sdk.c2dm.C2DMIntentService" />
+        <service android:name="com.xtify.sdk.alarm.MetricsIntentService" />
+        <service android:name="com.xtify.sdk.alarm.TagIntentService" />
+        <service android:name="com.xtify.sdk.alarm.RegistrationIntentService" />
+        <service android:name="com.xtify.sdk.alarm.LocationIntentService" />
         
     </application>
 
