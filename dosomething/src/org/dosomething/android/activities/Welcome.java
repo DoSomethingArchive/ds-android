@@ -10,7 +10,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -61,7 +60,7 @@ public class Welcome extends AbstractActivity {
 			notificationReceived = true;
 		}
 		
-		// Customizing Xtify notifications settings
+        // Customizing Xtify notifications settings
         Context context = getApplicationContext();
         NotificationsPreference.setVibrateEnabled(context, true);
         long[] vibratePattern = {0, 100, 200, 300};
@@ -74,10 +73,10 @@ public class Welcome extends AbstractActivity {
         NotificationsPreference.setLights(context, new int[] {ledARGB, ledOnMS, ledOffMS});
         
 //      String xid = XtifySDK.getXidKey(getApplicationContext());
-//		String appkey = XtifySDK.getAppKey(getApplicationContext());
-//		String ver = XtifySDK.getSdkVerNumber();
-//		boolean notifEnabled = XtifySDK.isNotificationEnabled(getApplicationContext());
-//		Log.v("XTIFY", "xid="+xid+" / appkey="+appkey+" / ver="+ver+" / notifEnabled="+notifEnabled);
+//      String appkey = XtifySDK.getAppKey(getApplicationContext());
+//      String ver = XtifySDK.getSdkVerNumber();
+//      boolean notifEnabled = XtifySDK.isNotificationEnabled(getApplicationContext());
+//      Log.v("XTIFY", "xid="+xid+" / appkey="+appkey+" / ver="+ver+" / notifEnabled="+notifEnabled);
 		
 		MyModel model = (MyModel) getLastNonConfigurationInstance();
         if (model != null) {
@@ -145,9 +144,10 @@ public class Welcome extends AbstractActivity {
 					}
 					else if (intentNotifActivity.compareTo("campaign") == 0) {
 						String intentCampaign = intent.getStringExtra(NOTIF_CAMPAIGN);
-Log.v("XTIFY", "campaign page - " + intentCampaign);
-						startCampaignActivity(intentCampaign);
-						bGoToProfile = false;
+						if (intentCampaign != null) {
+							startCampaignActivity(intentCampaign);
+							bGoToProfile = false;
+						}
 					}
 				}
 			}

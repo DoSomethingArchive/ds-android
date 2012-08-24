@@ -52,12 +52,6 @@
                 <category android:name="org.dosomething.android" />
             </intent-filter>
         </receiver>
-        
-        <receiver android:name="org.dosomething.android.receivers.XtifyNotifier" >
-            <intent-filter>
-                <action android:name="com.xtify.sdk.NOTIFIER" />
-            </intent-filter>
-        </receiver>
          
         <receiver android:name="com.xtify.sdk.NotifActionReceiver" />
         <receiver android:name="com.xtify.sdk.wi.AlarmReceiver" >
