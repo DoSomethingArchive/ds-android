@@ -76,6 +76,7 @@
     <string name="campaign_locator">LOCATOR</string>
     <string name="campaign_resources">RESOURCES</string>
     <string name="campaign_faq">FAQ</string>
+    <string name="campaign_loading">Loading Campaign...</string>
     
     <string name="campaign_action_list">Campaign Action List</string>
     

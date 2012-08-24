@@ -27,6 +27,10 @@ public class XtifyNotifier extends XtifyBroadcastReceiver {
 	private static final String NOTIF_ACTION_TYPE = "com.xtify.sdk.NOTIF_ACTION_TYPE";
 	// Data related to the action type (e.g. for open URL the data will be website URL)
 	private static final String NOTIF_ACTION_DATA = "com.xtify.sdk.NOTIF_ACTION_DATA";
+	// Custom key where payload will tell us what page/activity to load
+	private static final String NOTIF_ACTIVITY = "xtify.activity";
+	// Custom key where payload tells us what campaign page to load
+	private static final String NOTIF_CAMPAIGN = "xtify.campaign";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -40,8 +44,8 @@ public class XtifyNotifier extends XtifyBroadcastReceiver {
 		Log.v(TAG, "Notification Content: " + msgExtras.getString(NOTIFICATION_CONTENT));
 		Log.v(TAG, "Notif Action Type: " + msgExtras.getString(NOTIF_ACTION_TYPE));
 		Log.v(TAG, "Notif Action Data: " + msgExtras.getString(NOTIF_ACTION_DATA));
-		Log.v(TAG, "Test Payload 1: " + msgExtras.getString("key1"));
-		Log.v(TAG, "Test Payload 2: " + msgExtras.getString("key2"));
+		Log.v(TAG, "Test Payload 1: " + msgExtras.getString(NOTIF_ACTIVITY));
+		Log.v(TAG, "Test Payload 2: " + msgExtras.getString(NOTIF_CAMPAIGN));
 		
 		// more extras
 		Log.v(TAG, "NOTIFICATION_DETAILS: " + msgExtras.getString("com.xtify.sdk.NOTIFICATION_DETAILS"));

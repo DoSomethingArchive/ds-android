@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import org.acra.ErrorReporter;
@@ -111,6 +112,18 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 
 	protected List<Campaign> getCampaigns(){
 		return this.campaigns;
+	}
+	
+	protected Campaign getCampaignById(String campaignId) {
+		Iterator<Campaign> iter = campaigns.iterator();
+		while (iter.hasNext()) {
+			Campaign campaign = iter.next();
+			if (campaign.getId().compareTo(campaignId) == 0) {
+				return campaign;
+			}
+		}
+		
+		return null;
 	}
 
 	private Campaign convert(String id, JSONObject object) throws JSONException, ParseException {
