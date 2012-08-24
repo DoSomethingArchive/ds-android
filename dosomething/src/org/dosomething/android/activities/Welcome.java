@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.xtify.sdk.api.NotificationsPreference;
+import com.xtify.sdk.api.XtifyLocation;
 import com.xtify.sdk.api.XtifySDK;
 
 public class Welcome extends AbstractActivity {
@@ -71,6 +72,9 @@ public class Welcome extends AbstractActivity {
         int ledOnMS = 300;
         int ledOffMS = 1000;
         NotificationsPreference.setLights(context, new int[] {ledARGB, ledOnMS, ledOffMS});
+        
+        // Enabling Xtify location updates (TOOD: determine if battery drain is significant)
+        XtifyLocation.enableRepetitiveLocUpdate(context);
         
 //      String xid = XtifySDK.getXidKey(getApplicationContext());
 //      String appkey = XtifySDK.getAppKey(getApplicationContext());
