@@ -5,12 +5,16 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.dosomething.android.R;
+import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
 import org.dosomething.android.domain.UserCampaign;
+import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
+import org.dosomething.android.tasks.NoInternetException;
 import org.dosomething.android.widget.CustomActionBar;
 
 import roboguice.inject.InjectView;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -31,11 +35,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class Campaign extends AbstractActivity {
 
 	private static final String CAMPAIGN = "campaign";
+	private static final String CAMPAIGN_NAME = "campaign-name";
 
 	private static final int REQ_LOGIN_FOR_SIGN_UP = 111;
 
 	@Inject private ImageLoader imageLoader;
 	@Inject private UserContext userContext;
+	@Inject private Cache cache;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
@@ -66,6 +72,21 @@ public class Campaign extends AbstractActivity {
 
 		campaign = (org.dosomething.android.transfer.Campaign) getIntent().getSerializableExtra(CAMPAIGN);
 
+		if (campaign != null) {
+			// then ok to continue doing what we did before
+			populateFields();
+		}
+		else {
+			String campaignId = getIntent().getStringExtra(CAMPAIGN_NAME);
+			actionBar.setTitle(getString(R.string.campaign_loading));
+			// load appropriate campaign from cache, otherwise download and get this isht
+			new CampaignsFetchTask(campaignId).execute();
+		}
+
+		// onResume is called next
+	}
+	
+	private void populateFields() {
 		actionBar.setTitle(campaign.getName());
 
 		txtDates.setText(formatDateRange(campaign));
@@ -114,8 +135,6 @@ public class Campaign extends AbstractActivity {
 			imageLoader.displayImage(campaign.getImage(), imgThumb);
 			imgThumb.setVisibility(ImageView.VISIBLE);
 		}
-
-		// onResume is called next
 	}
 	
 	public void playVideo(View v){
@@ -227,9 +246,59 @@ public class Campaign extends AbstractActivity {
 		return answer;
 	}
 	
+	public static Intent getIntent(Context context, String campaignName) {
+		Intent answer = new Intent(context, Campaign.class);
+		answer.putExtra(CAMPAIGN_NAME, campaignName);
+		return answer;
+	}
+	
 	@Override
 	protected String getPageName() {
 		return "campaign";
+	}
+	
+	private class CampaignsFetchTask extends AbstractFetchCampaignsTask {
+		
+		private String campaignId;
+
+		public CampaignsFetchTask(String _campaignId) {
+			super(Campaign.this, userContext, cache, actionBar);
+			campaignId = _campaignId;
+		}
+
+		@Override
+		protected void onSuccess() {
+			if (campaignId != null) {
+				campaign = getCampaignById(campaignId);
+				if (campaign != null) {
+					populateFields();
+				}
+				else {
+					onError(null);
+				}
+			}
+			else {
+				onError(null);
+			}
+		}
+
+		@Override
+		protected void onError(Exception e) {
+			String message;
+			if(e instanceof NoInternetException) {
+				message = getString(R.string.campaigns_no_internet);
+			} else {
+				message = getString(R.string.campaigns_failed);
+			}
+			
+			new AlertDialog.Builder(Campaign.this)
+				.setMessage(message)
+				.setCancelable(false)
+				.setPositiveButton(getString(R.string.ok_upper), null)
+				.create()
+				.show();
+		}
+
 	}
 
 }

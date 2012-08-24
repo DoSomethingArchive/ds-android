@@ -145,8 +145,9 @@ public class Welcome extends AbstractActivity {
 					}
 					else if (intentNotifActivity.compareTo("campaign") == 0) {
 						String intentCampaign = intent.getStringExtra(NOTIF_CAMPAIGN);
+Log.v("XTIFY", "campaign page - " + intentCampaign);
 						startCampaignActivity(intentCampaign);
-						//bGoToProfile = false;
+						bGoToProfile = false;
 					}
 				}
 			}
@@ -215,7 +216,7 @@ public class Welcome extends AbstractActivity {
 	 * Starts activity for specified campaign
 	 */
 	private void startCampaignActivity(String campaignName) {
-		//startActivity(org.dosomething.android.activities.Campaign.getIntent(getApplicationContext(), campaign));
+		startActivity(org.dosomething.android.activities.Campaign.getIntent(getApplicationContext(), campaignName));
 	}
 	
 	/**
