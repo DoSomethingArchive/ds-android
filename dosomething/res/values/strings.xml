@@ -97,6 +97,7 @@
     <string name="cause_our_troops">Our Troops</string>
     <string name="cause_health">Physical and Mental Health</string>
     <string name="cause_sex_relationships">Sex and Relationships</string>
+    <string name="sms_add_contacts">+ Add Friend</string>
     <string name="sms_cell_field">YOUR CELL PHONE NUMBER *</string>
     <string name="sms_name_field">YOUR NAME *</string>
     <string name="sms_refer_title">Text Your Friends</string>
