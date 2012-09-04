@@ -23,26 +23,32 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             style="@style/WebFormRow">
-            
-            <!-- TODO: dummy text -->
+
             <TextView
-                android:text="Teaser text will go here. Text at least 5 of your friends to be entered for a chance to win a $5,000,000 scholarship"
+                android:id="@+id/sms_refer_text"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                style="@style/SMSReferText" />
             
-            <!-- TODO: dummy text -->
             <TextView
-                android:text="Your Name:"
+                android:text="@string/sms_name_field"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-            <include layout="@layout/web_form_textfield_row" />
+                android:layout_height="wrap_content"
+                style="@style/WebFormRowLabel" />
+            <EditText
+		        android:id="@+id/sms_name_input"
+		        style="@style/WebFormRowInput"
+		        android:inputType="text" />
             
-            <!-- TODO: dummy text -->
             <TextView
-                android:text="Your Cell #:"
+                android:text="@string/sms_cell_field"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-            <include layout="@layout/web_form_phone_row" />
+                android:layout_height="wrap_content"
+                style="@style/WebFormRowLabel" />
+            <EditText
+		        android:id="@+id/sms_cell_input"
+		        style="@style/WebFormRowInput"
+		        android:inputType="phone" />
             
             <!--  TODO: dummy text -->
             <Button

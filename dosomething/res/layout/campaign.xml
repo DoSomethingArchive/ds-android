@@ -44,6 +44,22 @@
                 <Button android:id="@+id/sign_up" android:onClick="signUp" style="@style/CampaignSignUpButton" android:text="@string/campaign_sign_up_button" android:background="@drawable/main_button_selector"/>
             </LinearLayout>
             
+            <LinearLayout 
+                android:id="@+id/sms_refer_container"
+                android:visibility="gone"
+                style="@style/CampaignSignUpRow" >
+                
+                <TextView android:id="@+id/sms_refer_text" style="@style/CampaignSMSReferText" />
+                
+                <Button
+                    android:id="@+id/sms_refer"
+                    android:onClick="smsRefer"
+                    style="@style/CampaignSignUpButton"
+                    android:text="@string/sms_refer_title" 
+                    android:background="@drawable/main_button_selector" />
+                    
+            </LinearLayout>
+            
             <FrameLayout android:id="@+id/frmVideo" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:onClick="playVideo">
                 <ImageView android:id="@+id/imgVideoThumb" android:layout_width="fill_parent" android:layout_height="wrap_content" android:scaleType="centerInside" android:gravity="center" android:adjustViewBounds="true"/>
            		<ImageView android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:src="@drawable/play"/>
