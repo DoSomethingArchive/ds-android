@@ -6,6 +6,7 @@ import org.dosomething.android.widget.CustomActionBar;
 import roboguice.inject.InjectView;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -14,13 +15,15 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 public class CampaignSMSRefer extends AbstractActivity {
 	
-	//private static final String CAMPAIGN = "campaign";
+	private static final String CAMPAIGN = "campaign";
 	private static final int GET_CONTACT_ACTIVITY = 1;
 	
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+	@InjectView(R.id.sms_refer_text) private TextView txtSMSRefer;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,11 @@ public class CampaignSMSRefer extends AbstractActivity {
 		
 		actionBar.addAction(Campaigns.getHomeAction(this));
 		
-		//Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
+		org.dosomething.android.transfer.Campaign campaign = (org.dosomething.android.transfer.Campaign) getIntent().getExtras().get(CAMPAIGN);
+		String smsReferText = campaign.getSMSReferText();
+		if (smsReferText != null) {
+			txtSMSRefer.setText(smsReferText);
+		}
 	}
 
 	@Override
@@ -80,5 +87,10 @@ public class CampaignSMSRefer extends AbstractActivity {
 			}
 		}
 	}
-	
+
+	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {
+		Intent answer = new Intent(context, CampaignSMSRefer.class);
+		answer.putExtra(CAMPAIGN, campaign);
+		return answer;
+	}
 }

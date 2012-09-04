@@ -40,6 +40,11 @@ public class Campaign implements Serializable {
 	private String shareTitle;
 	private String shareMessage;
 	
+	private String smsReferText;
+	private int mCommonsCampaignId;
+	private int mCommonsAlphaOptIn;
+	private int mCommonsBetaOptIn;
+	
 	private List<Faq> faqs;
 	private Gallery gallery;
 	private List<HowTo> howTos;
@@ -66,6 +71,10 @@ public class Campaign implements Serializable {
 		callout = co.optString("call-to-action",null);
 		gid = co.optInt("gid", -1);
 		order = co.getInt("order");
+		smsReferText = co.optString("sms-refer-text");
+		mCommonsCampaignId = co.optInt("mcommons-campaign-id", -1);
+		mCommonsAlphaOptIn = co.optInt("mcommons-optin", -1);
+		mCommonsBetaOptIn = co.optInt("mcommons-friend-optin", -1);
 		
 		JSONArray ct = co.optJSONArray("causes-tags");
 		if(ct!=null) {
@@ -340,5 +349,21 @@ public class Campaign implements Serializable {
 	
 	public int getOrder() {
 		return order;
+	}
+	
+	public String getSMSReferText() {
+		return smsReferText;
+	}
+	
+	public int getMCommonsCampaignId() {
+		return mCommonsCampaignId;
+	}
+	
+	public int getMCommonsAlphaOptIn() {
+		return mCommonsAlphaOptIn;
+	}
+	
+	public int getMCommonsBetaOptIn() {
+		return mCommonsBetaOptIn;
 	}
 }

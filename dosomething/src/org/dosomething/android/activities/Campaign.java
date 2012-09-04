@@ -60,6 +60,9 @@ public class Campaign extends AbstractActivity {
 	@InjectView(R.id.frmVideo) private FrameLayout frmVideo;
 	@InjectView(R.id.imgVideoThumb) private ImageView imgVideoThumb;
 	@InjectView(R.id.imgThumb) private ImageView imgThumb;
+	@InjectView(R.id.sms_refer_container) private LinearLayout llSMSReferContainer;
+	@InjectView(R.id.sms_refer_text) private TextView txtSMSRefer;
+	@InjectView(R.id.sms_refer) private Button btnSMSRefer;
 
 	private org.dosomething.android.transfer.Campaign campaign;
 
@@ -134,6 +137,12 @@ public class Campaign extends AbstractActivity {
 		}else if(!nullOrEmpty(campaign.getImage())){
 			imageLoader.displayImage(campaign.getImage(), imgThumb);
 			imgThumb.setVisibility(ImageView.VISIBLE);
+		}
+		
+		btnSMSRefer.setTypeface(headerTypeface, Typeface.BOLD);
+		if (!nullOrEmpty(campaign.getSMSReferText())) {
+			llSMSReferContainer.setVisibility(LinearLayout.VISIBLE);
+			txtSMSRefer.setText(campaign.getSMSReferText());
 		}
 	}
 	
@@ -227,6 +236,10 @@ public class Campaign extends AbstractActivity {
 		}else{
 			startActivityForResult(new Intent(this, Login.class), REQ_LOGIN_FOR_SIGN_UP);
 		}
+	}
+	
+	public void smsRefer(View v) {
+		startActivity(CampaignSMSRefer.getIntent(this, campaign));
 	}
 
 	@Override
