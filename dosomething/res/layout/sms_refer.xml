@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/campaign_share_outer_background"
+    android:orientation="vertical" >
+    
+    <org.dosomething.android.widget.CustomActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar"
+        app:title="@string/sms_refer_title" />
+    
+    <ScrollView 
+        android:orientation="vertical"
+        android:layout_weight="1.0"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true">
+        
+        <LinearLayout 
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/WebFormRow">
+            
+            <!-- TODO: dummy text -->
+            <TextView
+                android:text="Teaser text will go here. Text at least 5 of your friends to be entered for a chance to win a $5,000,000 scholarship"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            
+            <!-- TODO: dummy text -->
+            <TextView
+                android:text="Your Name:"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            <include layout="@layout/web_form_textfield_row" />
+            
+            <!-- TODO: dummy text -->
+            <TextView
+                android:text="Your Cell #:"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            <include layout="@layout/web_form_phone_row" />
+            
+            <!--  TODO: dummy text -->
+            <Button
+                android:id="@+id/sms_add_numbers"
+                style="@style/WebFormRowSubmit"
+                android:text="+ Add Numbers"
+                android:onClick="addNumbers" />
+                
+            <LinearLayout 
+                android:id="@+id/sms_refer_numbers"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            
+            <TextView
+                android:id="@+id/required_instructions"
+                style="@style/RegisterDisclaimer"
+                android:text="@string/required_instructions"
+                android:visibility="gone" />
+            
+            <Button
+                android:id="@+id/submit"
+                style="@style/WebFormRowSubmit"
+                android:text="@string/go_upper" />
+        </LinearLayout>
+        
+    </ScrollView>
+    
+</LinearLayout>
