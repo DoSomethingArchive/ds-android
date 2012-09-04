@@ -14,16 +14,23 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.inject.Inject;
 
 public class CampaignSMSRefer extends AbstractActivity {
 	
 	private static final String CAMPAIGN = "campaign";
 	private static final int GET_CONTACT_ACTIVITY = 1;
-	
+
+	@Inject private LayoutInflater inflater;
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.sms_refer_text) private TextView txtSMSRefer;
+	@InjectView(R.id.sms_friends_container) private LinearLayout llFriendsContainer;
+	@InjectView(R.id.sms_friends_label) private TextView tvFriendsLabel;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,13 +86,27 @@ public class CampaignSMSRefer extends AbstractActivity {
 						if (pc.moveToFirst()) {
 							String phone = pc.getString(pc.getColumnIndex(Phone.NUMBER));
 							if (phone != null) {
-								// TODO: Phone successfully retrieved, display to screen
+								// Phone successfully retrieved
+								addFriendToContact(name, phone);
 							}
 						}
 					}
 				}
 			}
 		}
+	}
+	
+	private void addFriendToContact(String name, String phone) {
+		tvFriendsLabel.setVisibility(TextView.VISIBLE);
+		
+		View v = inflater.inflate(R.layout.sms_friend_contact, null);
+		TextView tvContact = (TextView)v.findViewById(R.id.contact);
+		if (tvContact != null) {
+			String strDisplay = name + " - " + phone;
+			tvContact.setText(strDisplay);
+		}
+		
+		llFriendsContainer.addView(v);
 	}
 
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {

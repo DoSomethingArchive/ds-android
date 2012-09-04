@@ -50,11 +50,23 @@
 		        style="@style/WebFormRowInput"
 		        android:inputType="phone" />
             
-            <!--  TODO: dummy text -->
+            <TextView
+                android:id="@+id/sms_friends_label"
+                android:text="Friends we'll text:"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                style="@style/WebFormRowLabel" />
+            <LinearLayout
+                android:id="@+id/sms_friends_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+            
             <Button
                 android:id="@+id/sms_add_numbers"
                 style="@style/WebFormRowSubmit"
-                android:text="+ Add Numbers"
+                android:text="@string/sms_add_contacts"
                 android:onClick="addNumbers" />
                 
             <LinearLayout 
@@ -72,7 +84,8 @@
             <Button
                 android:id="@+id/submit"
                 style="@style/WebFormRowSubmit"
-                android:text="@string/go_upper" />
+                android:text="@string/go_upper"
+                android:textStyle="bold" />
         </LinearLayout>
         
     </ScrollView>
