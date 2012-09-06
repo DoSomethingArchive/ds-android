@@ -41,7 +41,6 @@ public class Campaign implements Serializable {
 	private String shareMessage;
 	
 	private String smsReferText;
-	private int mCommonsCampaignId;
 	private int mCommonsAlphaOptIn;
 	private int mCommonsBetaOptIn;
 	
@@ -72,7 +71,6 @@ public class Campaign implements Serializable {
 		gid = co.optInt("gid", -1);
 		order = co.getInt("order");
 		smsReferText = co.optString("sms-refer-text");
-		mCommonsCampaignId = co.optInt("mcommons-campaign-id", -1);
 		mCommonsAlphaOptIn = co.optInt("mcommons-optin", -1);
 		mCommonsBetaOptIn = co.optInt("mcommons-friend-optin", -1);
 		
@@ -353,10 +351,6 @@ public class Campaign implements Serializable {
 	
 	public String getSMSReferText() {
 		return smsReferText;
-	}
-	
-	public int getMCommonsCampaignId() {
-		return mCommonsCampaignId;
 	}
 	
 	public int getMCommonsAlphaOptIn() {
