@@ -1,11 +1,13 @@
 package org.dosomething.android.activities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.widget.CustomActionBar;
@@ -211,6 +213,11 @@ public class CampaignSMSRefer extends AbstractActivity {
 		@Override
 		protected void onSuccess() {
 			if (webOpSuccess) {
+				// Log successful SMS submission
+				HashMap<String, String> param = new HashMap<String, String>();
+				param.put("submit", "success");
+				Analytics.logEvent(getPageName(), param);
+				
 				// Finish this activity, and notify previous activity that sms referral succeeded
 				Intent i = new Intent(context, org.dosomething.android.activities.Campaign.class);
 				i.putExtra(SMS_REFER, true);
@@ -218,6 +225,11 @@ public class CampaignSMSRefer extends AbstractActivity {
 				finish();
 			}
 			else {
+				// Log failed SMS submission
+				HashMap<String, String> param = new HashMap<String, String>();
+				param.put("submit", "failed");
+				Analytics.logEvent(getPageName(), param);
+				
 				new AlertDialog.Builder(CampaignSMSRefer.this)
 					.setMessage(getString(R.string.form_submit_failed))
 					.setCancelable(false)
