@@ -39,7 +39,7 @@ public class Login extends AbstractActivity {
 	private static final int REQ_SIGN_UP = 112;
 	
     
-	private Facebook facebook = new Facebook("105775762330");
+	private Facebook facebook = new Facebook("525191857506466");
 	
 	@InjectView(R.id.username) private EditText username;
 	@InjectView(R.id.password) private EditText password;
