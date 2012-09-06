@@ -1,10 +1,18 @@
 package org.dosomething.android.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.widget.CustomActionBar;
 
 import roboguice.inject.InjectView;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,10 +21,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
@@ -24,13 +35,21 @@ import com.google.inject.Inject;
 public class CampaignSMSRefer extends AbstractActivity {
 	
 	private static final String CAMPAIGN = "campaign";
+	private static final String SMS_REFER = "sms-refer";
 	private static final int GET_CONTACT_ACTIVITY = 1;
 
 	@Inject private LayoutInflater inflater;
+	@Inject private UserContext userContext;
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
-	@InjectView(R.id.sms_refer_text) private TextView txtSMSRefer;
+	@InjectView(R.id.sms_cell_input) private EditText etCellInput;
 	@InjectView(R.id.sms_friends_container) private LinearLayout llFriendsContainer;
 	@InjectView(R.id.sms_friends_label) private TextView tvFriendsLabel;
+	@InjectView(R.id.sms_name_input) private EditText etNameInput;
+	@InjectView(R.id.sms_refer_text) private TextView txtSMSRefer;
+	@InjectView(R.id.submit) private Button btnSubmit;
+	
+	private org.dosomething.android.transfer.Campaign campaign;
+	private List<String> friendNumbers;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,11 +58,19 @@ public class CampaignSMSRefer extends AbstractActivity {
 		
 		actionBar.addAction(Campaigns.getHomeAction(this));
 		
-		org.dosomething.android.transfer.Campaign campaign = (org.dosomething.android.transfer.Campaign) getIntent().getExtras().get(CAMPAIGN);
+		campaign = (org.dosomething.android.transfer.Campaign) getIntent().getExtras().get(CAMPAIGN);
 		String smsReferText = campaign.getSMSReferText();
 		if (smsReferText != null) {
 			txtSMSRefer.setText(smsReferText);
 		}
+		
+		friendNumbers = new ArrayList<String>();
+		
+		btnSubmit.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v) {
+        		onSubmitClick();
+        	}
+        });
 	}
 
 	@Override
@@ -58,8 +85,6 @@ public class CampaignSMSRefer extends AbstractActivity {
 	}
 
 	public void onActivityResult(int reqCode, int resultCode, Intent data) {
-		Log.v("SMS_TEST", "received result from activity");
-		Log.v("SMS_TEST", "reqCode="+reqCode+" / resultCode="+resultCode);
 		// Handle data returned from the Contact picker activity
 		if (reqCode == GET_CONTACT_ACTIVITY) {
 			if (resultCode == Activity.RESULT_OK) {
@@ -104,14 +129,133 @@ public class CampaignSMSRefer extends AbstractActivity {
 		if (tvContact != null) {
 			String strDisplay = name + " - " + phone;
 			tvContact.setText(strDisplay);
+			
+			friendNumbers.add(strDisplay);
+			
+			llFriendsContainer.addView(v);
+		}
+	}
+	
+	private void onSubmitClick() {
+		// validate required fields
+		if (validatedFields()) {
+			// submit form
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("person[first_name]", etNameInput.getText().toString()));
+			params.add(new BasicNameValuePair("person[phone]", etCellInput.getText().toString()));
+			params.add(new BasicNameValuePair("opt_in_path", Integer.toString(campaign.getMCommonsAlphaOptIn())));
+			params.add(new BasicNameValuePair("friends_opt_in_path", Integer.toString(campaign.getMCommonsBetaOptIn())));
+
+			for (int i=0; i<friendNumbers.size(); i++) {
+				String friendNumber = friendNumbers.get(i);
+				params.add(new BasicNameValuePair("friends[]", friendNumber));
+			}
+			
+			new SMSReferralTask(this, params).execute();
+		}
+	}
+	
+	private boolean validatedFields() {
+		String errorMsg = "";
+		if (etNameInput.getText().toString() == null || etNameInput.getText().length() == 0) {
+			String reqField = getString(R.string.sms_name_field);
+			errorMsg = getString(R.string.required_field, reqField);
+		}
+		else if (etCellInput.getText().toString() == null || etCellInput.getText().length() == 0) {
+			String reqField = getString(R.string.sms_cell_field);
+			errorMsg = getString(R.string.required_field, reqField);
+		}
+		else if (friendNumbers.size() == 0) {
+			errorMsg = getString(R.string.sms_no_friends_selected);
 		}
 		
-		llFriendsContainer.addView(v);
+		if (errorMsg != "") {
+			new AlertDialog.Builder(CampaignSMSRefer.this)
+				.setMessage(errorMsg)
+				.setCancelable(false)
+				.setPositiveButton(getString(R.string.ok_upper), null)
+				.create()
+				.show();
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {
 		Intent answer = new Intent(context, CampaignSMSRefer.class);
 		answer.putExtra(CAMPAIGN, campaign);
 		return answer;
+	}
+	
+	private class SMSReferralTask extends AbstractWebserviceTask {
+		
+		private Context context;
+		private List<NameValuePair> params;
+		private boolean webOpSuccess;
+		
+		public SMSReferralTask(Context context, List<NameValuePair> params) {
+			super(userContext);
+			this.context = context;
+			this.params = params;
+			this.webOpSuccess = false;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
+		}
+
+		@Override
+		protected void onSuccess() {
+			if (webOpSuccess) {
+				// Finish this activity, and notify previous activity that sms referral succeeded
+				Intent i = new Intent(context, org.dosomething.android.activities.Campaign.class);
+				i.putExtra(SMS_REFER, true);
+				setResult(Activity.RESULT_OK, i);
+				finish();
+			}
+			else {
+				new AlertDialog.Builder(CampaignSMSRefer.this)
+					.setMessage(getString(R.string.form_submit_failed))
+					.setCancelable(false)
+					.setPositiveButton(getString(R.string.ok_upper), null)
+					.create()
+					.show();
+			}
+		}
+
+		@Override
+		protected void onFinish() {
+			actionBar.setProgressBarVisibility(ProgressBar.GONE);
+		}
+
+		@Override
+		protected void onError(Exception e) {
+			new AlertDialog.Builder(CampaignSMSRefer.this)
+				.setMessage(getString(R.string.form_submit_failed))
+				.setCancelable(false)
+				.setPositiveButton(getString(R.string.ok_upper), null)
+				.create()
+				.show();
+		}
+
+		@Override
+		protected void doWebOperation() throws Exception {
+			String url = "http://dosomething.mcommons.com/profiles/join";
+			
+			WebserviceResponse response = doPost(url, params);
+			
+			if (response.getStatusCode() >= 400 && response.getStatusCode() < 500) {
+				// submission failed
+				webOpSuccess = false;
+			}
+			else {
+				// submission succeeded
+				webOpSuccess = true;
+			}
+		}
 	}
 }
