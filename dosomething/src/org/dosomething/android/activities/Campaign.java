@@ -27,6 +27,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -36,8 +37,10 @@ public class Campaign extends AbstractActivity {
 
 	private static final String CAMPAIGN = "campaign";
 	private static final String CAMPAIGN_NAME = "campaign-name";
+	private static final String SMS_REFER = "sms-refer";
 
 	private static final int REQ_LOGIN_FOR_SIGN_UP = 111;
+	private static final int SMS_REFER_ACTIVITY = 112;
 
 	@Inject private ImageLoader imageLoader;
 	@Inject private UserContext userContext;
@@ -239,7 +242,7 @@ public class Campaign extends AbstractActivity {
 	}
 	
 	public void smsRefer(View v) {
-		startActivity(CampaignSMSRefer.getIntent(this, campaign));
+		startActivityForResult(CampaignSMSRefer.getIntent(this, campaign), SMS_REFER_ACTIVITY);
 	}
 
 	@Override
@@ -249,6 +252,12 @@ public class Campaign extends AbstractActivity {
 		if(requestCode == REQ_LOGIN_FOR_SIGN_UP && resultCode == RESULT_OK){
 			if(userContext.isLoggedIn()){
 				startActivity(SignUp.getIntent(this, campaign));
+			}
+		}
+		else if (requestCode == SMS_REFER_ACTIVITY && resultCode == RESULT_OK) {
+			boolean smsReferResult = data.getBooleanExtra(SMS_REFER, false);
+			if (smsReferResult) {
+				Toast.makeText(this, getString(R.string.sms_refer_success), Toast.LENGTH_LONG).show();
 			}
 		}
 	}

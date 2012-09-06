@@ -97,10 +97,13 @@
     <string name="cause_our_troops">Our Troops</string>
     <string name="cause_health">Physical and Mental Health</string>
     <string name="cause_sex_relationships">Sex and Relationships</string>
-    <string name="sms_add_contacts">+ Add Friend</string>
-    <string name="sms_cell_field">YOUR CELL PHONE NUMBER *</string>
-    <string name="sms_name_field">YOUR NAME *</string>
+    <string name="sms_add_contacts">+ Add Friend\'s Number</string>
+    <string name="sms_cell_field">Your Cell Phone Number *</string>
+    <string name="sms_friends_label">Friends we\'ll text:</string>
+    <string name="sms_name_field">Your Name *</string>
+    <string name="sms_no_friends_selected">You must add at least one number.</string>
     <string name="sms_refer_title">Text Your Friends</string>
+    <string name="sms_refer_success">Thanks! We\'ll be sending your friends a text message soon!</string>
     
     <string name="splash_version">v</string>
     <string name="welcome_text">DoSomething.org provides easy and fun ways for young people to take action around the causes they care about!</string>
