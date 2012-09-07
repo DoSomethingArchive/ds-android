@@ -23,6 +23,8 @@ public class Welcome extends AbstractActivity {
 	
 	@Inject private LayoutInflater inflater;
 	
+	// Alarm notification key
+	private static final String NOTIF_ALARM_CAMPAIGN = "AlarmReminder.campaign";
 	// Simple notification title
 	private static final String NOTIFICATION_TITLE = "com.xtify.sdk.NOTIFICATION_TITLE";
 	// Simple notification content
@@ -55,9 +57,10 @@ public class Welcome extends AbstractActivity {
 		boolean notificationReceived = false;
 		Intent intent = getIntent();
 		if (intent != null && 
-			intent.getStringExtra(NOTIFICATION_TITLE) != null &&
-			intent.getStringExtra(NOTIFICATION_CONTENT) != null) {
-			
+			(intent.getStringExtra(NOTIFICATION_TITLE) != null &&
+			intent.getStringExtra(NOTIFICATION_CONTENT) != null) ||
+			intent.getStringExtra(NOTIF_ALARM_CAMPAIGN) != null) {
+
 			notificationReceived = true;
 		}
 		
@@ -136,22 +139,32 @@ public class Welcome extends AbstractActivity {
 			boolean bGoToProfile = true;
 			// Handle payload sent from push notifications
 			Intent intent = getIntent();
-			if (intent != null && 
-				intent.getStringExtra(NOTIF_ACTION_TYPE) != null &&
-				intent.getStringExtra(NOTIF_ACTION_TYPE).compareTo("com.xtify.sdk.SHOW_NOTIF") == 0) {
+			if (intent != null) {
+				// Handle Xtify Push Notifications
+				if (intent.getStringExtra(NOTIF_ACTION_TYPE) != null &&
+					intent.getStringExtra(NOTIF_ACTION_TYPE).compareTo("com.xtify.sdk.SHOW_NOTIF") == 0) {
 				
-				String intentNotifActivity = intent.getStringExtra(NOTIF_ACTIVITY);
-				if (intentNotifActivity != null) {
-					if (intentNotifActivity.compareTo("campaigns") == 0) {
-						startCampaignsActivity();
-						bGoToProfile = false;
-					}
-					else if (intentNotifActivity.compareTo("campaign") == 0) {
-						String intentCampaign = intent.getStringExtra(NOTIF_CAMPAIGN);
-						if (intentCampaign != null) {
-							startCampaignActivity(intentCampaign);
+					String intentNotifActivity = intent.getStringExtra(NOTIF_ACTIVITY);
+					if (intentNotifActivity != null) {
+						if (intentNotifActivity.compareTo("campaigns") == 0) {
+							startCampaignsActivity();
 							bGoToProfile = false;
 						}
+						else if (intentNotifActivity.compareTo("campaign") == 0) {
+							String intentCampaign = intent.getStringExtra(NOTIF_CAMPAIGN);
+							if (intentCampaign != null) {
+								startCampaignActivity(intentCampaign);
+								bGoToProfile = false;
+							}
+						}
+					}
+				}
+				// Handle self-triggered alarm notifications 
+				else if(intent.getStringExtra(NOTIF_ALARM_CAMPAIGN) != null) {
+					String intentCampaign = intent.getStringExtra(NOTIF_ALARM_CAMPAIGN);
+					if (intentCampaign != null) {
+						startCampaignActivity(intentCampaign);
+						bGoToProfile = false;
 					}
 				}
 			}
