@@ -36,7 +36,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class Campaign extends AbstractActivity {
 
 	private static final String CAMPAIGN = "campaign";
-	private static final String CAMPAIGN_NAME = "campaign-name";
+	private static final String CAMPAIGN_ID = "campaign-id";
 	private static final String SMS_REFER = "sms-refer";
 
 	private static final int REQ_LOGIN_FOR_SIGN_UP = 111;
@@ -83,10 +83,10 @@ public class Campaign extends AbstractActivity {
 			populateFields();
 		}
 		else {
-			String campaignId = getIntent().getStringExtra(CAMPAIGN_NAME);
+			String campaignId = getIntent().getStringExtra(CAMPAIGN_ID);
 			actionBar.setTitle(getString(R.string.campaign_loading));
 			// load appropriate campaign from cache, otherwise download and get this isht
-			new CampaignsFetchTask(campaignId).execute();
+			new CampaignsFetchTask(this, campaignId).execute();
 		}
 
 		// onResume is called next
@@ -157,7 +157,7 @@ public class Campaign extends AbstractActivity {
 	protected void onResume() {
 		super.onResume();
 		
-		if(userContext.isLoggedIn()){
+		if (userContext.isLoggedIn() && campaign != null) {
 			UserCampaign userCampaign = new MyDAO(this).findUserCampaign(userContext.getUserUid(), campaign.getId());
 			if(userCampaign != null){
 				btnSignUp.setEnabled(false);
@@ -268,9 +268,9 @@ public class Campaign extends AbstractActivity {
 		return answer;
 	}
 	
-	public static Intent getIntent(Context context, String campaignName) {
+	public static Intent getIntent(Context context, String campaignId) {
 		Intent answer = new Intent(context, Campaign.class);
-		answer.putExtra(CAMPAIGN_NAME, campaignName);
+		answer.putExtra(CAMPAIGN_ID, campaignId);
 		return answer;
 	}
 	
@@ -282,10 +282,12 @@ public class Campaign extends AbstractActivity {
 	private class CampaignsFetchTask extends AbstractFetchCampaignsTask {
 		
 		private String campaignId;
+		private Context context;
 
-		public CampaignsFetchTask(String _campaignId) {
+		public CampaignsFetchTask(Context _context, String _campaignId) {
 			super(Campaign.this, userContext, cache, actionBar);
 			campaignId = _campaignId;
+			context = _context;
 		}
 
 		@Override
@@ -294,6 +296,15 @@ public class Campaign extends AbstractActivity {
 				campaign = getCampaignById(campaignId);
 				if (campaign != null) {
 					populateFields();
+					if (userContext.isLoggedIn()) {
+						UserCampaign userCampaign = new MyDAO(context).findUserCampaign(userContext.getUserUid(), campaign.getId());
+						if(userCampaign != null){
+							btnSignUp.setEnabled(false);
+							btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
+							
+							btnActions.setVisibility(Button.VISIBLE);
+						}
+					}
 				}
 				else {
 					onError(null);

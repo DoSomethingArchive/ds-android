@@ -97,6 +97,8 @@
     <string name="cause_our_troops">Our Troops</string>
     <string name="cause_health">Physical and Mental Health</string>
     <string name="cause_sex_relationships">Sex and Relationships</string>
+    <string name="reminder_title">Do Something Reminder</string>
+    <string name="reminder_body_reportback">is ending in a week! Remember to let us know what you\'ve done.</string>
     <string name="sms_add_contacts">+ Add Friend\'s Number</string>
     <string name="sms_cell_field">Your Cell Phone Number *</string>
     <string name="sms_friends_label">Friends we\'ll text:</string>

@@ -62,6 +62,8 @@
             </intent-filter>
         </receiver>
         
+        <receiver android:process=":remote" android:name=".receivers.AlarmReceiver"></receiver>
+        
         <service android:name="com.xtify.sdk.location.LocationUpdateService" />
         <service android:name="com.xtify.sdk.c2dm.C2DMIntentService" />
         <service android:name="com.xtify.sdk.alarm.MetricsIntentService" />
