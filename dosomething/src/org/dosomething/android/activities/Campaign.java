@@ -157,7 +157,12 @@ public class Campaign extends AbstractActivity {
 	protected void onResume() {
 		super.onResume();
 		
-		if (userContext.isLoggedIn() && campaign != null) {
+		if (useAlternateSignUp()) {
+			btnSignUp.setEnabled(true);
+			btnSignUp.setText(campaign.getSignUpAltText());
+			btnActions.setVisibility(Button.GONE);
+		}
+		else if (userContext.isLoggedIn() && campaign != null) {
 			UserCampaign userCampaign = new MyDAO(this).findUserCampaign(userContext.getUserUid(), campaign.getId());
 			if(userCampaign != null){
 				btnSignUp.setEnabled(false);
@@ -230,11 +235,28 @@ public class Campaign extends AbstractActivity {
 			return "th";
 		}
 	}
+	
+	public boolean useAlternateSignUp() {
+		if (campaign.getSignUpAltLink() != null 
+			&& campaign.getSignUpAltLink().length() > 0
+			&& campaign.getSignUpAltText() != null
+			&& campaign.getSignUpAltText().length() > 0) {
+			
+			return true;
+		}
+		else
+			return false;
+	}
 
 	public void signUp(View v){
 		String uid = new UserContext(this).getUserUid();
-		
-		if(uid != null){
+
+		if (useAlternateSignUp()) {
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			i.setData(Uri.parse(campaign.getSignUpAltLink()));
+			startActivity(i);
+		}
+		else if(uid != null){
 			startActivity(SignUp.getIntent(this, campaign));
 		}else{
 			startActivityForResult(new Intent(this, Login.class), REQ_LOGIN_FOR_SIGN_UP);
