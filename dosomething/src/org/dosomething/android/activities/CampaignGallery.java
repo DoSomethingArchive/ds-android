@@ -87,9 +87,9 @@ public class CampaignGallery extends AbstractActivity {
 			switch (item.getType()) {
 			case IMAGE:
 				Intent intent = new Intent(context, GalleryImageItemDisplay.class);
-				Bundle bundle = new Bundle();
-				bundle.putString(GALLERY_IMG_URL, item.getUrl());
-				intent.putExtras(bundle);
+				intent.putExtra(CAMPAIGN, campaign);
+				intent.putExtra(GALLERY_IMG_URL, item.getUrl());
+				
 				startActivity(intent);
 				break;
 			case VIDEO:

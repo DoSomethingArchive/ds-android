@@ -82,6 +82,7 @@
     
     <string name="campaign_prizes_rules">Official Rules and Regulations</string>
     <string name="gallery_image_item_display_error">Unable to load the image</string>
+    <string name="gallery_image_share_title">DoSomething.org %1$s</string>
     
     <string name="cause_confirm">Thanks for letting us know! Keep an eye out for our campaigns tagged with your causes.</string>
     <string name="cause_title">Select Your Causes</string>
