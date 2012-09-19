@@ -41,6 +41,7 @@ public class CampaignGallery extends AbstractActivity {
 	
 	private static final String TAG = "CampaignGallery";
 	private static final String CAMPAIGN = "campaign";
+	private static final String GALLERY_IMG_AUTHOR = "gallery-img-author";
 	private static final String GALLERY_IMG_URL = "gallery-img-url";
 	
 	@Inject LayoutInflater inflater;
@@ -89,6 +90,7 @@ public class CampaignGallery extends AbstractActivity {
 				Intent intent = new Intent(context, GalleryImageItemDisplay.class);
 				intent.putExtra(CAMPAIGN, campaign);
 				intent.putExtra(GALLERY_IMG_URL, item.getUrl());
+				intent.putExtra(GALLERY_IMG_AUTHOR, item.getAuthor());
 				
 				startActivity(intent);
 				break;

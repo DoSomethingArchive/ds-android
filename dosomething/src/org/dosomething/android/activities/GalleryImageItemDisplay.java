@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
@@ -27,12 +28,14 @@ import com.nostra13.universalimageloader.core.assist.DecodingType;
 public class GalleryImageItemDisplay extends AbstractActivity {
 
 	private static final String CAMPAIGN = "campaign";
+	private static final String GALLERY_IMG_AUTHOR = "gallery-img-author";
 	private static final String GALLERY_IMG_URL = "gallery-img-url";
 	
 	@Inject LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.galleryImageItemDisplay) private ImageView imageView;
+	@InjectView(R.id.galleryImageItemAuthor) private TextView authorTextView;
 	
 	private org.dosomething.android.transfer.Campaign campaign;
 	private String imageURL;
@@ -63,6 +66,12 @@ public class GalleryImageItemDisplay extends AbstractActivity {
 	        imageLoader.displayImage(imageURL, imageView, imageLoaderOptions);
 			ProgressBar progressBar = (ProgressBar)findViewById(R.id.galleryImageItemDisplayProgress);
 			imageLoader.displayImage(imageURL, imageView, new ProgressBarImageLoadingListener(progressBar));
+			
+			String author = bundle.getString(GALLERY_IMG_AUTHOR);
+			if (author != null && !author.equals("") && authorTextView != null) {
+				String authorLabel = getString(R.string.gallery_image_author, author);
+				authorTextView.setText(authorLabel);
+			}
 		}
 		else {
 			Toast.makeText(this, R.string.gallery_image_item_display_error, Toast.LENGTH_LONG);

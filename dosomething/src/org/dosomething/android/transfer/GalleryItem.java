@@ -11,6 +11,7 @@ public class GalleryItem implements Serializable {
 	private GalleryItemType type;
 	private String url;
 	private String thumb;
+	private String author;
 	
 	public GalleryItem() {}
 	
@@ -21,6 +22,7 @@ public class GalleryItem implements Serializable {
 		case IMAGE:
 			url = obj.getString("image");
 			thumb = obj.getString("thumbnail");
+			author = obj.getString("author");
 			break;
 		case VIDEO:
 			url = obj.getString("video");
@@ -50,6 +52,10 @@ public class GalleryItem implements Serializable {
 	}
 	public void setThumb(String thumb) {
 		this.thumb = thumb;
+	}
+	
+	public String getAuthor() {
+		return author;
 	}
 	
 	public static enum GalleryItemType {

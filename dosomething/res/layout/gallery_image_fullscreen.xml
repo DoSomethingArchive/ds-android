@@ -26,6 +26,14 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
 			style="?android:attr/progressBarStyleInverse" />
+        <TextView
+	        android:id="@+id/galleryImageItemAuthor"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="bottom"
+	        android:layout_marginLeft="5dp"
+	        android:layout_marginBottom="5dp"
+	        android:textColor="#000" />
     </FrameLayout>
 
 </LinearLayout>
