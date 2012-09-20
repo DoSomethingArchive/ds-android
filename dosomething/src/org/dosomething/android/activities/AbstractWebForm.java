@@ -29,9 +29,9 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -225,7 +225,19 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		
 		for(WebFormFieldBinding binding : fields) {
 			for(String value : binding.getFormValue()) {
-				params.add(new BasicNameValuePair(binding.getWebFormField().getName(), value));
+				// Date is special case that needs to be broken out into 3 fields
+				if (binding.getLayoutResource() == R.layout.web_form_date_row) {
+					String[] dateValues = value.split("/");
+					if (dateValues.length == 3) {
+						String baseName = binding.getWebFormField().getName();
+						params.add(new BasicNameValuePair(baseName+"[month]",dateValues[0]));
+						params.add(new BasicNameValuePair(baseName+"[day]",dateValues[1]));
+						params.add(new BasicNameValuePair(baseName+"[year]",dateValues[2]));
+					}
+				}
+				else {
+					params.add(new BasicNameValuePair(binding.getWebFormField().getName(), value));
+				}
 			}
 		}
 		
@@ -384,6 +396,10 @@ public abstract class AbstractWebForm extends AbstractActivity {
 
 		public WebFormField getWebFormField() {
 			return webFormField;
+		}
+		
+		public int getLayoutResource() {
+			return layoutResource;
 		}
 		
 		public void setFormValue(List<String> values) {
