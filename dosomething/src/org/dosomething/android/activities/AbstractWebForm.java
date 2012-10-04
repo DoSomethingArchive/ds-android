@@ -26,6 +26,7 @@ import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -36,7 +37,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64OutputStream;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -74,6 +74,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 	private List<WebFormFieldBinding> fields;
 	
 	private WebFormFieldBinding pendingImageResult;
+	private boolean submitTaskInProgress;
 	
 	protected abstract int getContentViewResourceId();
 	protected abstract WebForm getWebForm();
@@ -167,10 +168,11 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		}
 	}
 	
-	private void onFileUploadSuccess(int fieldIndex, String fid) {
+	private void onFileUploadSuccess(int fieldIndex, String fid, String path) {
 		
 		WebFormFieldBinding binding = fields.get(fieldIndex);
-		binding.setUploadFid(fid);
+		binding.addUploadFid(fid);
+		binding.setLastUploadedImage(path);
 		
 		nextFileUploadOrSubmit();
 	}
@@ -204,9 +206,10 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		boolean didFileUpload = false;
 		for(int i=0; i<fields.size(); i++) {
 			WebFormFieldBinding binding = fields.get(i);
-			if(binding.getSelectedImage()!=null && binding.getUploadFid()==null) {
-				
-				new MyFileUpload(i, binding.getSelectedImage()).execute();
+			if(binding.hasImagesToUpload()) {
+				 
+				String imgPath = binding.getSelectedImage(binding.getLastUploadedImageIndex() + 1);
+				new MyFileUpload(i, imgPath).execute();
 				didFileUpload = true;
 				break;
 			}
@@ -224,6 +227,8 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		params.add(new BasicNameValuePair("nid", getWebForm().getNodeId()));
 		
 		for(WebFormFieldBinding binding : fields) {
+			int fidIndex = 0;
+			
 			for(String value : binding.getFormValue()) {
 				// Date is special case that needs to be broken out into 3 fields
 				if (binding.getLayoutResource() == R.layout.web_form_date_row) {
@@ -234,6 +239,11 @@ public abstract class AbstractWebForm extends AbstractActivity {
 						params.add(new BasicNameValuePair(baseName+"[day]",dateValues[1]));
 						params.add(new BasicNameValuePair(baseName+"[year]",dateValues[2]));
 					}
+				}
+				else if (binding.getLayoutResource() == R.layout.web_form_image_row) {
+					String name = "field_webform_pictures[und]["+fidIndex+"][fid]";
+					params.add(new BasicNameValuePair(name, value));
+					fidIndex++;
 				}
 				else {
 					params.add(new BasicNameValuePair(binding.getWebFormField().getName(), value));
@@ -250,13 +260,40 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		finish();
 	}
 	
+	public Bitmap getCompressedBitmap(String path, int size) throws Exception {
+        Bitmap b = null;
+
+        //Decode image size
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+
+        FileInputStream fis = new FileInputStream(path);
+        BitmapFactory.decodeStream(fis, null, o);
+        fis.close();
+
+        int scale = 1;
+        if (o.outHeight > size || o.outWidth > size) {
+                scale = (int)Math.pow(2, (int) Math.round(Math.log(size / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
+        }
+
+        //Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        fis = new FileInputStream(path);
+        b = BitmapFactory.decodeStream(fis, null, o2);
+        fis.close();
+
+        return b;
+	}
+	
 	private class WebFormFieldBinding {
 		
 		private View view;
 		private int layoutResource;
 		private WebFormField webFormField;
-		private String selectedImage;
-		private String uploadFid;
+		private int lastUploadedImageIndex;
+		private ArrayList<String> selectedImages;
+		private ArrayList<String> uploadFids;
 		private boolean editDialogOpen = false;
 		
 		
@@ -281,6 +318,9 @@ public abstract class AbstractWebForm extends AbstractActivity {
 				layoutResource = R.layout.web_form_date_row;
 			} else if(type.equals("file")) { 
 				layoutResource = R.layout.web_form_image_row;
+				lastUploadedImageIndex = -1;
+				selectedImages = new ArrayList<String>();
+				uploadFids = new ArrayList<String>();
 			} else if(type.equals("textarea")) {
 				layoutResource = R.layout.web_form_textarea_row;
 			} else {
@@ -365,29 +405,68 @@ public abstract class AbstractWebForm extends AbstractActivity {
 			}
 	    }
 		
-		
-		public void setSelectedImage(String path) {
-			selectedImage = path;	
-			updateImagePreview();
-		}
-		
 		private void updateImagePreview() {
-			if(selectedImage!=null) {
-				ImageView image = (ImageView)view.findViewById(R.id.image);
-				image.setImageURI(Uri.parse(new File(selectedImage).toString()));
+			// Clear all images
+			LinearLayout content = (LinearLayout)view.findViewById(R.id.content);
+			if (content != null) {
+				content.removeAllViews();
+				
+				for (int i = 0; selectedImages != null && i < selectedImages.size(); i++) {
+					Context c = getApplicationContext();
+					ImageView imageView = new ImageView(c);
+					// Convert dp into pixels before setting height and width
+					int dpSize = 80;
+					float scale = getResources().getDisplayMetrics().density;	// screen's density scale
+					// +0.5 is to round up to nearest whole number when int conversion happens
+					int pixelSize = (int)(dpSize * scale + 0.5f);
+					imageView.setLayoutParams(new LayoutParams(pixelSize, pixelSize));
+					try {
+						// Set drawable
+						Bitmap bitmap = getCompressedBitmap(selectedImages.get(i), 80);
+						imageView.setImageBitmap(bitmap);
+						
+						// Add new image to the view
+						content.addView(imageView);
+					}
+					catch (Exception e) {
+						//Log.v("IMAGE", "caught exception setting the image");
+					}
+				}
 			}
 		}
 		
-		public String getUploadFid() {
-			return uploadFid;
+		public void setSelectedImage(String path) {
+			selectedImages.add(path);	
+			updateImagePreview();
 		}
 
-		public void setUploadFid(String uploadFid) {
-			this.uploadFid = uploadFid;
+		public String getSelectedImage(int i) {
+			if (selectedImages != null && i >= 0 && i < selectedImages.size())
+				return selectedImages.get(i);
+			else
+				return null;
 		}
-
-		public String getSelectedImage() {
-			return selectedImage;
+		
+		public void setLastUploadedImage(String path) {
+			for (int i = 0; selectedImages != null && i < selectedImages.size(); i++) {
+				if (selectedImages.get(i) == path)
+					lastUploadedImageIndex = i;
+			}
+		}
+		
+		public int getLastUploadedImageIndex() {
+			return lastUploadedImageIndex;
+		}
+		
+		public boolean hasImagesToUpload() {
+			if (selectedImages != null && lastUploadedImageIndex < selectedImages.size() - 1)
+				return true;
+			else
+				return false;
+		}
+		
+		public void addUploadFid(String fid) {
+			uploadFids.add(fid);
 		}
 
 		public View getView() {
@@ -434,8 +513,17 @@ public abstract class AbstractWebForm extends AbstractActivity {
 					break;
 				}
 				case R.layout.web_form_image_row: {
-					selectedImage = values.get(0);
-					updateImagePreview();
+					if (values.size() > 0) {
+						if (selectedImages != null) {
+							selectedImages.clear();
+						}
+						
+						for (int i = 0; i < values.size(); i++) {
+							selectedImages.add(values.get(i));
+						}
+						
+						updateImagePreview();
+					}
 					break;
 				}
 				case R.layout.web_form_date_row : {
@@ -494,10 +582,15 @@ public abstract class AbstractWebForm extends AbstractActivity {
 					break;
 				}
 				case R.layout.web_form_image_row: {
-					if(uploadFid==null) {
-						answer.add(selectedImage);
-					} else {
-						answer.add(uploadFid);
+					if (uploadFids != null && uploadFids.size() > 0) {
+						for (int i = 0; i < uploadFids.size(); i++) {
+							answer.add(uploadFids.get(i));
+						}
+					}
+					else if (selectedImages != null && selectedImages.size() > 0) {
+						for (int i = 0; i < selectedImages.size(); i++) {
+							answer.add(selectedImages.get(i));
+						}
 					}
 					break;
 				}
@@ -558,7 +651,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		protected void onSuccess() {
 			
 			if(uploadSuccess) {
-				AbstractWebForm.this.onFileUploadSuccess(fieldIndex, fid);
+				AbstractWebForm.this.onFileUploadSuccess(fieldIndex, fid, path);
 			} else {
 				onError(null);
 			}
@@ -572,7 +665,9 @@ public abstract class AbstractWebForm extends AbstractActivity {
 
 		@Override
 		protected void onFinish() {
-			actionBar.setProgressBarVisibility(ProgressBar.GONE);
+			if (!submitTaskInProgress) {
+				actionBar.setProgressBarVisibility(ProgressBar.GONE);
+			}
 		}
 
 		@Override
@@ -603,39 +698,12 @@ public abstract class AbstractWebForm extends AbstractActivity {
 			WebserviceResponse response = doPost(url, params);
 			
 			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
-				Log.e("asdf", "response="+response.getBodyAsString());
 				uploadSuccess = false;
 			} else {
 				JSONObject obj = response.getBodyAsJSONObject();
 				fid = obj.getString("fid");
 				uploadSuccess = true;
 			}
-		}
-		
-		public Bitmap getCompressedBitmap(String path, int size) throws Exception {
-            Bitmap b = null;
-
-            //Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-
-            FileInputStream fis = new FileInputStream(path);
-            BitmapFactory.decodeStream(fis, null, o);
-            fis.close();
-
-            int scale = 1;
-            if (o.outHeight > size || o.outWidth > size) {
-                    scale = (int)Math.pow(2, (int) Math.round(Math.log(size / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
-            }
-
-            //Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            fis = new FileInputStream(path);
-            b = BitmapFactory.decodeStream(fis, null, o2);
-            fis.close();
-
-            return b;
 		}
 		
 	}
@@ -656,6 +724,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
+			submitTaskInProgress = true;
 		}
 
 		@Override
@@ -676,6 +745,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		@Override
 		protected void onFinish() {
 			actionBar.setProgressBarVisibility(ProgressBar.GONE);
+			submitTaskInProgress = false;
 		}
 
 		@Override
@@ -689,7 +759,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		}
 
 		@Override
-		protected void doWebOperation() throws Exception {
+		protected void doWebOperation() throws Exception {	
 			
 			String url = "http://www.dosomething.org/?q=rest/webform.json";
 			
