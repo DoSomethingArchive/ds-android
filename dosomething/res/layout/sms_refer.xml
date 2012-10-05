@@ -30,6 +30,12 @@
                 android:layout_height="wrap_content"
                 style="@style/SMSReferText" />
             
+            <TextView 
+                android:text="@string/sms_help_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/SMSHelpText"/>
+            
             <TextView
                 android:text="@string/sms_name_field"
                 android:layout_width="fill_parent"
