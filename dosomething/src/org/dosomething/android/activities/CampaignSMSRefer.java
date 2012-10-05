@@ -216,6 +216,8 @@ public class CampaignSMSRefer extends AbstractActivity {
 				// Log successful SMS submission
 				HashMap<String, String> param = new HashMap<String, String>();
 				param.put("submit", "success");
+				param.put(CAMPAIGN, campaign.getName());
+				param.put("num-shared", Integer.toString(friendNumbers.size()));
 				Analytics.logEvent(getPageName(), param);
 				
 				// Finish this activity, and notify previous activity that sms referral succeeded
