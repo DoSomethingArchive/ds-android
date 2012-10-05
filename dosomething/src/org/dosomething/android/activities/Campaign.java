@@ -2,9 +2,11 @@ package org.dosomething.android.activities;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
@@ -252,6 +254,11 @@ public class Campaign extends AbstractActivity {
 		String uid = new UserContext(this).getUserUid();
 
 		if (useAlternateSignUp()) {
+			// Log the alternate sign up events to Analytics
+			HashMap<String, String> param = new HashMap<String, String>();
+			param.put(CAMPAIGN, campaign.getName());
+			Analytics.logEvent("sign-up-submit", param);
+			
 			Intent i = new Intent(Intent.ACTION_VIEW);
 			i.setData(Uri.parse(campaign.getSignUpAltLink()));
 			startActivity(i);
