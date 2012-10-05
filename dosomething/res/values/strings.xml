@@ -104,6 +104,7 @@
     <string name="sms_add_contacts">+ Add Friend\'s Number</string>
     <string name="sms_cell_field">Your Cell Phone Number *</string>
     <string name="sms_friends_label">Friends we\'ll text:</string>
+    <string name="sms_help_text">(Also sign up to receive weekly updates. Msg &amp; data rates may apply. Text STOP to opt-out, HELP for help.)</string>
     <string name="sms_name_field">Your Name *</string>
     <string name="sms_no_friends_selected">You must add at least one number.</string>
     <string name="sms_refer_title">Text Your Friends</string>

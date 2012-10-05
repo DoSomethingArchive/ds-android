@@ -471,9 +471,14 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/register_label</item>
     </style>
+    <style name="SMSHelpText">
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColor">#2A2C2B</item>
+    </style>
     <style name="SMSReferText">
         <item name="android:textSize">15dp</item>
         <item name="android:textColor">#000</item>
+        <item name="android:paddingBottom">5dp</item>
     </style>
     
     <style name="WebFormList">
