@@ -29,4 +29,8 @@ public class Cache {
 		this.campaigns = campaigns;
 	}
 	
+	public void clearCampaigns() {
+		this.lastRetrieved = null;
+		this.campaigns = null;
+	}
 }
