@@ -10,9 +10,10 @@
         style="@style/ActionBar"
         app:title="@string/campaigns_title" />
 
-    <ListView android:id="@+id/list"
-    	android:layout_width="fill_parent"
-    	android:layout_height="0dp"
-    	android:layout_weight="1.0"/>
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0" />
     
 </LinearLayout>
