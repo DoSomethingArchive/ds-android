@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.markupartist.android.widget.ActionBar.Action;
 import com.markupartist.android.widget.ActionBar.IntentAction;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -50,7 +51,9 @@ public class Campaigns extends AbstractActivity {
 	@Inject @Named("DINComp-CondBold")Typeface calloutTypeface;
 	
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
-	@InjectView(R.id.list) private ListView list;
+	@InjectView(R.id.list) private PullToRefreshListView pullToRefreshView;
+	
+	private ListView list;
 	
 	private final OnItemClickListener itemClickListener = new MyItemClickListener();
 	
@@ -63,6 +66,8 @@ public class Campaigns extends AbstractActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaigns);
+        
+        list = pullToRefreshView.getRefreshableView();
         
         actionBar.addAction(profileButtonAction);
         
