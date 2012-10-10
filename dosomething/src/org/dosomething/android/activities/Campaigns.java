@@ -34,6 +34,8 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.markupartist.android.widget.ActionBar.Action;
 import com.markupartist.android.widget.ActionBar.IntentAction;
@@ -68,6 +70,12 @@ public class Campaigns extends AbstractActivity {
         setContentView(R.layout.campaigns);
         
         list = pullToRefreshView.getRefreshableView();
+        pullToRefreshView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+        	@Override
+        	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+        		fetchCampaigns(true);
+        	}
+        });
         
         actionBar.addAction(profileButtonAction);
         
@@ -78,7 +86,7 @@ public class Campaigns extends AbstractActivity {
 	protected void onResume() {
 		super.onResume();
 		
-		fetchCampaigns();
+		fetchCampaigns(false);
 	}
 	
 	private final Action profileButtonAction = new Action(){
@@ -107,8 +115,11 @@ public class Campaigns extends AbstractActivity {
 		}
 	}
 	
-	private void fetchCampaigns(){
-		new MyTask().execute();
+	private void fetchCampaigns(boolean forceSearch) {
+		MyTask task = new MyTask();
+		
+		task.setForceSearch(forceSearch);
+		task.execute();
 	}
 	
 	public static Action getHomeAction(Context context){
@@ -126,9 +137,13 @@ public class Campaigns extends AbstractActivity {
 	};
 	
 	private class MyTask extends AbstractFetchCampaignsTask {
+		
+		private boolean forceSearch;
 
 		public MyTask() {
 			super(Campaigns.this, userContext, cache, actionBar);
+			
+			forceSearch = false;
 		}
 
 		@Override
@@ -152,6 +167,25 @@ public class Campaigns extends AbstractActivity {
 				.setPositiveButton(getString(R.string.ok_upper), null)
 				.create()
 				.show();
+		}
+		
+		@Override
+		protected void doWebOperation() throws Exception {
+			if (forceSearch) {
+				cache.clearCampaigns();
+			}
+			
+			super.doWebOperation();
+		}
+		
+		@Override
+		protected void onFinish() {
+			super.onFinish();
+			pullToRefreshView.onRefreshComplete();
+		}
+		
+		protected void setForceSearch(boolean force) {
+			this.forceSearch = force;
 		}
 
 	}
