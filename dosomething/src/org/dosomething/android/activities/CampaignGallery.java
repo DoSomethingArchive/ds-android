@@ -41,8 +41,10 @@ public class CampaignGallery extends AbstractActivity {
 	
 	private static final String TAG = "CampaignGallery";
 	private static final String CAMPAIGN = "campaign";
-	private static final String GALLERY_IMG_AUTHOR = "gallery-img-author";
-	private static final String GALLERY_IMG_URL = "gallery-img-url";
+	private static final String GALLERY_IMG_AUTHORS = "gallery-img-authors";
+	private static final String GALLERY_NUM_ITEMS = "gallery-num-items";
+	private static final String GALLERY_IMG_POS = "gallery-img-pos";
+	private static final String GALLERY_IMG_URLS = "gallery-img-urls";
 	
 	@Inject LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
@@ -89,8 +91,23 @@ public class CampaignGallery extends AbstractActivity {
 			case IMAGE:
 				Intent intent = new Intent(context, GalleryImageItemDisplay.class);
 				intent.putExtra(CAMPAIGN, campaign);
-				intent.putExtra(GALLERY_IMG_URL, item.getUrl());
-				intent.putExtra(GALLERY_IMG_AUTHOR, item.getAuthor());
+				intent.putExtra(GALLERY_IMG_POS, position);
+				
+				MyEndlessGridAdapter gridAdapter = (MyEndlessGridAdapter)gridview.getAdapter();
+				MyGridAdapter mga = (MyGridAdapter)gridAdapter.getWrapped();
+				int numItems = mga.getCount();
+				
+				String[] urls = new String[numItems];
+				String[] authors = new String[numItems];
+				for(int i = 0; i < numItems; i++) {
+					GalleryItem gItem = (GalleryItem) gridview.getAdapter().getItem(i);
+					urls[i] = gItem.getUrl();
+					authors[i] = gItem.getAuthor();
+				}
+				
+				intent.putExtra(GALLERY_IMG_URLS, urls);
+				intent.putExtra(GALLERY_IMG_AUTHORS, authors);
+				intent.putExtra(GALLERY_NUM_ITEMS, numItems);
 				
 				startActivity(intent);
 				break;
@@ -137,6 +154,10 @@ public class CampaignGallery extends AbstractActivity {
 			for(GalleryItem item : items) {
 				adapter.add(item);
 			}
+		}
+		
+		protected MyGridAdapter getWrapped() {
+			return (MyGridAdapter) getWrappedAdapter();
 		}
 		
 	}
@@ -218,7 +239,6 @@ public class CampaignGallery extends AbstractActivity {
 		@Override
 		protected void onSuccess() {
 			MyEndlessGridAdapter adapter = new MyEndlessGridAdapter(new MyGridAdapter(CampaignGallery.this, loadedItems));
-			//MyGridAdapter adapter = new MyGridAdapter(CampaignGallery.this, loadedItems);
 			gridview.setAdapter(adapter);
 		}
 
