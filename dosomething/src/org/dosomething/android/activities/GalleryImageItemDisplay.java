@@ -1,6 +1,9 @@
 package org.dosomething.android.activities;
 
+import java.util.HashMap;
+
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.widget.CustomActionBar;
 import org.dosomething.android.widget.ProgressBarImageLoadingListener;
 
@@ -11,7 +14,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -74,8 +76,6 @@ public class GalleryImageItemDisplay extends AbstractActivity {
 		imageGalleryPager.setAdapter(imageGalleryPagerAdapter);
 		imageGalleryPager.setCurrentItem(imageGalleryPos);
 	}
-	
-	
 	
 	private class GalleryPagerAdapter extends PagerAdapter {
 		
@@ -155,6 +155,11 @@ public class GalleryImageItemDisplay extends AbstractActivity {
 				vibe.vibrate(20);
 				
 				startActivity(Intent.createChooser(getShareIntent(shareURL), getString(R.string.campaign_share_chooser)));
+				
+				HashMap<String, String> param = new HashMap<String, String>();
+				param.put("share", "chooser-opened");
+				Analytics.logEvent(getPageName(), param);
+				
 				return false;
 			}
 			
