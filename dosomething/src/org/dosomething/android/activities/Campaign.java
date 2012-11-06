@@ -159,20 +159,7 @@ public class Campaign extends AbstractActivity {
 	protected void onResume() {
 		super.onResume();
 		
-		if (useAlternateSignUp()) {
-			btnSignUp.setEnabled(true);
-			btnSignUp.setText(campaign.getSignUpAltText());
-			btnActions.setVisibility(Button.GONE);
-		}
-		else if (userContext.isLoggedIn() && campaign != null) {
-			UserCampaign userCampaign = new MyDAO(this).findUserCampaign(userContext.getUserUid(), campaign.getId());
-			if(userCampaign != null){
-				btnSignUp.setEnabled(false);
-				btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
-				
-				btnActions.setVisibility(Button.VISIBLE);
-			}
-		}
+		updateSignUpButton(this);
 	}
 
 	private static final boolean nullOrEmpty(List<?> list){
@@ -239,7 +226,7 @@ public class Campaign extends AbstractActivity {
 	}
 	
 	public boolean useAlternateSignUp() {
-		if (campaign.getSignUpAltLink() != null 
+		if (campaign != null && campaign.getSignUpAltLink() != null 
 			&& campaign.getSignUpAltLink().length() > 0
 			&& campaign.getSignUpAltText() != null
 			&& campaign.getSignUpAltText().length() > 0) {
@@ -267,6 +254,25 @@ public class Campaign extends AbstractActivity {
 			startActivity(SignUp.getIntent(this, campaign));
 		}else{
 			startActivityForResult(new Intent(this, Login.class), REQ_LOGIN_FOR_SIGN_UP);
+		}
+	}
+	
+	private void updateSignUpButton(Context context) {
+		if (userContext.isLoggedIn() && campaign != null) {
+			if (useAlternateSignUp()) {
+				btnSignUp.setEnabled(true);
+				btnSignUp.setText(campaign.getSignUpAltText());
+				btnActions.setVisibility(Button.GONE);
+			}
+			else {
+				UserCampaign userCampaign = new MyDAO(context).findUserCampaign(userContext.getUserUid(), campaign.getId());
+				if(userCampaign != null){
+					btnSignUp.setEnabled(false);
+					btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
+					
+					btnActions.setVisibility(Button.VISIBLE);
+				}
+			}
 		}
 	}
 	
@@ -325,15 +331,7 @@ public class Campaign extends AbstractActivity {
 				campaign = getCampaignById(campaignId);
 				if (campaign != null) {
 					populateFields();
-					if (userContext.isLoggedIn()) {
-						UserCampaign userCampaign = new MyDAO(context).findUserCampaign(userContext.getUserUid(), campaign.getId());
-						if(userCampaign != null){
-							btnSignUp.setEnabled(false);
-							btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
-							
-							btnActions.setVisibility(Button.VISIBLE);
-						}
-					}
+					updateSignUpButton(context);
 				}
 				else {
 					onError(null);
