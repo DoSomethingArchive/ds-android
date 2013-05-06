@@ -290,11 +290,11 @@ public class Profile extends AbstractActivity {
 		private ArrayList<Integer> gids;
 		
 		public CampaignTask() {
-			super(context, userContext, cache, actionBar);
+			super(Profile.this.context, userContext, cache, actionBar);
 		}
 
 		public CampaignTask(ArrayList<Integer> gids){
-			super(context, userContext, cache, actionBar);
+			super(Profile.this.context, userContext, cache, actionBar);
 			this.gids = gids;
 		}
 		

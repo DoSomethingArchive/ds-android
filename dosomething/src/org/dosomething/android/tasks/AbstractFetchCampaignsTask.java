@@ -17,13 +17,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.widget.ProgressBar;
 
 import com.markupartist.android.widget.ActionBar;
 
 public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask {
 
-	private final Context context;
+	protected final Context context;
 	private final ActionBar actionBar;
 	private final Cache cache;
 
@@ -124,6 +126,28 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 		}
 		
 		return null;
+	}
+	
+	// Checks campaigns for 
+	protected boolean hasHigherVersionCampaign() {
+		int currVersionCode = 0;
+		try {
+			PackageInfo pInfo = this.context.getPackageManager().getPackageInfo(this.context.getPackageName(), 0);
+			currVersionCode = pInfo.versionCode;
+		}
+		catch (NameNotFoundException e) {
+			return false;
+		}
+		
+		Iterator<Campaign> iter = campaigns.iterator();
+		while (iter.hasNext()) {
+			Campaign campaign = iter.next();
+			if (campaign.getMinVersion() > currVersionCode) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	private Campaign convert(String id, JSONObject object) throws JSONException, ParseException {

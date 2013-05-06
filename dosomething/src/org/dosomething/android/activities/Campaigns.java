@@ -2,6 +2,7 @@ package org.dosomething.android.activities;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.dosomething.android.R;
@@ -18,18 +19,24 @@ import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
@@ -53,6 +60,9 @@ public class Campaigns extends AbstractActivity {
 	@Inject @Named("DINComp-CondBold")Typeface calloutTypeface;
 	
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+	@InjectView(R.id.popup) private RelativeLayout popupView;
+	@InjectView(R.id.popupMsg) private TextView popupMsgView;
+	@InjectView(R.id.popupClose) private Button popupCloseButton;
 	@InjectView(R.id.list) private PullToRefreshListView pullToRefreshView;
 	
 	private ListView list;
@@ -78,6 +88,21 @@ public class Campaigns extends AbstractActivity {
         });
         
         actionBar.addAction(profileButtonAction);
+        
+        // Upgrade notification popup click listeners
+        popupMsgView.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View v) {
+        		// Open link to the Google Play Store
+        		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=org.dosomething.android")));
+        	}
+        });
+        popupCloseButton.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View v) {
+        		popupView.setVisibility(View.GONE);
+        	}
+        });
         
         // onResume is always called next
     }
@@ -137,7 +162,8 @@ public class Campaigns extends AbstractActivity {
 	};
 	
 	private class MyTask extends AbstractFetchCampaignsTask {
-		
+
+		private boolean currentVersionOutdated = false;
 		private boolean forceSearch;
 
 		public MyTask() {
@@ -149,7 +175,27 @@ public class Campaigns extends AbstractActivity {
 		@Override
 		protected void onSuccess() {
 			list.setOnItemClickListener(itemClickListener);
-			list.setAdapter(new MyAdapter(getApplicationContext(), getCampaigns()));
+
+			// Don't display campaigns that require a higher version than what we have
+			int version = 0;
+			try {
+				PackageInfo pInfo = this.context.getPackageManager().getPackageInfo(this.context.getPackageName(), 0);
+				version = pInfo.versionCode;
+			}
+			catch (NameNotFoundException e) {
+			}
+			
+			List<Campaign> campaigns = getCampaigns();
+			Iterator<Campaign> iter = campaigns.iterator();
+			while (iter.hasNext()) {
+				Campaign campaign = iter.next();
+				if (campaign.getMinVersion() > version) {
+					currentVersionOutdated = true;
+					iter.remove();
+				}
+			}
+			
+			list.setAdapter(new MyAdapter(getApplicationContext(), campaigns));
 		}
 
 		@Override
@@ -182,12 +228,18 @@ public class Campaigns extends AbstractActivity {
 		protected void onFinish() {
 			super.onFinish();
 			pullToRefreshView.onRefreshComplete();
+			
+			if (currentVersionOutdated) {
+				popupView.setVisibility(View.VISIBLE);
+			}
+			else {
+				popupView.setVisibility(View.GONE);
+			}
 		}
 		
 		protected void setForceSearch(boolean force) {
 			this.forceSearch = force;
 		}
-
 	}
 
 	private class MyAdapter extends ArrayAdapter<Campaign> {
