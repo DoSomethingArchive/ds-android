@@ -89,6 +89,7 @@ public class Campaigns extends AbstractActivity {
         
         actionBar.addAction(profileButtonAction);
         
+        popupMsgView.setTypeface(calloutTypeface);
         // Upgrade notification popup click listeners
         popupMsgView.setOnClickListener(new OnClickListener() {
         	@Override

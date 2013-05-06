@@ -15,20 +15,16 @@
         android:layout_width="fill_parent"
         android:layout_height="60dp"
         android:visibility="gone">
-                
+
+        <Button
+            android:id="@+id/popupClose"
+            style="@style/UpgradePopupButton"
+            android:text="X" />
+
         <TextView 
             android:id="@+id/popupMsg"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentLeft="true"
-            android:text="There's a new update. Get it in the store now."/>
-        
-        <Button
-            android:id="@+id/popupClose" 
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentRight="true"
-            android:text="OK"/>
+            style="@style/UpgradePopupMessage"
+            android:text="@string/campaigns_upgrade_popup"/>
         
     </RelativeLayout>
 
