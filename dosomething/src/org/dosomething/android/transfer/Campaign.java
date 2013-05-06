@@ -28,6 +28,7 @@ public class Campaign implements Serializable {
 	private String backgroundColor;
 	private String backgroundUrl;
 	private String callout;
+	private int minVersion;
 	private int[] cause_tags;
 	private int gid;
 	private int order;
@@ -75,6 +76,7 @@ public class Campaign implements Serializable {
 		smsReferText = co.optString("sms-refer-text");
 		mCommonsAlphaOptIn = co.optInt("mcommons-optin", -1);
 		mCommonsBetaOptIn = co.optInt("mcommons-friend-optin", -1);
+		minVersion = co.optInt("min-version", 0);
 		
 		JSONArray ct = co.optJSONArray("causes-tags");
 		if(ct!=null) {
@@ -347,6 +349,10 @@ public class Campaign implements Serializable {
 	
 	public String getCallout() {
 		return callout;
+	}
+	
+	public int getMinVersion() {
+		return minVersion;
 	}
 	
 	public int[] getCauseTags() {

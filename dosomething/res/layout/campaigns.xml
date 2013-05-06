@@ -6,9 +6,31 @@
     xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
 	
     <org.dosomething.android.widget.CustomActionBar
-        android:id="@+id/actionbar" 
+        android:id="@+id/actionbar"
         style="@style/ActionBar"
         app:title="@string/campaigns_title" />
+    
+    <RelativeLayout
+        android:id="@+id/popup"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:visibility="gone">
+                
+        <TextView 
+            android:id="@+id/popupMsg"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:text="There's a new update. Get it in the store now."/>
+        
+        <Button
+            android:id="@+id/popupClose" 
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:text="OK"/>
+        
+    </RelativeLayout>
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/list"
