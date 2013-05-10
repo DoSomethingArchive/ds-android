@@ -21,7 +21,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -164,8 +163,6 @@ public class CampaignActions extends AbstractActivity {
 			}
 			
 			final Challenge challenge = (Challenge) getItem(index);
-			
-			Log.d("asdf", "text="+challenge.getText() + "  complete="+challenge.getCompletionPage());
 			
 			boolean completed = completedChallenges.contains(challenge.getText());
 			boolean actionable = !completed && challenge.getCompletionPage()!=null;

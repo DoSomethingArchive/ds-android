@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
@@ -61,6 +62,7 @@ public class Campaign extends AbstractActivity {
 	@InjectView(R.id.prizes) private Button btnPrizes;
 	@InjectView(R.id.resources) private Button btnResources;
 	@InjectView(R.id.faq) private Button btnFaq;
+	@InjectView(R.id.report_back) private Button btnReportBack;
 	@InjectView(R.id.sign_up) private Button btnSignUp;
 	@InjectView(R.id.frmVideo) private FrameLayout frmVideo;
 	@InjectView(R.id.imgVideoThumb) private ImageView imgVideoThumb;
@@ -108,6 +110,7 @@ public class Campaign extends AbstractActivity {
 		}
 		imageLoader.displayImage(campaign.getLogoUrl(), imgLogo);
 		
+		btnReportBack.setTypeface(headerTypeface, Typeface.BOLD);
 		btnSignUp.setTypeface(headerTypeface, Typeface.BOLD);
 		btnActions.setTypeface(headerTypeface, Typeface.BOLD);
 		
@@ -195,7 +198,7 @@ public class Campaign extends AbstractActivity {
 	}
 
 	private String formatDateRange(org.dosomething.android.transfer.Campaign campaign){
-		SimpleDateFormat mf = new SimpleDateFormat("MMMMM");
+		SimpleDateFormat mf = new SimpleDateFormat("MMMMM", Locale.US);
 
 		Calendar scal = Calendar.getInstance();
 		scal.setTime(campaign.getStartDate());
@@ -267,13 +270,27 @@ public class Campaign extends AbstractActivity {
 			else {
 				UserCampaign userCampaign = new MyDAO(context).findUserCampaign(userContext.getUserUid(), campaign.getId());
 				if(userCampaign != null){
-					btnSignUp.setEnabled(false);
-					btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
+					// If user's already signed up and there is a report back available, then show report back button
+					if (campaign.getReportBack() != null) {
+						btnReportBack.setVisibility(Button.VISIBLE);
+						btnSignUp.setVisibility(Button.GONE);
+					}
+					else {
+						btnSignUp.setEnabled(false);
+						btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
+						
+						btnReportBack.setVisibility(Button.GONE);
+						btnSignUp.setVisibility(Button.VISIBLE);
+					}
 					
 					btnActions.setVisibility(Button.VISIBLE);
 				}
 			}
 		}
+	}
+	
+	public void reportBack(View v) {
+		startActivity(ReportBack.getIntent(this, campaign));
 	}
 	
 	public void smsRefer(View v) {
