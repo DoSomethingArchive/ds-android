@@ -60,6 +60,7 @@
     <string name="profile_no_campaigns_button">GET INVOLVED NOW</string>
     <string name="profile_load_error">Unable to load Profile data at this time. Please try again later.</string>
     
+    <string name="campaign_report_back_button">REPORT BACK!</string>
     <string name="campaign_sign_up_button">SIGN UP!</string>
     <string name="campaign_sign_up_button_already_signed_up">Already Signed Up</string>
     
