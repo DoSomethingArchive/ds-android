@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -84,6 +85,11 @@ public class Register extends AbstractActivity {
         
         cancel.setTypeface(headerTypeface, Typeface.BOLD);
         submit.setTypeface(headerTypeface, Typeface.BOLD);
+        
+        // Prepopulate mobile # field with # found on phone
+        if (mobile != null && userContext.getPhoneNumber() != null) {
+        	mobile.setText(userContext.getPhoneNumber());
+        }
     }
     
     private final OnClickListener birthdayClickListener = new OnClickListener() {
@@ -133,7 +139,7 @@ public class Register extends AbstractActivity {
 		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 			savedBirthday = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
-			birthday.setText(new SimpleDateFormat(DATE_FORMAT).format(savedBirthday));
+			birthday.setText(new SimpleDateFormat(DATE_FORMAT, Locale.US).format(savedBirthday));
 		}
 	};
     
@@ -207,7 +213,7 @@ public class Register extends AbstractActivity {
 		protected void doWebOperation() throws Exception {
 			String url = "http://www.dosomething.org/?q=rest/user/register.json";
 			
-			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
 			
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("name", username));
