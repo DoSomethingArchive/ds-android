@@ -138,12 +138,37 @@ public abstract class AbstractWebForm extends AbstractActivity {
 	}
 	
 	private void prePopulate() {
-		for(WebFormFieldBinding binding : fields) {
+		for (WebFormFieldBinding binding : fields) {
 			String name = binding.getWebFormField().getName();
-			if(name.equals("email") || name.equals("field_webform_email[und][0][email]")) {
+			if (name.equals("email") || name.equals("field_webform_email[und][0][email]")) {
 				binding.setFormValue(Collections.singletonList(userContext.getEmail()));
-			} else if(name.equals("name") || name.equals("user_name")) {
+			}
+			else if (name.equals("name") || name.equals("user_name")) {
 				binding.setFormValue(Collections.singletonList(userContext.getUserName()));
+			}
+			else if (name.equals("field_webform_mobile[und][0][value]") && userContext.getPhoneNumber() != null) {
+				binding.setFormValue(Collections.singletonList(userContext.getPhoneNumber()));
+			}
+			else if (name.equals("first_name")) {
+				binding.setFormValue(Collections.singletonList(userContext.getFirstName()));
+			}
+			else if (name.equals("last_name")) {
+				binding.setFormValue(Collections.singletonList(userContext.getLastName()));
+			}
+			else if (name.equals("address_1")) {
+				binding.setFormValue(Collections.singletonList(userContext.getAddr1()));
+			}
+			else if (name.equals("address_2")) {
+				binding.setFormValue(Collections.singletonList(userContext.getAddr2()));
+			}
+			else if (name.equals("city")) {
+				binding.setFormValue(Collections.singletonList(userContext.getAddrCity()));
+			}
+			else if (name.equals("state")) {
+				binding.setFormValue(Collections.singletonList(userContext.getAddrState()));
+			}
+			else if (name.equals("zip") || name.equals("zip_code")) {
+				binding.setFormValue(Collections.singletonList(userContext.getAddrZip()));
 			}
 		}
 	}
@@ -227,6 +252,37 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		params.add(new BasicNameValuePair("nid", getWebForm().getNodeId()));
 		
 		for(WebFormFieldBinding binding : fields) {
+			// Save applicable data to SharedPreferences
+			String fieldName = binding.getWebFormField().getName();
+			if (fieldName.equals("first_name")) {
+				List<String> firstName = binding.getFormValue();
+				userContext.setFirstName(firstName.get(0));
+			}
+			else if (fieldName.equals("last_name")) {
+				List<String> lastName = binding.getFormValue();
+				userContext.setLastName(lastName.get(0));
+			}
+			else if (fieldName.equals("address_1")) {
+				List<String> addr1 = binding.getFormValue();
+				userContext.setAddr1(addr1.get(0));
+			}
+			else if (fieldName.equals("address_2")) {
+				List<String> addr2 = binding.getFormValue();
+				userContext.setAddr2(addr2.get(0));
+			}
+			else if (fieldName.equals("city")) {
+				List<String> city = binding.getFormValue();
+				userContext.setAddrCity(city.get(0));
+			}
+			else if (fieldName.equals("state")) {
+				List<String> state = binding.getFormValue();
+				userContext.setAddrState(state.get(0));
+			}
+			else if (fieldName.equals("zip") || fieldName.equals("zip_code")) {
+				List<String> zip = binding.getFormValue();
+				userContext.setAddrZip(zip.get(0));
+			}
+			
 			int fidIndex = 0;
 			
 			for(String value : binding.getFormValue()) {
@@ -355,7 +411,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 					LinearLayout layout = (LinearLayout)view.findViewById(R.id.field_select_multi);
 					for(WebFormSelectOptions wfso : webFormField.getSelectOptions()) {
 						CheckBox checkbox = new CheckBox(AbstractWebForm.this);
-						checkbox.setTextColor(R.color.web_form_checkbox_label);
+						checkbox.setTextColor(getResources().getColor(R.color.web_form_checkbox_label));
 						checkbox.setText(wfso.getLabel());
 						checkbox.setTag(wfso.getValue());
 						layout.addView(checkbox, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
@@ -760,7 +816,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {	
-			
+
 			String url = "http://www.dosomething.org/?q=rest/webform.json";
 			
 			WebserviceResponse response = doPost(url, params);

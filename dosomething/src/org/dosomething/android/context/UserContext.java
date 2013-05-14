@@ -1,14 +1,22 @@
 package org.dosomething.android.context;
 
-import com.google.inject.Inject;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.telephony.TelephonyManager;
+
+import com.google.inject.Inject;
 
 public class UserContext {
 	
 	private static final String MY_PREFS = "my_prefs";
+	private static final String FIRST_NAME = "first_name";
+	private static final String LAST_NAME = "last_name";
+	private static final String ADDR_1 = "addr_1";
+	private static final String ADDR_2 = "addr_2";
+	private static final String ADDR_CITY = "addr_city";
+	private static final String ADDR_STATE = "addr_state";
+	private static final String ADDR_ZIP = "addr_zip";
 	private static final String USER_NAME = "user_name";
 	private static final String EMAIL = "email";
 	private static final String UID = "user_uid";
@@ -55,6 +63,54 @@ public class UserContext {
 		return uid;
 	}
 	
+	public String getPhoneNumber() {
+		TelephonyManager tmgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+		String phone = tmgr.getLine1Number();
+		return phone;
+	}
+	
+	public String getFirstName() {
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		String firstName = settings.getString(FIRST_NAME, null);
+		return firstName;
+	}
+	
+	public String getLastName() {
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		String lastName = settings.getString(LAST_NAME, null);
+		return lastName;
+	}
+	
+	public String getAddr1() {
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		String addr1 = settings.getString(ADDR_1, null);
+		return addr1;
+	}
+	
+	public String getAddr2() {
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		String addr2 = settings.getString(ADDR_2, null);
+		return addr2;
+	}
+	
+	public String getAddrCity() {
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		String addrCity = settings.getString(ADDR_CITY, null);
+		return addrCity;
+	}
+	
+	public String getAddrState() {
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		String addrState = settings.getString(ADDR_STATE, null);
+		return addrState;
+	}
+	
+	public String getAddrZip() {
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		String addrZip = settings.getString(ADDR_ZIP, null);
+		return addrZip;
+	}
+	
 	public boolean isLoggedIn(){
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
 		String uid = settings.getString(UID, null);
@@ -62,6 +118,83 @@ public class UserContext {
 		long deadline = System.currentTimeMillis() + EXPIRES_AT_PADDING;
 		
 		return (uid != null && expires_at != 0 && expires_at > deadline);
+	}
+	
+	public void setFirstName(String firstName) {
+		if (firstName == null || firstName.length() == 0) {
+			return;
+		}
+		
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		Editor editor = settings.edit();
+		editor.putString(FIRST_NAME, firstName);
+		editor.commit();
+	}
+	
+	public void setLastName(String lastName) {
+		if (lastName == null || lastName.length() == 0) {
+			return;
+		}
+		
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		Editor editor = settings.edit();
+		editor.putString(LAST_NAME, lastName);
+		editor.commit();
+	}
+	
+	public void setAddr1(String addr1) {
+		if (addr1 == null || addr1.length() == 0) {
+			return;
+		}
+		
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		Editor editor = settings.edit();
+		editor.putString(ADDR_1, addr1);
+		editor.commit();
+	}
+	
+	public void setAddr2(String addr2) {
+		if (addr2 == null || addr2.length() == 0) {
+			return;
+		}
+		
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		Editor editor = settings.edit();
+		editor.putString(ADDR_2, addr2);
+		editor.commit();
+	}
+	
+	public void setAddrCity(String addrCity) {
+		if (addrCity == null || addrCity.length() == 0) {
+			return;
+		}
+		
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		Editor editor = settings.edit();
+		editor.putString(ADDR_CITY, addrCity);
+		editor.commit();
+	}
+	
+	public void setAddrState(String addrState) {
+		if (addrState == null || addrState.length() == 0) {
+			return;
+		}
+		
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		Editor editor = settings.edit();
+		editor.putString(ADDR_STATE, addrState);
+		editor.commit();
+	}
+	
+	public void setAddrZip(String addrZip) {
+		if (addrZip == null || addrZip.length() == 0) {
+			return;
+		}
+		
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		Editor editor = settings.edit();
+		editor.putString(ADDR_ZIP, addrZip);
+		editor.commit();
 	}
 	
 	public void setLoggedIn(String userName, String email, String uid, String sessionId, String sessionName, long expiresMins){
@@ -88,6 +221,13 @@ public class UserContext {
 		editor.remove(SESSION_ID);
 		editor.remove(SESSION_NAME);
 		editor.remove(EXPIRES_AT);
+		editor.remove(FIRST_NAME);
+		editor.remove(LAST_NAME);
+		editor.remove(ADDR_1);
+		editor.remove(ADDR_2);
+		editor.remove(ADDR_CITY);
+		editor.remove(ADDR_STATE);
+		editor.remove(ADDR_ZIP);
 		editor.commit();
 	}
 }
