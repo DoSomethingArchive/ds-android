@@ -65,9 +65,67 @@ public class Login extends AbstractActivity {
     	String email = this.username.getText().toString();
     	String password = this.password.getText().toString();
     	
-    	//goToProfile();
-    	
     	new MyLoginTask(email, password).execute();
+    }
+    
+    /**
+     * After a login succeeds, takes json object returned and updates the user
+     * context with the contained info.
+     * 
+     * @param obj JSONObject of user and profile data
+     */
+    private void updateUserContext(JSONObject obj) throws Exception {
+    	JSONObject user = obj.getJSONObject("user");
+		
+		userContext.setLoggedIn(
+			user.getString("name"),
+			user.getString("mail"),
+			user.getString("uid"),
+			obj.getString("sessid"),
+			obj.getString("session_name"),
+			obj.getLong("session_cache_expire"));
+		
+		JSONObject profile = obj.optJSONObject("profile");
+		if (profile != null) {
+			
+			String firstName;
+			if (profile.optJSONObject("field_user_first_name") != null
+					&& profile.optJSONObject("field_user_first_name").optJSONArray("und") != null
+					&& profile.optJSONObject("field_user_first_name").optJSONArray("und").optJSONObject(0) != null
+					&& (firstName = profile.optJSONObject("field_user_first_name").optJSONArray("und").getJSONObject(0).optString("value", null)) != null)
+			{
+				userContext.setFirstName(firstName);
+			}
+			
+			String lastName;
+			if (profile.optJSONObject("field_user_last_name") != null
+					&& profile.optJSONObject("field_user_last_name").optJSONArray("und") != null
+					&& profile.optJSONObject("field_user_last_name").optJSONArray("und").optJSONObject(0) != null
+					&& (lastName = profile.optJSONObject("field_user_last_name").optJSONArray("und").optJSONObject(0).optString("value", null)) != null)
+			{
+				userContext.setLastName(lastName);
+			}
+			
+
+			JSONObject address;
+			if (profile.optJSONObject("field_user_address") != null
+					&& profile.optJSONObject("field_user_address").optJSONArray("und") != null
+					&& (address = profile.optJSONObject("field_user_address").optJSONArray("und").optJSONObject(0)) != null)
+			{
+				String addr1 = address.optString("thoroughfare");
+				String addr2 = address.optString("premise");
+				String city = address.optString("locality");
+				String state = address.optString("administrative_area");
+				String zip = address.optString("postal_code");
+				
+				userContext.setAddr1(addr1);
+				userContext.setAddr2(addr2);
+				userContext.setAddrCity(city);
+				userContext.setAddrState(state);
+				userContext.setAddrZip(zip);
+			}
+		}
+		
     }
     
     private void goToProfile(){
@@ -125,10 +183,11 @@ public class Login extends AbstractActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == REQ_FACEBOOK_LOGIN){
+        if (requestCode == REQ_FACEBOOK_LOGIN) {
         	 facebook.authorizeCallback(requestCode, resultCode, data);
-        }else if(requestCode == REQ_SIGN_UP){
-        	if(resultCode == RESULT_OK){
+        }
+        else if (requestCode == REQ_SIGN_UP) {
+        	if (resultCode == RESULT_OK) {
         		setResult(RESULT_OK);
         		finish();
         	}
@@ -194,9 +253,10 @@ public class Login extends AbstractActivity {
 		@Override
 		protected void onSuccess() {
 			
-			if(loginSuccess) {
+			if (loginSuccess) {
 				goToProfile();
-			} else {
+			}
+			else {
 				Toast.makeText(Login.this, getString(R.string.log_in_auth_failed), Toast.LENGTH_LONG).show();
 			}
 		}
@@ -219,7 +279,7 @@ public class Login extends AbstractActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			String url = "http://www.dosomething.org/?q=rest/user/login.json";
+			String url = "http://www.dosomething.org/rest/user/login.json";
 			
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("username", username));
@@ -227,13 +287,11 @@ public class Login extends AbstractActivity {
 			
 			WebserviceResponse response = doPost(url, params);
 			
-			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
+			if (response.getStatusCode() >= 400 && response.getStatusCode() < 500) {
 				loginSuccess = false;
-			} else {
-				JSONObject obj = response.getBodyAsJSONObject();
-				JSONObject user = obj.getJSONObject("user");
-				
-				userContext.setLoggedIn(user.getString("name"), user.getString("mail"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
+			}
+			else {
+				updateUserContext(response.getBodyAsJSONObject());
 				
 				loginSuccess = true;
 			}
@@ -262,13 +320,14 @@ public class Login extends AbstractActivity {
 		@Override
 		protected void onSuccess() {
 			
-			if(loginSuccess) {
+			if (loginSuccess) {
 				HashMap<String, String> param = new HashMap<String, String>();
 				param.put("facebook", "login-success");
 				Analytics.logEvent(getPageName(), param);
 				
 				goToProfile();
-			} else {
+			}
+			else {
 				Toast.makeText(Login.this, getString(R.string.log_in_auth_failed), Toast.LENGTH_LONG).show();
 			}
 		}
@@ -286,21 +345,18 @@ public class Login extends AbstractActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			String url = "http://www.dosomething.org/?q=rest/user/fblogin.json";
+			String url = "http://www.dosomething.org/rest/user/fblogin.json";
 			
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("access_token", accessToken));
 			
 			WebserviceResponse response = doPost(url, params);
 			
-			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
+			if (response.getStatusCode() >= 400 && response.getStatusCode() < 500) {
 				loginSuccess = false;
-			} else {
-				JSONObject obj = response.getBodyAsJSONObject();
-				JSONObject user = obj.getJSONObject("user");
-				
-				userContext.setLoggedIn(user.getString("name"), user.getString("mail"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
-				
+			}
+			else {
+				updateUserContext(response.getBodyAsJSONObject());
 				loginSuccess = true;
 			}
 		}
