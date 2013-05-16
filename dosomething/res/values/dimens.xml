@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="gallery_item">100dp</dimen>
+    <dimen name="popup_button_width">45dp</dimen>
+    <dimen name="popup_height">45dp</dimen>
 </resources>
