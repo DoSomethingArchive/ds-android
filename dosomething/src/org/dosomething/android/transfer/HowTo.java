@@ -11,6 +11,7 @@ public class HowTo implements Serializable{
 	
 	private String header;
 	private String body;
+	private String imageUrl;
 	
 	public HowTo() {}
 	
@@ -18,18 +19,30 @@ public class HowTo implements Serializable{
 		
 		header = obj.getString("item-header");
 		body = obj.getString("item-body");
+		imageUrl = obj.optString("item-image", null);
 		
 	}
 
 	public String getHeader() {
 		return header;
 	}
+	
 	public void setHeader(String header) {
 		this.header = header;
 	}
+	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	
+	public void setImageUrl(String url) {
+		this.imageUrl = url;
+	}
+	
 	public String getBody() {
 		return body;
 	}
+	
 	public void setBody(String body) {
 		this.body = body;
 	}

@@ -16,17 +16,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class CampaignHowTo extends AbstractActivity {
 	
 	private static final String CAMPAIGN = "campaign";
 	
 	@Inject private LayoutInflater inflater;
+	@Inject private ImageLoader imageLoader;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 	
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
@@ -79,6 +82,9 @@ public class CampaignHowTo extends AbstractActivity {
 			TextView header = (TextView)v.findViewById(R.id.header);
 			header.setTypeface(headerTypeface, Typeface.BOLD);
 			header.setText(howTo.getHeader());
+			
+			ImageView image = (ImageView)v.findViewById(R.id.image);
+			imageLoader.displayImage(howTo.getImageUrl(), image);
 			
 			TextView body = (TextView)v.findViewById(R.id.body);
 			body.setText(howTo.getBody());
