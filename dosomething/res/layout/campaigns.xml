@@ -13,7 +13,7 @@
     <RelativeLayout
         android:id="@+id/popup"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/popup_height"
         android:visibility="gone">
 
         <Button
