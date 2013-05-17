@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +18,7 @@ import android.content.Intent;
 public class Campaign implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	private static final SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy");
+	private static final SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy", Locale.US);
 	
 	private String id;
 	private String name;
@@ -42,6 +43,7 @@ public class Campaign implements Serializable {
 	private String shareMessage;
 	private String signUpAltLink;
 	private String signUpAltText;
+	private String signUpSmsAction;
 	
 	private String smsReferText;
 	private int mCommonsAlphaOptIn;
@@ -102,6 +104,7 @@ public class Campaign implements Serializable {
 			shareMessage = m.optString("share-message",null);
 			signUpAltLink = m.optString("sign-up-alt-link",null);
 			signUpAltText = m.optString("sign-up-alt-text",null);
+			signUpSmsAction = m.optString("sign-up-sms-action",null);
 		}
 		
 		JSONArray f = obj.optJSONArray("faq");
@@ -334,6 +337,10 @@ public class Campaign implements Serializable {
 	
 	public String getSignUpAltText() {
 		return signUpAltText;
+	}
+	
+	public String getSignUpSmsAction() {
+		return signUpSmsAction;
 	}
 
 	public void setShareMessage(String shareMessage) {

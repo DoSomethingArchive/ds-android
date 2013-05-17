@@ -63,6 +63,8 @@
     <string name="campaign_report_back_button">REPORT BACK!</string>
     <string name="campaign_sign_up_button">SIGN UP!</string>
     <string name="campaign_sign_up_button_already_signed_up">Already Signed Up</string>
+    <string name="campaign_sign_up_sms_action_alert_title">Get Ready to Game</string>
+    <string name="campaign_sign_up_sms_action_alert_body">To begin this SMS experience, you will need to text a keyword to the DoSomething.org 38383 shortcode. You\'re being taken to your messaging app to get started.\n\nMessage and data rates may apply. Text STOP to opt-out, HELP for help.</string>
     
     <string name="campaign_share_button">SHARE THIS CAMPAIGN</string>
     <string name="campaign_share_signup_header">Thanks for signing up!</string>
