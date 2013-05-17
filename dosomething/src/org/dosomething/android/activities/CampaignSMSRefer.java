@@ -73,6 +73,9 @@ public class CampaignSMSRefer extends AbstractActivity {
         		onSubmitClick();
         	}
         });
+
+		// Auto-fill any fields we already have information for
+		prePopulate();
 	}
 
 	@Override
@@ -183,6 +186,14 @@ public class CampaignSMSRefer extends AbstractActivity {
 		else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Use values from the UserContext to populate input fields we've already got info for
+	 */
+	private void prePopulate() {
+		etNameInput.setText(userContext.getFirstName());
+		etCellInput.setText(userContext.getPhoneNumber());
 	}
 
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {
