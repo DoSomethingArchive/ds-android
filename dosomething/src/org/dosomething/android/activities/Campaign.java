@@ -19,6 +19,7 @@ import org.dosomething.android.widget.CustomActionBar;
 import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -228,22 +229,51 @@ public class Campaign extends AbstractActivity {
 		}
 	}
 	
-	public boolean useAlternateSignUp() {
-		if (campaign != null && campaign.getSignUpAltLink() != null 
-			&& campaign.getSignUpAltLink().length() > 0
-			&& campaign.getSignUpAltText() != null
-			&& campaign.getSignUpAltText().length() > 0) {
+	private boolean useAlternateSignUp() {
+		if (campaign != null) {
+			boolean hasAltText = campaign.getSignUpAltText() != null && campaign.getSignUpAltText().length() > 0;
+			boolean hasAltLink = campaign.getSignUpAltLink() != null && campaign.getSignUpAltLink().length() > 0;
 			
-			return true;
+			if (hasAltText && hasAltLink) {
+				return true;
+			}
 		}
-		else
-			return false;
+		
+		return false;
+	}
+	
+	private boolean useSmsActionSignUp() {
+		if (campaign != null) {
+			boolean hasAltText = campaign.getSignUpAltText() != null && campaign.getSignUpAltText().length() > 0;
+			boolean hasSmsAction = campaign.getSignUpSmsAction() != null && campaign.getSignUpSmsAction().length() > 0;
+			
+			if (hasAltText && hasSmsAction) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	public void signUp(View v){
 		String uid = new UserContext(this).getUserUid();
 
-		if (useAlternateSignUp()) {
+		if (useSmsActionSignUp()) {
+			AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+			alertBuilder.setTitle(R.string.campaign_sign_up_sms_action_alert_title)
+						.setMessage(R.string.campaign_sign_up_sms_action_alert_body)
+						.setPositiveButton(R.string.ok_upper, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:38383"));
+								i.putExtra("sms_body", campaign.getSignUpSmsAction());
+								i.putExtra("compose_mode", true);
+								startActivity(i);
+							}
+						})
+						.create();
+			alertBuilder.show();
+		}
+		else if (useAlternateSignUp()) {
 			// Log the alternate sign up events to Analytics
 			HashMap<String, String> param = new HashMap<String, String>();
 			param.put(CAMPAIGN, campaign.getName());
@@ -253,16 +283,17 @@ public class Campaign extends AbstractActivity {
 			i.setData(Uri.parse(campaign.getSignUpAltLink()));
 			startActivity(i);
 		}
-		else if(uid != null){
+		else if (uid != null){
 			startActivity(SignUp.getIntent(this, campaign));
-		}else{
+		}
+		else {
 			startActivityForResult(new Intent(this, Login.class), REQ_LOGIN_FOR_SIGN_UP);
 		}
 	}
 	
 	private void updateSignUpButton(Context context) {
 		if (userContext.isLoggedIn() && campaign != null) {
-			if (useAlternateSignUp()) {
+			if (useAlternateSignUp() || useSmsActionSignUp()) {
 				btnSignUp.setEnabled(true);
 				btnSignUp.setText(campaign.getSignUpAltText());
 				btnActions.setVisibility(Button.GONE);
