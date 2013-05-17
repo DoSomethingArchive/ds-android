@@ -78,7 +78,7 @@ public class Campaign implements Serializable {
 		smsReferText = co.optString("sms-refer-text");
 		mCommonsAlphaOptIn = co.optInt("mcommons-optin", -1);
 		mCommonsBetaOptIn = co.optInt("mcommons-friend-optin", -1);
-		minVersion = co.optInt("min-version", 0);
+		minVersion = co.optInt("android-min-version", 0);
 		
 		JSONArray ct = co.optJSONArray("causes-tags");
 		if(ct!=null) {
