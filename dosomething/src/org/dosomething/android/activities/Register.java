@@ -10,6 +10,7 @@ import java.util.Locale;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
@@ -211,8 +212,6 @@ public class Register extends AbstractActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			String url = "http://www.dosomething.org/?q=rest/user/register.json";
-			
 			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
 			
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -226,7 +225,7 @@ public class Register extends AbstractActivity {
 			params.add(new BasicNameValuePair("profile_main[field_user_last_name][und][0][value]", last));
 			params.add(new BasicNameValuePair("profile_main[field_user_mobile][und][0][value]", mobile));
 			
-			WebserviceResponse response = doPost(url, params);
+			WebserviceResponse response = doPost(DSConstants.API_URL_USER_REGISTER, params);
 			
 			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
 				

@@ -14,6 +14,7 @@ import java.util.Locale;
 import org.acra.util.Base64;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
@@ -743,7 +744,6 @@ public abstract class AbstractWebForm extends AbstractActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			String url = "http://www.dosomething.org/?q=rest/file.json";
 			
 			Bitmap bitmap = getCompressedBitmap(path, 600);
 			
@@ -756,7 +756,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 			params.add(new BasicNameValuePair("file", byteos.toString("UTF-8")));
 			params.add(new BasicNameValuePair("filename", new File(path).getName()));
 			
-			WebserviceResponse response = doPost(url, params);
+			WebserviceResponse response = doPost(DSConstants.API_URL_FILE, params);
 			
 			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
 				uploadSuccess = false;
@@ -822,9 +822,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		@Override
 		protected void doWebOperation() throws Exception {	
 
-			String url = "http://www.dosomething.org/rest/webform.json";
-			
-			WebserviceResponse response = doPost(url, params);
+			WebserviceResponse response = doPost(DSConstants.API_URL_WEBFORM, params);
 			
 			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
 				

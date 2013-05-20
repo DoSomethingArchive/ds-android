@@ -4,8 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
@@ -220,7 +222,7 @@ public class Profile extends AbstractActivity {
 			txtCompleted.setText("Completed: " + completeActions.size() + " of " + campaign.getChallenges().size());
 			
 			TextView txtEndDate = (TextView) v.findViewById(R.id.end_date);
-			txtEndDate.setText("Ends: " + new SimpleDateFormat(DF).format(campaign.getEndDate()));
+			txtEndDate.setText("Ends: " + new SimpleDateFormat(DF, Locale.US).format(campaign.getEndDate()));
 
 			return v;
 		}
@@ -240,7 +242,7 @@ public class Profile extends AbstractActivity {
 		@Override
 		protected void doWebOperation() throws Exception {
 			String uid = new UserContext(context).getUserUid();
-			String url = "http://www.dosomething.org/?q=rest/user/"+uid+".json";
+			String url = DSConstants.API_URL_BASE + "user/"+uid+".json";
 			
 			WebserviceResponse response = doGet(url);
 			if (!response.hasErrorStatusCode()) {
@@ -253,7 +255,7 @@ public class Profile extends AbstractActivity {
 					for (int i = 0; i < groups_array.length(); i++) {
 						JSONObject group = groups_array.getJSONObject(i);
 						int gid = group.getInt("gid");
-						gids.add(new Integer(gid));
+						gids.add(Integer.valueOf(gid));
 					}
 				}
 			}

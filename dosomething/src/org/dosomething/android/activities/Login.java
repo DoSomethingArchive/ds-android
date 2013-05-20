@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
@@ -279,13 +280,11 @@ public class Login extends AbstractActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			String url = "http://www.dosomething.org/rest/user/login.json";
-			
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("username", username));
 			params.add(new BasicNameValuePair("password", password));
 			
-			WebserviceResponse response = doPost(url, params);
+			WebserviceResponse response = doPost(DSConstants.API_URL_LOGIN, params);
 			
 			if (response.getStatusCode() >= 400 && response.getStatusCode() < 500) {
 				loginSuccess = false;
@@ -345,12 +344,10 @@ public class Login extends AbstractActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			String url = "http://www.dosomething.org/rest/user/fblogin.json";
-			
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("access_token", accessToken));
 			
-			WebserviceResponse response = doPost(url, params);
+			WebserviceResponse response = doPost(DSConstants.API_URL_FBLOGIN, params);
 			
 			if (response.getStatusCode() >= 400 && response.getStatusCode() < 500) {
 				loginSuccess = false;

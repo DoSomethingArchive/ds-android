@@ -40,8 +40,6 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Excepti
 	private static final String ACCEPT_GZIP = "gzip";
 	private static final String UA = "android";
 
-	protected static final String API_URL = "http://apps.dosomething.org/m_app_api/";
-
 	protected abstract void onSuccess();
 	protected abstract void onFinish();
 	protected abstract void onError(Exception e);
