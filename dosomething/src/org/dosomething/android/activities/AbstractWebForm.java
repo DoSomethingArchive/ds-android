@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import org.acra.util.Base64;
 import org.apache.http.NameValuePair;
@@ -301,6 +302,10 @@ public abstract class AbstractWebForm extends AbstractActivity {
 					params.add(new BasicNameValuePair(name, value));
 					fidIndex++;
 				}
+				else if (binding.getLayoutResource() == R.layout.web_form_select_multi_row) {
+					String baseName = binding.getWebFormField().getName();
+					params.add(new BasicNameValuePair(baseName+"[select]["+value+"]", value));
+				}
 				else {
 					params.add(new BasicNameValuePair(binding.getWebFormField().getName(), value));
 				}
@@ -453,7 +458,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 					public void onDateSet(DatePicker datePickerView, int year, int monthOfYear, int dayOfMonth) {
 						Date date  = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
 						EditText field = (EditText)view.findViewById(R.id.field_date);
-						field.setText(new SimpleDateFormat(DATE_FORMAT).format(date));
+						field.setText(new SimpleDateFormat(DATE_FORMAT, Locale.US).format(date));
 						editDialogOpen = false;
 					}
 				}, 1995, 0, 1).show();
@@ -817,7 +822,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		@Override
 		protected void doWebOperation() throws Exception {	
 
-			String url = "http://www.dosomething.org/?q=rest/webform.json";
+			String url = "http://www.dosomething.org/rest/webform.json";
 			
 			WebserviceResponse response = doPost(url, params);
 			
