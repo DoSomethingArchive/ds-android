@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.acra.ErrorReporter;
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.cache.PersistentCampaignsCache;
 import org.dosomething.android.context.UserContext;
@@ -54,7 +55,7 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 			if(isOnline){
 				
 				try{
-					String url = API_URL + "?q=campaigns";
+					String url = DSConstants.CAMPAIGN_API_URL + "?q=campaigns";
 
 					JSONObject json = doGet(url).getBodyAsJSONObject();
 
