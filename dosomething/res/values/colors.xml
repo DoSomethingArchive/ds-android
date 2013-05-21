@@ -26,6 +26,8 @@
 <color name="campaign_share_outer_background">#1d59a1</color>
 <color name="campaign_button_background">#1d59a1</color>
 <color name="campaign_button_background_active">#164278</color>
+<color name="campaign_progress_bar">#FF522053</color>
+<color name="campaign_progress_bar_bg">#FF868686</color>
 <color name="cause_text">#333333</color>
 <color name="web_form_checkbox_label">#000000</color>
 <color name="campaigns_callout_background">#FF522053</color>

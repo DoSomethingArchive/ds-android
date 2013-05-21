@@ -219,10 +219,18 @@ public class Profile extends AbstractActivity {
 			List<CompletedCampaignAction> completeActions = dao.getCompletedActions(userCampaign.getId());
 			
 			TextView txtCompleted = (TextView) v.findViewById(R.id.completed);
-			txtCompleted.setText("Completed: " + completeActions.size() + " of " + campaign.getChallenges().size());
+			String strCompleted = "Completed: " + completeActions.size() + " of " + campaign.getChallenges().size();
+			if (completeActions.size() == campaign.getChallenges().size()) {
+				strCompleted += " " + getString(R.string.special_smiley);
+			}
+			txtCompleted.setText(strCompleted);
 			
 			TextView txtEndDate = (TextView) v.findViewById(R.id.end_date);
 			txtEndDate.setText("Ends: " + new SimpleDateFormat(DF, Locale.US).format(campaign.getEndDate()));
+			
+			ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.campaignProgress);
+			int progress = Math.round(((float)completeActions.size() / (float)campaign.getChallenges().size()) * 100.f);
+			progressBar.setProgress(progress);
 
 			return v;
 		}
