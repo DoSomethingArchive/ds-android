@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Do Something</string>
+    <string name="special_smiley">&#9786;</string>
     <string name="username">Email / Username</string>
     <string name="password">Password</string>
     <string name="facebook_log_in">Login with Facebook</string>
