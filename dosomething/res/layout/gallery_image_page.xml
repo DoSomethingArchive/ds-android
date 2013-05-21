@@ -8,7 +8,7 @@
         android:id="@+id/galleryImageItemDisplay"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scaleType="centerInside" />
+        android:scaleType="fitCenter" />
     <ProgressBar
         android:id="@+id/galleryImageItemDisplayProgress"
         android:layout_width="wrap_content"
