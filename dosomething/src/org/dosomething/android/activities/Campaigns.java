@@ -29,6 +29,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
+import android.widget.AbsListView.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -66,8 +70,9 @@ public class Campaigns extends AbstractActivity {
 	@InjectView(R.id.list) private PullToRefreshListView pullToRefreshView;
 	
 	private ListView list;
+	private CampaignListAdapter listAdapter;
 	
-	private final OnItemClickListener itemClickListener = new MyItemClickListener();
+	private final OnItemClickListener itemClickListener = new CampaignItemClickListener();
 	
 	@Override
 	protected String getPageName() {
@@ -152,15 +157,54 @@ public class Campaigns extends AbstractActivity {
 		return new IntentAction(context, new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), R.drawable.action_bar_home);
 	}
 	
-	private class MyItemClickListener implements OnItemClickListener {
+	private class CampaignItemClickListener implements OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> av, View v, int position,
 				long id) {
-			Campaign campaign = (Campaign) list.getAdapter().getItem(position);
-			
-			startActivity(org.dosomething.android.activities.Campaign.getIntent(getApplicationContext(), campaign));
+
+			int openHeight = getResources().getDimensionPixelSize(R.dimen.campaign_row_height_open);
+			if (v.getLayoutParams().height == openHeight) {
+				Campaign campaign = (Campaign) list.getAdapter().getItem(position);
+				startActivity(org.dosomething.android.activities.Campaign.getIntent(getApplicationContext(), campaign));
+			}
+			else {
+				listAdapter.setItemOpenState(position - 1, true);
+				
+				ExpandCampaignAnimation anim = new ExpandCampaignAnimation(v);
+				v.setAnimation(anim);
+				anim.start();
+			}
 		}
 	};
+	
+	private class ExpandCampaignAnimation extends Animation {
+		private View campaignView;
+		private int heightDelta, startingHeight;
+		private int animDuration = 150;	// in milliseconds
+
+		public ExpandCampaignAnimation(View v) {
+			this.campaignView = v;
+			this.setDuration(animDuration);
+			this.setInterpolator(new AccelerateInterpolator());
+			
+			this.startingHeight = getResources().getDimensionPixelSize(R.dimen.campaign_row_height_closed);
+			int targetHeight = getResources().getDimensionPixelSize(R.dimen.campaign_row_height_open);
+			this.heightDelta = targetHeight - this.startingHeight;
+		}
+		
+		@Override
+		protected void applyTransformation(float interpolatedTime, Transformation t) {
+			int newHeight = (int)(this.heightDelta * interpolatedTime) + this.startingHeight;
+			campaignView.getLayoutParams().height = newHeight;
+			campaignView.requestLayout();
+		}
+		
+		@Override
+		public boolean willChangeBounds() {
+			return true;
+		}
+	}
+	
 	
 	private class MyTask extends AbstractFetchCampaignsTask {
 
@@ -196,7 +240,8 @@ public class Campaigns extends AbstractActivity {
 				}
 			}
 			
-			list.setAdapter(new MyAdapter(getApplicationContext(), campaigns));
+			listAdapter = new CampaignListAdapter(getApplicationContext(), campaigns);
+			list.setAdapter(listAdapter);
 		}
 
 		@Override
@@ -243,10 +288,14 @@ public class Campaigns extends AbstractActivity {
 		}
 	}
 
-	private class MyAdapter extends ArrayAdapter<Campaign> {
+	private class CampaignListAdapter extends ArrayAdapter<Campaign> {
 
-		public MyAdapter(Context context, List<Campaign> objects){
+		private boolean itemOpenState[];
+
+		public CampaignListAdapter(Context context, List<Campaign> objects){
 			super(context, android.R.layout.simple_list_item_1, objects);
+			
+			this.itemOpenState = new boolean[objects.size()];
 		}
 		
 		@Override
@@ -271,6 +320,29 @@ public class Campaigns extends AbstractActivity {
 			ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 			imageLoader.displayImage(campaign.getLogoUrl(), imageView, new ProgressBarImageLoadingListener(progressBar));
 			
+			Calendar cal = Calendar.getInstance();
+			Date todayDate = cal.getTime();
+			if (itemOpenState[position] != true && todayDate.after(campaign.getEndDate())) {
+				// Semi-hide past campaigns
+				itemOpenState[position] = false;
+				int closedHeight = getResources().getDimensionPixelSize(R.dimen.campaign_row_height_closed);
+				if (v.getLayoutParams() != null)
+					v.getLayoutParams().height = closedHeight;
+				else {
+					v.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, closedHeight));
+				}
+			}
+			else {
+				itemOpenState[position] = true;
+				int openHeight = getResources().getDimensionPixelSize(R.dimen.campaign_row_height_open);
+				if (v.getLayoutParams() != null) {
+					v.getLayoutParams().height = openHeight;
+				}
+				else {
+					v.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, openHeight));
+				}
+			}
+			
 			TextView textView = (TextView) v.findViewById(R.id.callout);
 			if(campaign.getCallout() != null && campaign.getCallout().length() > 0) {
 				textView.setText(campaign.getCallout());
@@ -278,8 +350,6 @@ public class Campaigns extends AbstractActivity {
 				textView.setVisibility(TextView.VISIBLE);
 				
 				// Change text color and background color if it's a past campaign
-				Calendar cal = Calendar.getInstance();
-				Date todayDate = cal.getTime();
 				if (todayDate.after(campaign.getEndDate())) {
 					// TODO: for past campaigns, maybe also set "Past Campaigns" text, even if none was set
 					int bgColor = getResources().getColor(R.color.campaigns_past_campaign_callout_background);
@@ -322,6 +392,12 @@ public class Campaigns extends AbstractActivity {
 			}
 
 			return v;
+		}
+		
+		public void setItemOpenState(int position, boolean opened) {
+			if (itemOpenState.length > position) {
+				itemOpenState[position] = opened;
+			}
 		}
 		
 		private int getCauseDrawable(int cause_id) {

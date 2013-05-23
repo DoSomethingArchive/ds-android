@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="160dp"
-    android:orientation="vertical" >
+    android:layout_height="@dimen/campaign_row_height_open"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true" >
     
     <FrameLayout 
         android:id="@+id/frame"
@@ -21,4 +22,4 @@
     
     
     
-</LinearLayout>
+</LinearLayout> 
