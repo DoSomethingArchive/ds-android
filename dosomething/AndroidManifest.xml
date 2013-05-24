@@ -53,6 +53,7 @@
         <activity android:name=".activities.ActionsFinder"/>
         <activity android:name=".activities.ActionsResults"/>
         <activity android:name=".activities.Profile"/>
+        <activity android:name=".activities.ProfileConfig"/>
         <activity android:name=".activities.Project"/>
         <activity android:name=".activities.ReportBack"/>
         <activity android:name=".activities.SignUp"/>

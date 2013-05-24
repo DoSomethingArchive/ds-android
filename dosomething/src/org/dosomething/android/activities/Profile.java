@@ -78,7 +78,10 @@ public class Profile extends AbstractActivity {
         
         context = this;
         
-        actionBar.addAction(causeAction);
+        if (userContext.isLoggedIn()) {
+			actionBar.addAction(configAction);
+        }
+		
         actionBar.addAction(Campaigns.getHomeAction(this));
         
         if (getIntent() != null && getIntent().getExtras() != null) {
@@ -94,16 +97,16 @@ public class Profile extends AbstractActivity {
         // onResume is always call next
     }
 	
-	private final Action causeAction = new Action() {
+	private final Action configAction = new Action() {
 		@Override
 		public int getDrawable() {
-			return R.drawable.action_bar_cause;
+			return R.drawable.action_bar_config;
 		}
-
+		
 		@Override
-		public void performAction(View view) {
+		public void performAction(View v) {
 			Context ctx = getApplicationContext();
-			startActivity(new Intent(ctx, CauseSelector.class));
+			startActivity(new Intent(ctx, ProfileConfig.class));
 		}
 	};
 	

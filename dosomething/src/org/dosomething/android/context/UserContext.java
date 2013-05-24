@@ -1,5 +1,11 @@
 package org.dosomething.android.context;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import org.dosomething.android.DSConstants;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -19,6 +25,7 @@ public class UserContext {
 	private static final String ADDR_ZIP = "addr_zip";
 	private static final String USER_NAME = "user_name";
 	private static final String EMAIL = "email";
+	private static final String CREATED_TIMESTAMP = "created_timestamp";
 	private static final String UID = "user_uid";
 	private static final String SESSION_ID = "session_id";
 	private static final String SESSION_NAME = "session_name";
@@ -111,6 +118,19 @@ public class UserContext {
 		return addrZip;
 	}
 	
+	public String getCreatedTime() {
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		long lCreatedTime = settings.getLong(CREATED_TIMESTAMP, 0);
+		if (lCreatedTime > 0) {
+			// Multiply by 1000 because the time retrieved from backend is unix and Date here expects milliseconds
+			Date createdDate = new Date(lCreatedTime * 1000);
+			return new SimpleDateFormat(DSConstants.DATE_FORMAT, Locale.US).format(createdDate);
+		}
+		else {
+			return null;
+		}
+	}
+	
 	public boolean isLoggedIn(){
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
 		String uid = settings.getString(UID, null);
@@ -121,7 +141,7 @@ public class UserContext {
 	}
 	
 	public void setFirstName(String firstName) {
-		if (firstName == null || firstName.length() == 0) {
+		if (firstName == null) {
 			return;
 		}
 		
@@ -132,7 +152,7 @@ public class UserContext {
 	}
 	
 	public void setLastName(String lastName) {
-		if (lastName == null || lastName.length() == 0) {
+		if (lastName == null) {
 			return;
 		}
 		
@@ -143,7 +163,7 @@ public class UserContext {
 	}
 	
 	public void setAddr1(String addr1) {
-		if (addr1 == null || addr1.length() == 0) {
+		if (addr1 == null) {
 			return;
 		}
 		
@@ -154,7 +174,7 @@ public class UserContext {
 	}
 	
 	public void setAddr2(String addr2) {
-		if (addr2 == null || addr2.length() == 0) {
+		if (addr2 == null) {
 			return;
 		}
 		
@@ -165,7 +185,7 @@ public class UserContext {
 	}
 	
 	public void setAddrCity(String addrCity) {
-		if (addrCity == null || addrCity.length() == 0) {
+		if (addrCity == null) {
 			return;
 		}
 		
@@ -176,7 +196,7 @@ public class UserContext {
 	}
 	
 	public void setAddrState(String addrState) {
-		if (addrState == null || addrState.length() == 0) {
+		if (addrState == null) {
 			return;
 		}
 		
@@ -187,13 +207,33 @@ public class UserContext {
 	}
 	
 	public void setAddrZip(String addrZip) {
-		if (addrZip == null || addrZip.length() == 0) {
+		if (addrZip == null) {
 			return;
 		}
 		
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
 		Editor editor = settings.edit();
 		editor.putString(ADDR_ZIP, addrZip);
+		editor.commit();
+	}
+	
+	public void setCreatedTime(String createdTimestamp) {
+		long lCreatedTime = Integer.valueOf(createdTimestamp);
+		
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		Editor editor = settings.edit();
+		editor.putLong(CREATED_TIMESTAMP, lCreatedTime);
+		editor.commit();
+	}
+	
+	public void setEmail(String email) {
+		if (email == null || email.length() == 0) {
+			return;
+		}
+		
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		Editor editor = settings.edit();
+		editor.putString(EMAIL, email);
 		editor.commit();
 	}
 	

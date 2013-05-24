@@ -14,4 +14,6 @@ public class DSConstants {
 	public static final String API_URL_WEBFORM = API_URL_BASE + "webform.json";
 	
 	public static final String CAMPAIGN_API_URL = "http://apps.dosomething.org/m_app_api";
+	
+	public static final String DATE_FORMAT = "MM/dd/yyyy";
 }

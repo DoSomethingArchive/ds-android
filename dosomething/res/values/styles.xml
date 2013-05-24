@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <style name="SplashScreen">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
@@ -90,6 +90,38 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">5dp</item>
+    </style>
+    <style name="ProfileConfigCauseButton">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:background">@drawable/cause_blue_bg</item>
+    </style>
+    <style name="ProfileConfigContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/black_bottom_border_background</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+    <style name="ProfileConfigEditButton">
+        <item name="android:background">@drawable/main_button_selector</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+    <style name="ProfileConfigSaveButton">
+        <item name="android:background">@drawable/main_button_selector</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+    <style name="ProfileConfigLabel">
+        <item name="android:textColor">@color/register_label</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
     </style>
     <style name="ProfileNoCampaignsLayout">
         <item name="android:background">@color/profile_background</item>

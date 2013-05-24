@@ -42,8 +42,6 @@ import com.google.inject.name.Named;
 
 public class Register extends AbstractActivity {
 	
-	private static final String DATE_FORMAT = "MM/dd/yyyy";
-	
 	@Inject private UserContext userContext;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 	
@@ -140,7 +138,7 @@ public class Register extends AbstractActivity {
 		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 			savedBirthday = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
-			birthday.setText(new SimpleDateFormat(DATE_FORMAT, Locale.US).format(savedBirthday));
+			birthday.setText(new SimpleDateFormat(DSConstants.DATE_FORMAT, Locale.US).format(savedBirthday));
 		}
 	};
     
@@ -212,7 +210,7 @@ public class Register extends AbstractActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+			SimpleDateFormat dateFormat = new SimpleDateFormat(DSConstants.DATE_FORMAT, Locale.US);
 			
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("name", username));
