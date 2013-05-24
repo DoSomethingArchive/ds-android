@@ -75,16 +75,20 @@ public class Login extends AbstractActivity {
      * 
      * @param obj JSONObject of user and profile data
      */
-    private void updateUserContext(JSONObject obj) throws Exception {
+	private void updateUserContext(JSONObject obj) throws Exception {
     	JSONObject user = obj.getJSONObject("user");
 		
-		userContext.setLoggedIn(
-			user.getString("name"),
-			user.getString("mail"),
-			user.getString("uid"),
-			obj.getString("sessid"),
-			obj.getString("session_name"),
-			obj.getLong("session_cache_expire"));
+    	if (user != null && obj != null) {
+			userContext.setLoggedIn(
+				user.getString("name"),
+				user.getString("mail"),
+				user.getString("uid"),
+				obj.getString("sessid"),
+				obj.getString("session_name"),
+				obj.getLong("session_cache_expire"));
+			
+			userContext.setCreatedTime(user.getString("created"));
+    	}
 		
 		JSONObject profile = obj.optJSONObject("profile");
 		if (profile != null) {

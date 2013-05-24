@@ -63,7 +63,6 @@ public abstract class AbstractWebForm extends AbstractActivity {
 //	private static final String TAG = "AbstractWebForm";
 //	private static final String CAMPAIGN = "campaign";
 	private static final int PICK_IMAGE_REQUEST = 0xFF0;
-	private static final String DATE_FORMAT = "MM/dd/yyyy";
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private UserContext userContext;
@@ -459,7 +458,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 					public void onDateSet(DatePicker datePickerView, int year, int monthOfYear, int dayOfMonth) {
 						Date date  = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
 						EditText field = (EditText)view.findViewById(R.id.field_date);
-						field.setText(new SimpleDateFormat(DATE_FORMAT, Locale.US).format(date));
+						field.setText(new SimpleDateFormat(DSConstants.DATE_FORMAT, Locale.US).format(date));
 						editDialogOpen = false;
 					}
 				}, 1995, 0, 1).show();

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/profile_background"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android" >
+    
+    <org.dosomething.android.widget.CustomActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar"
+        app:title="@string/profile_config"/>
+    
+    <ScrollView 
+        android:orientation="vertical"
+        android:layout_weight="1.0"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    
+		    <LinearLayout
+		        android:id="@+id/profile_info_section"
+		        android:layout_alignParentTop="true"
+		        style="@style/ProfileConfigContainer"
+		        android:orientation="vertical">
+		        <TextView
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:text="@string/first_name"
+		            style="@style/ProfileConfigLabel"/>
+		        <EditText 
+		            android:id="@+id/first_name"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"/>
+		        
+		        <TextView
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:text="@string/last_name"
+		            style="@style/ProfileConfigLabel"/>
+		        <EditText 
+		            android:id="@+id/last_name"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"/>
+		        
+		        <TextView
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:text="@string/email"
+		            style="@style/ProfileConfigLabel"/>
+		        <EditText 
+		            android:id="@+id/email"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"/>
+		        
+		    </LinearLayout>
+		    
+		    <LinearLayout
+		        android:id="@+id/profile_causes_section"
+		        android:layout_below="@id/profile_info_section"
+		        style="@style/ProfileConfigContainer"
+		        android:orientation="vertical">
+		        
+		        <RelativeLayout
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content">
+		            
+		            <TextView
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_alignParentLeft="true"
+		                android:text="@string/profile_config_your_causes"
+		                style="@style/ProfileConfigLabel"/>
+		            <Button
+		                android:onClick="editCauses"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_alignParentRight="true"
+		                android:text="@string/edit_upper"
+		                style="@style/ProfileConfigEditButton"/>
+		            
+		        </RelativeLayout>
+		        
+		        <LinearLayout
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_gravity="center_horizontal"
+		            android:gravity="center_horizontal"
+		            android:orientation="horizontal" >
+		            
+		            <ImageView
+		                android:id="@+id/cause1"
+		                style="@style/ProfileConfigCauseButton"/>
+		            <ImageView
+		                android:id="@+id/cause2"
+		                style="@style/ProfileConfigCauseButton"/>
+		            <ImageView
+		                android:id="@+id/cause3"
+		                style="@style/ProfileConfigCauseButton"/>
+		            
+		        </LinearLayout>
+		        
+		    </LinearLayout>
+		    
+		    <LinearLayout
+		        android:id="@+id/profile_stats_section"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@id/profile_causes_section"
+		        android:paddingBottom="100dp">
+			    <LinearLayout
+			        style="@style/ProfileConfigContainer"
+			        android:orientation="vertical">
+			        
+			        <TextView
+			            android:id="@+id/member_since"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            style="@style/ProfileConfigLabel"/>
+			        
+			        <TextView
+			            android:id="@+id/campaigns_joined"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            style="@style/ProfileConfigLabel"/>
+			        
+			    </LinearLayout>
+		    </LinearLayout>
+		    
+	        <Button 
+	            android:onClick="save"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentBottom="true"
+	            android:text="@string/save_upper"
+	            style="@style/ProfileConfigSaveButton"/>
+		    
+	    </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

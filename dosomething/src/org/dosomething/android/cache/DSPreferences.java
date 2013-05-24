@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.google.inject.Inject;
+
 public class DSPreferences {
 	
 	private static final String DS_PREFS = "ds_prefs";
@@ -28,6 +30,7 @@ public class DSPreferences {
 	
 	private final Context context;
 	
+	@Inject
 	public DSPreferences(Context context){
 		this.context = context;
 	}
@@ -178,6 +181,35 @@ public class DSPreferences {
 			return R.id.health_btn;
 		case CAUSE_RELATIONSHIPS:
 			return R.id.sex_relationships_btn;
+		default:
+			return -1;
+		}
+	}
+	
+	public int getCauseDrawableByFeedId(int feed_id) {
+		switch(feed_id) {
+		case CAUSE_ANIMALS:
+			return R.drawable.cause_animals;
+		case CAUSE_BULLYING:
+			return R.drawable.cause_bullying;
+		case CAUSE_DISASTERS:
+			return R.drawable.cause_disasters;
+		case CAUSE_DISCRIMINATION:
+			return R.drawable.cause_discrimination;
+		case CAUSE_EDUCATION:
+			return R.drawable.cause_education;
+		case CAUSE_ENVIRONMENT:
+			return R.drawable.cause_environment;
+		case CAUSE_POVERTY:
+			return R.drawable.cause_poverty;
+		case CAUSE_HUMAN_RIGHTS:
+			return R.drawable.cause_human_rights;
+		case CAUSE_TROOPS:
+			return R.drawable.cause_troops;
+		case CAUSE_HEALTH:
+			return R.drawable.cause_health;
+		case CAUSE_RELATIONSHIPS:
+			return R.drawable.cause_relationships;
 		default:
 			return -1;
 		}

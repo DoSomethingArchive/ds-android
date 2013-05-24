@@ -30,10 +30,13 @@ public class CauseSelector extends AbstractActivity {
 	};
 	
 	private static final String FROM_CAUSE_SEL = "from_cause_sel";
+	private static final String FROM_PROFILE_CONFIG = "from_profile_config";
 
 	@InjectView(R.id.cause1) private TextView textCause1;
 	@InjectView(R.id.cause2) private TextView textCause2;
 	@InjectView(R.id.cause3) private TextView textCause3;
+	
+	private boolean launchProfileOnFinish = true;
 	
 	@Override
 	protected String getPageName() {
@@ -44,6 +47,11 @@ public class CauseSelector extends AbstractActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cause_selector);
+		
+		if (getIntent() != null && getIntent().getExtras() != null) {
+			boolean bFromProfileConfig = getIntent().getExtras().getBoolean(FROM_PROFILE_CONFIG, false);
+			launchProfileOnFinish = !bFromProfileConfig;
+		}
 	}
 	
 	@Override
@@ -80,9 +88,12 @@ public class CauseSelector extends AbstractActivity {
 		}
 		Analytics.logEvent("causes-selected", param);
 		
-		Intent intent = new Intent(this, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		intent.putExtra(FROM_CAUSE_SEL, true);
-		startActivity(intent);
+		if (launchProfileOnFinish) {
+			Intent intent = new Intent(this, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.putExtra(FROM_CAUSE_SEL, true);
+			startActivity(intent);
+		}
+		
 		finish();
 	}
 
