@@ -55,6 +55,7 @@
     <string name="profile_config_your_causes">Your Causes</string>
     <string name="profile_login_button">GET STARTED NOW</string>
     <string name="profile_title">Profile</string>
+    <string name="profile_update_error">There was an error updating your profile. Check your internet connection and try again later.</string>
     <string name="campaigns_title">Ways To Get Involved</string>
     <string name="campaigns_upgrade_popup">A new update is available!</string>
     <string name="campaign_share_title">Share</string>
