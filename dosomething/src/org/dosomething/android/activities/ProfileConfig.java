@@ -39,6 +39,9 @@ public class ProfileConfig extends AbstractActivity {
 	@InjectView(R.id.cause1)private ImageView cause1View;
 	@InjectView(R.id.cause2)private ImageView cause2View;
 	@InjectView(R.id.cause3)private ImageView cause3View;
+	
+	private String initialFirstName;
+	private String initialLastName;
 
 	@Override
 	protected String getPageName() {
@@ -59,12 +62,13 @@ public class ProfileConfig extends AbstractActivity {
 		super.onResume();
 		
 		// Fill out fields with saved data from profile
-		firstNameView.setText(userContext.getFirstName());
-		lastNameView.setText(userContext.getLastName());
+		initialFirstName = userContext.getFirstName();
+		initialLastName = userContext.getLastName();
+		
+		firstNameView.setText(initialFirstName);
+		lastNameView.setText(initialLastName);
 		emailView.setText(userContext.getEmail());
-		
-		
-		// TODO: adjust imageview sizes based on screen size
+
 		if (dsPrefs.getCause1() >= 0) {
 			cause1View.setImageResource(dsPrefs.getCauseDrawableByFeedId(dsPrefs.getCause1()));
 		}
@@ -116,25 +120,26 @@ public class ProfileConfig extends AbstractActivity {
 	 * on the local filesystem and to the server if possible.
 	 */
 	public void save(View v) {
-		// Save values to Shared Preferences
 		String firstName = firstNameView.getText().toString();
-		userContext.setFirstName(firstName);
-		
 		String lastName = lastNameView.getText().toString();
-		userContext.setLastName(lastName);
 		
-		String email = emailView.getText().toString();
-		userContext.setEmail(email);
-		
-		// Save values to the server profile through the web service
-		try {
-			JSONObject jsonParams = new JSONObject();
-			jsonParams.put("field_user_first_name", firstName);
-			jsonParams.put("field_user_last_name", lastName);
-			new UpdateProfileTask(jsonParams).execute();
-		}
-		catch(Exception e) {
-			// TODO handle json exception
+		// Only update values if they've changed
+		if (!initialFirstName.equals(firstName) || !initialLastName.equals(lastName)) {
+			// Save values to Shared Preferences
+			userContext.setFirstName(firstName);
+			userContext.setLastName(lastName);
+			
+			// Save values to the server profile through the web service
+			// TODO update email if it's not empty
+			try {
+				JSONObject jsonParams = new JSONObject();
+				jsonParams.put("field_user_first_name", firstName);
+				jsonParams.put("field_user_last_name", lastName);
+				new UpdateProfileTask(jsonParams).execute();
+			}
+			catch(Exception e) {
+				// Profile not updating is non-fatal. Just continue on to next Activity.
+			}
 		}
 		
 		finish();
@@ -144,7 +149,8 @@ public class ProfileConfig extends AbstractActivity {
 	 * Task to update user's profile on the server
 	 */
 	private class UpdateProfileTask extends AbstractWebserviceTask {
-		JSONObject putParams;
+		private JSONObject putParams;
+		private boolean updateSuccess;
 		
 		public UpdateProfileTask(JSONObject params) {
 			super(userContext);
@@ -154,8 +160,6 @@ public class ProfileConfig extends AbstractActivity {
 
 		@Override
 		protected void onSuccess() {
-			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
@@ -164,8 +168,17 @@ public class ProfileConfig extends AbstractActivity {
 
 		@Override
 		protected void onError(Exception e) {
-			// TODO Auto-generated method stub
+		}
+		
+		@Override
+		protected void onPostExecute(Exception exception) {
+			super.onPostExecute(exception);
 			
+			// TODO: may want to find a way to prompt user through an AlertDialog
+			// that the profile update failed if updateSuccess == false
+			// Can't use ProfileConfig as a context though since the activity
+			// will likely already be closed by the time the profile update
+			// is complete.
 		}
 
 		@Override
@@ -174,7 +187,13 @@ public class ProfileConfig extends AbstractActivity {
 			String url = DSConstants.API_URL_BASE + "profile/"+uid+".json";
 			
 			WebserviceResponse response = doPut(url, this.putParams);
-			// TODO handle error responses
+			if (response.getStatusCode() >= 400 && response.getStatusCode() < 500) {
+				updateSuccess = false;
+			}
+			else {
+				updateSuccess = true;
+			}
+			
 		}
 	}
 
