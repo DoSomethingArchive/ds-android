@@ -1,5 +1,6 @@
 package org.dosomething.android.cache;
 
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 
 import android.content.Context;
@@ -15,18 +16,6 @@ public class DSPreferences {
 	private static final String CAUSE_1 = "cause_1";
 	private static final String CAUSE_2 = "cause_2";
 	private static final String CAUSE_3 = "cause_3";
-	
-	public static final int CAUSE_ANIMALS = 29;
-	public static final int CAUSE_BULLYING = 28;
-	public static final int CAUSE_DISASTERS = 27;
-	public static final int CAUSE_DISCRIMINATION = 23;
-	public static final int CAUSE_EDUCATION = 25;
-	public static final int CAUSE_ENVIRONMENT = 20;
-	public static final int CAUSE_POVERTY = 21;
-	public static final int CAUSE_HUMAN_RIGHTS = 73;
-	public static final int CAUSE_TROOPS = 24;
-	public static final int CAUSE_HEALTH = 26;
-	public static final int CAUSE_RELATIONSHIPS = 22;
 	
 	private final Context context;
 	
@@ -127,27 +116,27 @@ public class DSPreferences {
 	private int getCauseFeedId(int res_id) {
 		switch(res_id) {
 		case R.id.animals_btn:
-			return CAUSE_ANIMALS;
+			return DSConstants.CAUSE_TAG.ANIMALS.getValue();
 		case R.id.bullying_violence_btn:
-			return CAUSE_BULLYING;
+			return DSConstants.CAUSE_TAG.BULLYING.getValue();
 		case R.id.disasters_btn:
-			return CAUSE_DISASTERS;
+			return DSConstants.CAUSE_TAG.DISASTERS.getValue();
 		case R.id.discrimination_btn:
-			return CAUSE_DISCRIMINATION;
+			return DSConstants.CAUSE_TAG.DISCRIMINATION.getValue();
 		case R.id.education_btn:
-			return CAUSE_EDUCATION;
+			return DSConstants.CAUSE_TAG.EDUCATION.getValue();
 		case R.id.environment_btn:
-			return CAUSE_ENVIRONMENT;
+			return DSConstants.CAUSE_TAG.ENVIRONMENT.getValue();
 		case R.id.homelessness_poverty_btn:
-			return CAUSE_POVERTY;
+			return DSConstants.CAUSE_TAG.POVERTY.getValue();
 		case R.id.human_rights_btn:
-			return CAUSE_HUMAN_RIGHTS;
+			return DSConstants.CAUSE_TAG.HUMAN_RIGHTS.getValue();
 		case R.id.our_troops_btn:
-			return CAUSE_TROOPS;
+			return DSConstants.CAUSE_TAG.TROOPS.getValue();
 		case R.id.health_btn:
-			return CAUSE_HEALTH;
+			return DSConstants.CAUSE_TAG.HEALTH.getValue();
 		case R.id.sex_relationships_btn:
-			return CAUSE_RELATIONSHIPS;
+			return DSConstants.CAUSE_TAG.RELATIONSHIPS.getValue();
 		default:
 			return -1;
 		}
@@ -158,60 +147,56 @@ public class DSPreferences {
 	 * corresponding internal resource id.
 	 */
 	public int getCauseResId(int feed_id) {
-		switch(feed_id) {
-		case CAUSE_ANIMALS:
+		if (feed_id == DSConstants.CAUSE_TAG.ANIMALS.getValue())
 			return R.id.animals_btn;
-		case CAUSE_BULLYING:
+		else if (feed_id == DSConstants.CAUSE_TAG.BULLYING.getValue())
 			return R.id.bullying_violence_btn;
-		case CAUSE_DISASTERS:
+		else if (feed_id == DSConstants.CAUSE_TAG.DISASTERS.getValue())
 			return R.id.disasters_btn;
-		case CAUSE_DISCRIMINATION:
+		else if (feed_id == DSConstants.CAUSE_TAG.DISCRIMINATION.getValue())
 			return R.id.discrimination_btn;
-		case CAUSE_EDUCATION:
+		else if (feed_id == DSConstants.CAUSE_TAG.EDUCATION.getValue())
 			return R.id.education_btn;
-		case CAUSE_ENVIRONMENT:
+		else if (feed_id == DSConstants.CAUSE_TAG.ENVIRONMENT.getValue())
 			return R.id.environment_btn;
-		case CAUSE_POVERTY:
+		else if (feed_id == DSConstants.CAUSE_TAG.POVERTY.getValue())
 			return R.id.homelessness_poverty_btn;
-		case CAUSE_HUMAN_RIGHTS:
+		else if (feed_id == DSConstants.CAUSE_TAG.HUMAN_RIGHTS.getValue())
 			return R.id.human_rights_btn;
-		case CAUSE_TROOPS:
+		else if (feed_id == DSConstants.CAUSE_TAG.TROOPS.getValue())
 			return R.id.our_troops_btn;
-		case CAUSE_HEALTH:
+		else if (feed_id == DSConstants.CAUSE_TAG.HEALTH.getValue())
 			return R.id.health_btn;
-		case CAUSE_RELATIONSHIPS:
+		else if (feed_id == DSConstants.CAUSE_TAG.RELATIONSHIPS.getValue())
 			return R.id.sex_relationships_btn;
-		default:
+		else
 			return -1;
-		}
 	}
 	
 	public int getCauseDrawableByFeedId(int feed_id) {
-		switch(feed_id) {
-		case CAUSE_ANIMALS:
+		if (feed_id == DSConstants.CAUSE_TAG.ANIMALS.getValue())
 			return R.drawable.cause_animals;
-		case CAUSE_BULLYING:
+		else if (feed_id == DSConstants.CAUSE_TAG.BULLYING.getValue())
 			return R.drawable.cause_bullying;
-		case CAUSE_DISASTERS:
+		else if (feed_id == DSConstants.CAUSE_TAG.DISASTERS.getValue())
 			return R.drawable.cause_disasters;
-		case CAUSE_DISCRIMINATION:
+		else if (feed_id == DSConstants.CAUSE_TAG.DISCRIMINATION.getValue())
 			return R.drawable.cause_discrimination;
-		case CAUSE_EDUCATION:
+		else if (feed_id == DSConstants.CAUSE_TAG.EDUCATION.getValue())
 			return R.drawable.cause_education;
-		case CAUSE_ENVIRONMENT:
+		else if (feed_id == DSConstants.CAUSE_TAG.ENVIRONMENT.getValue())
 			return R.drawable.cause_environment;
-		case CAUSE_POVERTY:
+		else if (feed_id == DSConstants.CAUSE_TAG.POVERTY.getValue())
 			return R.drawable.cause_poverty;
-		case CAUSE_HUMAN_RIGHTS:
+		else if (feed_id == DSConstants.CAUSE_TAG.HUMAN_RIGHTS.getValue())
 			return R.drawable.cause_human_rights;
-		case CAUSE_TROOPS:
+		else if (feed_id == DSConstants.CAUSE_TAG.TROOPS.getValue())
 			return R.drawable.cause_troops;
-		case CAUSE_HEALTH:
+		else if (feed_id == DSConstants.CAUSE_TAG.HEALTH.getValue())
 			return R.drawable.cause_health;
-		case CAUSE_RELATIONSHIPS:
+		else if (feed_id == DSConstants.CAUSE_TAG.RELATIONSHIPS.getValue())
 			return R.drawable.cause_relationships;
-		default:
+		else
 			return -1;
-		}
 	}
 }

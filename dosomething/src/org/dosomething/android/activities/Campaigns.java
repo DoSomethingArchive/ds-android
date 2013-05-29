@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.cache.DSPreferences;
@@ -401,32 +402,30 @@ public class Campaigns extends AbstractActivity {
 		}
 		
 		private int getCauseDrawable(int cause_id) {
-			switch(cause_id) {
-			case DSPreferences.CAUSE_ANIMALS:
+			if (cause_id == DSConstants.CAUSE_TAG.ANIMALS.getValue())
 				return R.drawable.cause_animals_tag;
-			case DSPreferences.CAUSE_BULLYING:
+			else if (cause_id == DSConstants.CAUSE_TAG.BULLYING.getValue())
 				return R.drawable.cause_bullying_tag;
-			case DSPreferences.CAUSE_DISASTERS:
+			else if (cause_id == DSConstants.CAUSE_TAG.DISASTERS.getValue())
 				return R.drawable.cause_disasters_tag;
-			case DSPreferences.CAUSE_DISCRIMINATION:
+			else if (cause_id == DSConstants.CAUSE_TAG.DISCRIMINATION.getValue())
 				return R.drawable.cause_discrimination_tag;
-			case DSPreferences.CAUSE_EDUCATION:
+			else if (cause_id == DSConstants.CAUSE_TAG.EDUCATION.getValue())
 				return R.drawable.cause_education_tag;
-			case DSPreferences.CAUSE_ENVIRONMENT:
+			else if (cause_id == DSConstants.CAUSE_TAG.ENVIRONMENT.getValue())
 				return R.drawable.cause_environment_tag;
-			case DSPreferences.CAUSE_HEALTH:
-				return R.drawable.cause_health_tag;
-			case DSPreferences.CAUSE_HUMAN_RIGHTS:
-				return R.drawable.cause_human_rights_tag;
-			case DSPreferences.CAUSE_POVERTY:
+			else if (cause_id == DSConstants.CAUSE_TAG.POVERTY.getValue())
 				return R.drawable.cause_poverty_tag;
-			case DSPreferences.CAUSE_RELATIONSHIPS:
-				return R.drawable.cause_relationships_tag;
-			case DSPreferences.CAUSE_TROOPS:
+			else if (cause_id == DSConstants.CAUSE_TAG.HUMAN_RIGHTS.getValue())
+				return R.drawable.cause_human_rights_tag;
+			else if (cause_id == DSConstants.CAUSE_TAG.TROOPS.getValue())
 				return R.drawable.cause_troops_tag;
-			default:
+			else if (cause_id == DSConstants.CAUSE_TAG.HEALTH.getValue())
+				return R.drawable.cause_health_tag;
+			else if (cause_id == DSConstants.CAUSE_TAG.RELATIONSHIPS.getValue())
+				return R.drawable.cause_relationships_tag;
+			else
 				return -1;
-			}
 		}
 		
 	}
