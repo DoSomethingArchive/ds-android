@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.cache.Cache;
@@ -257,8 +258,17 @@ public class Campaign extends AbstractActivity {
 
 	public void signUp(View v){
 		String uid = new UserContext(this).getUserUid();
-
-		if (useSmsActionSignUp()) {
+		
+		
+		if (campaign.getCampaignType() == DSConstants.CAMPAIGN_TYPE.SHARE_FOR_GOOD) {
+			new AlertDialog.Builder(this)
+				.setTitle(campaign.getName())
+				.setMessage("Coming soon!")
+				.setPositiveButton(R.string.ok_upper,null)
+				.create()
+				.show();
+		}
+		else if (useSmsActionSignUp()) {
 			AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 			alertBuilder.setTitle(R.string.campaign_sign_up_sms_action_alert_title)
 						.setMessage(R.string.campaign_sign_up_sms_action_alert_body)

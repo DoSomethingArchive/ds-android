@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.dosomething.android.DSConstants;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +34,7 @@ public class Campaign implements Serializable {
 	private int[] cause_tags;
 	private int gid;
 	private int order;
+	private DSConstants.CAMPAIGN_TYPE campaignType;
 
 	private String videoUrl;
 	private String videoThumbnail;
@@ -90,6 +92,25 @@ public class Campaign implements Serializable {
 				int tag = ct.getInt(i);
 				cause_tags[i] = tag;
 			}
+		}
+		
+		// Convert campaign-type to its enum value
+		String strCampaignType = co.optString("campaign-type",null);
+		if (strCampaignType != null) {
+			if (strCampaignType.equals("change-a-mind"))
+				campaignType = DSConstants.CAMPAIGN_TYPE.CHANGE_A_MIND;
+			else if (strCampaignType.equals("donation"))
+				campaignType = DSConstants.CAMPAIGN_TYPE.DONATION;
+			else if (strCampaignType.equals("help-1-person"))
+				campaignType = DSConstants.CAMPAIGN_TYPE.HELP_1_PERSON;
+			else if (strCampaignType.equals("improve-a-place"))
+				campaignType = DSConstants.CAMPAIGN_TYPE.IMPROVE_A_PLACE;
+			else if (strCampaignType.equals("made-by-you"))
+				campaignType = DSConstants.CAMPAIGN_TYPE.MADE_BY_YOU;
+			else if (strCampaignType.equals("share-for-good"))
+				campaignType = DSConstants.CAMPAIGN_TYPE.SHARE_FOR_GOOD;
+			else if (strCampaignType.equals("sms"))
+				campaignType = DSConstants.CAMPAIGN_TYPE.SMS;
 		}
 		
 		JSONObject m = obj.optJSONObject("main");
@@ -356,6 +377,10 @@ public class Campaign implements Serializable {
 	
 	public String getCallout() {
 		return callout;
+	}
+	
+	public DSConstants.CAMPAIGN_TYPE getCampaignType() {
+		return campaignType;
 	}
 	
 	public int getMinVersion() {
