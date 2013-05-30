@@ -279,10 +279,21 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Excepti
 			String body = getBodyAsString();
 			if(body!=null && body.length() > 0) {
 				if(body.equals("null")) {
-					Log.w(TAG, "Webserice response body = 'null'");
+					Log.w(TAG, "Webservice response body = 'null'");
 				} else {
 					answer = new JSONObject(body);
 				}
+			}
+			
+			return answer;
+		}
+		
+		public JSONArray getBodyAsJSONArray() throws JSONException, IOException {
+			JSONArray answer = null;
+			
+			String body = getBodyAsString();
+			if (body != null && body.length() > 0) {
+				answer = new JSONArray(body);
 			}
 			
 			return answer;

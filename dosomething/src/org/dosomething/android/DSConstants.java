@@ -17,6 +17,20 @@ public class DSConstants {
 	
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
 	
+	public static enum ACTIVITY_KEY {
+		CAMPAIGN("campaign");
+		
+		private String value;
+		
+		private ACTIVITY_KEY(String val) {
+			value = val;
+		}
+		
+		public String getValue() {
+			return value;
+		}
+	}
+	
 	public static enum CAMPAIGN_TYPE {
 		CHANGE_A_MIND,
 		DONATION,
@@ -40,14 +54,14 @@ public class DSConstants {
 		HEALTH(26),
 		RELATIONSHIPS(22);
 		
-		private int intValue;
+		private int value;
 		
 		private CAUSE_TAG(int val) {
-			intValue = val;
+			value = val;
 		}
 		
 		public int getValue() {
-			return intValue;
+			return value;
 		}
 	}
 }
