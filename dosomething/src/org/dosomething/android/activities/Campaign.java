@@ -261,12 +261,7 @@ public class Campaign extends AbstractActivity {
 		
 		
 		if (campaign.getCampaignType() == DSConstants.CAMPAIGN_TYPE.SHARE_FOR_GOOD) {
-			new AlertDialog.Builder(this)
-				.setTitle(campaign.getName())
-				.setMessage("Coming soon!")
-				.setPositiveButton(R.string.ok_upper,null)
-				.create()
-				.show();
+			startActivity(SFGGallery.getIntent(this, campaign));
 		}
 		else if (useSmsActionSignUp()) {
 			AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
