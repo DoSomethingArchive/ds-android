@@ -10,12 +10,14 @@ public class SFGGalleryItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private boolean adopted;
+	private String bottomText;
 	private String imageURL;
 	private String name;
 	private int shareCount;
 	private String shelter;
 	private String state;
 	private String story;
+	private String topText;
 	
 	public SFGGalleryItem(JSONObject obj) throws JSONException {
 		
@@ -26,13 +28,19 @@ public class SFGGalleryItem implements Serializable {
 		
 		// Optional items
 		adopted = obj.optBoolean("adopted", false);
+		bottomText = obj.optString("bottom_text", null);
 		shelter = obj.optString("shelter", null);
 		state = obj.optString("state", null);
 		story = obj.optString("story", null);
+		topText = obj.optString("top_text", null);
 	}
 	
 	public boolean getAdopted() {
 		return adopted;
+	}
+	
+	public String getBottomText() {
+		return bottomText;
 	}
 	
 	public String getImageURL() {
@@ -57,5 +65,9 @@ public class SFGGalleryItem implements Serializable {
 	
 	public String getStory() {
 		return story;
+	}
+	
+	public String getTopText() {
+		return topText;
 	}
 }
