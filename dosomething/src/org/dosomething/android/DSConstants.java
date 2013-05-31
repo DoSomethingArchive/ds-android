@@ -17,12 +17,13 @@ public class DSConstants {
 	
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
 	
-	public static enum ACTIVITY_KEY {
-		CAMPAIGN("campaign");
+	public static enum EXTRAS_KEY {
+		CAMPAIGN("campaign"),
+		SFGITEM("sfg-item");
 		
 		private String value;
 		
-		private ACTIVITY_KEY(String val) {
+		private EXTRAS_KEY(String val) {
 			value = val;
 		}
 		

@@ -58,6 +58,7 @@
         <activity android:name=".activities.ReportBack"/>
         <activity android:name=".activities.SignUp"/>
         <activity android:name=".activities.SFGGallery"/>
+        <activity android:name=".activities.SFGItem"/>
         
         <receiver android:name="com.xtify.sdk.c2dm.C2DMBroadcastReceiver">
             <intent-filter android:permission="com.google.android.c2dm.permission.SEND" >

@@ -22,6 +22,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -69,7 +71,7 @@ public class SFGGallery extends AbstractActivity {
 			}
 		});
 		
-		campaign = (Campaign) getIntent().getExtras().get(DSConstants.ACTIVITY_KEY.CAMPAIGN.getValue());
+		campaign = (Campaign) getIntent().getExtras().get(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue());
 		if (campaign != null) {
 			actionBar.setTitle(campaign.getName());
 		}
@@ -90,7 +92,7 @@ public class SFGGallery extends AbstractActivity {
 	
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){
 		Intent answer = new Intent(context, SFGGallery.class);
-		answer.putExtra(DSConstants.ACTIVITY_KEY.CAMPAIGN.getValue(), campaign);
+		answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), campaign);
 		return answer;
 	}
 	
@@ -138,6 +140,14 @@ public class SFGGallery extends AbstractActivity {
 
 		@Override
 		protected void onSuccess() {
+			list.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> av, View v, int position, long id) {
+					SFGGalleryItem galleryItem = (SFGGalleryItem)list.getAdapter().getItem(position);
+					startActivity(SFGItem.getIntent(getApplicationContext(), galleryItem, campaign));
+				}
+			});
+			
 			SFGListAdapter adapter = new SFGListAdapter(galleryItems);
 			list.setAdapter(adapter);
 		}
@@ -199,13 +209,17 @@ public class SFGGallery extends AbstractActivity {
 			SFGGalleryItem item = getItem(position);
 			
 			ProgressBar progressBar = (ProgressBar)v.findViewById(R.id.progressBar);
+			TextView bottomText = (TextView)v.findViewById(R.id.bottom_text);
 			TextView name = (TextView)v.findViewById(R.id.name);
 			ImageView image = (ImageView)v.findViewById(R.id.image);
 			TextView shareCount = (TextView)v.findViewById(R.id.share_count);
 			TextView shelter = (TextView)v.findViewById(R.id.shelter);
 			TextView state = (TextView)v.findViewById(R.id.state);
+			TextView topText = (TextView)v.findViewById(R.id.top_text);
 			
 			name.setText(item.getName());
+			topText.setText(item.getTopText());
+			bottomText.setText(item.getBottomText());
 			String imageUrl = campaign.getSFGGalleryUrl() + item.getImageURL();
 			imageLoader.displayImage(imageUrl, image, new ProgressBarImageLoadingListener(progressBar));
 			
