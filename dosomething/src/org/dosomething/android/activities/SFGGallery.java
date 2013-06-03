@@ -18,6 +18,7 @@ import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -46,6 +48,7 @@ public class SFGGallery extends AbstractActivity {
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
 	@Inject private UserContext userContext;
+	@Inject @Named("DINComp-CondBold")Typeface dinTypeface;
 	
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.list) private PullToRefreshListView pullToRefreshView;
@@ -209,23 +212,36 @@ public class SFGGallery extends AbstractActivity {
 			SFGGalleryItem item = getItem(position);
 			
 			ProgressBar progressBar = (ProgressBar)v.findViewById(R.id.progressBar);
-			TextView bottomText = (TextView)v.findViewById(R.id.bottom_text);
 			TextView name = (TextView)v.findViewById(R.id.name);
 			ImageView image = (ImageView)v.findViewById(R.id.image);
 			TextView shareCount = (TextView)v.findViewById(R.id.share_count);
 			TextView shelter = (TextView)v.findViewById(R.id.shelter);
 			TextView state = (TextView)v.findViewById(R.id.state);
-			TextView topText = (TextView)v.findViewById(R.id.top_text);
 			
-			name.setText(item.getName());
-			topText.setText(item.getTopText());
-			bottomText.setText(item.getBottomText());
-			String imageUrl = campaign.getSFGGalleryUrl() + item.getImageURL();
-			imageLoader.displayImage(imageUrl, image, new ProgressBarImageLoadingListener(progressBar));
+			if (name != null) {
+				name.setTypeface(dinTypeface, Typeface.BOLD); 
+				name.setText(item.getName());
+			}
 			
-			shareCount.setText("Share Count: "+item.getShareCount());
-			shelter.setText(item.getShelter());
-			state.setText(item.getState());
+			if (image != null && progressBar != null) {
+				String imageUrl = campaign.getSFGGalleryUrl() + item.getImageURL();
+				imageLoader.displayImage(imageUrl, image, new ProgressBarImageLoadingListener(progressBar));
+			}
+			
+			if (shareCount != null) {
+				shareCount.setTypeface(dinTypeface, Typeface.BOLD);
+				shareCount.setText("Share Count: "+item.getShareCount());
+			}
+			
+			if (shelter != null) {
+				shelter.setTypeface(dinTypeface, Typeface.BOLD);
+				shelter.setText(item.getShelter());
+			}
+			
+			if (state != null) {
+				state.setTypeface(dinTypeface, Typeface.BOLD);
+				state.setText(item.getState());
+			}
 			
 			return v;
 		}
