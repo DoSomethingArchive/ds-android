@@ -10,21 +10,22 @@ import org.dosomething.android.widget.ProgressBarImageLoadingListener;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class SFGItem extends AbstractActivity {
 	
 	@Inject private ImageLoader imageLoader;
+	@Inject @Named("DINComp-CondBold")Typeface dinTypeface;
 
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
-	@InjectView(R.id.top_text) private TextView topTextView;
-	@InjectView(R.id.bottom_text) private TextView bottomTextView;
 	@InjectView(R.id.image) private ImageView imageView;
 	@InjectView(R.id.share_count) private TextView shareCountView;
 	@InjectView(R.id.shelter) private TextView shelterView;
@@ -58,16 +59,30 @@ public class SFGItem extends AbstractActivity {
 		super.onResume();
 		
 		if (sfgItem != null) {
-			topTextView.setText(sfgItem.getTopText());
-			bottomTextView.setText(sfgItem.getBottomText());
-			if (campaign != null) {
+			if (campaign != null && imageView != null && progressBar != null) {
 				String imageUrl = campaign.getSFGGalleryUrl() + sfgItem.getImageURL();
 				imageLoader.displayImage(imageUrl, imageView, new ProgressBarImageLoadingListener(progressBar));
 			}
-			shareCountView.setText("Share Count: "+sfgItem.getShareCount());
-			shelterView.setText(sfgItem.getShelter());
-			stateView.setText(sfgItem.getState());
-			storyView.setText(sfgItem.getStory());
+			
+			if (shareCountView != null) {
+				shareCountView.setTypeface(dinTypeface, Typeface.BOLD);
+				shareCountView.setText("Share Count: "+sfgItem.getShareCount());
+			}
+			
+			if (shelterView != null) {
+				shelterView.setTypeface(dinTypeface, Typeface.BOLD);
+				shelterView.setText(sfgItem.getShelter());
+			}
+			
+			if (stateView != null) {
+				stateView.setTypeface(dinTypeface, Typeface.BOLD);
+				stateView.setText(sfgItem.getState());
+			}
+			
+			if (storyView != null) {
+				storyView.setTypeface(dinTypeface, Typeface.BOLD);
+				storyView.setText(sfgItem.getStory());
+			}
 		}
 	}
 	

@@ -5,4 +5,6 @@
     <dimen name="popup_height">45dp</dimen>
     <dimen name="campaign_row_height_open">160dp</dimen>
     <dimen name="campaign_row_height_closed">80dp</dimen>
+    <dimen name="font_size_header_label">20dp</dimen>
+    <dimen name="font_size_medium">16dp</dimen>
 </resources>
