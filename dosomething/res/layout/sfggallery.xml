@@ -9,7 +9,10 @@
     <org.dosomething.android.widget.CustomActionBar
         android:id="@+id/actionbar"
         style="@style/ActionBar" />
-    
+    <org.dosomething.android.widget.ActionBarSubMenu 
+        android:id="@+id/actionbar_submenu"
+        style="@style/ActionBarSubMenu"/>
+
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/list"
         android:layout_width="fill_parent"

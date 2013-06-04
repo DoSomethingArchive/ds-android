@@ -9,7 +9,9 @@ import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.SFGGalleryItem;
+import org.dosomething.android.widget.ActionBarSubMenu;
 import org.dosomething.android.widget.CustomActionBar;
+import org.dosomething.android.widget.CustomActionBar.SubMenuAction;
 import org.dosomething.android.widget.ProgressBarImageLoadingListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -78,6 +80,11 @@ public class SFGGallery extends AbstractActivity {
 		if (campaign != null) {
 			actionBar.setTitle(campaign.getName());
 		}
+		SubMenuAction subMenuAction = actionBar.addSubMenuAction(this);
+		ActionBarSubMenu subMenuView = subMenuAction.getSubMenuView();
+		subMenuView.addMenuItem(this, "GALLERY", null);
+		subMenuView.addMenuItem(this, "SUBMIT A PHOTO", null);
+		subMenuView.addMenuItem(this, "ABOUT", null);
 	}
 	
 	@Override
