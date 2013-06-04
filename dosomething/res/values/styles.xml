@@ -7,6 +7,23 @@
         <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="android:windowFrame">@null</item>
     </style>
+    <style name="ActionBarSubMenu">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/dark_grey_background</item>
+        <item name="android:visibility">gone</item>
+    </style>
+    <style name="ActionBarSubMenuItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/actionbar_submenu_item_height</item>
+        <!-- <item name="android:background">@color/dark_grey_background</item> -->
+        <item name="android:background">@drawable/actionbar_submenu_selector</item>
+        <item name="android:gravity">right</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:padding">@dimen/actionbar_submenu_item_padding</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_size_header_label</item>
+    </style>
     <style name="LoginLogo">
         <item name="android:src">@drawable/login_logo</item>
         <item name="android:layout_margin">10dp</item>

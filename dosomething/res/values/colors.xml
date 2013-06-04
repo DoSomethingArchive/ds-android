@@ -35,6 +35,7 @@
 <color name="campaigns_past_campaign_callout_background">#DD868686</color>
 <color name="campaigns_past_campaign_callout_text">#FFEFEFEF</color>
 
+<color name="blue_menu_active">#4A7AB4</color>
 <color name="dark_blue">#173781</color>
 <color name="dark_grey_background">#2A2C2B</color>
 <color name="white">#FFF</color>
