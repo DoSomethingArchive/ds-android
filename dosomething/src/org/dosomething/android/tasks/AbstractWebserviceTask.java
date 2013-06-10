@@ -11,6 +11,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -20,6 +21,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.dosomething.android.context.UserContext;
 import org.json.JSONArray;
@@ -133,6 +135,36 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Excepti
 			throw new ErrorResponseCodeException(responseCode, request.getURI().toString());
 		}
 
+		return new WebserviceResponse(responseCode, is);
+	}
+	
+	public WebserviceResponse doPostMultipart(String url, MultipartEntity entity) throws ClientProtocolException, IOException {
+		HttpEntityEnclosingRequestBase request = new HttpPost(url);
+		
+		request.addHeader("Accept", "application/json");
+		request.addHeader("Accept-Encoding", ACCEPT_GZIP);
+		request.addHeader("Content-type", "multipart/form-data");
+		request.addHeader("User-Agent", UA);
+		
+		request.setEntity(entity);
+		
+		HttpClient client = new DefaultHttpClient();
+		
+		HttpResponse response = client.execute(request);
+		int responseCode = response.getStatusLine().getStatusCode();
+		
+		HttpEntity responseEntity = response.getEntity();
+		InputStream is = responseEntity.getContent();
+		Header encoding = responseEntity.getContentEncoding();
+
+		if(encoding != null && "gzip".equalsIgnoreCase(encoding.getValue())){
+			is = new GZIPInputStream(is);
+		}
+
+		if(responseCode >= 500) {
+			throw new ErrorResponseCodeException(responseCode, request.getURI().toString());
+		}
+		
 		return new WebserviceResponse(responseCode, is);
 	}
 

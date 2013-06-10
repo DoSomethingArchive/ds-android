@@ -82,8 +82,8 @@ public class SFGGallery extends AbstractActivity {
 		}
 		SubMenuAction subMenuAction = actionBar.addSubMenuAction(this);
 		ActionBarSubMenu subMenuView = subMenuAction.getSubMenuView();
-		subMenuView.addMenuItem(this, "GALLERY", null);
-		subMenuView.addMenuItem(this, "SUBMIT A PHOTO", null);
+		subMenuView.addMenuItem(this, getString(R.string.campaign_gallery), SFGGallery.getIntentFromSubMenu(this, campaign));
+		subMenuView.addMenuItem(this, "SUBMIT A PHOTO", SFGSubmit.getIntent(this, campaign));
 		subMenuView.addMenuItem(this, "ABOUT", null);
 	}
 	
@@ -106,6 +106,12 @@ public class SFGGallery extends AbstractActivity {
 		return answer;
 	}
 	
+	public static Intent getIntentFromSubMenu(Context context, org.dosomething.android.transfer.Campaign campaign) {
+		Intent answer = new Intent(context, SFGGallery.class);
+		answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), campaign);
+		return answer;
+	}
+	
 	/**
 	 * Task to retrieve list data
 	 */
@@ -119,7 +125,7 @@ public class SFGGallery extends AbstractActivity {
 		public SFGGalleryWebserviceTask(String url) {
 			super(userContext);
 			
-			this.url = url + "posts.json";
+			this.url = url + "posts.json?key=" + DSConstants.PICS_API_KEY;
 			this.fetchSuccess = false;
 			this.galleryItems = new ArrayList<SFGGalleryItem>();
 		}
@@ -127,7 +133,7 @@ public class SFGGallery extends AbstractActivity {
 		public SFGGalleryWebserviceTask(String url, int page) {
 			super(userContext);
 			
-			this.url = url;
+			this.url = url + "?key=" + DSConstants.PICS_API_KEY;
 			this.page = page;
 			this.fetchSuccess = false;
 			this.galleryItems = new ArrayList<SFGGalleryItem>();
@@ -136,7 +142,7 @@ public class SFGGallery extends AbstractActivity {
 		public SFGGalleryWebserviceTask(String url, int page, List<String> opts) {
 			super(userContext);
 			
-			this.url = url;
+			this.url = url + "?key=" + DSConstants.PICS_API_KEY;
 			this.page = page;
 			this.options = opts;
 			this.fetchSuccess = false;
