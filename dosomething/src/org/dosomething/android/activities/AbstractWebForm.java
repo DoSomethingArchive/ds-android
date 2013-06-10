@@ -63,6 +63,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 //	private static final String TAG = "AbstractWebForm";
 //	private static final String CAMPAIGN = "campaign";
 	private static final int PICK_IMAGE_REQUEST = 0xFF0;
+	private static final int PICK_SFG_IMAGE_REQUEST = 0xFF1;
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private UserContext userContext;
@@ -72,7 +73,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 	@InjectView(R.id.required_instructions) private TextView lblRequiredInstructions;
 	@InjectView(R.id.submit) private Button btnSubmit;
 	
-	private List<WebFormFieldBinding> fields;
+	protected List<WebFormFieldBinding> fields;
 	
 	private WebFormFieldBinding pendingImageResult;
 	private boolean submitTaskInProgress;
@@ -174,15 +175,17 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		}
 	}
 	
-	private void onBeginImageActivity(WebFormFieldBinding binding) {
+	private void onBeginImageActivity(WebFormFieldBinding binding, int requestType) {
 		pendingImageResult = binding;
 		Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		startActivityForResult(intent, PICK_IMAGE_REQUEST);
+		startActivityForResult(intent, requestType);
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(requestCode==PICK_IMAGE_REQUEST && pendingImageResult!=null && data!=null) {
+		if((requestCode==PICK_IMAGE_REQUEST || requestCode == PICK_SFG_IMAGE_REQUEST)
+			&& pendingImageResult!=null && data!=null) {
+			
 			Uri uri = data.getData();
 			String[] projection = { MediaStore.Images.Media.DATA };
             Cursor cursor = managedQuery(uri, projection, null, null, null);
@@ -190,7 +193,12 @@ public abstract class AbstractWebForm extends AbstractActivity {
             cursor.moveToFirst();
             String path = cursor.getString(column_index);
             
-			pendingImageResult.setSelectedImage(path);
+            if (requestCode == PICK_IMAGE_REQUEST) {
+            	pendingImageResult.setSelectedImage(path);
+            }
+            else if (requestCode == PICK_SFG_IMAGE_REQUEST) {
+            	pendingImageResult.setSelectedSFGImage(path);
+            }
 		}
 	}
 	
@@ -210,7 +218,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		}
 	}
 	
-	private boolean validateRequired() {
+	protected boolean validateRequired() {
 		boolean answer = true;
 		for(WebFormFieldBinding binding : fields) {
 			if(binding.getWebFormField().isRequired() && (binding.getFormValue().isEmpty() || binding.getFormValue().get(0).trim().length()==0)) {
@@ -347,7 +355,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
         return b;
 	}
 	
-	private class WebFormFieldBinding {
+	protected class WebFormFieldBinding {
 		
 		private View view;
 		private int layoutResource;
@@ -382,7 +390,13 @@ public abstract class AbstractWebForm extends AbstractActivity {
 				lastUploadedImageIndex = -1;
 				selectedImages = new ArrayList<String>();
 				uploadFids = new ArrayList<String>();
-			} else if(type.equals("textarea")) {
+			}
+			else if(type.equals("sfg-image")) {
+				layoutResource = R.layout.web_form_sfg_image_row;
+				lastUploadedImageIndex = -1;
+				selectedImages = new ArrayList<String>();
+			}
+			else if(type.equals("textarea")) {
 				layoutResource = R.layout.web_form_textarea_row;
 			} else {
 				layoutResource = R.layout.web_form_textfield_row;
@@ -403,7 +417,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 			label.setText(labelText);
 			
 			switch(layoutResource) {
-				case R.layout.web_form_select_single_row : {
+				case R.layout.web_form_select_single_row: {
 					List<String> options = new ArrayList<String>();
 					for(WebFormSelectOptions wfso : webFormField.getSelectOptions()) {
 						options.add(wfso.getLabel());
@@ -412,7 +426,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 					spinner.setAdapter(new ArrayAdapter<String>(AbstractWebForm.this, android.R.layout.simple_spinner_item, options));
 					break;
 				}
-				case R.layout.web_form_select_multi_row : {
+				case R.layout.web_form_select_multi_row: {
 					LinearLayout layout = (LinearLayout)view.findViewById(R.id.field_select_multi);
 					for(WebFormSelectOptions wfso : webFormField.getSelectOptions()) {
 						CheckBox checkbox = new CheckBox(AbstractWebForm.this);
@@ -423,7 +437,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 					}
 					break;
 				}
-				case R.layout.web_form_date_row : {
+				case R.layout.web_form_date_row: {
 					EditText field = (EditText)view.findViewById(R.id.field_date);
 					field.setOnClickListener(new OnClickListener() {
 						public void onClick(View v) {
@@ -439,14 +453,23 @@ public abstract class AbstractWebForm extends AbstractActivity {
 					});
 					break;
 				}
-				case R.layout.web_form_image_row : {
+				case R.layout.web_form_image_row: {
 					Button button = (Button)view.findViewById(R.id.button);
 					button.setOnClickListener(new OnClickListener() {
 						public void onClick(View v) {
-							AbstractWebForm.this.onBeginImageActivity(WebFormFieldBinding.this);
+							AbstractWebForm.this.onBeginImageActivity(WebFormFieldBinding.this, PICK_IMAGE_REQUEST);
 						}
 					});
 					updateImagePreview();
+					break;
+				}
+				case R.layout.web_form_sfg_image_row: {
+					Button button = (Button)view.findViewById(R.id.button);
+					button.setOnClickListener(new OnClickListener() {
+						public void onClick(View v) {
+							AbstractWebForm.this.onBeginImageActivity(WebFormFieldBinding.this, PICK_SFG_IMAGE_REQUEST);
+						}
+					});
 					break;
 				}
 			}
@@ -496,8 +519,15 @@ public abstract class AbstractWebForm extends AbstractActivity {
 			}
 		}
 		
+		public void setSelectedSFGImage(String path) {
+			// Only one image can be uploaded at a time for share-for-good campaigns
+			selectedImages.clear();
+			selectedImages.add(path);
+			updateImagePreview();
+		}
+		
 		public void setSelectedImage(String path) {
-			selectedImages.add(path);	
+			selectedImages.add(path);
 			updateImagePreview();
 		}
 
@@ -587,6 +617,12 @@ public abstract class AbstractWebForm extends AbstractActivity {
 					}
 					break;
 				}
+				case R.layout.web_form_sfg_image_row: {
+					if (values.size() > 0) {
+						updateImagePreview();
+					}
+					break;
+				}
 				case R.layout.web_form_date_row : {
 					EditText field = (EditText)view.findViewById(R.id.field_date);
 					field.setText(values.get(0));
@@ -652,6 +688,12 @@ public abstract class AbstractWebForm extends AbstractActivity {
 						for (int i = 0; i < selectedImages.size(); i++) {
 							answer.add(selectedImages.get(i));
 						}
+					}
+					break;
+				}
+				case R.layout.web_form_sfg_image_row: {
+					if (selectedImages != null && selectedImages.size() > 0) {
+						answer.add(selectedImages.get(0));
 					}
 					break;
 				}

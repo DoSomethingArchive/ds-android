@@ -13,13 +13,17 @@ public class WebForm implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private String nodeId;
+	private String pageTitle;
+	private String postUrl;
 	private List<WebFormField> fields;
 	
 	public WebForm() {}
 	
 	public WebForm(JSONObject obj) throws JSONException {
 		
-		nodeId = obj.getString("node-id");
+		nodeId = obj.optString("node-id");
+		pageTitle = obj.optString("page-title");
+		postUrl = obj.optString("url");
 		
 		JSONArray f = obj.optJSONArray("fields");
 		if(f!=null) {
@@ -44,6 +48,14 @@ public class WebForm implements Serializable{
 
 	public void setFields(List<WebFormField> fields) {
 		this.fields = fields;
+	}
+	
+	public String getPageTitle() {
+		return pageTitle;
+	}
+	
+	public String getPostUrl() {
+		return postUrl;
 	}
 
 }

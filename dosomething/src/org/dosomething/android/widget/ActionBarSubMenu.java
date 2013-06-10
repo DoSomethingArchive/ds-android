@@ -67,7 +67,11 @@ public class ActionBarSubMenu extends LinearLayout {
 		
 		public void onClick(View v) {
 			Log.v("ACTION", "clicked: "+((TextView)v).getText());
-			//mContext.startActivity(mIntent);
+			if (mIntent != null) {
+				toggleMenu();
+				mIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+				mContext.startActivity(mIntent);
+			}
 		}
 	}
 	
