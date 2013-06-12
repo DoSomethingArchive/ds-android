@@ -386,7 +386,9 @@
         <item name="android:textColor">#000</item>
         <item name="android:autoLink">all</item>
     </style>
-    
+    <style name="FilterSubmitButton">
+        <item name="android:background">@drawable/main_button_selector</item>
+    </style>
     <style name="HowToRow">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
