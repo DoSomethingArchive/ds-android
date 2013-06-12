@@ -8,7 +8,9 @@ import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.SFGData;
 import org.dosomething.android.transfer.SFGGalleryItem;
+import org.dosomething.android.transfer.WebFormSelectOptions;
 import org.dosomething.android.widget.ActionBarSubMenu;
 import org.dosomething.android.widget.CustomActionBar;
 import org.dosomething.android.widget.CustomActionBar.SubMenuAction;
@@ -24,13 +26,16 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
@@ -57,6 +62,8 @@ public class SFGGallery extends AbstractActivity {
 	
 	private Campaign campaign;
 	private ListView list;
+	private String lastTypeFilter;
+	private String lastLocationFilter;
 
 	@Override
 	protected String getPageName() {
@@ -76,27 +83,77 @@ public class SFGGallery extends AbstractActivity {
 			}
 		});
 		
+		// Setup Custom Action bar with submenu items
 		campaign = (Campaign) getIntent().getExtras().get(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue());
 		if (campaign != null) {
 			actionBar.setTitle(campaign.getName());
 		}
 		SubMenuAction subMenuAction = actionBar.addSubMenuAction(this);
 		ActionBarSubMenu subMenuView = subMenuAction.getSubMenuView();
-		subMenuView.addMenuItem(this, getString(R.string.campaign_gallery), SFGGallery.getIntentFromSubMenu(this, campaign));
-		subMenuView.addMenuItem(this, "SUBMIT A PHOTO", SFGSubmit.getIntent(this, campaign));
-		subMenuView.addMenuItem(this, "ABOUT", null);
+		subMenuView.addMenuItem(this, getString(R.string.campaign_sfg_submit_pet), SFGSubmit.getIntent(this, campaign));
+		subMenuView.addMenuItem(this, getString(R.string.campaign_about), null);
+		
+		// Setup spinners with filter options pulled from campaign data
+		Spinner typeFilterSpinner = (Spinner)findViewById(R.id.type_filter);
+		SFGData sfgData = campaign.getSFGData();
+		ArrayList<WebFormSelectOptions> typeOptions = sfgData.getTypeOptions();
+		List<String> types = new ArrayList<String>();
+		for (int i = 0; i < typeOptions.size(); i++) {
+			WebFormSelectOptions options = typeOptions.get(i);
+			types.add(options.getLabel());
+		}
+		typeFilterSpinner.setAdapter(new FilterAdapter(SFGGallery.this, types));
+		
+		Spinner locFilterSpinner = (Spinner)findViewById(R.id.location_filter);
+		ArrayList<WebFormSelectOptions> locOptions = sfgData.getLocationOptions();
+		List<String> locations = new ArrayList<String>();
+		for (int i = 0; i < locOptions.size(); i++) {
+			WebFormSelectOptions options = locOptions.get(i);
+			locations.add(options.getLabel());
+		}
+		locFilterSpinner.setAdapter(new FilterAdapter(SFGGallery.this, locations));
+		
+		// Style filter button's typeface and setup click listener 
+		Button filterSubmit = (Button)findViewById(R.id.filter_execute);
+		filterSubmit.setTypeface(dinTypeface, Typeface.BOLD);
+		filterSubmit.setOnClickListener(new OnFilterClickListener());
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
+		lastTypeFilter = "";
+		lastLocationFilter = "";
 		fetchItems();
 	}
 	
 	private void fetchItems() {
+		// Clear any items that might currently be in the list
+		list.setAdapter(null);
+		
 		if (campaign != null) {
-			new SFGGalleryWebserviceTask(campaign.getSFGGalleryUrl()).execute();
+			new SFGGalleryWebserviceTask(campaign.getSFGData().getGalleryUrl(), lastTypeFilter, lastLocationFilter).execute();
+		}
+	}
+	
+	/**
+	 * Click listener to execute gallery filter
+	 */
+	private class OnFilterClickListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			Spinner typeFilterSpinner = (Spinner)findViewById(R.id.type_filter);
+			int typeIndex = typeFilterSpinner.getSelectedItemPosition();
+			WebFormSelectOptions typeOpt = campaign.getSFGData().getTypeOptions().get(typeIndex);
+			lastTypeFilter = typeOpt.getValue();
+			
+			Spinner locFilterSpinner = (Spinner)findViewById(R.id.location_filter);
+			int locIndex = locFilterSpinner.getSelectedItemPosition();
+			WebFormSelectOptions locOpt = campaign.getSFGData().getLocationOptions().get(locIndex);
+			lastLocationFilter = locOpt.getValue();
+			
+			fetchItems();
 		}
 	}
 	
@@ -106,10 +163,36 @@ public class SFGGallery extends AbstractActivity {
 		return answer;
 	}
 	
-	public static Intent getIntentFromSubMenu(Context context, org.dosomething.android.transfer.Campaign campaign) {
-		Intent answer = new Intent(context, SFGGallery.class);
-		answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), campaign);
-		return answer;
+	/**
+	 * Custom adapter for filter options. Allows us to customize the style of the
+	 * list of options
+	 */
+	private class FilterAdapter extends ArrayAdapter<String> {
+		public FilterAdapter(Context context, List<String> items) {
+		    super(context, android.R.layout.simple_dropdown_item_1line, items);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View v = super.getView(position, convertView, parent);
+			setDinTypeface(v);
+		    
+		    return v;
+		}
+	
+		@Override
+	    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+			View v = super.getDropDownView(position, convertView, parent);
+		    setDinTypeface(v);
+		    
+			return v;
+		}
+		
+		private void setDinTypeface(View v) {
+			TextView textView = (TextView)v.findViewById(android.R.id.text1);
+		    textView.setTypeface(dinTypeface, Typeface.BOLD);
+		    textView.setTextSize(16);
+		}
 	}
 	
 	/**
@@ -117,36 +200,37 @@ public class SFGGallery extends AbstractActivity {
 	 */
 	private class SFGGalleryWebserviceTask extends AbstractWebserviceTask {
 		private String url;
-		private int page;
-		private List<String> options;
-		private boolean fetchSuccess;
 		private List<SFGGalleryItem> galleryItems;
 		
 		public SFGGalleryWebserviceTask(String url) {
 			super(userContext);
 			
 			this.url = url + "posts.json?key=" + DSConstants.PICS_API_KEY;
-			this.fetchSuccess = false;
 			this.galleryItems = new ArrayList<SFGGalleryItem>();
 		}
 		
-		public SFGGalleryWebserviceTask(String url, int page) {
+		public SFGGalleryWebserviceTask(String _url, String typeOpt, String locOpt) {
 			super(userContext);
 			
-			this.url = url + "?key=" + DSConstants.PICS_API_KEY;
-			this.page = page;
-			this.fetchSuccess = false;
 			this.galleryItems = new ArrayList<SFGGalleryItem>();
-		}
-		
-		public SFGGalleryWebserviceTask(String url, int page, List<String> opts) {
-			super(userContext);
 			
-			this.url = url + "?key=" + DSConstants.PICS_API_KEY;
-			this.page = page;
-			this.options = opts;
-			this.fetchSuccess = false;
-			this.galleryItems = new ArrayList<SFGGalleryItem>();
+			String options = "";
+			if (typeOpt != null && typeOpt.length() > 0) {
+				options = typeOpt;
+			}
+			
+			if (locOpt != null && locOpt.length() > 0) {
+				if (options.length() == 0)
+					options = locOpt;
+				else
+					options += "-" + locOpt;
+			}
+			
+			if (options.length() == 0) {
+				options = "posts";
+			}
+			
+			this.url = _url + options + ".json?key=" + DSConstants.PICS_API_KEY;
 		}
 		
 		@Override
@@ -156,16 +240,26 @@ public class SFGGallery extends AbstractActivity {
 
 		@Override
 		protected void onSuccess() {
-			list.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> av, View v, int position, long id) {
-					SFGGalleryItem galleryItem = (SFGGalleryItem)list.getAdapter().getItem(position);
-					startActivity(SFGItem.getIntent(getApplicationContext(), galleryItem, campaign));
-				}
-			});
-			
-			SFGListAdapter adapter = new SFGListAdapter(galleryItems);
-			list.setAdapter(adapter);
+			if (galleryItems != null && galleryItems.size() > 0) {
+				SFGListAdapter adapter = new SFGListAdapter(galleryItems);
+				list.setAdapter(adapter);
+				list.setOnItemClickListener(new OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> av, View v, int position, long id) {
+						SFGGalleryItem galleryItem = (SFGGalleryItem)list.getAdapter().getItem(position);
+						startActivity(SFGItem.getIntent(getApplicationContext(), galleryItem, campaign));
+					}
+				});
+			}
+			else {
+				// No results were found
+				new AlertDialog.Builder(SFGGallery.this)
+					.setMessage(getString(R.string.campaign_sfg_no_results))
+					.setCancelable(false)
+					.setPositiveButton(getString(R.string.ok_upper), null)
+					.create()
+					.show();
+			}
 		}
 
 		@Override
@@ -187,23 +281,13 @@ public class SFGGallery extends AbstractActivity {
 		@Override
 		protected void doWebOperation() throws Exception {
 			WebserviceResponse response = this.doGet(this.url);
-			if (response.getStatusCode() >= 400) {
-				fetchSuccess = false;
-			}
-			else {
-				fetchSuccess = true;
+			if (response.getStatusCode() < 400) {
 				JSONArray jsonItems = response.getBodyAsJSONArray();
 				for (int i = 0; i < jsonItems.length(); i++) {
 					JSONObject item = jsonItems.getJSONObject(i);
 					galleryItems.add(new SFGGalleryItem(item));
 				}
 			}
-		}
-		
-		private List<SFGGalleryItem> getPage(int page) throws Exception {
-			List<SFGGalleryItem> items = new ArrayList<SFGGalleryItem>();
-			
-			return items;
 		}
 	}
 
@@ -237,7 +321,7 @@ public class SFGGallery extends AbstractActivity {
 			}
 			
 			if (image != null && progressBar != null) {
-				String imageUrl = campaign.getSFGGalleryUrl() + item.getImageURL();
+				String imageUrl = campaign.getSFGData().getGalleryUrl() + item.getImageURL();
 				imageLoader.displayImage(imageUrl, image, new ProgressBarImageLoadingListener(progressBar));
 			}
 			

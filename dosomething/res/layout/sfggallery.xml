@@ -12,6 +12,31 @@
     <org.dosomething.android.widget.ActionBarSubMenu 
         android:id="@+id/actionbar_submenu"
         style="@style/ActionBarSubMenu"/>
+    
+    <LinearLayout
+        android:id="@+id/filters"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="horizontal"
+        android:background="@color/dark_grey_background">
+        <Spinner
+            android:id="@+id/type_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <Spinner
+            android:id="@+id/location_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <Button
+            style="@style/FilterSubmitButton"
+            android:id="@+id/filter_execute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/go_upper"
+            android:layout_weight="1"/>
+    </LinearLayout>
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/list"

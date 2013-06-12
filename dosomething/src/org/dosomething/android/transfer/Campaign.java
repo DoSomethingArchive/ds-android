@@ -60,6 +60,7 @@ public class Campaign implements Serializable {
 	private List<Challenge> challenges;
 	private WebForm reportBack;
 	private WebForm signUp;
+	private SFGData sfgData;
 
 	public Campaign() {}
 	
@@ -180,6 +181,11 @@ public class Campaign implements Serializable {
 		JSONObject su = obj.optJSONObject("sign-up");
 		if(su!=null) {
 			signUp = new WebForm(su);
+		}
+		
+		JSONObject sfg = obj.optJSONObject("sfg-data");
+		if (sfg != null) {
+			sfgData = new SFGData(sfg);
 		}
 	}
 	
@@ -340,6 +346,10 @@ public class Campaign implements Serializable {
 
 	public void setSignUp(WebForm signUp) {
 		this.signUp = signUp;
+	}
+	
+	public SFGData getSFGData() {
+		return sfgData;
 	}
 
 	public String getShareTitle() {
