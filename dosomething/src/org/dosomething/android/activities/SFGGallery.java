@@ -91,7 +91,6 @@ public class SFGGallery extends AbstractActivity {
 		SubMenuAction subMenuAction = actionBar.addSubMenuAction(this);
 		ActionBarSubMenu subMenuView = subMenuAction.getSubMenuView();
 		subMenuView.addMenuItem(this, getString(R.string.campaign_sfg_submit_pet), SFGSubmit.getIntent(this, campaign));
-		subMenuView.addMenuItem(this, getString(R.string.campaign_about), null);
 		
 		// Setup spinners with filter options pulled from campaign data
 		Spinner typeFilterSpinner = (Spinner)findViewById(R.id.type_filter);
