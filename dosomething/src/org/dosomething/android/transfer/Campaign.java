@@ -30,7 +30,6 @@ public class Campaign implements Serializable {
 	private String backgroundColor;
 	private String backgroundUrl;
 	private String callout;
-	private String sfgGalleryUrl;
 	private int minVersion;
 	private int[] cause_tags;
 	private int gid;
@@ -77,7 +76,6 @@ public class Campaign implements Serializable {
 		logoUrl = co.getString("logo");
 		backgroundUrl = co.optString("logo-bg-image",null);
 		callout = co.optString("call-to-action",null);
-		sfgGalleryUrl = co.optString("sfg-gallery-url", null);
 		gid = co.optInt("gid", -1);
 		order = co.getInt("order");
 		smsReferText = co.optString("sms-refer-text");
@@ -389,10 +387,6 @@ public class Campaign implements Serializable {
 	
 	public String getCallout() {
 		return callout;
-	}
-	
-	public String getSFGGalleryUrl() {
-		return sfgGalleryUrl;
 	}
 	
 	public DSConstants.CAMPAIGN_TYPE getCampaignType() {
