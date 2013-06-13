@@ -60,7 +60,7 @@ public class SFGItem extends AbstractActivity {
 		
 		if (sfgItem != null) {
 			if (campaign != null && imageView != null && progressBar != null) {
-				String imageUrl = campaign.getSFGGalleryUrl() + sfgItem.getImageURL();
+				String imageUrl = campaign.getSFGData().getGalleryUrl() + sfgItem.getImageURL();
 				imageLoader.displayImage(imageUrl, imageView, new ProgressBarImageLoadingListener(progressBar));
 			}
 			
