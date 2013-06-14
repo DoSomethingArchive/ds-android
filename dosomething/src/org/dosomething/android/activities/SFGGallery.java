@@ -37,6 +37,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -122,6 +123,12 @@ public class SFGGallery extends AbstractActivity {
 	protected void onResume() {
 		super.onResume();
 		
+		// Display toast message if provided one
+		String toastMsg = (String)getIntent().getExtras().get(DSConstants.EXTRAS_KEY.TOAST_MSG.getValue());
+		if (toastMsg != null && toastMsg.length() > 0) {
+			Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+		}
+		
 		lastTypeFilter = "";
 		lastLocationFilter = "";
 		fetchItems();
@@ -156,9 +163,17 @@ public class SFGGallery extends AbstractActivity {
 		}
 	}
 	
-	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){
+	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {
 		Intent answer = new Intent(context, SFGGallery.class);
 		answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), campaign);
+		return answer;
+	}
+	
+	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign, String toastMsg) {
+		Intent answer = new Intent(context, SFGGallery.class);
+		answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), campaign);
+		answer.putExtra(DSConstants.EXTRAS_KEY.TOAST_MSG.getValue(), toastMsg);
+		answer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		return answer;
 	}
 	
