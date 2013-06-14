@@ -140,12 +140,10 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Excepti
 	
 	public WebserviceResponse doPostMultipart(String url, MultipartEntity entity) throws ClientProtocolException, IOException {
 		HttpEntityEnclosingRequestBase request = new HttpPost(url);
-		
 		request.addHeader("Accept", "application/json");
 		request.addHeader("Accept-Encoding", ACCEPT_GZIP);
-		request.addHeader("Content-type", "multipart/form-data");
 		request.addHeader("User-Agent", UA);
-		
+
 		request.setEntity(entity);
 		
 		HttpClient client = new DefaultHttpClient();
@@ -157,11 +155,11 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Excepti
 		InputStream is = responseEntity.getContent();
 		Header encoding = responseEntity.getContentEncoding();
 
-		if(encoding != null && "gzip".equalsIgnoreCase(encoding.getValue())){
+		if (encoding != null && "gzip".equalsIgnoreCase(encoding.getValue())){
 			is = new GZIPInputStream(is);
 		}
 
-		if(responseCode >= 500) {
+		if (responseCode >= 500) {
 			throw new ErrorResponseCodeException(responseCode, request.getURI().toString());
 		}
 		
