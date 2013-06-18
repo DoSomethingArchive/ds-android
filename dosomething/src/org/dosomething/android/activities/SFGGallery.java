@@ -24,10 +24,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -52,7 +55,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * Main gallery page for Share for Good campaign types. Displays list of the 
  * sharable gallery items.
  */
-public class SFGGallery extends AbstractActivity {
+public class SFGGallery extends AbstractActivity implements OnScrollListener {
+	
+	private final float LOAD_MORE_PERCENTAGE = 0.8f;
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
@@ -64,9 +69,13 @@ public class SFGGallery extends AbstractActivity {
 	@InjectView(R.id.filters) private LinearLayout filtersView;
 	
 	private Campaign campaign;
+	private ArrayList<SFGGalleryItem> galleryItems;
 	private ListView list;
+	private SFGListAdapter listAdapter;
 	private String lastTypeFilter;
 	private String lastLocationFilter;
+	private int lastIdQuery;
+	private boolean webTaskInProgress;
 
 	@Override
 	protected String getPageName() {
@@ -78,13 +87,21 @@ public class SFGGallery extends AbstractActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sfggallery);
 		
+		// Instantiating vars
+		lastIdQuery = -1;
+		galleryItems = new ArrayList<SFGGalleryItem>();
+		listAdapter = new SFGListAdapter(galleryItems);
 		list = pullToRefreshView.getRefreshableView();
+		list.setAdapter(listAdapter);
+		
+		// Refresh listener for the pull-to-refresh gesture
 		pullToRefreshView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				fetchItems(false);
+				fetchItems(0);
 			}
 		});
+		pullToRefreshView.setOnScrollListener(this);
 		
 		// Set Action Bar title
 		campaign = (Campaign) getIntent().getExtras().get(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue());
@@ -141,28 +158,58 @@ public class SFGGallery extends AbstractActivity {
 			Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
 		}
 		
-		boolean showSubs = false;
 		Boolean objShowSubs = (Boolean)getIntent().getExtras().get(DSConstants.EXTRAS_KEY.SHOW_SUBMISSIONS.getValue());
 		if (objShowSubs != null && objShowSubs.booleanValue()) {
 			filtersView.setVisibility(View.GONE);
-			showSubs = objShowSubs.booleanValue();
 		}
 		
 		lastTypeFilter = "";
 		lastLocationFilter = "";
-		fetchItems(showSubs);
+		
+		// Conducts again the last query done. TODO: This is likely bad programming, because 
+		// when going back to the main gallery from an individual post, we're sorta relying
+		// on the query to be the same so that a new query is NOT executed.
+		if (lastIdQuery >= 0) {
+			fetchItems(lastIdQuery);
+		}
+		else {
+			fetchItems(0);
+		}
 	}
 	
-	private void fetchItems(boolean showMySubmissions) {
-		// Clear any items that might currently be in the list
-		list.setAdapter(null);
-		
-		if (campaign != null) {
-			if (showMySubmissions) {
-				new SFGGalleryWebserviceTask(campaign.getSFGData().getGalleryUrl(), campaign.getSFGData().getMySubmissionsEndpoint()).execute();
+	/**
+	 * Triggered on scroll events. Determines when to load more items for infinite
+	 * load scrolling.
+	 */
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		// Scroll past a certain %, then load more items
+		boolean loadMore = ((float)(firstVisibleItem + visibleItemCount) / totalItemCount) > LOAD_MORE_PERCENTAGE;
+		if (loadMore && galleryItems.size() > 0) {
+			SFGGalleryItem item = galleryItems.get(galleryItems.size() - 1);
+			int lastId = item.getId();
+			fetchItems(lastId);
+		}
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {}
+	
+	private void fetchItems(int startId) {
+		if (campaign != null && !webTaskInProgress && lastIdQuery != startId) {
+			lastIdQuery = startId;
+			
+			boolean showSubs = false;
+			Boolean objShowSubs = (Boolean)getIntent().getExtras().get(DSConstants.EXTRAS_KEY.SHOW_SUBMISSIONS.getValue());
+			if (objShowSubs != null && objShowSubs.booleanValue()) {
+				showSubs = objShowSubs.booleanValue();
+			}
+			
+			if (showSubs) {
+				new SFGGalleryWebserviceTask(campaign.getSFGData().getGalleryUrl(), campaign.getSFGData().getMySubmissionsEndpoint(), startId).execute();
 			}
 			else {
-				new SFGGalleryWebserviceTask(campaign.getSFGData().getGalleryUrl(), lastTypeFilter, lastLocationFilter).execute();
+				new SFGGalleryWebserviceTask(campaign.getSFGData().getGalleryUrl(), lastTypeFilter, lastLocationFilter, startId).execute();
 			}
 		}
 	}
@@ -183,7 +230,10 @@ public class SFGGallery extends AbstractActivity {
 			WebFormSelectOptions locOpt = campaign.getSFGData().getLocationOptions().get(locIndex);
 			lastLocationFilter = locOpt.getValue();
 			
-			fetchItems(false);
+			// When executing a filtered search, clear out old results
+			galleryItems.clear();
+			lastIdQuery = -1;
+			fetchItems(0);
 		}
 	}
 	
@@ -238,7 +288,7 @@ public class SFGGallery extends AbstractActivity {
 		private void setDinTypeface(View v) {
 			TextView textView = (TextView)v.findViewById(android.R.id.text1);
 		    textView.setTypeface(dinTypeface, Typeface.BOLD);
-		    textView.setTextSize(16);
+		    textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16.f);
 		}
 	}
 	
@@ -247,44 +297,56 @@ public class SFGGallery extends AbstractActivity {
 	 */
 	private class SFGGalleryWebserviceTask extends AbstractWebserviceTask {
 		private String url;
-		private List<SFGGalleryItem> galleryItems;
+		private boolean isNewSearch;
 		
-		public SFGGalleryWebserviceTask(String _url) {
+		public SFGGalleryWebserviceTask(String _url, String _endpointOverride, int _startId) {
 			super(userContext);
 			
-			this.url = _url + campaign.getSFGData().getDefaultEndpoint() + ".json?key=" + DSConstants.PICS_API_KEY;
-			this.galleryItems = new ArrayList<SFGGalleryItem>();
+			this.url = _url + _endpointOverride + ".json?key=" + DSConstants.PICS_API_KEY + "&userid=" + userContext.getUserUid();
+			
+			if (_startId > 0) {
+				this.url += "&last=" + _startId;
+				isNewSearch = false;
+			}
+			else {
+				galleryItems.clear();
+				isNewSearch = true;
+			}
+
+			webTaskInProgress = true;
 		}
 		
-		public SFGGalleryWebserviceTask(String _url, String endpointOverride) {
+		public SFGGalleryWebserviceTask(String _url, String _typeOpt, String _locOpt, int _startId) {
 			super(userContext);
-			
-			this.url = _url + endpointOverride + ".json?key=" + DSConstants.PICS_API_KEY + "&userid=" + userContext.getUserUid();
-			this.galleryItems = new ArrayList<SFGGalleryItem>();
-		}
-		
-		public SFGGalleryWebserviceTask(String _url, String typeOpt, String locOpt) {
-			super(userContext);
-			
-			this.galleryItems = new ArrayList<SFGGalleryItem>();
 			
 			String options = "";
-			if (typeOpt != null && typeOpt.length() > 0) {
-				options = typeOpt;
+			if (_typeOpt != null && _typeOpt.length() > 0) {
+				options = _typeOpt;
 			}
 			
-			if (locOpt != null && locOpt.length() > 0) {
+			if (_locOpt != null && _locOpt.length() > 0) {
 				if (options.length() == 0)
-					options = locOpt;
+					options = _locOpt;
 				else
-					options += "-" + locOpt;
+					options += "-" + _locOpt;
 			}
 			
 			if (options.length() == 0) {
-				options = "posts";
+				options = campaign.getSFGData().getDefaultEndpoint();
 			}
 			
 			this.url = _url + options + ".json?key=" + DSConstants.PICS_API_KEY;
+			
+			if (_startId > 0) {
+				this.url += "&last="+_startId;
+				isNewSearch = false;
+			}
+			else {
+				galleryItems.clear();
+				isNewSearch = true;
+			}
+			
+			webTaskInProgress = true;
 		}
 		
 		@Override
@@ -295,8 +357,13 @@ public class SFGGallery extends AbstractActivity {
 		@Override
 		protected void onSuccess() {
 			if (galleryItems != null && galleryItems.size() > 0) {
-				SFGListAdapter adapter = new SFGListAdapter(galleryItems);
-				list.setAdapter(adapter);
+				listAdapter.notifyDataSetChanged();
+				
+				// On new searches, return the view to the top of the list
+				if (isNewSearch) {
+					list.setSelection(0);
+				}
+				
 				list.setOnItemClickListener(new OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> av, View v, int position, long id) {
@@ -318,6 +385,7 @@ public class SFGGallery extends AbstractActivity {
 
 		@Override
 		protected void onFinish() {
+			webTaskInProgress = false;
 			actionBar.setProgressBarVisibility(ProgressBar.GONE);
 			pullToRefreshView.onRefreshComplete();
 		}
@@ -397,6 +465,4 @@ public class SFGGallery extends AbstractActivity {
 			return v;
 		}
 	}
-	
-	
 }
