@@ -11,6 +11,7 @@ public class SFGGalleryItem implements Serializable {
 	
 	private boolean adopted;
 	private String bottomText;
+	private int id;
 	private String imageURL;
 	private String name;
 	private int shareCount;
@@ -29,6 +30,7 @@ public class SFGGalleryItem implements Serializable {
 		// Optional items
 		adopted = obj.optBoolean("adopted", false);
 		bottomText = obj.optString("bottom_text", null);
+		id = obj.optInt("id", 0);
 		shelter = obj.optString("shelter", null);
 		state = obj.optString("state", null);
 		story = obj.optString("story", null);
@@ -41,6 +43,10 @@ public class SFGGalleryItem implements Serializable {
 	
 	public String getBottomText() {
 		return bottomText;
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public String getImageURL() {
