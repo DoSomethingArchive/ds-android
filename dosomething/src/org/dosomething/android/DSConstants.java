@@ -22,6 +22,7 @@ public class DSConstants {
 	public static enum EXTRAS_KEY {
 		CAMPAIGN("campaign"),
 		SFGITEM("sfg-item"),
+		SHOW_SUBMISSIONS("show-submissions"),
 		TOAST_MSG("toast-msg");
 		
 		private String value;

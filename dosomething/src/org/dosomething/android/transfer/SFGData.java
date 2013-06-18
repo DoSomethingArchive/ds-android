@@ -12,6 +12,8 @@ public class SFGData implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String galleryUrl;
+	private String defaultEndpoint;
+	private String mySubmissionsEndpoint;
 	private ArrayList<WebFormSelectOptions> typeOptions;
 	private ArrayList<WebFormSelectOptions> locationOptions;
 	
@@ -20,6 +22,9 @@ public class SFGData implements Serializable {
 	
 	public SFGData(JSONObject obj) throws JSONException {
 		galleryUrl = obj.optString("gallery-url");
+		defaultEndpoint = obj.optString("default-endpoint");
+		mySubmissionsEndpoint = obj.optString("my-submissions-endpoint");
+		
 		JSONObject filterObj = obj.optJSONObject("filter-options");
 		
 		typeOptions = new ArrayList<WebFormSelectOptions>();
@@ -41,6 +46,14 @@ public class SFGData implements Serializable {
 	
 	public String getGalleryUrl() {
 		return galleryUrl;
+	}
+	
+	public String getDefaultEndpoint() {
+		return defaultEndpoint;
+	}
+	
+	public String getMySubmissionsEndpoint() {
+		return mySubmissionsEndpoint;
 	}
 	
 	public ArrayList<WebFormSelectOptions> getTypeOptions() {

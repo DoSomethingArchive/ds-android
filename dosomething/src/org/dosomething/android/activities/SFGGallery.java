@@ -33,6 +33,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -60,6 +61,7 @@ public class SFGGallery extends AbstractActivity {
 	
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.list) private PullToRefreshListView pullToRefreshView;
+	@InjectView(R.id.filters) private LinearLayout filtersView;
 	
 	private Campaign campaign;
 	private ListView list;
@@ -80,17 +82,27 @@ public class SFGGallery extends AbstractActivity {
 		pullToRefreshView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				fetchItems();
+				fetchItems(false);
 			}
 		});
 		
-		// Setup Custom Action bar with submenu items
+		// Set Action Bar title
 		campaign = (Campaign) getIntent().getExtras().get(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue());
-		if (campaign != null) {
-			actionBar.setTitle(campaign.getName());
+		Boolean objShowSubs = (Boolean)getIntent().getExtras().get(DSConstants.EXTRAS_KEY.SHOW_SUBMISSIONS.getValue());
+		if (objShowSubs != null && objShowSubs.booleanValue()) {
+			actionBar.setTitle(getString(R.string.campaign_sfg_my_submissions));
 		}
+		else {
+			if (campaign != null) {
+				actionBar.setTitle(campaign.getName());
+			}
+		}
+		
+		// Setup Custom Action Bar's sub
 		SubMenuAction subMenuAction = actionBar.addSubMenuAction(this);
 		ActionBarSubMenu subMenuView = subMenuAction.getSubMenuView();
+		subMenuView.addMenuItem(this, getString(R.string.campaign_gallery), SFGGallery.getIntent(this, campaign));
+		subMenuView.addMenuItem(this, getString(R.string.campaign_sfg_my_pets), SFGGallery.getIntent(this, campaign, true));
 		subMenuView.addMenuItem(this, getString(R.string.campaign_sfg_submit_pet), SFGSubmit.getIntent(this, campaign));
 		
 		// Setup spinners with filter options pulled from campaign data
@@ -129,17 +141,29 @@ public class SFGGallery extends AbstractActivity {
 			Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
 		}
 		
+		boolean showSubs = false;
+		Boolean objShowSubs = (Boolean)getIntent().getExtras().get(DSConstants.EXTRAS_KEY.SHOW_SUBMISSIONS.getValue());
+		if (objShowSubs != null && objShowSubs.booleanValue()) {
+			filtersView.setVisibility(View.GONE);
+			showSubs = objShowSubs.booleanValue();
+		}
+		
 		lastTypeFilter = "";
 		lastLocationFilter = "";
-		fetchItems();
+		fetchItems(showSubs);
 	}
 	
-	private void fetchItems() {
+	private void fetchItems(boolean showMySubmissions) {
 		// Clear any items that might currently be in the list
 		list.setAdapter(null);
 		
 		if (campaign != null) {
-			new SFGGalleryWebserviceTask(campaign.getSFGData().getGalleryUrl(), lastTypeFilter, lastLocationFilter).execute();
+			if (showMySubmissions) {
+				new SFGGalleryWebserviceTask(campaign.getSFGData().getGalleryUrl(), campaign.getSFGData().getMySubmissionsEndpoint()).execute();
+			}
+			else {
+				new SFGGalleryWebserviceTask(campaign.getSFGData().getGalleryUrl(), lastTypeFilter, lastLocationFilter).execute();
+			}
 		}
 	}
 	
@@ -159,13 +183,14 @@ public class SFGGallery extends AbstractActivity {
 			WebFormSelectOptions locOpt = campaign.getSFGData().getLocationOptions().get(locIndex);
 			lastLocationFilter = locOpt.getValue();
 			
-			fetchItems();
+			fetchItems(false);
 		}
 	}
 	
 	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {
 		Intent answer = new Intent(context, SFGGallery.class);
 		answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), campaign);
+		answer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		return answer;
 	}
 	
@@ -173,6 +198,14 @@ public class SFGGallery extends AbstractActivity {
 		Intent answer = new Intent(context, SFGGallery.class);
 		answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), campaign);
 		answer.putExtra(DSConstants.EXTRAS_KEY.TOAST_MSG.getValue(), toastMsg);
+		answer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		return answer;
+	}
+	
+	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign, boolean showSubmissions) {
+		Intent answer = new Intent(context, SFGGallery.class);
+		answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), campaign);
+		answer.putExtra(DSConstants.EXTRAS_KEY.SHOW_SUBMISSIONS.getValue(), Boolean.valueOf(showSubmissions));
 		answer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		return answer;
 	}
@@ -216,10 +249,17 @@ public class SFGGallery extends AbstractActivity {
 		private String url;
 		private List<SFGGalleryItem> galleryItems;
 		
-		public SFGGalleryWebserviceTask(String url) {
+		public SFGGalleryWebserviceTask(String _url) {
 			super(userContext);
 			
-			this.url = url + "posts.json?key=" + DSConstants.PICS_API_KEY;
+			this.url = _url + campaign.getSFGData().getDefaultEndpoint() + ".json?key=" + DSConstants.PICS_API_KEY;
+			this.galleryItems = new ArrayList<SFGGalleryItem>();
+		}
+		
+		public SFGGalleryWebserviceTask(String _url, String endpointOverride) {
+			super(userContext);
+			
+			this.url = _url + endpointOverride + ".json?key=" + DSConstants.PICS_API_KEY + "&userid=" + userContext.getUserUid();
 			this.galleryItems = new ArrayList<SFGGalleryItem>();
 		}
 		
@@ -285,7 +325,7 @@ public class SFGGallery extends AbstractActivity {
 		@Override
 		protected void onError(Exception e) {
 			new AlertDialog.Builder(SFGGallery.this)
-				.setMessage("Unable to update")
+				.setMessage(getString(R.string.campaign_sfg_update_error))
 				.setCancelable(false)
 				.setPositiveButton(getString(R.string.ok_upper), null)
 				.create()

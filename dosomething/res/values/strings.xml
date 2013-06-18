@@ -73,11 +73,14 @@
     <string name="profile_load_error">Unable to load Profile data at this time. Please try again later.</string>
     
     <string name="campaign_report_back_button">TELL US!</string>
+    <string name="campaign_sfg_my_pets">MY PETS</string>
+    <string name="campaign_sfg_my_submissions">My Submissions</string>
     <string name="campaign_sfg_no_results">No results were found.</string>
     <string name="campaign_sfg_submit_error">There was an error attempting to submit. Please try again later.</string>
     <string name="campaign_sfg_submit_pet">SUBMIT A PET</string>
     <string name="campaign_sfg_submit_success">Thanks for your submission!</string>
-    <string name="campaign_sfg_submitting">Submitting#8230;</string>
+    <string name="campaign_sfg_submitting">Submitting…</string>
+    <string name="campaign_sfg_update_error">Unable to update. Please check your internet connection and try again.</string>
     <string name="campaign_sign_up_button">SIGN UP!</string>
     <string name="campaign_sign_up_button_already_signed_up">Already Signed Up</string>
     <string name="campaign_sign_up_sms_action_alert_title">Get Ready to Game</string>
@@ -97,7 +100,7 @@
     <string name="campaign_locator">LOCATOR</string>
     <string name="campaign_resources">RESOURCES</string>
     <string name="campaign_faq">FAQ</string>
-    <string name="campaign_loading">Loading Campaign...</string>
+    <string name="campaign_loading">Loading Campaign…</string>
     
     <string name="campaign_action_list">Campaign Action List</string>
     
