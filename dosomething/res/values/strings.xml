@@ -76,6 +76,9 @@
     <string name="campaign_sfg_my_pets">MY PETS</string>
     <string name="campaign_sfg_my_submissions">My Submissions</string>
     <string name="campaign_sfg_no_results">No results were found.</string>
+    <string name="campaign_sfg_p4p_share_description">%1$s is super cute and deserves a loving home. Could you be %1$s\'s new owner?</string>
+    <string name="campaign_sfg_p4p_share_title">Want to adopt me?</string>
+    <string name="campaign_sfg_share_me">Share Me</string>
     <string name="campaign_sfg_submit_error">There was an error attempting to submit. Please try again later.</string>
     <string name="campaign_sfg_submit_pet">SUBMIT A PET</string>
     <string name="campaign_sfg_submit_success">Thanks for your submission!</string>

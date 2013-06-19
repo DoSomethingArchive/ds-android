@@ -17,6 +17,7 @@ public class DSConstants {
 	
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
 	
+	public static final String FACEBOOK_APP_ID = "525191857506466";
 	public static final String PICS_API_KEY = "aea12e3fe5f83f0d574fdff0342aba91";
 	
 	public static enum EXTRAS_KEY {
