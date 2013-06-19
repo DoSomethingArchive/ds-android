@@ -49,6 +49,13 @@
 		        android:textColor="@color/dark_blue"
 		        android:textSize="@dimen/font_size_medium"
                 android:textStyle="bold"/>
+			<Button
+			    android:id="@+id/shareButton"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:textStyle="bold"
+			    android:gravity="center"
+			    android:text="@string/campaign_sfg_share_me" />
 		    <RelativeLayout
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content">
