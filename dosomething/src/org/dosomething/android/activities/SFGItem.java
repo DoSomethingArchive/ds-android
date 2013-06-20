@@ -1,7 +1,14 @@
 package org.dosomething.android.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.SFGGalleryItem;
 import org.dosomething.android.widget.CustomActionBar;
@@ -13,13 +20,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.FacebookException;
 import com.facebook.widget.WebDialog;
@@ -32,6 +39,7 @@ public class SFGItem extends AbstractActivity {
 	
 	@Inject private ImageLoader imageLoader;
 	@Inject @Named("DINComp-CondBold")Typeface dinTypeface;
+	@Inject private UserContext userContext;
 
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.image) private ImageView imageView;
@@ -119,8 +127,15 @@ public class SFGItem extends AbstractActivity {
 	    feedDialog.setOnCompleteListener(new WebDialog.OnCompleteListener() {
 			@Override
 			public void onComplete(Bundle values, FacebookException error) {
-				// TODO implement
 				boolean shareSuccess = values != null && !values.isEmpty();
+				if (shareSuccess) {
+					// Send POST to update the share count
+					int postId = sfgItem.getId();
+					String uid = userContext.getUserUid();
+					new PostShareTask(postId, uid).execute();
+					
+					Toast.makeText(SFGItem.this, campaign.getSFGData().getShareSuccessMsg(), Toast.LENGTH_LONG).show();
+				}
 			}
 	    });
 	    feedDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -144,5 +159,42 @@ public class SFGItem extends AbstractActivity {
 		answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), camp);
 		return answer;
 	}
+	
+	/**
+	 * Notify database about a post being shared.
+	 */
+	private class PostShareTask extends AbstractWebserviceTask {
+		private int postId;
+		private String uid;
+		
+		public PostShareTask(int _postId, String _uid) {
+			super(userContext);
+			
+			postId = _postId;
+			uid = _uid;
+		}
 
+		@Override
+		protected void onSuccess() {
+		}
+
+		@Override
+		protected void onFinish() {
+		}
+
+		@Override
+		protected void onError(Exception e) {
+		}
+
+		@Override
+		protected void doWebOperation() throws Exception {
+			String url = campaign.getSFGData().getGalleryUrl() + "shares.json?key=" + DSConstants.PICS_API_KEY;
+			
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("share[uid]", uid));
+			params.add(new BasicNameValuePair("share[post_id]", String.valueOf(postId)));
+			
+			doPost(url, params);
+		}
+	}
 }

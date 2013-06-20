@@ -14,6 +14,7 @@ public class SFGData implements Serializable {
 	private String galleryUrl;
 	private String defaultEndpoint;
 	private String mySubmissionsEndpoint;
+	private String shareSuccessMsg;
 	private ArrayList<WebFormSelectOptions> typeOptions;
 	private ArrayList<WebFormSelectOptions> locationOptions;
 	
@@ -24,6 +25,7 @@ public class SFGData implements Serializable {
 		galleryUrl = obj.optString("gallery-url");
 		defaultEndpoint = obj.optString("default-endpoint");
 		mySubmissionsEndpoint = obj.optString("my-submissions-endpoint");
+		shareSuccessMsg = obj.optString("share-success-message");
 		
 		JSONObject filterObj = obj.optJSONObject("filter-options");
 		
@@ -54,6 +56,10 @@ public class SFGData implements Serializable {
 	
 	public String getMySubmissionsEndpoint() {
 		return mySubmissionsEndpoint;
+	}
+	
+	public String getShareSuccessMsg() {
+		return shareSuccessMsg;
 	}
 	
 	public ArrayList<WebFormSelectOptions> getTypeOptions() {
