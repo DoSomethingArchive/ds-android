@@ -33,6 +33,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -67,6 +68,8 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.list) private PullToRefreshListView pullToRefreshView;
 	@InjectView(R.id.filters) private LinearLayout filtersView;
+	@InjectView(R.id.type_filter) private Spinner typeFilterSpinner;
+	@InjectView(R.id.location_filter) private Spinner locFilterSpinner;
 	
 	private Campaign campaign;
 	private ArrayList<SFGGalleryItem> galleryItems;
@@ -123,7 +126,7 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 		subMenuView.addMenuItem(this, getString(R.string.campaign_sfg_submit_pet), SFGSubmit.getIntent(this, campaign));
 		
 		// Setup spinners with filter options pulled from campaign data
-		Spinner typeFilterSpinner = (Spinner)findViewById(R.id.type_filter);
+		typeFilterSpinner = (Spinner)findViewById(R.id.type_filter);
 		SFGData sfgData = campaign.getSFGData();
 		ArrayList<WebFormSelectOptions> typeOptions = sfgData.getTypeOptions();
 		List<String> types = new ArrayList<String>();
@@ -132,8 +135,31 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 			types.add(options.getLabel());
 		}
 		typeFilterSpinner.setAdapter(new FilterAdapter(SFGGallery.this, types));
+		typeFilterSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				// The "featured" filter can't have a location applied to it. Server API does not support it.
+				WebFormSelectOptions typeOpt = campaign.getSFGData().getTypeOptions().get(position);
+				String typeFilter = typeOpt.getValue();
+				if (typeFilter.equals("featured")) {
+					// Set location option to default
+					locFilterSpinner.setSelection(0);
+					// Disable location spinner
+					locFilterSpinner.setEnabled(false);
+				}
+				else {
+					locFilterSpinner.setEnabled(true);
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+			}
+			
+		});
 		
-		Spinner locFilterSpinner = (Spinner)findViewById(R.id.location_filter);
+		locFilterSpinner = (Spinner)findViewById(R.id.location_filter);
 		ArrayList<WebFormSelectOptions> locOptions = sfgData.getLocationOptions();
 		List<String> locations = new ArrayList<String>();
 		for (int i = 0; i < locOptions.size(); i++) {
