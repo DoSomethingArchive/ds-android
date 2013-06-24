@@ -45,7 +45,7 @@ public class SFGItem extends AbstractActivity {
 	@InjectView(R.id.image) private ImageView imageView;
 	@InjectView(R.id.share_count) private TextView shareCountView;
 	@InjectView(R.id.shelter) private TextView shelterView;
-	@InjectView(R.id.state) private TextView stateView;
+	@InjectView(R.id.location) private TextView locationView;
 	@InjectView(R.id.story) private TextView storyView; 
 	@InjectView(R.id.progressBar) private ProgressBar progressBar;
 	@InjectView(R.id.shareButton) private Button shareButton;
@@ -87,6 +87,7 @@ public class SFGItem extends AbstractActivity {
 			if (campaign != null && imageView != null && progressBar != null) {
 				String imageUrl = campaign.getSFGData().getGalleryUrl() + sfgItem.getImageURL();
 				imageLoader.displayImage(imageUrl, imageView, new ProgressBarImageLoadingListener(progressBar));
+				imageView.setAdjustViewBounds(true);
 			}
 			
 			if (shareCountView != null) {
@@ -99,13 +100,13 @@ public class SFGItem extends AbstractActivity {
 				shelterView.setText(sfgItem.getShelter());
 			}
 			
-			if (stateView != null) {
-				stateView.setTypeface(dinTypeface, Typeface.BOLD);
-				stateView.setText(sfgItem.getState());
+			if (locationView != null) {
+				locationView.setTypeface(dinTypeface, Typeface.BOLD);
+				locationView.setText(sfgItem.getCity() + ", " + sfgItem.getState());
 			}
 			
-			if (storyView != null) {
-				storyView.setTypeface(dinTypeface, Typeface.BOLD);
+			if (storyView != null && sfgItem.getStory() != null
+					&& !sfgItem.getStory().equalsIgnoreCase("null")) {
 				storyView.setText(sfgItem.getStory());
 			}
 		}
