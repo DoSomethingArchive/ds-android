@@ -38,5 +38,6 @@
 <color name="blue_menu_active">#4A7AB4</color>
 <color name="dark_blue">#173781</color>
 <color name="dark_grey_background">#2A2C2B</color>
+<color name="share_button_blue">#3D75B1</color>
 <color name="white">#FFF</color>
 </resources>

@@ -471,6 +471,7 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 			if (image != null && progressBar != null) {
 				String imageUrl = campaign.getSFGData().getGalleryUrl() + item.getImageURL();
 				imageLoader.displayImage(imageUrl, image, new ProgressBarImageLoadingListener(progressBar));
+				image.setAdjustViewBounds(true);
 			}
 			
 			if (shareCount != null) {
