@@ -13,17 +13,18 @@ public class SFGData implements Serializable {
 	
 	private String galleryUrl;
 	private String defaultEndpoint;
+	private String locatorType;
 	private String mySubmissionsEndpoint;
 	private String shareSuccessMsg;
 	private ArrayList<WebFormSelectOptions> typeOptions;
 	private ArrayList<WebFormSelectOptions> locationOptions;
-	
 	
 	public SFGData() {}
 	
 	public SFGData(JSONObject obj) throws JSONException {
 		galleryUrl = obj.optString("gallery-url");
 		defaultEndpoint = obj.optString("default-endpoint");
+		locatorType = obj.optString("locator-type");
 		mySubmissionsEndpoint = obj.optString("my-submissions-endpoint");
 		shareSuccessMsg = obj.optString("share-success-message");
 		
@@ -52,6 +53,10 @@ public class SFGData implements Serializable {
 	
 	public String getDefaultEndpoint() {
 		return defaultEndpoint;
+	}
+	
+	public String getLocatorType() {
+		return locatorType;
 	}
 	
 	public String getMySubmissionsEndpoint() {

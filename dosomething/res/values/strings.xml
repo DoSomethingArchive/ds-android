@@ -73,6 +73,7 @@
     <string name="profile_load_error">Unable to load Profile data at this time. Please try again later.</string>
     
     <string name="campaign_report_back_button">TELL US!</string>
+    <string name="campaign_sfg_find_me">Find Me</string>
     <string name="campaign_sfg_my_pets">MY PETS</string>
     <string name="campaign_sfg_my_submissions">My Submissions</string>
     <string name="campaign_sfg_no_results">No results were found.</string>
