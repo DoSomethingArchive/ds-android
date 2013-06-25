@@ -11,14 +11,13 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
-import com.nostra13.universalimageloader.cache.disc.impl.FileCountLimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.DecodingType;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 public class MyModule extends AbstractModule {
@@ -74,14 +73,11 @@ public class MyModule extends AbstractModule {
 			DisplayImageOptions displayOptions = new DisplayImageOptions.Builder()
 				.cacheInMemory() // allow images to memory cache by default
 				.cacheOnDisc() // allow images to disc cache by default
-				.decodingType(DecodingType.MEMORY_SAVING)
+				.imageScaleType(ImageScaleType.EXACTLY)
 				.build();
 			
 			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-				.maxImageWidthForMemoryCache(480/*px*/)
-	            .maxImageHeightForMemoryCache(800/*px*/)
-		        .httpConnectTimeout(5000/*millis = 5sec*/)
-		        .httpReadTimeout(30000/*millis = 30sec*/)
+				.memoryCacheExtraOptions(480/*px*/, 800/*px*/)
 		        .threadPoolSize(5)
 		        .threadPriority(Thread.MIN_PRIORITY + 2)
 		        .denyCacheImageMultipleSizesInMemory()
