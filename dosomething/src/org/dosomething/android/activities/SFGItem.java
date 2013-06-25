@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,6 +49,7 @@ public class SFGItem extends AbstractActivity {
 	@InjectView(R.id.location) private TextView locationView;
 	@InjectView(R.id.story) private TextView storyView; 
 	@InjectView(R.id.progressBar) private ProgressBar progressBar;
+	@InjectView(R.id.findButton) private Button findButton;
 	@InjectView(R.id.shareButton) private Button shareButton;
 	
 	private Campaign campaign;
@@ -77,6 +79,26 @@ public class SFGItem extends AbstractActivity {
 				publishFeedDialog();
 			}
 		});
+		
+		if (campaign.getSFGData().getLocatorType() != null) {
+			findButton.setVisibility(Button.VISIBLE);
+			findButton.setTypeface(dinTypeface);
+			findButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (campaign.getSFGData().getLocatorType().equals("adoptapet")) {
+						// TODO: this url is specific to Pics for Pets. Will need to be changed for other campaigns.
+						String url = "http://www.adoptapet.com/animal-shelter-search?city_or_zip=" + sfgItem.getCity()
+									+ ",%20" + sfgItem.getState()
+									+ "&shelter_name=" + sfgItem.getShelter()
+									+ "&distance=50&adopts_out=all";
+						Intent i = new Intent(Intent.ACTION_VIEW);
+						i.setData(Uri.parse(url));
+						startActivity(i);
+					}
+				}
+			});
+		}
 	}
 	
 	@Override
@@ -108,6 +130,9 @@ public class SFGItem extends AbstractActivity {
 			if (storyView != null && sfgItem.getStory() != null
 					&& !sfgItem.getStory().equalsIgnoreCase("null")) {
 				storyView.setText(sfgItem.getStory());
+			}
+			else {
+				storyView.setVisibility(TextView.GONE);
 			}
 		}
 	}
