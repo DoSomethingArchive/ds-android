@@ -25,9 +25,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
+import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiscCache;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.DecodingType;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
 /**
  * Activity for displaying an image from a campaign's gallery 
@@ -103,10 +108,20 @@ public class GalleryImageItemDisplay extends AbstractActivity {
 				// make a DisplayImageOptions without cacheInMemory or cacheOnDisc, because the large image will hurt the cache
 				DisplayImageOptions imageLoaderOptions = 
 						new DisplayImageOptions.Builder()
-							.decodingType(DecodingType.MEMORY_SAVING)
+							.imageScaleType(ImageScaleType.EXACTLY)
 							.build();
 				
-		        imageLoader.displayImage(imageURL, imageView, imageLoaderOptions);
+				ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(ctx)
+					.memoryCacheExtraOptions(480/*px*/, 800/*px*/)
+			        .threadPoolSize(5)
+			        .threadPriority(Thread.MIN_PRIORITY + 2)
+			        .denyCacheImageMultipleSizesInMemory()
+			        .discCache(new LimitedAgeDiscCache(StorageUtils.getIndividualCacheDirectory(ctx), new Md5FileNameGenerator(), 604800/*seconds = 7days*/))
+			        .memoryCache(new UsingFreqLimitedMemoryCache(2097152/*bytes = 2mb*/))
+			        .defaultDisplayImageOptions(imageLoaderOptions)
+			        .build();
+				
+				imageLoader.init(config);
 				ProgressBar progressBar = (ProgressBar)flv.findViewById(R.id.galleryImageItemDisplayProgress);
 				imageLoader.displayImage(imageURL, imageView, new ProgressBarImageLoadingListener(progressBar));
 				
