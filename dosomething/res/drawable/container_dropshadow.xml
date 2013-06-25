@@ -4,38 +4,44 @@
      <!-- Drop Shadow Stack -->
      <item>
         <shape>
-            <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
-            <solid android:color="#00AACCCC" />
-        </shape>
-    </item>
-     <item>
-        <shape>
-            <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
-            <solid android:color="#00CCCCCC" />
+            <padding android:top="0dp" android:right="1dp" android:bottom="1dp" android:left="0dp" />
+            <solid android:color="#00909090" />
         </shape>
     </item>
      <item>
         <shape>
             <padding android:top="0dp" android:right="1dp" android:bottom="1dp" android:left="0dp" />
-            <solid android:color="#10CCCCCC" />
+            <solid android:color="#10909090" />
         </shape>
     </item>
      <item>
         <shape>
             <padding android:top="0dp" android:right="1dp" android:bottom="1dp" android:left="0dp" />
-            <solid android:color="#20CCCCCC" />
+            <solid android:color="#20909090" />
         </shape>
     </item>
      <item>
         <shape>
             <padding android:top="0dp" android:right="1dp" android:bottom="1dp" android:left="0dp" />
-            <solid android:color="#30CCCCCC" />
+            <solid android:color="#30909090" />
         </shape>
     </item>
     <item>
         <shape>
             <padding android:top="0dp" android:right="1dp" android:bottom="1dp" android:left="0dp" />
-            <solid android:color="#50CCCCCC" />
+            <solid android:color="#40909090" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding android:top="0dp" android:right="1dp" android:bottom="1dp" android:left="0dp" />
+            <solid android:color="#50909090" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding android:top="0dp" android:right="1dp" android:bottom="1dp" android:left="0dp" />
+            <solid android:color="#60909090" />
         </shape>
     </item>
 
