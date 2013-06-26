@@ -123,7 +123,7 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 		ActionBarSubMenu subMenuView = subMenuAction.getSubMenuView();
 		subMenuView.addMenuItem(this, getString(R.string.campaign_gallery), SFGGallery.getIntent(this, campaign));
 		subMenuView.addMenuItem(this, getString(R.string.campaign_sfg_my_pets), SFGGallery.getIntent(this, campaign, true));
-		subMenuView.addMenuItem(this, getString(R.string.campaign_sfg_submit_pet), SFGSubmit.getIntent(this, campaign));
+		subMenuView.addMenuItem(this, getString(R.string.campaign_sfg_submit_pet), SFGSubmit.getIntent(this, campaign, userContext));
 		
 		// Setup spinners with filter options pulled from campaign data
 		typeFilterSpinner = (Spinner)findViewById(R.id.type_filter);
