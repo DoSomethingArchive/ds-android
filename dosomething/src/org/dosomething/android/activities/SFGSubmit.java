@@ -137,10 +137,16 @@ public class SFGSubmit extends AbstractWebForm {
 			.show();
 	}
 
-	public static Intent getIntent(Context context, Campaign campaign) {
-		Intent answer = new Intent(context, SFGSubmit.class);
-		answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), campaign);
-		return answer;
+	public static Intent getIntent(Context _context, Campaign _campaign, UserContext _userContext) {
+		if (_userContext != null && _userContext.isLoggedIn() && _userContext.getUserUid() != null) {
+			Intent answer = new Intent(_context, SFGSubmit.class);
+			answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), _campaign);
+			return answer;
+		}
+		else {
+			Intent answer = new Intent(_context, Login.class);
+			return answer;
+		}
 	}
 
 	/**
