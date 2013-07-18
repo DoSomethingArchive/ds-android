@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@drawable/login_background">
-    
-    <ScrollView 
-		android:orientation="vertical"
-		android:layout_weight="1.0"
-		android:layout_width="fill_parent"
-		android:layout_height="0dp"
-		android:fillViewport="true">
-    
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			
-    		<ImageView style="@style/LoginLogo"/>
-    
-		    <LinearLayout style="@style/LoginInputsLayout"
-		        android:focusableInTouchMode="true"
-		        android:descendantFocusability="beforeDescendants">
-		    
-			    <EditText android:id="@+id/username" android:hint="@string/username" style="@style/LoginInput"/>
-			    <EditText android:id="@+id/password" style="@style/LoginInput" android:hint="@string/password" android:inputType="textPassword" android:layout_marginTop="6dp"/>
-			    <Button android:onClick="logIn" style="@style/LoginButton" android:layout_marginTop="10dp" android:text="@string/log_in_upper"/>
-			    <Button android:onClick="signUp" style="@style/LoginButton" android:layout_marginTop="6dp" android:text="@string/sign_up_upper"/>
-			    <Button android:onClick="facebookLogin" style="@style/FacebookLoginButton" android:background="@drawable/facebook_login"/>
-			
-		    </LinearLayout>
-		    
-		 </LinearLayout>
-		 
-	</ScrollView>
-    
-</LinearLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_weight="1.0"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:fillViewport="true"
+	android:background="@drawable/login_background">
+   
+       <LinearLayout
+           android:orientation="vertical"
+           android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		
+   		<ImageView style="@style/LoginLogo"/>
+   
+	    <LinearLayout style="@style/LoginInputsLayout"
+	        android:focusableInTouchMode="true"
+	        android:descendantFocusability="beforeDescendants">
+	    
+		    <EditText android:id="@+id/username" android:hint="@string/username" style="@style/LoginInput"/>
+		    <EditText android:id="@+id/password" style="@style/LoginInput" android:hint="@string/password" android:inputType="textPassword" android:layout_marginTop="6dp"/>
+		    <Button
+		        android:onClick="logIn"
+		        style="@style/LoginButton"
+		        android:layout_marginTop="10dp"
+		        android:text="@string/log_in_upper"/>
+		    <Button android:onClick="signUp"
+		        style="@style/LoginButton"
+		        android:layout_marginTop="6dp"
+		        android:text="@string/sign_up_upper"/>
+		    <com.facebook.widget.LoginButton
+		        xmlns:fb="http://schemas.android.com/apk/res-auto"
+		        android:id="@+id/facebookLoginButton"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_horizontal"
+		        android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+		        android:layout_marginTop="20dp"
+		        android:textStyle="bold"
+		        fb:login_text="@string/facebook_log_in"
+		        fb:logout_text="@string/facebook_log_in"/>
+		
+	    </LinearLayout>
+	    
+	 </LinearLayout>
+	 
+</ScrollView>

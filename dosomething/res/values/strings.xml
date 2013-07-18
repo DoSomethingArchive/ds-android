@@ -4,13 +4,14 @@
     <string name="special_smiley">&#9786;</string>
     <string name="username">Email / Username</string>
     <string name="password">Password</string>
-    <string name="facebook_log_in">Login with Facebook</string>
     <string name="log_in_auth_failed">Password is incorrect. Please try again.</string>
     <string name="log_in_failed">Login failed. Please check your internet connection and try again.</string>
     <string name="register_failed">Registration failed. Please check your internet connection and try again.</string>
     <string name="confirm_password_failed">The passwords entered do not match.</string>
     <string name="auth_failed">User authentication has failed.</string>
+    <string name="facebook_app_id">525191857506466</string>
     <string name="facebook_auth_failed">Facebook login failed. Please try again.</string>
+    <string name="facebook_log_in">Login with Facebook</string>
     <string name="form_submit_failed">The form submit has failed. Please try again.</string>
     <string name="gallery_feed_failed">The gallery has failed to load. Please try again.</string>
     <string name="campaigns_failed">The current campaigns have failed to load. Please try again.</string>

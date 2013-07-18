@@ -4,21 +4,21 @@ import org.dosomething.android.DSConstants;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.transfer.Campaign;
 
-import roboguice.activity.RoboActivity;
+import roboguice.activity.RoboFragmentActivity;
 
-public abstract class AbstractActivity extends RoboActivity {
-	
+public abstract class AbstractFragmentActivity extends RoboFragmentActivity {
+
 	protected abstract String getPageName();
 	
 	public void onStart() {
-	   super.onStart();
-	   Analytics.startSession(this);
+		super.onStart();
+		Analytics.startSession(this);
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		
 		boolean bLogged = false;
 		if (getIntent() != null && getIntent().getExtras() != null) {
 			Campaign campaign = (Campaign) getIntent().getExtras().get(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue());
@@ -34,8 +34,7 @@ public abstract class AbstractActivity extends RoboActivity {
 	}
 	
 	public void onStop() {
-	   super.onStop();
-	   Analytics.endSession(this);
+		super.onStop();
+		Analytics.endSession(this);
 	}
-	
 }

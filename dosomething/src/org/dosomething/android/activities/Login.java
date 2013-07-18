@@ -13,41 +13,36 @@ import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.json.JSONObject;
 
-import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.facebook.android.DialogError;
-import com.facebook.android.Facebook;
-import com.facebook.android.Facebook.DialogListener;
-import com.facebook.android.FacebookError;
+import com.facebook.Session;
 import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar.Action;
 
-public class Login extends AbstractActivity {
+
+
+public class Login extends AbstractFragmentActivity {
 	
-	private static final String TAG = "Login";
-	private static final int REQ_FACEBOOK_LOGIN = 111;
 	private static final int REQ_SIGN_UP = 112;
 	
-    
-	private Facebook facebook = new Facebook(DSConstants.FACEBOOK_APP_ID);
-	
-	@InjectView(R.id.username) private EditText username;
-	@InjectView(R.id.password) private EditText password;
+	private LoginFragment loginFragment;
 	
 	@Inject private UserContext userContext;
 	
 	private Context context;
+	
+	private DSFacebookLoginTask fbLoginTask;
 	
 	@Override
 	protected String getPageName() {
@@ -57,16 +52,30 @@ public class Login extends AbstractActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
-        
         context = this;
+        
+        if (savedInstanceState == null) {
+            // Add the fragment on initial activity setup
+            loginFragment = new LoginFragment();
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, loginFragment).commit();
+        }
+        else {
+            // Or set the fragment from restored state info
+            loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(android.R.id.content);
+        }
     }
     
+    /**
+     * Execute task for normal DoSomething login with username/email and password
+     */
     public void logIn(View v){
-    	String email = this.username.getText().toString();
-    	String password = this.password.getText().toString();
+    	EditText username = (EditText)findViewById(R.id.username);
+    	EditText password = (EditText)findViewById(R.id.password);
     	
-    	new MyLoginTask(email, password).execute();
+    	String user = username.getText().toString();
+    	String pw = password.getText().toString();
+    	
+    	new DSLoginTask(user, pw).execute();
     }
     
     /**
@@ -142,56 +151,29 @@ public class Login extends AbstractActivity {
     	startActivityForResult(new Intent(this, Register.class), REQ_SIGN_UP);
     }
     
-    public void facebookLogin(View v){
-
-    	facebook.authorize(this, new String[]{"email","user_birthday"}, REQ_FACEBOOK_LOGIN, new DialogListener(){
-
-			@Override
-			public void onComplete(Bundle values) {
-				
-				new MyFacebookLoginTask(facebook.getAccessToken()).execute();
-			}
-
-			@Override
-			public void onFacebookError(FacebookError e) {
-				new AlertDialog.Builder(Login.this)
-					.setMessage(getString(R.string.facebook_auth_failed))
-					.setCancelable(false)
-					.setPositiveButton(getString(R.string.ok_upper), null)
-					.create()
-					.show();
-			}
-
-			@Override
-			public void onError(DialogError e) {
-				new AlertDialog.Builder(Login.this)
-					.setMessage(getString(R.string.facebook_auth_failed))
-					.setCancelable(false)
-					.setPositiveButton(getString(R.string.ok_upper), null)
-					.create()
-					.show();
-			}
-
-			@Override
-			public void onCancel() {
-				HashMap<String, String> param = new HashMap<String, String>();
-				param.put("facebook", "authorize-cancelled");
-				Analytics.logEvent(getPageName(), param);
-				
-				Log.d(TAG, "facebook authorize cancelled");
-			}
-    		
-    	});
+    /**
+     * After logging in with Facebook, execute login to DoSomething backend with
+     * the given Facebook access token.
+     * 
+     * @param accessToken Access token provided by Facebook Graph API
+     */
+    public void dsFacebookLogin(String accessToken) {
+    	if (fbLoginTask == null) {
+    		fbLoginTask = new DSFacebookLoginTask();
+    		fbLoginTask.executeWithToken(accessToken);
+    	}
+    	// If a FB login task was already create, don't execute another one unless
+    	// it's already finished executing its previous task.
+    	else if (fbLoginTask.getStatus() == AsyncTask.Status.FINISHED) {
+    		fbLoginTask.executeWithToken(accessToken);
+    	}
     }
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQ_FACEBOOK_LOGIN) {
-        	 facebook.authorizeCallback(requestCode, resultCode, data);
-        }
-        else if (requestCode == REQ_SIGN_UP) {
+        if (requestCode == REQ_SIGN_UP) {
         	if (resultCode == RESULT_OK) {
         		setResult(RESULT_OK);
         		finish();
@@ -200,14 +182,14 @@ public class Login extends AbstractActivity {
     }
     
     public static Action getLogoutAction(Context context, UserContext userContext) {
-    	return new MyLogoutAction(context, userContext);
+    	return new DSLogoutAction(context, userContext);
     }
     
-    private static class MyLogoutAction implements Action {
+    private static class DSLogoutAction implements Action {
     	private Context context;
     	private UserContext userContext;
     	
-    	public MyLogoutAction(Context context, UserContext userContext) {
+    	public DSLogoutAction(Context context, UserContext userContext) {
 			this.context = context;
 			this.userContext = userContext;
 		}
@@ -223,6 +205,12 @@ public class Login extends AbstractActivity {
 				.setMessage(context.getString(R.string.logout_confirm))
 				.setPositiveButton(context.getString(R.string.yes_upper), new OnClickListener() {
 					public void onClick(DialogInterface arg0, int arg1) {
+						// Close Facebook session and clear token info if any
+				    	Session session = Session.getActiveSession();
+				    	if (session != null) {
+				    		session.closeAndClearTokenInformation();
+				    	}
+				    	
 						userContext.clear();
 						context.startActivity(new Intent(context, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 					}
@@ -233,8 +221,7 @@ public class Login extends AbstractActivity {
 		}
     }
     
-    
-	private class MyLoginTask extends AbstractWebserviceTask {
+	private class DSLoginTask extends AbstractWebserviceTask {
 
 		private String username;
 		private String password;
@@ -243,7 +230,7 @@ public class Login extends AbstractActivity {
 		
 		private ProgressDialog pd;
 		
-		public MyLoginTask(String username, String password) {
+		public DSLoginTask(String username, String password) {
 			super(userContext);
 			this.username = username;
 			this.password = password;
@@ -301,7 +288,7 @@ public class Login extends AbstractActivity {
 		}
 	}
 	
-	private class MyFacebookLoginTask extends AbstractWebserviceTask {
+	private class DSFacebookLoginTask extends AbstractWebserviceTask {
 
 		private String accessToken;
 		
@@ -309,9 +296,8 @@ public class Login extends AbstractActivity {
 		
 		private ProgressDialog pd;
 		
-		public MyFacebookLoginTask(String accessToken) {
+		public DSFacebookLoginTask() {
 			super(userContext);
-			this.accessToken = accessToken;
 		}
 		
 		@Override
@@ -319,10 +305,14 @@ public class Login extends AbstractActivity {
 			super.onPreExecute();
 			pd = ProgressDialog.show(context, null, getString(R.string.logging_in));
 		}
-
+		
+		public void executeWithToken(String accessToken) {
+			this.accessToken = accessToken;
+			this.execute();
+		}
+		
 		@Override
 		protected void onSuccess() {
-			
 			if (loginSuccess) {
 				HashMap<String, String> param = new HashMap<String, String>();
 				param.put("facebook", "login-success");
@@ -337,12 +327,20 @@ public class Login extends AbstractActivity {
 		
 		@Override
 		protected void onFinish() {
-			pd.dismiss();
+			if (pd != null && pd.isShowing()) {
+				try {
+					pd.dismiss();
+					pd = null;
+				}
+				catch (IllegalArgumentException e) {
+					// Catching error if progress dialog is dismissed after activity ends
+					Log.w(getPageName(), "Dismissing progress dialog after Login activity ended");
+				}
+			}
 		}
 
 		@Override
 		protected void onError(Exception e) {
-			
 			Toast.makeText(Login.this, getString(R.string.log_in_failed), Toast.LENGTH_LONG).show();
 		}
 
