@@ -260,14 +260,21 @@ public class Profile extends AbstractActivity {
 				// gid's found in group_audience object show what campaigns, clubs,
 				// and other OG groups the user is signed up for
 				JSONObject jsonResponse = response.getBodyAsJSONObject();
-				JSONObject group_audience = jsonResponse.getJSONObject("group_audience");
-				JSONArray groups_array = group_audience.getJSONArray("und");
-				if (groups_array != null) {
-					for (int i = 0; i < groups_array.length(); i++) {
-						JSONObject group = groups_array.getJSONObject(i);
-						int gid = group.getInt("gid");
-						gids.add(Integer.valueOf(gid));
+				try {
+					JSONObject group_audience = jsonResponse.getJSONObject("group_audience");
+					JSONArray groups_array = group_audience.getJSONArray("und");
+					if (groups_array != null) {
+						for (int i = 0; i < groups_array.length(); i++) {
+							JSONObject group = groups_array.getJSONObject(i);
+							int gid = group.getInt("gid");
+							gids.add(Integer.valueOf(gid));
+						}
 					}
+				}
+				catch (Exception e) {
+					// The group_audience field is returned as an array when empty :(
+					// Catching the type-mismatch error here, and doing nothing
+					// since there should be no groups to add anyway.
 				}
 			}
 		}
@@ -380,7 +387,7 @@ public class Profile extends AbstractActivity {
 				content.addView(inflater.inflate(R.layout.profile_no_campaigns, null));
 			}else{
 				list = new ListView(Profile.this);
-				content.addView(list, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT, 1));
+				content.addView(list, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
 			
 				list.setOnItemClickListener(itemClickListener);
 				list.setAdapter(new MyAdapter(context, userCampaigns, campaigns));
