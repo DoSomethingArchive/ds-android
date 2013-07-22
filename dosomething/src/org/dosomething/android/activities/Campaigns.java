@@ -158,6 +158,11 @@ public class Campaigns extends AbstractActivity {
 		return new IntentAction(context, new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), R.drawable.action_bar_home);
 	}
 	
+	public static Intent getIntent(Context context) {
+		Intent answer = new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		return answer;
+	}
+	
 	private class CampaignItemClickListener implements OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> av, View v, int position,

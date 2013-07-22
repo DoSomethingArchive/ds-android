@@ -21,6 +21,7 @@ import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -396,16 +397,22 @@ public class Campaign extends AbstractActivity {
 		@Override
 		protected void onError(Exception e) {
 			String message;
-			if(e instanceof NoInternetException) {
+			if (e instanceof NoInternetException) {
 				message = getString(R.string.campaigns_no_internet);
-			} else {
-				message = getString(R.string.campaigns_failed);
+			}
+			else {
+				message = getString(R.string.campaign_load_error);
 			}
 			
 			new AlertDialog.Builder(Campaign.this)
 				.setMessage(message)
 				.setCancelable(false)
-				.setPositiveButton(getString(R.string.ok_upper), null)
+				.setPositiveButton(getString(R.string.ok_upper), new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						startActivity(Campaigns.getIntent(context));
+					}
+				})
 				.create()
 				.show();
 		}
