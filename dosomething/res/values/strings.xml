@@ -63,6 +63,7 @@
     <string name="campaign_share_title">Share</string>
     <string name="campaign_how_to_title">How To</string>
     <string name="campaign_gallery_title">Gallery</string>
+    <string name="campaign_moreInfo_title">More Information</string>
     <string name="campaign_prizes_title">Prizes</string>
     <string name="report_back_title">Tell Us</string>
     <string name="sign_up_title">Sign Up</string>
@@ -104,6 +105,7 @@
     <string name="campaign_gallery">GALLERY</string>
     <string name="campaign_prizes">PRIZES</string>
     <string name="campaign_locator">LOCATOR</string>
+    <string name="campaign_moreInfo">MORE INFORMATION</string>
     <string name="campaign_resources">RESOURCES</string>
     <string name="campaign_faq">FAQ</string>
     <string name="campaign_loading">Loading Campaign…</string>

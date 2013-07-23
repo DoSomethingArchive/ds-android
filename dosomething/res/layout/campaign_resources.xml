@@ -9,7 +9,7 @@
     <org.dosomething.android.widget.CustomActionBar
         android:id="@+id/actionbar" 
         style="@style/ActionBar" 
-        app:title="@string/campaign_resources_title"/>
+        app:title="@string/campaign_moreInfo_title"/>
     
     <ListView android:id="@+id/list"
     	android:layout_width="fill_parent"
