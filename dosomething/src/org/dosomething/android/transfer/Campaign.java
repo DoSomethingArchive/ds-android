@@ -55,6 +55,7 @@ public class Campaign implements Serializable {
 	private Gallery gallery;
 	private List<HowTo> howTos;
 	private Prize prize;
+	private MoreInfo moreInfo;
 	private List<Resource> resources;
 	private List<Challenge> challenges;
 	private WebForm reportBack;
@@ -153,6 +154,11 @@ public class Campaign implements Serializable {
 		JSONObject p = obj.optJSONObject("prizes");
 		if(p!=null) {
 			prize = new Prize(p);
+		}
+		
+		JSONObject mi = obj.optJSONObject("more-info");
+		if (mi != null) {
+			moreInfo = new MoreInfo(mi);
 		}
 		
 		JSONArray r = obj.optJSONArray("resources");
@@ -312,6 +318,10 @@ public class Campaign implements Serializable {
 
 	public void setPrize(Prize prize) {
 		this.prize = prize;
+	}
+	
+	public MoreInfo getMoreInfo() {
+		return moreInfo;
 	}
 
 	public List<Resource> getResources() {

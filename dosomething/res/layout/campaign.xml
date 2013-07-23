@@ -83,7 +83,7 @@
             <Button android:id="@+id/howTo" android:onClick="howTo" style="@style/CampaignButton" android:visibility="gone" android:text="@string/campaign_how_to"/>
             <Button android:id="@+id/gallery" android:onClick="gallery" style="@style/CampaignButton" android:visibility="gone" android:text="@string/campaign_gallery"/>
             <Button android:id="@+id/prizes" android:onClick="prizes" style="@style/CampaignButton" android:visibility="gone" android:text="@string/campaign_prizes"/>
-            <Button android:id="@+id/resources" android:onClick="resources" style="@style/CampaignButton" android:visibility="gone" android:text="@string/campaign_resources"/>
+            <Button android:id="@+id/resources" android:onClick="resources" style="@style/CampaignButton" android:visibility="gone" android:text="@string/campaign_moreInfo"/>
             <Button android:id="@+id/faq" android:onClick="faq" style="@style/CampaignButton" android:visibility="gone" android:text="@string/campaign_faq"/>
             
         </LinearLayout>
