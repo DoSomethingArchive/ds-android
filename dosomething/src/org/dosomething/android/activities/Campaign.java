@@ -133,7 +133,7 @@ public class Campaign extends AbstractActivity {
 		}
 
 		btnResources.setTypeface(headerTypeface, Typeface.BOLD);
-		if(!nullOrEmpty(campaign.getResources())){
+		if (!nullOrEmpty(campaign.getResources()) || campaign.getMoreInfo() != null) {
 			btnResources.setVisibility(Button.VISIBLE);
 		}
 
