@@ -6,13 +6,15 @@
     
     <TextView
         android:id="@+id/header"
+        android:textIsSelectable="false"
         style="@style/SubpageRowHeader" />
     <ImageView
         android:id="@+id/image"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/body"
+        android:textIsSelectable="false"
         style="@style/SubpageRowBody" />
     
 </LinearLayout>
