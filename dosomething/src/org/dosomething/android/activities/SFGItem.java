@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.DSConstants;
+import org.dosomething.android.FadeInResizeBitmapDisplayer;
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
@@ -36,7 +37,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class SFGItem extends AbstractActivity {
 	
@@ -111,7 +111,7 @@ public class SFGItem extends AbstractActivity {
 			if (campaign != null && imageView != null && progressBar != null) {
 				String imageUrl = campaign.getSFGData().getGalleryUrl() + sfgItem.getImageURL();
 				DisplayImageOptions imageOptions = new DisplayImageOptions.Builder()
-					.displayer(new FadeInBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME))
+					.displayer(new FadeInResizeBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME))
 					.build();
 				imageLoader.displayImage(imageUrl, imageView, imageOptions, new ProgressBarImageLoadingListener(progressBar));
 				imageView.setAdjustViewBounds(true);

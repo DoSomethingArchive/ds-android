@@ -3,6 +3,7 @@ package org.dosomething.android.activities;
 import java.util.List;
 
 import org.dosomething.android.DSConstants;
+import org.dosomething.android.FadeInResizeBitmapDisplayer;
 import org.dosomething.android.R;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.People;
@@ -26,7 +27,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class CampaignPeople extends AbstractActivity {
 	
@@ -91,7 +91,7 @@ public class CampaignPeople extends AbstractActivity {
 			header.setText(peopleItem.getHeader());
 			
 			DisplayImageOptions imageOptions = new DisplayImageOptions.Builder()
-				.displayer(new FadeInBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME))
+				.displayer(new FadeInResizeBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME))
 				.build();
 			ImageView image = (ImageView)v.findViewById(R.id.image);
 			imageLoader.displayImage(peopleItem.getImageUrl(), image, imageOptions);
