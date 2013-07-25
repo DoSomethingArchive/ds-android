@@ -62,6 +62,7 @@ public class Campaign extends AbstractActivity {
 	@InjectView(R.id.actions) private Button btnActions;
 	@InjectView(R.id.howTo) private Button btnHowTo;
 	@InjectView(R.id.gallery) private Button btnGallery;
+	@InjectView(R.id.people) private Button btnPeople;
 	@InjectView(R.id.prizes) private Button btnPrizes;
 	@InjectView(R.id.resources) private Button btnResources;
 	@InjectView(R.id.faq) private Button btnFaq;
@@ -131,6 +132,11 @@ public class Campaign extends AbstractActivity {
 		if(campaign.getPrize() != null){
 			btnPrizes.setVisibility(Button.VISIBLE);
 		}
+		
+		btnPeople.setTypeface(headerTypeface, Typeface.BOLD);
+		if (campaign.getPeople() != null) {
+			btnPeople.setVisibility(Button.VISIBLE);
+		}
 
 		btnResources.setTypeface(headerTypeface, Typeface.BOLD);
 		if (!nullOrEmpty(campaign.getResources()) || campaign.getMoreInfo() != null) {
@@ -176,27 +182,31 @@ public class Campaign extends AbstractActivity {
 		return str == null || str.trim().length() == 0;
 	}
 
-	public void actions(View v){
+	public void onClickActions(View v){
 		startActivity(CampaignActions.getIntent(this, campaign));
 	}
 	
-	public void howTo(View v){
+	public void onClickHowTo(View v){
 		startActivity(CampaignHowTo.getIntent(this, campaign));
 	}
 
-	public void gallery(View v){
+	public void onClickGallery(View v){
 		startActivity(CampaignGallery.getIntent(this, campaign));
 	}
+	
+	public void onClickPeople(View v) {
+		startActivity(CampaignPeople.getIntent(this, campaign));
+	}
 
-	public void prizes(View v){
+	public void onClickPrizes(View v){
 		startActivity(CampaignPrizes.getIntent(this, campaign));
 	}
 
-	public void resources(View v){
+	public void onClickResources(View v){
 		startActivity(CampaignResources.getIntent(this, campaign));
 	}
 
-	public void faq(View v){
+	public void onClickFaq(View v){
 		startActivity(CampaignFAQ.getIntent(this, campaign));
 	}
 

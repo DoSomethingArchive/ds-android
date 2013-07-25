@@ -44,6 +44,7 @@
         <activity android:name=".activities.CampaignFAQ"/>
         <activity android:name=".activities.CampaignGallery"/>
         <activity android:name=".activities.CampaignHowTo"/>
+        <activity android:name=".activities.CampaignPeople"/>
         <activity android:name=".activities.CampaignPrizes"/>
         <activity android:name=".activities.CampaignResources"/>
         <activity android:name=".activities.CampaignShare"/>

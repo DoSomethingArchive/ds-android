@@ -2,9 +2,11 @@ package org.dosomething.android.activities;
 
 import java.util.List;
 
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.HowTo;
+import org.dosomething.android.transfer.People;
+import org.dosomething.android.transfer.PeopleItem;
 import org.dosomething.android.widget.CustomActionBar;
 
 import roboguice.inject.InjectView;
@@ -24,44 +26,47 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class CampaignHowTo extends AbstractActivity {
-	
-	private static final String CAMPAIGN = "campaign";
+public class CampaignPeople extends AbstractActivity {
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 	
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+	@InjectView(R.id.intro) private TextView introText;
 	@InjectView(R.id.list) private ListView list;
-	
+
 	@Override
 	protected String getPageName() {
-		return "campaign-how-to";
+		return "campaign-people";
 	}
 	
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.campaign_how_to);
-        
-        actionBar.addAction(Campaigns.getHomeAction(this));
-        
-        Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
-        
-        list.setAdapter(new MyAdapter(getApplicationContext(), campaign.getHowTos()));
-    }
-	
-	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){
-		Intent answer = new Intent(context, CampaignHowTo.class);
-		answer.putExtra(CAMPAIGN, campaign);
-		return answer;
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.campaign_people);
+		
+		actionBar.addAction(Campaigns.getHomeAction(this));
+		
+		Campaign campaign = (org.dosomething.android.transfer.Campaign) getIntent().getExtras().get(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue());
+		
+		People people = campaign.getPeople();
+		if (people != null) {
+			introText.setText(people.getIntro());
+			
+			List<PeopleItem> peopleItems = people.getItems();
+			list.setAdapter(new PeopleListAdapter(getApplicationContext(), peopleItems));
+		}
 	}
 	
-	
-	private class MyAdapter extends ArrayAdapter<HowTo> {
+	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {
+		Intent answer = new Intent(context, CampaignPeople.class);
+		answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), campaign);
+		return answer;
+	}
 
-		public MyAdapter(Context context, List<HowTo> objects){
+	private class PeopleListAdapter extends ArrayAdapter<PeopleItem> {
+		public PeopleListAdapter(Context context, List<PeopleItem> objects) {
 			super(context, android.R.layout.simple_list_item_1, objects);
 		}
 		
@@ -69,7 +74,7 @@ public class CampaignHowTo extends AbstractActivity {
 		public boolean isEnabled(int position) {
 			return false;
 		}
-
+		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
@@ -77,20 +82,19 @@ public class CampaignHowTo extends AbstractActivity {
 				v = inflater.inflate(R.layout.hib_row, null);
 			}
 			
-			HowTo howTo = getItem(position);
+			PeopleItem peopleItem = getItem(position);
 			
 			TextView header = (TextView)v.findViewById(R.id.header);
 			header.setTypeface(headerTypeface, Typeface.BOLD);
-			header.setText(howTo.getHeader());
+			header.setText(peopleItem.getHeader());
 			
 			ImageView image = (ImageView)v.findViewById(R.id.image);
-			imageLoader.displayImage(howTo.getImageUrl(), image);
+			imageLoader.displayImage(peopleItem.getImageUrl(), image);
 			
 			TextView body = (TextView)v.findViewById(R.id.body);
-			body.setText(howTo.getBody());
-
+			body.setText(peopleItem.getBody());
+			
 			return v;
 		}
-		
 	}
 }

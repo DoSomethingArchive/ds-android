@@ -54,6 +54,7 @@ public class Campaign implements Serializable {
 	private List<Faq> faqs;
 	private Gallery gallery;
 	private List<HowTo> howTos;
+	private People people;
 	private Prize prize;
 	private MoreInfo moreInfo;
 	private List<Resource> resources;
@@ -149,6 +150,11 @@ public class Campaign implements Serializable {
 			for(int i=0; i<h.length(); i++) {
 				howTos.add(new HowTo(h.getJSONObject(i)));
 			}
+		}
+		
+		JSONObject jsonPeople = obj.optJSONObject("people");
+		if (jsonPeople != null) {
+			people = new People(jsonPeople);
 		}
 		
 		JSONObject p = obj.optJSONObject("prizes");
@@ -310,6 +316,10 @@ public class Campaign implements Serializable {
 
 	public void setHowTos(List<HowTo> howTos) {
 		this.howTos = howTos;
+	}
+	
+	public People getPeople() {
+		return people;
 	}
 
 	public Prize getPrize() {
