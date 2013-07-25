@@ -157,7 +157,7 @@ public class CampaignResources extends AbstractActivity {
 			
 			View v = convertView;
 			if (irItem.getType() == IRIType.MOREINFO) {
-				v = inflater.inflate(R.layout.more_info_row, null);
+				v = inflater.inflate(R.layout.hib_row, null);
 				
 				MoreInfoItem mi = irItem.getMoreInfo();
 				
