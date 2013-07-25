@@ -49,7 +49,9 @@ import com.google.inject.name.Named;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 /**
  * SFG = Share For Good
@@ -470,7 +472,10 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 			
 			if (image != null && progressBar != null) {
 				String imageUrl = campaign.getSFGData().getGalleryUrl() + item.getImageURL();
-				imageLoader.displayImage(imageUrl, image, new ProgressBarImageLoadingListener(progressBar));
+				DisplayImageOptions imageOptions = new DisplayImageOptions.Builder()
+					.displayer(new FadeInBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME))
+					.build();
+				imageLoader.displayImage(imageUrl, image, imageOptions, new ProgressBarImageLoadingListener(progressBar));
 				image.setAdjustViewBounds(true);
 			}
 			
