@@ -34,7 +34,9 @@ import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.Builder;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class SFGItem extends AbstractActivity {
 	
@@ -108,7 +110,10 @@ public class SFGItem extends AbstractActivity {
 		if (sfgItem != null) {
 			if (campaign != null && imageView != null && progressBar != null) {
 				String imageUrl = campaign.getSFGData().getGalleryUrl() + sfgItem.getImageURL();
-				imageLoader.displayImage(imageUrl, imageView, new ProgressBarImageLoadingListener(progressBar));
+				DisplayImageOptions imageOptions = new DisplayImageOptions.Builder()
+					.displayer(new FadeInBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME))
+					.build();
+				imageLoader.displayImage(imageUrl, imageView, imageOptions, new ProgressBarImageLoadingListener(progressBar));
 				imageView.setAdjustViewBounds(true);
 			}
 			

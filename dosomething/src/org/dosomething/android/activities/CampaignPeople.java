@@ -24,7 +24,9 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class CampaignPeople extends AbstractActivity {
 	
@@ -88,8 +90,11 @@ public class CampaignPeople extends AbstractActivity {
 			header.setTypeface(headerTypeface, Typeface.BOLD);
 			header.setText(peopleItem.getHeader());
 			
+			DisplayImageOptions imageOptions = new DisplayImageOptions.Builder()
+				.displayer(new FadeInBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME))
+				.build();
 			ImageView image = (ImageView)v.findViewById(R.id.image);
-			imageLoader.displayImage(peopleItem.getImageUrl(), image);
+			imageLoader.displayImage(peopleItem.getImageUrl(), image, imageOptions);
 			
 			TextView body = (TextView)v.findViewById(R.id.body);
 			body.setText(peopleItem.getBody());

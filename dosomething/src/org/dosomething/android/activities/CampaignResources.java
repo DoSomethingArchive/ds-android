@@ -3,6 +3,7 @@ package org.dosomething.android.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.MoreInfo;
@@ -28,7 +29,9 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class CampaignResources extends AbstractActivity {
 	
@@ -165,8 +168,11 @@ public class CampaignResources extends AbstractActivity {
 				header.setTypeface(headerTypeface, Typeface.BOLD);
 				header.setText(mi.getHeader());
 				
+				DisplayImageOptions imageOptions = new DisplayImageOptions.Builder()
+					.displayer(new FadeInBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME))
+					.build();
 				ImageView image = (ImageView)v.findViewById(R.id.image);
-				imageLoader.displayImage(mi.getImageUrl(), image);
+				imageLoader.displayImage(mi.getImageUrl(), image, imageOptions);
 				
 				TextView body = (TextView)v.findViewById(R.id.body);
 				body.setText(mi.getBody());
