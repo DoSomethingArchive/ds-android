@@ -20,6 +20,8 @@ public class DSConstants {
 	public static final String FACEBOOK_APP_ID = "525191857506466";
 	public static final String PICS_API_KEY = "aea12e3fe5f83f0d574fdff0342aba91";
 	
+	public static final int IMAGE_LOADER_FADE_IN_TIME = 400; // in milliseconds
+	
 	public static enum EXTRAS_KEY {
 		CAMPAIGN("campaign"),
 		SFGITEM("sfg-item"),
