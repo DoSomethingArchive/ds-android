@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dosomething.android.DSConstants;
+import org.dosomething.android.FadeInResizeBitmapDisplayer;
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
@@ -51,7 +52,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 /**
  * SFG = Share For Good
@@ -473,7 +473,7 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 			if (image != null && progressBar != null) {
 				String imageUrl = campaign.getSFGData().getGalleryUrl() + item.getImageURL();
 				DisplayImageOptions imageOptions = new DisplayImageOptions.Builder()
-					.displayer(new FadeInBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME))
+					.displayer(new FadeInResizeBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME))
 					.build();
 				imageLoader.displayImage(imageUrl, image, imageOptions, new ProgressBarImageLoadingListener(progressBar));
 				image.setAdjustViewBounds(true);
