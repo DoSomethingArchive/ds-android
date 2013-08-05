@@ -1,6 +1,7 @@
 package org.dosomething.android.activities;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
@@ -35,6 +36,7 @@ public class ProfileConfig extends AbstractActivity {
 	@InjectView(R.id.last_name) private EditText lastNameView;
 	@InjectView(R.id.email) private EditText emailView;
 	@InjectView(R.id.campaigns_joined) private TextView campaignsJoinedView;
+	@InjectView(R.id.ftafs_sent) private TextView ftafsSentView;
 	@InjectView(R.id.member_since) private TextView memberSinceView;
 	@InjectView(R.id.cause1)private ImageView cause1View;
 	@InjectView(R.id.cause2)private ImageView cause2View;
@@ -69,6 +71,7 @@ public class ProfileConfig extends AbstractActivity {
 		lastNameView.setText(initialLastName);
 		emailView.setText(userContext.getEmail());
 
+		// Causes
 		if (dsPrefs.getCause1() >= 0) {
 			cause1View.setImageResource(dsPrefs.getCauseDrawableByFeedId(dsPrefs.getCause1()));
 		}
@@ -90,6 +93,7 @@ public class ProfileConfig extends AbstractActivity {
 			cause3View.setImageResource(R.drawable.cause_blue_bg);
 		}
 		
+		// "Member since" data
 		String memberSince = userContext.getCreatedTime();
 		if (memberSince != null) {
 			memberSinceView.setText(getString(R.string.profile_config_member_since, memberSince));
@@ -99,11 +103,15 @@ public class ProfileConfig extends AbstractActivity {
 			memberSinceView.setText(getString(R.string.profile_config_member_since, emptyDate));
 		}
 		
+		// Campaigns participated
 		String uid = userContext.getUserUid();
 		List<UserCampaign> userCampaigns = dao.findUserCampaigns(uid);
 		int numCampaigns = userCampaigns.size();
 		campaignsJoinedView.setText(getString(R.string.profile_config_campaigns_joined, numCampaigns));
 		
+		// Mobile Commons activity
+		int ftafsSent = userContext.getFtafsSent();
+		ftafsSentView.setText(getString(R.string.profile_config_ftafs_sent, ftafsSent));
 	}
 	
 	/**
@@ -183,8 +191,8 @@ public class ProfileConfig extends AbstractActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			String uid = userContext.getUserUid();
-			String url = DSConstants.API_URL_BASE + "profile/"+uid+".json";
+			int uid = Integer.parseInt(userContext.getUserUid());
+			String url = String.format(Locale.US, DSConstants.API_URL_PROFILE_UPDATE, uid);
 			
 			WebserviceResponse response = doPut(url, this.putParams);
 			if (response.getStatusCode() >= 400 && response.getStatusCode() < 500) {

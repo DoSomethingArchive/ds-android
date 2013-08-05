@@ -25,6 +25,7 @@ public class UserContext {
 	private static final String ADDR_ZIP = "addr_zip";
 	private static final String USER_NAME = "user_name";
 	private static final String EMAIL = "email";
+	private static final String FTAFS_SENT = "ftafs_sent";
 	private static final String CREATED_TIMESTAMP = "created_timestamp";
 	private static final String UID = "user_uid";
 	private static final String SESSION_ID = "session_id";
@@ -50,6 +51,12 @@ public class UserContext {
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
 		String uid = settings.getString(EMAIL, null);
 		return uid;
+	}
+	
+	public int getFtafsSent() {
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		int ftafsSent = settings.getInt(FTAFS_SENT, 0);
+		return ftafsSent;
 	}
 	
 	public String getUserUid(){
@@ -234,6 +241,13 @@ public class UserContext {
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
 		Editor editor = settings.edit();
 		editor.putString(EMAIL, email);
+		editor.commit();
+	}
+	
+	public void setFtafsSent(int ftafsSent) {
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		Editor editor = settings.edit();
+		editor.putInt(FTAFS_SENT, ftafsSent);
 		editor.commit();
 	}
 	
