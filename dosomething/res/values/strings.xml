@@ -53,6 +53,7 @@
     <string name="profile_config">Profile Stats</string>
     <string name="profile_config_campaigns_joined">Campaigns Joined: %1$d</string>
     <string name="profile_config_date_empty">--/--/----</string>
+    <string name="profile_config_ftafs_sent">Friends Texted: %1$d</string>
     <string name="profile_config_member_since">Member Since: %1$s</string>
     <string name="profile_config_your_causes">Your Causes</string>
     <string name="profile_login_button">GET STARTED NOW</string>
@@ -141,6 +142,7 @@
     <string name="sms_help_text">(Also sign up to receive weekly updates. Msg &amp; data rates may apply. Text STOP to opt-out, HELP for help.)</string>
     <string name="sms_name_field">Your Name *</string>
     <string name="sms_no_friends_selected">You must add at least one number.</string>
+    <string name="sms_refer_contact_has_no_number">There was no phone number found for that contact.</string>
     <string name="sms_refer_title">Text Your Friends</string>
     <string name="sms_refer_success">Thanks! We\'ll be sending your friends a text message soon!</string>
     

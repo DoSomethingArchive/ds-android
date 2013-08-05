@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.inject.Inject;
 
@@ -120,6 +121,11 @@ public class CampaignSMSRefer extends AbstractActivity {
 								addFriendToContact(name, phone);
 							}
 						}
+					}
+					// If no number is found, notify user that contact has no number
+					else {
+						Toast toast = Toast.makeText(this, R.string.sms_refer_contact_has_no_number, Toast.LENGTH_LONG);
+						toast.show();
 					}
 				}
 			}
@@ -230,6 +236,11 @@ public class CampaignSMSRefer extends AbstractActivity {
 				param.put(CAMPAIGN, campaign.getName());
 				param.put("num-shared", Integer.toString(friendNumbers.size()));
 				Analytics.logEvent(getPageName(), param);
+				
+				// Update the ftafs_sent count
+				int ftafsSent = userContext.getFtafsSent();
+				ftafsSent += friendNumbers.size();
+				userContext.setFtafsSent(ftafsSent);
 				
 				// Finish this activity, and notify previous activity that sms referral succeeded
 				Intent i = new Intent(context, org.dosomething.android.activities.Campaign.class);

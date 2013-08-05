@@ -10,6 +10,7 @@ public class DSConstants {
 	public static final String API_URL_FILE = API_URL_BASE + "file.json";
 	public static final String API_URL_LOGIN = API_URL_BASE + "user/login.json";
 	public static final String API_URL_LOGOUT = API_URL_BASE + "user/logout.json";
+	public static final String API_URL_PROFILE_UPDATE = API_URL_BASE + "profile/%d.json";
 	public static final String API_URL_USER_REGISTER = API_URL_BASE + "user/register.json";
 	public static final String API_URL_WEBFORM = API_URL_BASE + "webform.json";
 	
