@@ -16,6 +16,8 @@ public class DSConstants {
 	
 	public static final String CAMPAIGN_API_URL = "http://apps.dosomething.org/m_app_api";
 	
+	public static final String MCOMMONS_API_JOIN_URL = "http://dosomething.mcommons.com/profiles/join";
+	
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
 	
 	public static final String FACEBOOK_APP_ID = "525191857506466";

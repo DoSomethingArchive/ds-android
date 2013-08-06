@@ -1,11 +1,14 @@
 package org.dosomething.android.activities;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
@@ -14,6 +17,7 @@ import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.MyDAO;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.tasks.NoInternetException;
 import org.dosomething.android.widget.CustomActionBar;
 
@@ -280,25 +284,18 @@ public class Campaign extends AbstractActivity {
 		else if (useSmsActionSignUp()) {
 			AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 			alertBuilder.setTitle(R.string.campaign_sign_up_sms_action_alert_title)
-						.setMessage(R.string.campaign_sign_up_sms_action_alert_body)
+						.setMessage(getString(R.string.campaign_sign_up_sms_action_alert_body, campaign.getName()))
+						.setNegativeButton(R.string.cancel_upper, null)
 						.setPositiveButton(R.string.ok_upper, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:38383"));
-								i.putExtra("sms_body", campaign.getSignUpSmsAction());
-								i.putExtra("compose_mode", true);
-								startActivity(i);
+								// Join the user into the Mobile Commons opt-in path
+								if (campaign.getSignUpSmsOptIn() > 0) {
+									new SMSMobileCommonsOptInTask(Campaign.this, campaign.getSignUpSmsOptIn()).execute();
+								}
 							}
 						})
-						.create();
-			alertBuilder.show();
-			
-			// Log the SMS sign up events to Flurry Analytics
-			HashMap<String, String> param = new HashMap<String, String>();
-			param.put(CAMPAIGN, campaign.getName());
-			Analytics.logEvent("sign-up-submit", param);
-			
-			// and Google Analytics
-			Analytics.logEvent("sign-up", "sms-sign-up", campaign.getName());
+						.create()
+						.show();
 		}
 		else if (useAlternateSignUp()) {
 			// Log the alternate sign up events to Flurry Analytics
@@ -309,6 +306,7 @@ public class Campaign extends AbstractActivity {
 			// and Google Analytics
 			Analytics.logEvent("sign-up", "alt-sign-up", campaign.getName());
 			
+			// Open up the link in another activity to view
 			Intent i = new Intent(Intent.ACTION_VIEW);
 			i.setData(Uri.parse(campaign.getSignUpAltLink()));
 			startActivity(i);
@@ -441,6 +439,76 @@ public class Campaign extends AbstractActivity {
 				.show();
 		}
 
+	}
+	
+	/**
+	 * Webservice task to join the user into the specified Mobile Commons opt-in path
+	 */
+	private class SMSMobileCommonsOptInTask extends AbstractWebserviceTask {
+		
+		private Context context;
+		private int optInPath;
+		private boolean webOpSuccess;
+		
+		public SMSMobileCommonsOptInTask(Context context, int optInPath) {
+			super(userContext);
+			this.context = context;
+			this.optInPath = optInPath;
+		}
+
+		@Override
+		protected void onSuccess() {
+			if (webOpSuccess) {
+				// Log the SMS sign up event to Flurry Analytics
+				HashMap<String, String> param = new HashMap<String, String>();
+				param.put(CAMPAIGN, campaign.getName());
+				Analytics.logEvent("sign-up-submit", param);
+				
+				// and Google Analytics
+				Analytics.logEvent("sign-up", "sms-sign-up", campaign.getName());
+				
+				Toast.makeText(context, getString(R.string.campaign_sign_up_sms_success), Toast.LENGTH_LONG).show();
+			}
+			else {
+				onError(null);
+			}
+		}
+
+		@Override
+		protected void onFinish() {
+		}
+
+		@Override
+		protected void onError(Exception e) {
+			String errorMessage = getString(R.string.campaign_sign_up_sms_error);
+			// If a keyword is available, offer that option in the error message
+			if (!nullOrEmpty(campaign.getSignUpSmsAction())) {
+				errorMessage = getString(R.string.campaign_sign_up_sms_error_with_keyword, campaign.getSignUpSmsAction());
+			}
+			
+			new AlertDialog.Builder(Campaign.this)
+				.setMessage(errorMessage)
+				.setPositiveButton(getString(R.string.ok_upper), null)
+				.create()
+				.show();
+		}
+
+		@Override
+		protected void doWebOperation() throws Exception {
+			webOpSuccess = false;
+			String phoneNumber = userContext.getPhoneNumber();
+			if (phoneNumber != null && optInPath > 0) {
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("person[phone]", phoneNumber));
+				params.add(new BasicNameValuePair("opt_in_path", Integer.toString(optInPath)));
+				
+				WebserviceResponse response = doPost(DSConstants.MCOMMONS_API_JOIN_URL, params);
+				if (response.getStatusCode() < 400 || response.getStatusCode() > 500) {
+					webOpSuccess = true;
+				}
+			}
+		}
+		
 	}
 
 }

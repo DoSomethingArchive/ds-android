@@ -48,7 +48,7 @@
     <string name="logout_confirm">Are you sure you want to logout?</string>
     
     <string name="register_title">Become A Member</string>
-    <string name="register_disclaimer">By tapping "Go", you accept the &lt;a href="http://www.dosomething.org/about/terms-of-service">terms of use&lt;/a> and &lt;a href="http://www.dosomething.org/about/privacy">privacy policy&lt;/a>.</string>
+    <string name="register_disclaimer">By tapping \"Go\", you accept the &lt;a href="http://www.dosomething.org/about/terms-of-service">terms of use&lt;/a> and &lt;a href="http://www.dosomething.org/about/privacy">privacy policy&lt;/a>.</string>
     <string name="profile_browse_campaigns">FIND WAYS TO GET INVOLVED</string>
     <string name="profile_config">Profile Stats</string>
     <string name="profile_config_campaigns_joined">Campaigns Joined: %1$d</string>
@@ -92,8 +92,11 @@
     <string name="campaign_sfg_update_error">Unable to update. Please check your internet connection and try again.</string>
     <string name="campaign_sign_up_button">SIGN UP!</string>
     <string name="campaign_sign_up_button_already_signed_up">Already Signed Up</string>
-    <string name="campaign_sign_up_sms_action_alert_title">Get Ready to Game</string>
-    <string name="campaign_sign_up_sms_action_alert_body">To begin this SMS experience, you will need to text a keyword to the DoSomething.org 38383 shortcode. You\'re being taken to your messaging app to get started.\n\nMessage and data rates may apply. Text STOP to opt-out, HELP for help.</string>
+    <string name="campaign_sign_up_sms_action_alert_title">Start the SMS Experience</string>
+    <string name="campaign_sign_up_sms_action_alert_body">You\'re about to begin the \"%1$s\" SMS experience. A message will be sent to you from DoSomething.org at 38383 for you to start.\n\nMessage and data rates may apply. Text STOP to opt-out, HELP for help.</string>
+    <string name="campaign_sign_up_sms_error">There was an error starting the SMS experience. Please try again.</string>
+    <string name="campaign_sign_up_sms_error_with_keyword">There was an error starting the SMS experience. Try again or text %1$s to 38383 to begin.</string>
+    <string name="campaign_sign_up_sms_success">You\'ll be getting a message soon from 38383 to begin!</string>
     
     <string name="campaign_share_button">SHARE THIS CAMPAIGN</string>
     <string name="campaign_share_signup_header">Thanks for signing up!</string>
