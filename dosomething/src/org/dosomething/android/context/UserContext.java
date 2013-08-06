@@ -23,14 +23,15 @@ public class UserContext {
 	private static final String ADDR_CITY = "addr_city";
 	private static final String ADDR_STATE = "addr_state";
 	private static final String ADDR_ZIP = "addr_zip";
-	private static final String USER_NAME = "user_name";
-	private static final String EMAIL = "email";
-	private static final String FTAFS_SENT = "ftafs_sent";
 	private static final String CREATED_TIMESTAMP = "created_timestamp";
-	private static final String UID = "user_uid";
+	private static final String EMAIL = "email";
+	private static final String EXPIRES_AT = "expires_at";
+	private static final String FTAFS_SENT = "ftafs_sent";
 	private static final String SESSION_ID = "session_id";
 	private static final String SESSION_NAME = "session_name";
-	private static final String EXPIRES_AT = "expires_at";
+	private static final String SMS_CAMPAIGNS_STARTED = "sms_campaigns_started";
+	private static final String UID = "user_uid";
+	private static final String USER_NAME = "user_name";
 	
 	private static final long EXPIRES_AT_PADDING = 24 * 60 * 60 * 1000; // 24hrs
 	
@@ -75,6 +76,11 @@ public class UserContext {
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
 		String uid = settings.getString(SESSION_NAME, null);
 		return uid;
+	}
+	
+	public int getSmsCampaignsStarted() {
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		return settings.getInt(SMS_CAMPAIGNS_STARTED, 0);
 	}
 	
 	public String getPhoneNumber() {
@@ -244,10 +250,25 @@ public class UserContext {
 		editor.commit();
 	}
 	
-	public void setFtafsSent(int ftafsSent) {
+	public void addFtafsSent(int additionalFtafs) {
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		int ftafsSent = settings.getInt(FTAFS_SENT, 0);
+		if (additionalFtafs > 0) {
+			ftafsSent += additionalFtafs;
+		}
+		
 		Editor editor = settings.edit();
 		editor.putInt(FTAFS_SENT, ftafsSent);
+		editor.commit();
+	}
+	
+	public void addSmsCampaignsStarted() {
+		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);
+		int numStarted = settings.getInt(SMS_CAMPAIGNS_STARTED, 0);
+		numStarted++;
+
+		Editor editor = settings.edit();
+		editor.putInt(SMS_CAMPAIGNS_STARTED, numStarted);
 		editor.commit();
 	}
 	
