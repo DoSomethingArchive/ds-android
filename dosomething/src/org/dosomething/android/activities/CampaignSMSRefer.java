@@ -240,9 +240,7 @@ public class CampaignSMSRefer extends AbstractActivity {
 				Analytics.logEvent("sms", "refer", campaign.getName(), Long.valueOf(friendNumbers.size()));
 				
 				// Update the ftafs_sent count
-				int ftafsSent = userContext.getFtafsSent();
-				ftafsSent += friendNumbers.size();
-				userContext.setFtafsSent(ftafsSent);
+				userContext.addFtafsSent(friendNumbers.size());
 				
 				// Finish this activity, and notify previous activity that sms referral succeeded
 				Intent i = new Intent(context, org.dosomething.android.activities.Campaign.class);

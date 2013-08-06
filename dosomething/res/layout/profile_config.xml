@@ -134,6 +134,12 @@
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
 		            style="@style/ProfileConfigLabel"/>
+		        
+		        <TextView
+		            android:id="@+id/sms_campaigns_started"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            style="@style/ProfileConfigLabel"/>
 			        
 		    </LinearLayout>
 		    

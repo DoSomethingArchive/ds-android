@@ -55,6 +55,7 @@
     <string name="profile_config_date_empty">--/--/----</string>
     <string name="profile_config_ftafs_sent">Friends Texted: %1$d</string>
     <string name="profile_config_member_since">Member Since: %1$s</string>
+    <string name="profile_config_sms_campaigns_started">SMS Experiences Started: %1$d</string>
     <string name="profile_config_your_causes">Your Causes</string>
     <string name="profile_login_button">GET STARTED NOW</string>
     <string name="profile_title">Profile</string>

@@ -38,6 +38,7 @@ public class ProfileConfig extends AbstractActivity {
 	@InjectView(R.id.campaigns_joined) private TextView campaignsJoinedView;
 	@InjectView(R.id.ftafs_sent) private TextView ftafsSentView;
 	@InjectView(R.id.member_since) private TextView memberSinceView;
+	@InjectView(R.id.sms_campaigns_started) private TextView smsCampaignsStartedView;
 	@InjectView(R.id.cause1)private ImageView cause1View;
 	@InjectView(R.id.cause2)private ImageView cause2View;
 	@InjectView(R.id.cause3)private ImageView cause3View;
@@ -112,6 +113,9 @@ public class ProfileConfig extends AbstractActivity {
 		// Mobile Commons activity
 		int ftafsSent = userContext.getFtafsSent();
 		ftafsSentView.setText(getString(R.string.profile_config_ftafs_sent, ftafsSent));
+		
+		int smsCampaignsStarted = userContext.getSmsCampaignsStarted();
+		smsCampaignsStartedView.setText(getString(R.string.profile_config_sms_campaigns_started, smsCampaignsStarted));
 	}
 	
 	/**
@@ -158,7 +162,6 @@ public class ProfileConfig extends AbstractActivity {
 	 */
 	private class UpdateProfileTask extends AbstractWebserviceTask {
 		private JSONObject putParams;
-		private boolean updateSuccess;
 		
 		public UpdateProfileTask(JSONObject params) {
 			super(userContext);
@@ -194,14 +197,8 @@ public class ProfileConfig extends AbstractActivity {
 			int uid = Integer.parseInt(userContext.getUserUid());
 			String url = String.format(Locale.US, DSConstants.API_URL_PROFILE_UPDATE, uid);
 			
-			WebserviceResponse response = doPut(url, this.putParams);
-			if (response.getStatusCode() >= 400 && response.getStatusCode() < 500) {
-				updateSuccess = false;
-			}
-			else {
-				updateSuccess = true;
-			}
-			
+			// TODO: handle the error or success responses
+			/*WebserviceResponse response = */doPut(url, this.putParams);
 		}
 	}
 

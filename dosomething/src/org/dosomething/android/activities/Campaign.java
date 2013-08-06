@@ -289,9 +289,7 @@ public class Campaign extends AbstractActivity {
 						.setPositiveButton(R.string.ok_upper, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								// Join the user into the Mobile Commons opt-in path
-								if (campaign.getSignUpSmsOptIn() > 0) {
-									new SMSMobileCommonsOptInTask(Campaign.this, campaign.getSignUpSmsOptIn()).execute();
-								}
+								new SMSMobileCommonsOptInTask(Campaign.this, campaign.getSignUpSmsOptIn()).execute();
 							}
 						})
 						.create()
@@ -467,7 +465,11 @@ public class Campaign extends AbstractActivity {
 				// and Google Analytics
 				Analytics.logEvent("sign-up", "sms-sign-up", campaign.getName());
 				
+				// Display a Toast message
 				Toast.makeText(context, getString(R.string.campaign_sign_up_sms_success), Toast.LENGTH_LONG).show();
+				
+				// Increment the counter of times an SMS experience was started
+				userContext.addSmsCampaignsStarted();
 			}
 			else {
 				onError(null);
