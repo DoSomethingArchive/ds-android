@@ -46,6 +46,7 @@ public class Campaign implements Serializable {
 	private String signUpAltLink;
 	private String signUpAltText;
 	private String signUpSmsAction;
+	private int signUpSmsOptIn;
 	
 	private String smsReferText;
 	private int mCommonsAlphaOptIn;
@@ -129,6 +130,7 @@ public class Campaign implements Serializable {
 			signUpAltLink = m.optString("sign-up-alt-link",null);
 			signUpAltText = m.optString("sign-up-alt-text",null);
 			signUpSmsAction = m.optString("sign-up-sms-action",null);
+			signUpSmsOptIn = m.optInt("sign-up-sms-opt-in", 0);
 		}
 		
 		JSONArray f = obj.optJSONArray("faq");
@@ -392,6 +394,10 @@ public class Campaign implements Serializable {
 	
 	public String getSignUpSmsAction() {
 		return signUpSmsAction;
+	}
+	
+	public int getSignUpSmsOptIn() {
+		return signUpSmsOptIn;
 	}
 
 	public void setShareMessage(String shareMessage) {

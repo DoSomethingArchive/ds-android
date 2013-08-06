@@ -60,4 +60,9 @@ public class Analytics {
 		// Google Analytics event tracking
 		EasyTracker.getTracker().sendEvent(category, action, label, 1L);
 	}
+	
+	public static void logEvent(String category, String action, String label, Long value) {
+		// Google Analytics event tracking
+		EasyTracker.getTracker().sendEvent(category, action, label, value);
+	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
@@ -236,6 +237,7 @@ public class CampaignSMSRefer extends AbstractActivity {
 				param.put(CAMPAIGN, campaign.getName());
 				param.put("num-shared", Integer.toString(friendNumbers.size()));
 				Analytics.logEvent(getPageName(), param);
+				Analytics.logEvent("sms", "refer", campaign.getName(), Long.valueOf(friendNumbers.size()));
 				
 				// Update the ftafs_sent count
 				int ftafsSent = userContext.getFtafsSent();
@@ -280,9 +282,7 @@ public class CampaignSMSRefer extends AbstractActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			String url = "http://dosomething.mcommons.com/profiles/join";
-			
-			WebserviceResponse response = doPost(url, params);
+			WebserviceResponse response = doPost(DSConstants.MCOMMONS_API_JOIN_URL, params);
 			
 			if (response.getStatusCode() >= 400 && response.getStatusCode() < 500) {
 				// submission failed
