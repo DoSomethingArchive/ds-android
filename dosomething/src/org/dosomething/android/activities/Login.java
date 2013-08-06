@@ -245,6 +245,14 @@ public class Login extends AbstractFragmentActivity {
 		protected void onSuccess() {
 			
 			if (loginSuccess) {
+				// Track login with analytics - Flurry Analytics
+				HashMap<String, String> param = new HashMap<String, String>();
+				param.put("ds-login", "login-success");
+				Analytics.logEvent(getPageName(), param);
+				
+				// and Google Analytics
+				Analytics.logEvent("login", "ds-login", "success");
+				
 				goToProfile();
 			}
 			else {
@@ -313,9 +321,13 @@ public class Login extends AbstractFragmentActivity {
 		@Override
 		protected void onSuccess() {
 			if (loginSuccess) {
+				// Track login with analytics - Flurry Analytics
 				HashMap<String, String> param = new HashMap<String, String>();
 				param.put("facebook", "login-success");
 				Analytics.logEvent(getPageName(), param);
+				
+				// and Google Analytics
+				Analytics.logEvent("login", "facebook-login", "success");
 				
 				goToProfile();
 			}

@@ -1,6 +1,7 @@
 package org.dosomething.android.activities;
 
 import java.io.File;
+import java.util.HashMap;
 
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
@@ -8,6 +9,7 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
@@ -73,6 +75,14 @@ public class SFGSubmit extends AbstractWebForm {
 
 	@Override
 	protected void onSubmitSuccess() {
+		// Track submission in analytics - Flurry Analytics event tracking
+		HashMap<String, String> param = new HashMap<String, String>();
+		param.put(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue(), campaign.getName());
+		Analytics.logEvent("report-back-submit", param);
+		
+		// Google Analytics event tracking
+		Analytics.logEvent("report-back", "sfg-submit", campaign.getName());
+		
 		startActivity(SFGGallery.getIntent(this, campaign, getString(R.string.campaign_sfg_submit_success)));
 		finish();
 	}

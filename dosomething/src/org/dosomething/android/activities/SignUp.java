@@ -109,9 +109,13 @@ public class SignUp extends AbstractWebForm {
 			}
 		}
 		
+		// Flurry Analytics event tracking
 		HashMap<String, String> param = new HashMap<String, String>();
 		param.put(CAMPAIGN, campaign.getName());
 		Analytics.logEvent("sign-up-submit", param);
+		
+		// Google Analytics event tracking
+		Analytics.logEvent("sign-up", "normal-sign-up", campaign.getName());
 		
 		startActivity(CampaignShare.getIntentForSignedUp(this, campaign));
 		finish();

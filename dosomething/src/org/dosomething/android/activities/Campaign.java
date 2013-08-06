@@ -235,7 +235,10 @@ public class Campaign extends AbstractActivity {
 		case 2:
 			return "nd";
 		case 3:
-			return "rd";
+			if (value == 13)
+				return "th";
+			else
+				return "rd";
 		default:
 			return "th";
 		}
@@ -288,12 +291,23 @@ public class Campaign extends AbstractActivity {
 						})
 						.create();
 			alertBuilder.show();
-		}
-		else if (useAlternateSignUp()) {
-			// Log the alternate sign up events to Analytics
+			
+			// Log the SMS sign up events to Flurry Analytics
 			HashMap<String, String> param = new HashMap<String, String>();
 			param.put(CAMPAIGN, campaign.getName());
 			Analytics.logEvent("sign-up-submit", param);
+			
+			// and Google Analytics
+			Analytics.logEvent("sign-up", "sms-sign-up", campaign.getName());
+		}
+		else if (useAlternateSignUp()) {
+			// Log the alternate sign up events to Flurry Analytics
+			HashMap<String, String> param = new HashMap<String, String>();
+			param.put(CAMPAIGN, campaign.getName());
+			Analytics.logEvent("sign-up-submit", param);
+			
+			// and Google Analytics
+			Analytics.logEvent("sign-up", "alt-sign-up", campaign.getName());
 			
 			Intent i = new Intent(Intent.ACTION_VIEW);
 			i.setData(Uri.parse(campaign.getSignUpAltLink()));
