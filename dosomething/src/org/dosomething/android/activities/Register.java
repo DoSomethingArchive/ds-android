@@ -181,9 +181,13 @@ public class Register extends AbstractActivity {
 		protected void onSuccess() {
 			
 			if(registerSuccess) {
+				// Track register in analytics - Flurry Analytics event tracking
 				HashMap<String, String> param = new HashMap<String, String>();
 				param.put("success", "true");
 				Analytics.logEvent(getPageName(), param);
+				
+				// and Google Analytics
+				Analytics.logEvent("login", "register", "success");
 				
 				setResult(RESULT_OK);
 		    	finish();

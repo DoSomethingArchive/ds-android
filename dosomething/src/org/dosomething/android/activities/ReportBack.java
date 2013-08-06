@@ -53,9 +53,13 @@ public class ReportBack extends AbstractWebForm {
 			}
 		}
 		
+		// Track submission in analytics - Flurry Analytics
 		HashMap<String, String> param = new HashMap<String, String>();
 		param.put("campaign", campaign.getName());
 		Analytics.logEvent("report-back-submit", param);
+		
+		// and Google Analytics
+		Analytics.logEvent("report-back", "normal-submit", campaign.getName());
 		
 		startActivity(CampaignShare.getIntentForReportedBack(this, campaign));
 		finish();
