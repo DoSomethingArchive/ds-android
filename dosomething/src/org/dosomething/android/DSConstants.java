@@ -5,6 +5,15 @@ public class DSConstants {
 	// Class is non-instantiable
 	private DSConstants() {}
 	
+	// Flag to enable/disable analytics tracking. Should be set to false during development to avoid dirtying the data.
+	public static final boolean analyticsEnabled = false;
+	
+	// IDs and keys for web services
+	public static final String FACEBOOK_APP_ID = "525191857506466";
+	public static final String PICS_API_KEY = "aea12e3fe5f83f0d574fdff0342aba91";
+	public static final String FLURRY_API_KEY = "P4R2NTE9XSRAHB9IR9M2";
+	
+	// API URLs
 	public static final String API_URL_BASE = "https://www.dosomething.org/rest/";
 	public static final String API_URL_FBLOGIN = API_URL_BASE + "user/fblogin.json";
 	public static final String API_URL_FILE = API_URL_BASE + "file.json";
@@ -13,18 +22,16 @@ public class DSConstants {
 	public static final String API_URL_PROFILE_UPDATE = API_URL_BASE + "profile/%d.json";
 	public static final String API_URL_USER_REGISTER = API_URL_BASE + "user/register.json";
 	public static final String API_URL_WEBFORM = API_URL_BASE + "webform.json";
-	
 	public static final String CAMPAIGN_API_URL = "http://apps.dosomething.org/m_app_api";
-	
 	public static final String MCOMMONS_API_JOIN_URL = "http://dosomething.mcommons.com/profiles/join";
 	
+	// Date format to use across all areas of the app that need it
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
 	
-	public static final String FACEBOOK_APP_ID = "525191857506466";
-	public static final String PICS_API_KEY = "aea12e3fe5f83f0d574fdff0342aba91";
+	// Fade-in animation time (in milliseconds) for ImageLoader images
+	public static final int IMAGE_LOADER_FADE_IN_TIME = 400;
 	
-	public static final int IMAGE_LOADER_FADE_IN_TIME = 400; // in milliseconds
-	
+	// Keys used for data passed to Activity's through Intent extra Bundles
 	public static enum EXTRAS_KEY {
 		CAMPAIGN("campaign"),
 		SFGITEM("sfg-item"),
@@ -42,6 +49,7 @@ public class DSConstants {
 		}
 	}
 	
+	// Specifies a campaign's type
 	public static enum CAMPAIGN_TYPE {
 		CHANGE_A_MIND,
 		DONATION,
@@ -52,6 +60,7 @@ public class DSConstants {
 		SMS
 	}
 	
+	// Causes and their int values as provided by DoSomething.org action finder circa 2011
 	public static enum CAUSE_TAG {
 		ANIMALS(29),
 		BULLYING(28),
