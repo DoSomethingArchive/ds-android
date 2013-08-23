@@ -14,7 +14,7 @@ public class DSConstants {
 	public static final String FLURRY_API_KEY = "P4R2NTE9XSRAHB9IR9M2";
 	
 	// API URLs
-	public static final String API_URL_BASE = "https://www.dosomething.org/rest/";
+	public static final String API_URL_BASE = "http://www.dosomething.org/rest/";
 	public static final String API_URL_FBLOGIN = API_URL_BASE + "user/fblogin.json";
 	public static final String API_URL_FILE = API_URL_BASE + "file.json";
 	public static final String API_URL_LOGIN = API_URL_BASE + "user/login.json";
