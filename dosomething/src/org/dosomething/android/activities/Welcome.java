@@ -222,6 +222,10 @@ public class Welcome extends AbstractActivity {
 	    }, 3000);
 	}
 	
+	public Dialog getSplashScreen() {
+		return splashDialog;
+	}
+	
 	/**
 	 * Starts Profile Activity
 	 */
