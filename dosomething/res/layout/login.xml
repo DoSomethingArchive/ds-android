@@ -23,10 +23,12 @@
 		    <Button
 		        android:onClick="logIn"
 		        style="@style/LoginButton"
+		        android:id="@+id/loginButton"
 		        android:layout_marginTop="10dp"
 		        android:text="@string/log_in_upper"/>
 		    <Button android:onClick="signUp"
 		        style="@style/LoginButton"
+		        android:id="@+id/signUpButton"
 		        android:layout_marginTop="6dp"
 		        android:text="@string/sign_up_upper"/>
 		    <com.facebook.widget.LoginButton

@@ -88,8 +88,8 @@ public class Login extends AbstractFragmentActivity {
 		
     	if (user != null && obj != null) {
 			userContext.setLoggedIn(
-				user.getString("name"),
-				user.getString("mail"),
+				user.optString("name", ""),
+				user.optString("mail", ""),
 				user.getString("uid"),
 				obj.getString("sessid"),
 				obj.getString("session_name"),
@@ -239,6 +239,9 @@ public class Login extends AbstractFragmentActivity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pd = ProgressDialog.show(context, null, getString(R.string.logging_in));
+			
+			// Clear the UserContext of any data that could be lingering (ex: session cookie info)
+			userContext.clear();
 		}
 
 		@Override
@@ -262,7 +265,12 @@ public class Login extends AbstractFragmentActivity {
 		
 		@Override
 		protected void onFinish() {
-			pd.dismiss();
+			try {
+				pd.dismiss();
+			}
+			catch (IllegalArgumentException e) {
+				// Catching error if progress dialog is dismissed after activity ends
+			}
 		}
 
 		@Override
