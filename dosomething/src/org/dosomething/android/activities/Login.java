@@ -42,6 +42,7 @@ public class Login extends AbstractFragmentActivity {
 	private Context context;
 	
 	private DSFacebookLoginTask fbLoginTask;
+	private DSLoginTask dsLoginTask;
 	
 	@Override
 	protected String getPageName() {
@@ -74,7 +75,15 @@ public class Login extends AbstractFragmentActivity {
     	String user = username.getText().toString();
     	String pw = password.getText().toString();
     	
-    	new DSLoginTask(user, pw).execute();
+    	dsLoginTask = new DSLoginTask(user, pw);
+    	dsLoginTask.execute();
+    }
+    
+    /**
+     * Get handle to DSLoginTask. Useful for unit tests.
+     */
+    public AbstractWebserviceTask getDSLoginTask() {
+    	return dsLoginTask;
     }
     
     /**
