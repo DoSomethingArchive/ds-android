@@ -14,13 +14,14 @@ public class DSConstants {
 	public static final String FLURRY_API_KEY = "P4R2NTE9XSRAHB9IR9M2";
 	
 	// API URLs
-	public static final String API_URL_BASE = "http://www.dosomething.org/rest/";
+	public static String API_URL_BASE = "http://www.dosomething.org/rest/";
 	public static final String API_URL_FBLOGIN = API_URL_BASE + "user/fblogin.json";
 	public static final String API_URL_FILE = API_URL_BASE + "file.json";
 	public static final String API_URL_LOGIN = API_URL_BASE + "user/login.json";
 	public static final String API_URL_LOGOUT = API_URL_BASE + "user/logout.json";
 	public static final String API_URL_PROFILE_UPDATE = API_URL_BASE + "profile/%d.json";
-	public static final String API_URL_USER_REGISTER = API_URL_BASE + "user/register.json";
+	public static String API_URL_USER_DELETE = API_URL_BASE + "user/%d.json";
+	public static String API_URL_USER_REGISTER = API_URL_BASE + "user/register.json";
 	public static final String API_URL_WEBFORM = API_URL_BASE + "webform.json";
 	public static final String CAMPAIGN_API_URL = "http://apps.dosomething.org/m_app_api";
 	public static final String MCOMMONS_API_JOIN_URL = "http://dosomething.mcommons.com/profiles/join";

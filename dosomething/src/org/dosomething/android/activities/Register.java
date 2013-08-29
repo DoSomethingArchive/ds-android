@@ -62,6 +62,8 @@ public class Register extends AbstractActivity {
 	
 	private Context context;
 	
+	public AbstractWebserviceTask registerTask;
+	
 	@Override
 	protected String getPageName() {
 		return "register";
@@ -129,7 +131,8 @@ public class Register extends AbstractActivity {
 				.create()
 				.show();
     	} else {
-    		new MyTask(username, mobile, first, last, email, password, birthday).execute();
+    		registerTask = new RegisterTask(username, mobile, first, last, email, password, birthday);
+    		registerTask.execute();
     	}
     }
     
@@ -147,7 +150,7 @@ public class Register extends AbstractActivity {
     	finish();
     }
 	
-	private class MyTask extends AbstractWebserviceTask {
+	private class RegisterTask extends AbstractWebserviceTask {
 		private String username;
 		private String mobile;
 		private String first;
@@ -161,7 +164,7 @@ public class Register extends AbstractActivity {
 		
 		private ProgressDialog pd;
 		
-		public MyTask(String username, String mobile, String first, String last, String email, String password, String birthday) {
+		public RegisterTask(String username, String mobile, String first, String last, String email, String password, String birthday) {
 			super(userContext);
 			this.username = username;
 			this.first = first;
