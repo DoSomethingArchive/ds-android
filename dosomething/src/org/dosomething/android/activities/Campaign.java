@@ -14,7 +14,7 @@ import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
-import org.dosomething.android.dao.MyDAO;
+import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
@@ -324,7 +324,7 @@ public class Campaign extends AbstractActivity {
 			btnActions.setVisibility(Button.GONE);
 		}
 		else if (userContext.isLoggedIn() && campaign != null) {
-			UserCampaign userCampaign = new MyDAO(context).findUserCampaign(userContext.getUserUid(), campaign.getId());
+			UserCampaign userCampaign = new DSDao(context).findUserCampaign(userContext.getUserUid(), campaign.getId());
 			if(userCampaign != null){
 				// If user's already signed up and there is a report back available, then show report back button
 				if (campaign.getReportBack() != null) {

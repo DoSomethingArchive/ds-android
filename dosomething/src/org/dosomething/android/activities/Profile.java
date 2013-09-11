@@ -11,7 +11,7 @@ import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
-import org.dosomething.android.dao.MyDAO;
+import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
@@ -55,7 +55,7 @@ public class Profile extends AbstractActivity {
 	@Inject private UserContext userContext;
 	@Inject private @Named("DINComp-CondBold")Typeface headerTypeface;
 	@Inject private Cache cache;
-	@Inject private MyDAO dao;
+	@Inject private DSDao dao;
 	
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.content) private LinearLayout content;
@@ -194,12 +194,12 @@ public class Profile extends AbstractActivity {
 		}
 	};
 	
-	private class MyAdapter extends ArrayAdapter<Campaign> {
+	private class CampaignListAdapter extends ArrayAdapter<Campaign> {
 		
 		private List<UserCampaign> userCampaigns;
 		private List<Campaign> campaigns;
 		
-		public MyAdapter(Context context, List<UserCampaign> userCampaigns, List<Campaign> campaigns){
+		public CampaignListAdapter(Context context, List<UserCampaign> userCampaigns, List<Campaign> campaigns){
 			super(context, android.R.layout.simple_list_item_1, campaigns);
 			this.userCampaigns = userCampaigns;
 			this.campaigns = campaigns;
@@ -390,7 +390,7 @@ public class Profile extends AbstractActivity {
 				content.addView(list, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
 			
 				list.setOnItemClickListener(itemClickListener);
-				list.setAdapter(new MyAdapter(context, userCampaigns, campaigns));
+				list.setAdapter(new CampaignListAdapter(context, userCampaigns, campaigns));
 			}
 		}
 

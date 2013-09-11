@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
-import org.dosomething.android.dao.MyDAO;
+import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.transfer.Campaign;
@@ -55,7 +55,7 @@ public class CampaignActions extends AbstractActivity {
 	
 	private Set<String> completedChallenges;
 	
-	private MyDAO dao;
+	private DSDao dao;
 	
 	private UserCampaign userCampaign;
 	
@@ -74,7 +74,7 @@ public class CampaignActions extends AbstractActivity {
         
         actionBar.setTitle(campaign.getName());
         
-        dao = new MyDAO(this);
+        dao = new DSDao(this);
         
         completedChallenges = new HashSet<String>();
         
