@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
@@ -36,9 +35,7 @@ import android.widget.ProgressBar;
 
 import com.commonsware.cwac.endless.EndlessAdapter;
 import com.google.inject.Inject;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class CampaignGallery extends AbstractActivity {
 	
@@ -184,11 +181,7 @@ public class CampaignGallery extends AbstractActivity {
 			}
 			
 			GalleryItem item = getItem(position);
-			
-			DisplayImageOptions imageOptions = new DisplayImageOptions.Builder()
-				.displayer(new FadeInBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME))
-				.build();
-			imageLoader.displayImage(item.getThumb(), answer, imageOptions);
+			imageLoader.displayImage(item.getThumb(), answer);
 			return answer;
 		}
 	}

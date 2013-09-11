@@ -74,7 +74,7 @@ public class FadeInResizeBitmapDisplayer implements BitmapDisplayer {
 	 * @param durationMillis The length of the animation in milliseconds
 	 */
 	public static void animate(ImageView imageView, int durationMillis) {
-		AlphaAnimation fadeImage = new AlphaAnimation(0, 1);
+		AlphaAnimation fadeImage = new AlphaAnimation(0.5f, 1);
 		fadeImage.setDuration(durationMillis);
 		fadeImage.setInterpolator(new DecelerateInterpolator());
 		imageView.startAnimation(fadeImage);
