@@ -13,12 +13,12 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.google.inject.Inject;
 
-public class MyDAO {
+public class DSDao {
 	
 	private final Context context;
 	
 	@Inject
-	public MyDAO(Context context){
+	public DSDao(Context context){
 		this.context = context;
 	}
 	

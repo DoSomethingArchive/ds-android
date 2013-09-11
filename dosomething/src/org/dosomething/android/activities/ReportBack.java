@@ -6,7 +6,7 @@ import java.util.List;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
-import org.dosomething.android.dao.MyDAO;
+import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Challenge;
@@ -38,7 +38,7 @@ public class ReportBack extends AbstractWebForm {
 	protected void onSubmitSuccess() {
 		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
 		
-		MyDAO dao = new MyDAO(this);
+		DSDao dao = new DSDao(this);
 		
 		Long userCampaignId = dao.setSignedUp(new UserContext(this).getUserUid(), campaign.getId());
 		

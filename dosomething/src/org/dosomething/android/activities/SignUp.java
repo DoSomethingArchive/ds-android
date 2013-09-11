@@ -8,7 +8,7 @@ import java.util.List;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
-import org.dosomething.android.dao.MyDAO;
+import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.receivers.AlarmReceiver;
 import org.dosomething.android.transfer.Campaign;
@@ -55,7 +55,7 @@ public class SignUp extends AbstractWebForm {
 	protected void onSubmitSuccess() {
 		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
 		
-		MyDAO dao = new MyDAO(this);
+		DSDao dao = new DSDao(this);
 		
 		Long userCampaignId = dao.setSignedUp(new UserContext(this).getUserUid(), campaign.getId());
 		

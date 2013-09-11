@@ -7,7 +7,7 @@ import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.context.UserContext;
-import org.dosomething.android.dao.MyDAO;
+import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.widget.CustomActionBar;
@@ -29,7 +29,7 @@ public class ProfileConfig extends AbstractActivity {
 	
 	@Inject private UserContext userContext;
 	@Inject private DSPreferences dsPrefs;
-	@Inject private MyDAO dao;
+	@Inject private DSDao dao;
 	
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.first_name) private EditText firstNameView;
