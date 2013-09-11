@@ -30,7 +30,7 @@ public class DSConstants {
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
 	
 	// Fade-in animation time (in milliseconds) for ImageLoader images
-	public static final int IMAGE_LOADER_FADE_IN_TIME = 400;
+	public static final int IMAGE_LOADER_FADE_IN_TIME = 250;
 	
 	// Keys used for data passed to Activity's through Intent extra Bundles
 	public static enum EXTRAS_KEY {
