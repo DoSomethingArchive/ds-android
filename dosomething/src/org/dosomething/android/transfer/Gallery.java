@@ -18,7 +18,15 @@ public class Gallery implements Serializable{
 		
 		type = obj.getString("type");
 		feed = obj.getString("feed");
+	}
+	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
 		
+		obj.put("type", type);
+		obj.put("feed", feed);
+		
+		return obj;
 	}
 
 	public String getType() {

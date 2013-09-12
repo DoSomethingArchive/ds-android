@@ -33,6 +33,24 @@ public class WebForm implements Serializable{
 			}
 		}
 	}
+	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("node-id", nodeId);
+		obj.put("page-itle", pageTitle);
+		obj.put("url", postUrl);
+		
+		if (fields != null && fields.size() > 0) {
+			JSONArray f = new JSONArray();
+			for (WebFormField w : fields) {
+				f.put(w.toJSON());
+			}
+			obj.put("fields", f);
+		}
+		
+		return obj;
+	}
 
 	public String getNodeId() {
 		return nodeId;

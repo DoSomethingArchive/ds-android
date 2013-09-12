@@ -27,6 +27,22 @@ public class MoreInfo implements Serializable {
 		}
 	}
 	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("intro", intro);
+		
+		if (items != null && items.size() > 0) {
+			JSONArray jsonItems = new JSONArray();
+			for (MoreInfoItem item : items) {
+				jsonItems.put(item.toJSON());
+			}
+			obj.put("items", jsonItems);
+		}
+		
+		return obj;
+	}
+	
 	public String getIntro() {
 		return intro;
 	}

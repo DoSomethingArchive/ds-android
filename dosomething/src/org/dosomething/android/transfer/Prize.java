@@ -39,6 +39,25 @@ public class Prize implements Serializable{
 		mainText = obj.optString("main-text",null);
 	}
 	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("scholarships", scholarship.toJSON());
+		
+		if (others != null && others.size() > 0) {
+			JSONArray jsonPrizes = new JSONArray();
+			for (PrizeItem p : others) {
+				jsonPrizes.put(p.toJSON());
+			}
+			obj.put("prizes", jsonPrizes);
+		}
+		
+		obj.put("rules", rulesUrl);
+		obj.put("main-text", mainText);
+		
+		return obj;
+	}
+	
 	public PrizeItem getScholarship() {
 		return scholarship;
 	}

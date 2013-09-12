@@ -1,5 +1,7 @@
 package org.dosomething.android.activities;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +22,7 @@ import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Challenge;
 import org.dosomething.android.widget.CustomActionBar;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import roboguice.inject.InjectView;
@@ -320,7 +323,7 @@ public class Profile extends AbstractActivity {
 		
 		@Override
 		protected void onSuccess() {
-			List<Campaign> campaigns = new ArrayList<Campaign>();
+			List<Campaign> signedUpCampaigns = new ArrayList<Campaign>();
 			List<UserCampaign> userCampaigns = new ArrayList<UserCampaign>();
 			
 			boolean foundSignUpOnServer = false;
@@ -333,7 +336,26 @@ public class Profile extends AbstractActivity {
 					userCampaignsMap.put(userCampaign.getCampaignId(), userCampaign);
 				}
 				
-				for(Campaign campaign : getCampaigns()){
+				// Retrieve current list of campaigns from web
+				List<Campaign> webCampaigns = getCampaigns();
+				List<Campaign> allCampaigns = new ArrayList<Campaign>();
+				allCampaigns.addAll(webCampaigns);
+				
+				List<Campaign> cachedCampaigns = dao.fetchSignedUpCampaignData(uid);
+				for (Campaign cachedCampaign : cachedCampaigns) {
+					boolean bDuplicateFound = false;
+					for (Campaign webCampaign : allCampaigns) {
+						if (webCampaign.getId().equals(cachedCampaign.getId())) {
+							bDuplicateFound = true;
+							break;
+						}
+					}
+					
+					if (!bDuplicateFound)
+						allCampaigns.add(cachedCampaign);
+				}
+				
+				for(Campaign campaign : allCampaigns){
 					boolean addCampaign = false;
 					if(userCampaignsMap.containsKey(campaign.getId())){
 						addCampaign = true;
@@ -372,7 +394,7 @@ public class Profile extends AbstractActivity {
 					}
 					
 					if (addCampaign) {
-						campaigns.add(campaign);
+						signedUpCampaigns.add(campaign);
 						userCampaigns.add(userCampaignsMap.get(campaign.getId()));
 					}
 				}
@@ -383,14 +405,32 @@ public class Profile extends AbstractActivity {
 				}
 			}
 			
-			if(campaigns.isEmpty()){
+			if (signedUpCampaigns.isEmpty()) {
 				content.addView(inflater.inflate(R.layout.profile_no_campaigns, null));
-			}else{
+			}
+			else {
 				list = new ListView(Profile.this);
 				content.addView(list, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
 			
 				list.setOnItemClickListener(itemClickListener);
-				list.setAdapter(new CampaignListAdapter(context, userCampaigns, campaigns));
+				list.setAdapter(new CampaignListAdapter(context, userCampaigns, signedUpCampaigns));
+				
+				// Write campaigns to file cache
+				for (Campaign c : signedUpCampaigns) {
+					try {
+						dao.saveSignedUpCampaignData(uid, c);
+					}
+					// @todo Determine if there's something more that should actually be done to handle these exceptions
+					catch (JSONException e) {
+						e.printStackTrace();
+					}
+					catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
+					catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 

@@ -201,6 +201,131 @@ public class Campaign implements Serializable {
 		}
 	}
 	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
+		
+		JSONObject jsonCampaign = new JSONObject();
+		jsonCampaign.put("campaign-name", name);
+		// Remove '#' from color value
+		String logoBgColor = backgroundColor.substring(1);
+		jsonCampaign.put("logo-bg-color", logoBgColor);
+		jsonCampaign.put("start-date", new SimpleDateFormat("MM/dd/yy", Locale.US).format(startDate));
+		jsonCampaign.put("end-date", new SimpleDateFormat("MM/dd/yy", Locale.US).format(endDate));
+		jsonCampaign.put("logo", logoUrl);
+		jsonCampaign.put("logo-bg-image", backgroundUrl);
+		jsonCampaign.put("call-to-action", callout);
+		jsonCampaign.put("gid", gid);
+		jsonCampaign.put("order", order);
+		jsonCampaign.put("sms-refer-text", smsReferText);
+		jsonCampaign.put("mcommons-optin", mCommonsAlphaOptIn);
+		jsonCampaign.put("mcommons-friend-optin", mCommonsBetaOptIn);
+		jsonCampaign.put("android-min-version", minVersion);
+		obj.put("campaign", jsonCampaign);
+		
+		if (cause_tags != null) {
+			JSONArray jsonTags = new JSONArray();
+			for (int i = 0; i < cause_tags.length; i++) {
+				jsonTags.put(cause_tags[i]);
+			}
+			obj.put("causes-tags", jsonTags);
+		}
+		
+		if (campaignType != null) {
+			String cType = "";
+			if (campaignType == DSConstants.CAMPAIGN_TYPE.CHANGE_A_MIND)
+				cType = "change-a-mind";
+			else if (campaignType == DSConstants.CAMPAIGN_TYPE.DONATION)
+				cType = "donation";
+			else if (campaignType == DSConstants.CAMPAIGN_TYPE.HELP_1_PERSON)
+				cType = "help-1-person";
+			else if (campaignType == DSConstants.CAMPAIGN_TYPE.IMPROVE_A_PLACE)
+				cType = "improve-a-place";
+			else if (campaignType == DSConstants.CAMPAIGN_TYPE.MADE_BY_YOU)
+				cType = "made-by-you";
+			else if (campaignType == DSConstants.CAMPAIGN_TYPE.SHARE_FOR_GOOD)
+				cType = "share-for-good";
+			else if (campaignType == DSConstants.CAMPAIGN_TYPE.SMS)
+				cType = "sms";
+			
+			obj.put("campaign-type", cType);
+		}
+		
+		obj.put("campaign", jsonCampaign);
+		
+		JSONObject main = new JSONObject();
+		main.put("teaser", teaser);
+		main.put("video", videoUrl);
+		main.put("video-thumbnail", videoThumbnail);
+		main.put("additional-text", additionalText);
+		main.put("link", link);
+		main.put("image", image);
+		main.put("share-title", shareTitle);
+		main.put("share-message", shareMessage);
+		main.put("sign-up-alt-link", signUpAltLink);
+		main.put("sign-up-alt-text", signUpAltText);
+		main.put("sign-up-sms-action", signUpSmsAction);
+		main.put("sign-up-sms-opt-in", signUpSmsOptIn);
+		obj.put("main", main);
+		
+		if (faqs != null && faqs.size() > 0) {
+			JSONArray jsonFaqs = new JSONArray();
+			for (Faq f : faqs) {
+				jsonFaqs.put(f.toJSON());
+			}
+			obj.put("faq", jsonFaqs);
+		}
+		
+		if (gallery != null)
+			obj.put("gallery", gallery.toJSON());
+		
+		if (howTos != null && howTos.size() > 0) {
+			JSONArray jsonHowTos = new JSONArray();
+			for (HowTo h : howTos) {
+				jsonHowTos.put(h.toJSON());
+			}
+			obj.put("how-to", jsonHowTos);
+		}
+		
+		if (people != null)
+			obj.put("people", people.toJSON());
+		
+		if (prize != null)
+			obj.put("prizes", prize.toJSON());
+
+		if (moreInfo != null)
+			obj.put("more-info", moreInfo.toJSON());
+
+		if (resources != null && resources.size() > 0) {
+			JSONArray jsonResources = new JSONArray();
+			for (Resource r : resources) {
+				jsonResources.put(r.toJSON());
+			}
+			obj.put("resources", jsonResources);
+		}
+		
+		if (challenges != null && challenges.size() > 0) {
+			JSONArray jsonChallenges = new JSONArray();
+			for (Challenge c : challenges) {
+				jsonChallenges.put(c.toJSON());
+			}
+			obj.put("challenges", jsonChallenges);
+		}
+
+		if (reportBack != null)
+			obj.put("report-back", reportBack.toJSON());
+
+		if (signUp != null)
+			obj.put("sign-up", signUp.toJSON());
+
+		if (sfgData != null)
+			obj.put("sfg-data", sfgData.toJSON());
+		
+		JSONObject namedObj = new JSONObject();
+		namedObj.put(id, obj);
+		
+		return namedObj;
+	}
+	
 	public Intent getShareIntent(){
 		Intent answer = new Intent(android.content.Intent.ACTION_SEND);
 		

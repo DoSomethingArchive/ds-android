@@ -37,6 +37,27 @@ public class WebFormField implements Serializable{
 			}
 		}
 	}
+	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("label", label);
+		obj.put("type", type);
+		obj.put("name", name);
+		obj.put("select-type", selectType);
+		obj.put("required", required);
+		
+		if (selectOptions != null) {
+			JSONArray opts = new JSONArray(); 
+			for (WebFormSelectOptions opt : selectOptions) {
+				if (opt != null)
+					opts.put(opt.toJSON());
+			}
+			obj.put("select-options", opts);
+		}
+		
+		return obj;
+	}
 
 	public String getLabel() {
 		return label;

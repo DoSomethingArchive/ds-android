@@ -22,6 +22,16 @@ public class PrizeItem implements Serializable{
 		body = obj.optString("item-body",null);	
 	}
 	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("item-header", header);
+		obj.put("item-iamge", imageUrl);
+		obj.put("item-body", body);
+		
+		return obj;
+	}
+	
 	public String getHeader() {
 		return header;
 	}
