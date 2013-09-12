@@ -20,7 +20,16 @@ public class HowTo implements Serializable{
 		header = obj.getString("item-header");
 		body = obj.getString("item-body");
 		imageUrl = obj.optString("item-image", null);
+	}
+	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
 		
+		obj.put("item-header", header);
+		obj.put("item-body", body);
+		obj.put("item-image", imageUrl);
+		
+		return obj;
 	}
 
 	public String getHeader() {

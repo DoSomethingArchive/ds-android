@@ -19,6 +19,15 @@ public class Resource implements Serializable{
 		body = obj.optString("item-body",null);
 		linkUrl = obj.optString("item-link",null);
 	}
+	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("item-body", body);
+		obj.put("item-link", linkUrl);
+		
+		return obj;
+	}
 
 	public String getBody() {
 		return body;

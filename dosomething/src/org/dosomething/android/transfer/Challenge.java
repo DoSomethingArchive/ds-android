@@ -20,6 +20,15 @@ public class Challenge implements Serializable {
 		completionPage = obj.optString("completion-page",null);
 	}
 	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("text", text);
+		obj.put("completion-page", completionPage);
+		
+		return obj;
+	}
+	
 	public String getText() {
 		return text;
 	}

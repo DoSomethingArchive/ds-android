@@ -18,7 +18,15 @@ public class Faq implements Serializable {
 		
 		header = obj.getString("item-header");
 		body = obj.getString("item-body");
+	}
+	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
 		
+		obj.put("item-header", header);
+		obj.put("item-body", body);
+		
+		return obj;
 	}
 
 	public String getHeader() {

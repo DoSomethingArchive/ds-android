@@ -1,10 +1,19 @@
 package org.dosomething.android.dao;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
+import org.dosomething.android.transfer.Campaign;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,6 +24,7 @@ import com.google.inject.Inject;
 
 public class DSDao {
 	
+	private final String SIGNED_UP_CAMPAIGNS_FILENAME = "SignedUpCampaignsCache"; 
 	private final Context context;
 	
 	@Inject
@@ -76,6 +86,110 @@ public class DSDao {
         sql.close();
         
         return answer;
+	}
+	
+	/**
+	 * Read private file of campaign data a user has signed up for
+	 * 
+	 * @param uid User's uid we're retrieving data for
+	 * @return Cached campaign data as a JSONObject, or null if none is found
+	 */
+	public List<Campaign> fetchSignedUpCampaignData(String uid) {
+		String filename = SIGNED_UP_CAMPAIGNS_FILENAME + "-" + uid;
+		String fileContent = "";
+		ArrayList<Campaign> campaigns = new ArrayList<Campaign>();
+		
+		try {
+			FileInputStream fis = context.openFileInput(filename);
+			if (fis != null) {
+				BufferedInputStream bis = new BufferedInputStream(fis);
+				if (bis != null) {
+					byte[] buffer = new byte[1024];
+					
+					int bytesRead = 0;
+					while ((bytesRead = bis.read(buffer)) != -1) {
+						String chunk = new String(buffer, 0, bytesRead);
+						fileContent += chunk;
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			return campaigns;
+		}
+		
+		if (fileContent.length() > 0) {
+			try {
+				JSONObject jsonContent = new JSONObject(fileContent);
+				for (Iterator<?> iter = jsonContent.keys(); iter.hasNext();) {
+					String key = (String)iter.next();
+					if (jsonContent.get(key) instanceof JSONObject) {
+						campaigns.add(new Campaign(key, (JSONObject)jsonContent.get(key)));
+					}
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return campaigns;
+	}
+	
+	/**
+	 * Write campaign data for campaigns that a user's signed up for to a private
+	 * file for future use - particularly in case the campaign data gets removed
+	 * from the server later.
+	 * 
+	 * @param uid User's uid we're writing data for
+	 * @param campaign Campaign data being saved
+	 */
+	public void saveSignedUpCampaignData(String uid, Campaign campaign) throws FileNotFoundException, IOException, JSONException {
+		String filename = SIGNED_UP_CAMPAIGNS_FILENAME + "-" + uid;
+		
+		// Get current contents of the file
+		String savedContent = "";
+		try {
+			FileInputStream fis = context.openFileInput(filename);
+			if (fis != null) {
+				BufferedInputStream bis = new BufferedInputStream(fis);
+				if (bis != null) {
+					byte[] buffer = new byte[1024];
+					
+					int bytesRead = 0;
+					while ((bytesRead = bis.read(buffer)) != -1) {
+						String chunk = new String(buffer, 0, bytesRead);
+						savedContent += chunk;
+					}
+				}
+			}
+		}
+		// No worries if the read fails. Just continue and re-write the campaign data.
+		catch (Exception e) {}
+		
+		String newContent = "";
+		
+		// Convert current content string to a JSONObject
+		String campaignKey = campaign.getId();
+		if (savedContent.length() > 0) {
+			JSONObject jsonSaved = new JSONObject(savedContent);
+			// Overwrite campaign content if it's been previously saved
+			if (jsonSaved.has(campaignKey)) {
+				jsonSaved.remove(campaignKey);
+			}
+			
+			jsonSaved.put(campaignKey, campaign.toJSON().get(campaignKey));
+			newContent = jsonSaved.toString();
+		}
+		else {
+			newContent = campaign.toJSON().get(campaignKey).toString();
+		}
+		
+		FileOutputStream fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
+		if (fos != null) {
+			fos.write(newContent.getBytes());
+			fos.close();
+		}
 	}
 	
 	public void addCompletedAction(CompletedCampaignAction action){

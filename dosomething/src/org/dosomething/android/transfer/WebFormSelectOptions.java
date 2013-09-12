@@ -19,6 +19,15 @@ public class WebFormSelectOptions implements Serializable{
 		label = obj.optString("label",null);
 		value = obj.optString("value",null);
 	}
+	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("label", label);
+		obj.put("value", value);
+		
+		return obj;
+	}
 
 	public String getLabel() {
 		return label;

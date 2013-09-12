@@ -47,6 +47,38 @@ public class SFGData implements Serializable {
 		}
 	}
 	
+	public JSONObject toJSON() throws JSONException {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("gallery-url", galleryUrl);
+		obj.put("default-endpoint", defaultEndpoint);
+		obj.put("locator-type", locatorType);
+		obj.put("my-submissions-endpoint", mySubmissionsEndpoint);
+		obj.put("share-success-message", shareSuccessMsg);
+		
+		JSONObject filterObj = new JSONObject();
+		
+		if (typeOptions != null && typeOptions.size() > 0) {
+			JSONArray types = new JSONArray();
+			for (WebFormSelectOptions w : typeOptions) {
+				types.put(w.toJSON());
+			}
+			filterObj.put("type", types);
+		}
+		
+		if (locationOptions != null && locationOptions.size() > 0) {
+			JSONArray locs = new JSONArray();
+			for (WebFormSelectOptions w : locationOptions) {
+				locs.put(w.toJSON());
+			}
+			filterObj.put("location", locs);
+		}
+		
+		obj.put("filter-options", filterObj);
+		
+		return obj;
+	}
+	
 	public String getGalleryUrl() {
 		return galleryUrl;
 	}
