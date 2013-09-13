@@ -34,6 +34,7 @@ public class Campaign implements Serializable {
 	private int[] cause_tags;
 	private int gid;
 	private int order;
+	private boolean hidden;
 	private DSConstants.CAMPAIGN_TYPE campaignType;
 
 	private String videoUrl;
@@ -81,6 +82,7 @@ public class Campaign implements Serializable {
 		callout = co.optString("call-to-action",null);
 		gid = co.optInt("gid", -1);
 		order = co.getInt("order");
+		hidden = co.optBoolean("hidden", false);
 		smsReferText = co.optString("sms-refer-text");
 		mCommonsAlphaOptIn = co.optInt("mcommons-optin", -1);
 		mCommonsBetaOptIn = co.optInt("mcommons-friend-optin", -1);
@@ -215,6 +217,7 @@ public class Campaign implements Serializable {
 		jsonCampaign.put("logo-bg-image", backgroundUrl);
 		jsonCampaign.put("call-to-action", callout);
 		jsonCampaign.put("gid", gid);
+		jsonCampaign.put("hidden", hidden);
 		jsonCampaign.put("order", order);
 		jsonCampaign.put("sms-refer-text", smsReferText);
 		jsonCampaign.put("mcommons-optin", mCommonsAlphaOptIn);
@@ -554,6 +557,10 @@ public class Campaign implements Serializable {
 	
 	public int getGid() {
 		return gid;
+	}
+	
+	public boolean isHidden() {
+		return hidden;
 	}
 	
 	public int getOrder() {

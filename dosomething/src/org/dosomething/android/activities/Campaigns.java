@@ -148,7 +148,7 @@ public class Campaigns extends AbstractActivity {
 	}
 	
 	private void fetchCampaigns(boolean forceSearch) {
-		MyTask task = new MyTask();
+		CampaignsTask task = new CampaignsTask();
 		
 		task.setForceSearch(forceSearch);
 		task.execute();
@@ -212,12 +212,12 @@ public class Campaigns extends AbstractActivity {
 	}
 	
 	
-	private class MyTask extends AbstractFetchCampaignsTask {
+	private class CampaignsTask extends AbstractFetchCampaignsTask {
 
 		private boolean currentVersionOutdated = false;
 		private boolean forceSearch;
 
-		public MyTask() {
+		public CampaignsTask() {
 			super(Campaigns.this, userContext, cache, actionBar);
 			
 			forceSearch = false;
@@ -242,6 +242,9 @@ public class Campaigns extends AbstractActivity {
 				Campaign campaign = iter.next();
 				if (campaign.getMinVersion() > version) {
 					currentVersionOutdated = true;
+					iter.remove();
+				}
+				else if (campaign.isHidden()) {
 					iter.remove();
 				}
 			}
