@@ -317,6 +317,20 @@ public class Campaign extends AbstractActivity {
 		}
 	}
 	
+	private boolean hasNoSignUp() {
+		if (campaign != null
+			&& campaign.getSignUp() == null
+			&& (campaign.getSignUpAltLink() == null || campaign.getSignUpAltLink().length() == 0)
+			&& (campaign.getSignUpAltText() == null || campaign.getSignUpAltText().length() == 0)
+			&& (campaign.getSignUpSmsAction() == null || campaign.getSignUpSmsAction().length() == 0)
+			&& campaign.getSignUpSmsOptIn() > 0)
+		{
+			return true;
+		}
+		else
+			return false;
+	}
+	
 	private void updateSignUpButton(Context context) {
 		if (useAlternateSignUp() || useSmsActionSignUp()) {
 			btnSignUp.setEnabled(true);
@@ -324,22 +338,28 @@ public class Campaign extends AbstractActivity {
 			btnActions.setVisibility(Button.GONE);
 		}
 		else if (userContext.isLoggedIn() && campaign != null) {
-			UserCampaign userCampaign = new DSDao(context).findUserCampaign(userContext.getUserUid(), campaign.getId());
-			if(userCampaign != null){
-				// If user's already signed up and there is a report back available, then show report back button
-				if (campaign.getReportBack() != null) {
-					btnReportBack.setVisibility(Button.VISIBLE);
-					btnSignUp.setVisibility(Button.GONE);
-				}
-				else {
-					btnSignUp.setEnabled(false);
-					btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
+			if (hasNoSignUp() && campaign.getReportBack() != null) {
+				btnReportBack.setVisibility(Button.VISIBLE);
+				btnSignUp.setVisibility(Button.GONE);
+			}
+			else {
+				UserCampaign userCampaign = new DSDao(context).findUserCampaign(userContext.getUserUid(), campaign.getId());
+				if(userCampaign != null){
+					// If user's already signed up and there is a report back available, then show report back button
+					if (campaign.getReportBack() != null) {
+						btnReportBack.setVisibility(Button.VISIBLE);
+						btnSignUp.setVisibility(Button.GONE);
+					}
+					else {
+						btnSignUp.setEnabled(false);
+						btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
+						
+						btnReportBack.setVisibility(Button.GONE);
+						btnSignUp.setVisibility(Button.VISIBLE);
+					}
 					
-					btnReportBack.setVisibility(Button.GONE);
-					btnSignUp.setVisibility(Button.VISIBLE);
+					btnActions.setVisibility(Button.VISIBLE);
 				}
-				
-				btnActions.setVisibility(Button.VISIBLE);
 			}
 		}
 	}
