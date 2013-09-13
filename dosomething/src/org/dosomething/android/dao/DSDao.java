@@ -124,7 +124,17 @@ public class DSDao {
 				for (Iterator<?> iter = jsonContent.keys(); iter.hasNext();) {
 					String key = (String)iter.next();
 					if (jsonContent.get(key) instanceof JSONObject) {
-						campaigns.add(new Campaign(key, (JSONObject)jsonContent.get(key)));
+						Campaign addCampaign = null;
+						try {
+							addCampaign = new Campaign(key, (JSONObject)jsonContent.get(key));
+						}
+						catch (JSONException e) {
+							e.printStackTrace();
+							iter.remove();
+						}
+						
+						if (addCampaign != null)
+							campaigns.add(addCampaign);
 					}
 				}
 			}
