@@ -81,11 +81,11 @@ public class Profile extends AbstractActivity {
         
         context = this;
         
+        actionBar.addAction(Campaigns.getHomeAction(this));
+        
         if (userContext.isLoggedIn()) {
 			actionBar.addAction(configAction);
         }
-		
-        actionBar.addAction(Campaigns.getHomeAction(this));
         
         if (getIntent() != null && getIntent().getExtras() != null) {
 	        boolean bFromCauseSel = getIntent().getExtras().getBoolean(FROM_CAUSE_SEL);
