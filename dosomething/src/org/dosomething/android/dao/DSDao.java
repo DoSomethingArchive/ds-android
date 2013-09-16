@@ -123,18 +123,24 @@ public class DSDao {
 				JSONObject jsonContent = new JSONObject(fileContent);
 				for (Iterator<?> iter = jsonContent.keys(); iter.hasNext();) {
 					String key = (String)iter.next();
-					if (jsonContent.get(key) instanceof JSONObject) {
-						Campaign addCampaign = null;
-						try {
-							addCampaign = new Campaign(key, (JSONObject)jsonContent.get(key));
+					Object campaignObj = jsonContent.get(key);
+					// Ensure that item is the top-level "campaign" JSONObject before adding to returned Campaign list
+					if (campaignObj instanceof JSONObject) {
+						JSONObject jsonCampaignObj = (JSONObject)campaignObj;
+						if (jsonCampaignObj.has("campaign")) {
+							Campaign addCampaign = null;
+							try {
+								addCampaign = new Campaign(key, (JSONObject)jsonContent.get(key));
+							}
+							catch (JSONException e) {
+								e.printStackTrace();
+								iter.remove();
+							}
+							
+							if (addCampaign != null) {
+								campaigns.add(addCampaign);
+							}
 						}
-						catch (JSONException e) {
-							e.printStackTrace();
-							iter.remove();
-						}
-						
-						if (addCampaign != null)
-							campaigns.add(addCampaign);
 					}
 				}
 			}
@@ -175,7 +181,9 @@ public class DSDao {
 			}
 		}
 		// No worries if the read fails. Just continue and re-write the campaign data.
-		catch (Exception e) {}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		String newContent = "";
 		
@@ -188,11 +196,11 @@ public class DSDao {
 				jsonSaved.remove(campaignKey);
 			}
 			
-			jsonSaved.put(campaignKey, campaign.toJSON().get(campaignKey));
+			jsonSaved.put(campaignKey, campaign.toJSON().getJSONObject(campaignKey));
 			newContent = jsonSaved.toString();
 		}
 		else {
-			newContent = campaign.toJSON().get(campaignKey).toString();
+			newContent = campaign.toJSON().getJSONObject(campaignKey).toString();
 		}
 		
 		FileOutputStream fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
