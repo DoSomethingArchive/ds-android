@@ -323,7 +323,7 @@ public class Campaign extends AbstractActivity {
 			&& (campaign.getSignUpAltLink() == null || campaign.getSignUpAltLink().length() == 0)
 			&& (campaign.getSignUpAltText() == null || campaign.getSignUpAltText().length() == 0)
 			&& (campaign.getSignUpSmsAction() == null || campaign.getSignUpSmsAction().length() == 0)
-			&& campaign.getSignUpSmsOptIn() > 0)
+			&& campaign.getSignUpSmsOptIn() == 0)
 		{
 			return true;
 		}
