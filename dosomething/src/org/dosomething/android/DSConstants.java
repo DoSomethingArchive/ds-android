@@ -6,7 +6,7 @@ public class DSConstants {
 	private DSConstants() {}
 	
 	// Flag to enable/disable analytics tracking. Should be set to false during development to avoid dirtying the data.
-	public static final boolean analyticsEnabled = false;
+	public static final boolean analyticsEnabled = true;
 	
 	// IDs and keys for web services
 	public static final String FACEBOOK_APP_ID = "525191857506466";
