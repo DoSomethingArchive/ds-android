@@ -69,6 +69,8 @@ public class Profile extends AbstractActivity {
 	private Action profileAction;
 	private boolean initializingActivity = true;
 	
+	private List<Campaign> webCampaigns;
+	
 	@Override
 	protected String getPageName() {
 		return "profile";
@@ -96,8 +98,6 @@ public class Profile extends AbstractActivity {
 	        	getIntent().removeExtra(FROM_CAUSE_SEL);
 	        }
         }
-        
-        // onResume is always call next
     }
 	
 	private final Action configAction = new Action() {
@@ -153,17 +153,9 @@ public class Profile extends AbstractActivity {
 			// Add logout action
 			profileAction = Login.getLogoutAction(this, userContext);
 			actionBar.addAction(profileAction);
-			
+
 			// Start process to find campaigns the user's signed up for
-			if (initializingActivity) {
-				// Only query for user data on initial activity load
-				new UserTask().execute();
-				initializingActivity = false;
-			}
-			else {
-				// When activity is just being brought to the front again, skip user sync
-				new CampaignTask().execute();
-			}
+			new CampaignTask().execute();
 		}
 		else {
 			// Add login action
@@ -244,6 +236,136 @@ public class Profile extends AbstractActivity {
 	}
 	
 	/**
+	 * Updates the ListView component of the Profile view with the campaigns the
+	 * user is known to be signed up for.
+	 * 
+	 * @param gids List of gids that the user's signed up for as found through their Profile
+	 */
+	private void updateProfileList(List<Integer> gids) {
+		List<Campaign> signedUpCampaigns = new ArrayList<Campaign>();
+		List<UserCampaign> userCampaigns = new ArrayList<UserCampaign>();
+		
+		// userCampaignsMap stores list of campaigns the user has signed up for on the app
+		Map<String, UserCampaign> userCampaignsMap = new HashMap<String, UserCampaign>();
+		String uid = new UserContext(context).getUserUid();
+		if (uid != null) {
+			List<UserCampaign> allUserCampaigns = dao.findUserCampaigns(uid);
+			for(UserCampaign userCampaign : allUserCampaigns){
+				userCampaignsMap.put(userCampaign.getCampaignId(), userCampaign);
+			}
+			
+			// webCampaigns fetched from the CampaignTask add to list of campaigns to check against
+			List<Campaign> allCampaigns = new ArrayList<Campaign>();
+			allCampaigns.addAll(webCampaigns);
+			
+			// cachedCampaigns are fetched from a known private file on the system
+			List<Campaign> cachedCampaigns = dao.fetchSignedUpCampaignData(uid);
+			for (Campaign cachedCampaign : cachedCampaigns) {
+				
+				// Ensure no campaigns are added multiple times
+				boolean bDuplicateFound = false;
+				for (Campaign webCampaign : allCampaigns) {
+					if (webCampaign.getId().equals(cachedCampaign.getId())) {
+						bDuplicateFound = true;
+						break;
+					}
+				}
+				
+				if (!bDuplicateFound)
+					allCampaigns.add(cachedCampaign);
+			}
+			
+			// Flag indicating a campaign sign up was only detected on the server, 
+			// and not on the app itself.
+			boolean foundSignUpOnServer = false;
+			
+			// Cycle through all known campaigns from web or cache and check if they 
+			// match any from the list of user campaigns (saved from when they
+			// signed up for a campaign on the app).
+			for (Campaign campaign : allCampaigns) {
+				boolean addCampaign = false;
+				
+				if (userCampaignsMap.containsKey(campaign.getId())) {
+					addCampaign = true;
+				}
+				else if (gids != null) {
+					// User OG id's to determine if user signed up for this campaign on the website
+					for (int i = 0; gids != null && i < gids.size(); i++) {
+						if (campaign.getGid() == gids.get(i).intValue()) {
+							
+							// Save campaign as being signed up for
+							Long userCampaignId = dao.setSignedUp(uid, campaign.getId());
+							// And mark the sign-up challenge as completed
+							List<Challenge> challenges = campaign.getChallenges();
+							if (challenges != null) {
+								for (Challenge challenge : challenges) {
+									if ("sign-up".equals(challenge.getCompletionPage())) {
+										dao.addCompletedAction(new CompletedCampaignAction(userCampaignId, challenge.getText()));
+										break;
+									}
+								}
+							}
+							
+							// Add to userCampaignsMap HashMap
+							UserCampaign newUserCampaign = dao.findUserCampaign(uid, campaign.getId());
+							if (newUserCampaign != null) {
+								userCampaignsMap.put(newUserCampaign.getCampaignId(), newUserCampaign);
+								
+								// Only add to list for display if this succeeds. Otherwise, will crash
+								addCampaign = true;
+								foundSignUpOnServer = true;
+							}
+							
+							break;
+						}
+					}
+				}
+				
+				if (addCampaign) {
+					signedUpCampaigns.add(campaign);
+					userCampaigns.add(userCampaignsMap.get(campaign.getId()));
+				}
+			}
+			
+			// Display Toast notifying user some campaigns were found from the profile sync
+			if (foundSignUpOnServer) {
+				Toast toast = Toast.makeText(context, R.string.profile_campaign_synced, Toast.LENGTH_LONG);
+				toast.show();
+			}
+		}
+		
+		// If no campaigns were found, change to the layout with no profile activity
+		if (signedUpCampaigns.isEmpty()) {
+			content.addView(inflater.inflate(R.layout.profile_no_campaigns, null));
+		}
+		// Otherwise, clear the ListView and repopulate with updated content
+		else {
+			list = new ListView(Profile.this);
+			content.removeAllViews();
+			content.addView(list, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
+		
+			list.setOnItemClickListener(itemClickListener);
+			list.setAdapter(new CampaignListAdapter(context, userCampaigns, signedUpCampaigns));
+			
+			// Write campaigns to file cache
+			for (Campaign c : signedUpCampaigns) {
+				try {
+					dao.saveSignedUpCampaignData(uid, c);
+				}
+				catch (JSONException e) {
+					e.printStackTrace();
+				}
+				catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Task to get user's profile info from server.
 	 */
 	private class UserTask extends AbstractWebserviceTask {
@@ -257,7 +379,7 @@ public class Profile extends AbstractActivity {
 		protected void doWebOperation() throws Exception {
 			String uid = new UserContext(context).getUserUid();
 			String url = DSConstants.API_URL_BASE + "user/"+uid+".json";
-			
+
 			WebserviceResponse response = doGet(url);
 			if (!response.hasErrorStatusCode()) {
 				// gid's found in group_audience object show what campaigns, clubs,
@@ -284,14 +406,7 @@ public class Profile extends AbstractActivity {
 
 		@Override
 		protected void onSuccess() {
-		}
-		
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			if(actionBar != null){
-				actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
-			}
+			updateProfileList(gids);
 		}
 
 		@Override
@@ -299,9 +414,6 @@ public class Profile extends AbstractActivity {
 			if(actionBar != null){
 				actionBar.setProgressBarVisibility(ProgressBar.GONE);
 			}
-			
-			// Start task to retrieve campaigns
-			new CampaignTask(gids).execute();
 		}
 
 		@Override
@@ -309,128 +421,33 @@ public class Profile extends AbstractActivity {
 		}
 	}
 	
+	/**
+	 * Task to fetch the campaign data from the server.
+	 */
 	private class CampaignTask extends AbstractFetchCampaignsTask {
-		private ArrayList<Integer> gids;
 		
 		public CampaignTask() {
 			super(Profile.this.context, userContext, cache, actionBar);
 		}
 
-		public CampaignTask(ArrayList<Integer> gids){
-			super(Profile.this.context, userContext, cache, actionBar);
-			this.gids = gids;
+		@Override
+		protected void onSuccess() {
+			webCampaigns = getCampaigns();
+			
+			updateProfileList(null);
+			
+			if (initializingActivity) {
+				// Only query for user data on initial activity load
+				new UserTask().execute();
+				initializingActivity = false;
+			}
 		}
 		
 		@Override
-		protected void onSuccess() {
-			List<Campaign> signedUpCampaigns = new ArrayList<Campaign>();
-			List<UserCampaign> userCampaigns = new ArrayList<UserCampaign>();
-			
-			boolean foundSignUpOnServer = false;
-			
-			Map<String, UserCampaign> userCampaignsMap = new HashMap<String, UserCampaign>();
-			String uid = new UserContext(context).getUserUid();
-			if (uid != null) {
-				List<UserCampaign> allUserCampaigns = dao.findUserCampaigns(uid);
-				for(UserCampaign userCampaign : allUserCampaigns){
-					userCampaignsMap.put(userCampaign.getCampaignId(), userCampaign);
-				}
-				
-				// Retrieve current list of campaigns from web
-				List<Campaign> webCampaigns = getCampaigns();
-				List<Campaign> allCampaigns = new ArrayList<Campaign>();
-				allCampaigns.addAll(webCampaigns);
-				
-				List<Campaign> cachedCampaigns = dao.fetchSignedUpCampaignData(uid);
-				for (Campaign cachedCampaign : cachedCampaigns) {
-					boolean bDuplicateFound = false;
-					for (Campaign webCampaign : allCampaigns) {
-						if (webCampaign.getId().equals(cachedCampaign.getId())) {
-							bDuplicateFound = true;
-							break;
-						}
-					}
-					
-					if (!bDuplicateFound)
-						allCampaigns.add(cachedCampaign);
-				}
-				
-				for(Campaign campaign : allCampaigns){
-					boolean addCampaign = false;
-					if(userCampaignsMap.containsKey(campaign.getId())){
-						addCampaign = true;
-					}
-					else {
-						// User OG id's to determine if user signed up for this campaign on the website
-						for (int i = 0; gids != null && i < gids.size(); i++) {
-							if (campaign.getGid() == gids.get(i).intValue()) {
-								
-								// Save campaign as being signed up for
-								Long userCampaignId = dao.setSignedUp(uid, campaign.getId());
-								// And mark the sign-up challenge as completed
-								List<Challenge> challenges = campaign.getChallenges();
-								if (challenges != null){
-									for (Challenge challenge : challenges) {
-										if ("sign-up".equals(challenge.getCompletionPage())) {
-											dao.addCompletedAction(new CompletedCampaignAction(userCampaignId, challenge.getText()));
-											break;
-										}
-									}
-								}
-								
-								// Add to userCampaignsMap HashMap
-								UserCampaign newUserCampaign = dao.findUserCampaign(uid, campaign.getId());
-								if (newUserCampaign != null) {
-									userCampaignsMap.put(newUserCampaign.getCampaignId(), newUserCampaign);
-									
-									// Only add to list for display if this succeeds. Otherwise, will crash
-									addCampaign = true;
-									foundSignUpOnServer = true;
-								}
-								
-								break;
-							}
-						}
-					}
-					
-					if (addCampaign) {
-						signedUpCampaigns.add(campaign);
-						userCampaigns.add(userCampaignsMap.get(campaign.getId()));
-					}
-				}
-				
-				if (foundSignUpOnServer) {
-					Toast toast = Toast.makeText(context, R.string.profile_campaign_synced, Toast.LENGTH_LONG);
-					toast.show();
-				}
-			}
-			
-			if (signedUpCampaigns.isEmpty()) {
-				content.addView(inflater.inflate(R.layout.profile_no_campaigns, null));
-			}
-			else {
-				list = new ListView(Profile.this);
-				content.addView(list, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
-			
-				list.setOnItemClickListener(itemClickListener);
-				list.setAdapter(new CampaignListAdapter(context, userCampaigns, signedUpCampaigns));
-				
-				// Write campaigns to file cache
-				for (Campaign c : signedUpCampaigns) {
-					try {
-						dao.saveSignedUpCampaignData(uid, c);
-					}
-					// @todo Determine if there's something more that should actually be done to handle these exceptions
-					catch (JSONException e) {
-						e.printStackTrace();
-					}
-					catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
-					catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
+		protected void onPreExecute() {
+			super.onPreExecute();
+			if(actionBar != null){
+				actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
 			}
 		}
 
