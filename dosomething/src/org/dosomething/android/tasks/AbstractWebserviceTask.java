@@ -330,27 +330,45 @@ public abstract class AbstractWebserviceTask extends AsyncTask<Void,Void,Excepti
 		}
 		
 		public String extractFormErrorsAsMessage() throws JSONException, IOException {
-			JSONObject obj = getBodyAsJSONObject();
-			if(obj==null) {
-				return null;
-			}
-			
-			JSONObject formErrors = obj.optJSONObject("form_errors");
-			if(formErrors==null) {
-				return null;
-			}
-			
+			String jsonString = getBodyAsString();
 			StringBuilder message = new StringBuilder();
-			JSONArray names = formErrors.names();
-			for(int i=0; i<names.length(); i++) {
-				String htmlError = formErrors.getString(names.getString(i));
-				String plainText = Html.fromHtml(htmlError).toString();
-				message.append(plainText);
-				if(i+1<names.length()) {
-					message.append("\n");
+			if (jsonString.charAt(0) == '{') {
+				JSONObject jsonError = new JSONObject(jsonString);
+				
+				JSONObject formErrors = jsonError.optJSONObject("form_errors");
+				if(formErrors==null) {
+					return null;
+				}
+				
+				JSONArray names = formErrors.names();
+				for(int i=0; i<names.length(); i++) {
+					String htmlError = formErrors.getString(names.getString(i));
+					boolean appendNewLine = i + 1 < names.length();
+					message = appendErrorMessages(message, htmlError, appendNewLine);
 				}
 			}
+			else if (jsonString.charAt(0) == '[') {
+				JSONArray jsonError = new JSONArray(jsonString);
+				for (int i = 0; i < jsonError.length(); i++) {
+					boolean appendNewLine = i + 1 < jsonError.length();
+					message = appendErrorMessages(message, jsonError.getString(i), appendNewLine);
+				}
+			}
+			else {
+				return null;
+			}
+			
 			return message.toString();
+		}
+		
+		private StringBuilder appendErrorMessages(StringBuilder message, String appendString, boolean appendNewLine) {
+			String plainText = Html.fromHtml(appendString).toString();
+			message.append(plainText);
+			if (appendNewLine) {
+				message.append("\n");
+			}
+			
+			return message;
 		}
 
 		public int getStatusCode() {

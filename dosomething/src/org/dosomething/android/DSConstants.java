@@ -27,7 +27,7 @@ public class DSConstants {
     public static final String MCOMMONS_API_JOIN_URL = "http://dosomething.mcommons.com/profiles/join";
 
     // Date format to use across all areas of the app that need it
-    public static final String DATE_FORMAT = "MM/dd/yyyy";
+    public static final String DATE_FORMAT = "M/d/yyyy";
 
     // Fade-in animation time (in milliseconds) for ImageLoader images
     public static final int IMAGE_LOADER_FADE_IN_TIME = 250;
