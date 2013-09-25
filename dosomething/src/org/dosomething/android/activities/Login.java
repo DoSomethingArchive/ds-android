@@ -1,18 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-import org.dosomething.android.analytics.Analytics;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.json.JSONObject;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -29,6 +16,18 @@ import com.facebook.Session;
 import com.google.inject.Inject;
 import com.markupartist.android.widget.ActionBar.Action;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class Login extends AbstractFragmentActivity {

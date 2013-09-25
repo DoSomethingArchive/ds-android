@@ -1,30 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
-
-import org.acra.util.Base64;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.transfer.WebForm;
-import org.dosomething.android.transfer.WebFormField;
-import org.dosomething.android.transfer.WebFormSelectOptions;
-import org.dosomething.android.widget.CustomActionBar;
-import org.json.JSONObject;
-
-import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -57,6 +32,32 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+
+import org.acra.util.Base64;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.transfer.WebForm;
+import org.dosomething.android.transfer.WebFormField;
+import org.dosomething.android.transfer.WebFormSelectOptions;
+import org.dosomething.android.widget.CustomActionBar;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+
+import roboguice.inject.InjectView;
 
 public abstract class AbstractWebForm extends AbstractActivity {
 	
@@ -433,7 +434,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 						checkbox.setTextColor(getResources().getColor(R.color.web_form_checkbox_label));
 						checkbox.setText(wfso.getLabel());
 						checkbox.setTag(wfso.getValue());
-						layout.addView(checkbox, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+						layout.addView(checkbox, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 					}
 					break;
 				}

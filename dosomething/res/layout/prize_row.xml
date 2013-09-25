@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    style="@style/PrizeRow">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
     
     <TextView
         android:id="@+id/header"
-        style="@style/PrizeRowHeader" />
+        style="@style/SubpageRowHeader" />
     <ImageView 
         android:id="@+id/image"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>
     <TextView 
         android:id="@+id/body"
-        style="@style/PrizeRowBody" />
+        style="@style/SubpageRowBody" />
     
 </LinearLayout>

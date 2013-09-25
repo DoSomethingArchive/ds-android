@@ -30,12 +30,6 @@
                 android:layout_height="wrap_content"
                 style="@style/SMSReferText" />
             
-            <TextView 
-                android:text="@string/sms_help_text"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                style="@style/SMSHelpText"/>
-            
             <TextView
                 android:text="@string/sms_name_field"
                 android:layout_width="fill_parent"
@@ -55,6 +49,11 @@
 		        android:id="@+id/sms_cell_input"
 		        style="@style/WebFormRowInput"
 		        android:inputType="phone" />
+
+            <TextView
+                android:id="@+id/required_instructions"
+                style="@style/RegisterDisclaimer"
+                android:text="@string/required_instructions" />
             
             <TextView
                 android:id="@+id/sms_friends_label"
@@ -71,21 +70,9 @@
             
             <Button
                 android:id="@+id/sms_add_numbers"
-                style="@style/WebFormRowSubmit"
+                style="@style/ButtonSecondary"
                 android:text="@string/sms_add_contacts"
                 android:onClick="addNumbers" />
-                
-            <LinearLayout 
-                android:id="@+id/sms_refer_numbers"
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-            
-            <TextView
-                android:id="@+id/required_instructions"
-                style="@style/RegisterDisclaimer"
-                android:text="@string/required_instructions"
-                android:visibility="gone" />
             
             <Button
                 android:id="@+id/submit"

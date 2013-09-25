@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark_blue"
-                android:textSize="@dimen/font_size_header_label"
+                android:textSize="@dimen/font_size_header_2"
                 android:textStyle="bold"
                 android:layout_margin="10dp"/>
             

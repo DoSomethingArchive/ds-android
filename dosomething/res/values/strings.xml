@@ -49,7 +49,7 @@
     
     <string name="register_title">Become A Member</string>
     <string name="register_disclaimer">By tapping \"Go\", you accept the &lt;a href="http://www.dosomething.org/about/terms-of-service">terms of use&lt;/a> and &lt;a href="http://www.dosomething.org/about/privacy">privacy policy&lt;/a>.</string>
-    <string name="profile_browse_campaigns">FIND WAYS TO GET INVOLVED</string>
+    <string name="profile_browse_campaigns">PICK A PROJECT</string>
     <string name="profile_config">Profile Stats</string>
     <string name="profile_config_campaigns_joined">Campaigns Joined: %1$d</string>
     <string name="profile_config_date_empty">--/--/----</string>
@@ -57,10 +57,11 @@
     <string name="profile_config_member_since">Member Since: %1$s</string>
     <string name="profile_config_sms_campaigns_started">SMS Experiences Started: %1$d</string>
     <string name="profile_config_your_causes">Your Causes</string>
+    <string name="profile_logged_out_teaser">Make the world suck less. Pick a project to get started.</string>
     <string name="profile_login_button">GET STARTED NOW</string>
     <string name="profile_title">Profile</string>
     <string name="profile_update_error">There was an error updating your profile. Check your internet connection and try again later.</string>
-    <string name="campaigns_title">Ways To Get Involved</string>
+    <string name="campaigns_title">Projects</string>
     <string name="campaigns_upgrade_popup">A new update is available!</string>
     <string name="campaign_share_title">Share</string>
     <string name="campaign_how_to_title">How To</string>
@@ -75,7 +76,6 @@
     
     <string name="profile_campaign_synced">Looks like you signed up for campaigns on our website! We\'ve gone ahead and added them to your list here.</string>
     <string name="profile_no_campaigns">Hey! It looks like you haven\'t signed up for any of our campaigns.\n\nSign up for some, then check back here to see what you\'ve done and what you can do next!</string>
-    <string name="profile_no_campaigns_button">GET INVOLVED NOW</string>
     <string name="profile_load_error">Unable to load Profile data at this time. Please try again later.</string>
     
     <string name="campaign_report_back_button">TELL US!</string>
