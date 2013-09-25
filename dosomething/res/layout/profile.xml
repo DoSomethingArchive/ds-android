@@ -8,8 +8,7 @@
 	
     <org.dosomething.android.widget.CustomActionBar
         android:id="@+id/actionbar" 
-        style="@style/ActionBar" 
-        app:title="@string/profile_title"/>
+        style="@style/ActionBar" />
     
     <ScrollView 
 		android:orientation="vertical"

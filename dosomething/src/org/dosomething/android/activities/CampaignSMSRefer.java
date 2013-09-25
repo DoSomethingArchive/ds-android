@@ -1,25 +1,12 @@
 package org.dosomething.android.activities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-import org.dosomething.android.analytics.Analytics;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.widget.CustomActionBar;
-
-import roboguice.inject.InjectView;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -35,6 +22,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.widget.CustomActionBar;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import roboguice.inject.InjectView;
 
 public class CampaignSMSRefer extends AbstractActivity {
 	
@@ -44,12 +47,14 @@ public class CampaignSMSRefer extends AbstractActivity {
 
 	@Inject private LayoutInflater inflater;
 	@Inject private UserContext userContext;
+    @Inject private @Named("DINComp-CondBold")Typeface typefaceDin;
 	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.sms_cell_input) private EditText etCellInput;
 	@InjectView(R.id.sms_friends_container) private LinearLayout llFriendsContainer;
 	@InjectView(R.id.sms_friends_label) private TextView tvFriendsLabel;
 	@InjectView(R.id.sms_name_input) private EditText etNameInput;
 	@InjectView(R.id.sms_refer_text) private TextView txtSMSRefer;
+    @InjectView(R.id.sms_add_numbers) private Button btnAddNumbers;
 	@InjectView(R.id.submit) private Button btnSubmit;
 	
 	private org.dosomething.android.transfer.Campaign campaign;
@@ -75,6 +80,10 @@ public class CampaignSMSRefer extends AbstractActivity {
         		onSubmitClick();
         	}
         });
+
+        // Set custom typeface for buttons
+        btnAddNumbers.setTypeface(typefaceDin,Typeface.BOLD);
+        btnSubmit.setTypeface(typefaceDin, Typeface.BOLD);
 
 		// Auto-fill any fields we already have information for
 		prePopulate();

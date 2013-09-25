@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <style name="SplashScreen">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:padding">0dp</item>
         <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="android:windowFrame">@null</item>
@@ -21,7 +21,14 @@
         <item name="android:layout_weight">1.0</item>
         <item name="android:padding">@dimen/actionbar_submenu_item_padding</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/font_size_header_label</item>
+        <item name="android:textSize">@dimen/font_size_header_2</item>
+    </style>
+    <style name="ButtonSecondary">
+        <item name="android:background">@drawable/secondary_button_selector</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:textSize">@dimen/font_size_button</item>
     </style>
     <style name="LoginLogo">
         <item name="android:src">@drawable/login_logo</item>
@@ -41,11 +48,11 @@
         <item name="android:paddingLeft">14dp</item>
         <item name="android:paddingRight">14dp</item>
         <item name="android:paddingBottom">14dp</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="LoginInput">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>
         <item name="android:background">@color/login_input_background</item>
@@ -54,52 +61,53 @@
     </style>
     <style name="LoginButton">
         <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:background">@drawable/main_button_selector</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">@dimen/font_size_button</item>
     </style>
     <style name="RegisterDisclaimer">
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:textColor">@color/register_disclaimer_text</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="RequiredInstructions">
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:textColor">@color/required_instructions_text</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="RegisterInput">
         <item name="android:layout_marginTop">2dp</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="RegisterLabel">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/register_label</item>
         <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="RegisterCancelButton">
-        <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/secondary_button_selector</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginRight">5dp</item>
-        
+        <item name="android:textSize">@dimen/font_size_button</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="RegisterButton">
-        <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/main_button_selector</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:textSize">@dimen/font_size_button</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="ProfileConfigCauseButton">
         <item name="android:layout_width">80dp</item>
@@ -118,24 +126,24 @@
     </style>
     <style name="ProfileConfigEditButton">
         <item name="android:background">@drawable/main_button_selector</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/font_size_button</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
     </style>
     <style name="ProfileConfigSaveButton">
         <item name="android:background">@drawable/main_button_selector</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/font_size_button</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_margin">5dp</item>
     </style>
     <style name="ProfileConfigLabel">
         <item name="android:textColor">@color/register_label</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/font_size_medium</item>
     </style>
     <style name="ProfileNoCampaignsLayout">
         <item name="android:background">@color/profile_background</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:layout_gravity">center_horizontal</item>
@@ -144,7 +152,7 @@
     <style name="ProfileNoCampaignsInner">
         <item name="android:background">@drawable/white_border_background</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">20dp</item>
         <item name="android:layout_marginLeft">10dp</item>
@@ -157,7 +165,7 @@
     <style name="ProfileLoggedOutInner">
         <item name="android:background">@drawable/white_border_background</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">20dp</item>
         <item name="android:layout_marginLeft">10dp</item>
@@ -166,7 +174,7 @@
     </style>
     
     <style name="ProfileNoCampaignsText">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:textStyle">bold</item>
@@ -174,23 +182,23 @@
     </style>
     <style name="ProfileNoCampaignsButton">
         <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">20dp</item>
         <item name="android:layout_marginBottom">20dp</item>
         <item name="android:background">@drawable/main_button_selector</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">@dimen/font_size_button</item>
     </style>
     <style name="CampaignRowBackground">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">156dp</item>
         <item name="android:layout_margin">0dp</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:gravity">center</item>
     </style>
     <style name="CampaignRowImage">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">156dp</item>
         <item name="android:layout_margin">2dp</item>
         <item name="android:scaleType">centerInside</item>
@@ -201,7 +209,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">#522053</item>
         <item name="android:textColor">#FECC05</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">@dimen/font_size_header_2</item>
         <item name="android:padding">5dp</item>
     </style>
     <style name="CampaignCauseTag">
@@ -213,50 +221,52 @@
     </style>
     <style name="CampaignDatesRow">
         <item name="android:orientation">vertical</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@color/campaign_dates_row_background</item>
         <item name="android:padding">15dp</item>
     </style>
     <style name="CampaignDatesText">
-       <item name="android:layout_width">fill_parent</item>
+       <item name="android:layout_width">match_parent</item>
        <item name="android:layout_height">wrap_content</item>
        <item name="android:gravity">center_horizontal</item>
-       <item name="android:textSize">20sp</item>
+       <item name="android:textSize">@dimen/font_size_header_2</item>
        <item name="android:textStyle">bold</item>
        <item name="android:textColor">#FECC05</item>
     </style>
     <style name="CampaignTeaserText">
-       <item name="android:layout_width">fill_parent</item>
+       <item name="android:layout_width">match_parent</item>
        <item name="android:layout_height">wrap_content</item>
        <item name="android:gravity">center_horizontal</item>
        <item name="android:textColor">#fff</item>
+       <item name="android:textSize">@dimen/font_size_medium</item>
     </style>
     <style name="CampaignSignUpRow">
         <item name="android:orientation">vertical</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@color/campaign_sign_up_row_background</item>
     </style>
     <style name="CampaignSignUpButton">
-        <item name="android:textStyle">bold</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">20dp</item>
         <item name="android:layout_marginLeft">40dp</item>
         <item name="android:layout_marginRight">40dp</item>
         <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/font_size_button</item>
     </style>
     <style name="CampaignSMSReferRow">
         <item name="android:orientation">vertical</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@color/campaign_sign_up_row_background</item>
         <item name="android:paddingLeft">15dp</item>
         <item name="android:paddingRight">15dp</item>
     </style>
     <style name="CampaignSMSReferText">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">15dp</item>
         <item name="android:layout_marginRight">15dp</item>
@@ -264,14 +274,14 @@
         <item name="android:textColor">#fff</item>
     </style>
     <style name="CampaignImageBackground">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">156dp</item>
         <item name="android:layout_margin">0dp</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:gravity">center</item>
     </style>
     <style name="CampaignImage">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">156dp</item>
         <item name="android:layout_margin">2dp</item>
         <item name="android:scaleType">centerInside</item>
@@ -279,16 +289,16 @@
     </style>
     
     <style name="CampaignShareText">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/campaign_share_text</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">@dimen/font_size_header_2</item>
         <item name="android:gravity">center_horizontal</item>
     </style>
     
     <style name="CampaignShareButton">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">40dp</item>
         <item name="android:textStyle">bold</item>
@@ -296,7 +306,7 @@
     </style>
     
     <style name="CampaignShareContinueButton">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:textStyle">bold</item>
@@ -305,10 +315,10 @@
     
     <style name="CampaignButton">
         <item name="android:background">@drawable/campaign_button_selector</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">@dimen/font_size_button</item>
         <item name="android:textColor">#fff</item>
         <item name="android:gravity">left</item>
         <item name="android:padding">20dp</item>
@@ -318,7 +328,7 @@
         <item name="android:background">@drawable/white_border_background</item>
         <item name="android:orientation">vertical</item>
         <item name="android:padding">10dp</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">20dp</item>
     </style>
@@ -330,19 +340,19 @@
     </style>
     <style name="CauseSubmitButton">
         <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">20dp</item>
         <item name="android:layout_marginRight">20dp</item>
         <item name="android:layout_marginBottom">20dp</item>
         <item name="android:background">@drawable/main_button_selector</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">@dimen/font_size_button</item>
     </style>
     <style name="CauseListText">
         <item name="android:textColor">@color/cause_text</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">@dimen/font_size_medium</item>
     </style>
     <style name="CauseToggleButton">
         <item name="android:layout_width">100dp</item>
@@ -352,16 +362,16 @@
         <item name="android:layout_margin">10dp</item>
     </style>
     <style name="FaqRow">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="FaqRowChild">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">#fff</item>
     </style>
     <style name="FaqRowHeader">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">15dp</item>
         <item name="android:layout_marginBottom">15dp</item>
@@ -369,12 +379,12 @@
         <item name="android:layout_marginLeft">40dp</item>
         <item name="android:gravity">center_vertical|left</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">@dimen/font_size_header_2</item>
         <item name="android:textColor">#122B7C</item>
     </style>
     <style name="FaqRowBody">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:textColor">#000</item>
         <item name="android:autoLink">all</item>
@@ -382,57 +392,17 @@
     <style name="FilterSubmitButton">
         <item name="android:background">@drawable/main_button_selector</item>
     </style>
-    <style name="ResourceRow">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">10dp</item>
-    </style>
-    
-    <style name="ResourceRowBody">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#000</item>
-        <item name="android:textSize">15dp</item>
-        <item name="android:padding">5dp</item>
-        <item name="android:gravity">center</item>
-    </style>
-    
     <style name="ResourceRowImage">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:src">@android:drawable/ic_menu_info_details</item>
-    </style>
-    
-    <style name="PrizeRow">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-    
-    <style name="PrizeRowHeader">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#122B7C</item>
-        <item name="android:textSize">25sp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:padding">5dp</item>
-    </style>
-    <style name="PrizeRowBody">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#000</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:padding">5dp</item>
-        <item name="android:autoLink">all</item>
     </style>
     <style name="SubpageRowHeader">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#122B7C</item>
-        <item name="android:textSize">25sp</item>
+        <item name="android:textSize">@dimen/font_size_header_1</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">5dp</item>
     </style>
@@ -440,55 +410,55 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#000</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">@dimen/font_size_medium</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">5dp</item>
         <item name="android:autoLink">all</item>
     </style>
     <style name="ActionRow">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/action_row_selector</item>
         <item name="android:padding">10dp</item>
     </style>
     
     <style name="ActionRowBody">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#868686</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">15dp</item>
+        <item name="android:textSize">@dimen/font_size_medium</item>
         <item name="android:gravity">left|center_vertical</item>
     </style>
     
     <style name="CampaignActionListTitle">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#fff</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">15dp</item>
+        <item name="android:textSize">@dimen/font_size_medium</item>
         <item name="android:background">#173781</item>
         <item name="android:padding">10dp</item>
     </style>
     
     <style name="ProfileCampaignRowTitle">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">@dimen/font_size_header_2</item>
         <item name="android:textColor">#173781</item>
     </style>
     
     <style name="ProfileCampaignStatus">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">@dimen/font_size_medium</item>
         <item name="android:textColor">#868686</item>
     </style>
     
     <style name="PrizeRulesText">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:autoLink">all</item>
         <item name="android:textColor">#122B7C</item>
         <item name="android:textStyle">bold</item>
@@ -503,27 +473,23 @@
     </style>
     
     <style name="SMSContactLabel">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/register_label</item>
     </style>
-    <style name="SMSHelpText">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">#2A2C2B</item>
-    </style>
     <style name="SMSReferText">
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">@dimen/font_size_medium</item>
         <item name="android:textColor">#000</item>
         <item name="android:paddingBottom">5dp</item>
     </style>
     <style name="UpgradePopupButton">
         <item name="android:layout_width">@dimen/popup_button_width</item>
-        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:background">@drawable/upgrade_popup_selector</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">@dimen/font_size_header_2</item>
         <item name="android:gravity">center</item>
         <item name="android:shadowColor">#777</item>
         <item name="android:shadowRadius">2</item>
@@ -531,22 +497,22 @@
         <item name="android:shadowDy">2</item>
     </style>
     <style name="UpgradePopupMessage">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_toLeftOf">@id/popupClose</item>
         <item name="android:background">@drawable/upgrade_popup_selector</item>
         <item name="android:textColor">#000</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">@dimen/font_size_header_2</item>
     </style>
     <style name="WebFormList">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
     	<item name="android:layout_height">0dp</item>
     	<item name="android:layout_weight">1.0</item>
         <item name="android:divider">#fff</item>
     </style>
     <style name="WebFormRow">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">#fff</item>
         <item name="android:padding">5dp</item>
@@ -556,25 +522,25 @@
         <item name="android:textColor">@color/register_label</item>
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:layout_marginLeft">2dp</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="WebFormRowInput">
         <item name="android:layout_marginTop">2dp</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="WebFormRowSubmit">
-        <item name="android:layout_marginTop">15dp</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/main_button_selector</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/font_size_button</item>
     </style>
-
     <style name="WelcomeInner">
         <item name="android:background">@drawable/white_border_background</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginLeft">10dp</item>

@@ -6,6 +6,6 @@
     
     <TextView 
         android:id="@+id/body"
-        style="@style/PrizeRowBody" />
+        style="@style/SubpageRowBody" />
 
 </LinearLayout>

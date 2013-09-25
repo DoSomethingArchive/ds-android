@@ -1,13 +1,26 @@
 package org.dosomething.android.activities;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.markupartist.android.widget.ActionBar.Action;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
@@ -25,27 +38,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import roboguice.inject.InjectView;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.markupartist.android.widget.ActionBar.Action;
+import roboguice.inject.InjectView;
 
 public class Profile extends AbstractActivity {
 	
@@ -150,6 +152,9 @@ public class Profile extends AbstractActivity {
 		}
 		
 		if (userContext.isLoggedIn()) {
+            // Only set title to Profile if user's logged in
+            actionBar.setTitle(R.string.profile_title);
+
 			// Add logout action
 			profileAction = Login.getLogoutAction(this, userContext);
 			actionBar.addAction(profileAction);
@@ -164,6 +169,9 @@ public class Profile extends AbstractActivity {
 			
 			// Show the "no campaigns" layout
 			content.addView(inflater.inflate(R.layout.profile_logged_out, null));
+
+            Button btnAction = (Button)findViewById(R.id.profile_action_button);
+            btnAction.setTypeface(headerTypeface, Typeface.BOLD);
 		}
 	}
 	
@@ -337,6 +345,9 @@ public class Profile extends AbstractActivity {
 		// If no campaigns were found, change to the layout with no profile activity
 		if (signedUpCampaigns.isEmpty()) {
 			content.addView(inflater.inflate(R.layout.profile_no_campaigns, null));
+
+            Button btnAction = (Button)findViewById(R.id.profile_action_button);
+            btnAction.setTypeface(headerTypeface, Typeface.BOLD);
 		}
 		// Otherwise, clear the ListView and repopulate with updated content
 		else {
