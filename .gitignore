@@ -2,6 +2,9 @@
 Thumbs.db
 .DS_Store
 
+# vim
+*.swp
+
 # ANDROID
 # built application files
 *.apk
@@ -17,5 +20,8 @@ gen/
 local.properties
 
 # Android Studio
+.gradle/
 *.iml
 *.idea
+gradle/
+build/
