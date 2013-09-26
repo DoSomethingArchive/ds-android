@@ -49,8 +49,9 @@ import java.util.Map;
 
 import roboguice.inject.InjectView;
 
-public class Profile extends AbstractActivity {
-	
+//public class Profile extends AbstractActivity {
+public class Profile extends AbstractActionBarActivity {
+
 	//private static final String TAG = "Profile";
 	private static final int REQ_LOGIN_FOR_PROFILE = 112;
 	private static final String DF = "MM/dd/yy";
