@@ -187,6 +187,33 @@ public class Login extends AbstractFragmentActivity {
         	}
         }
     }
+
+    public static void logout(Context context) {
+        new AlertDialog.Builder(context)
+                .setMessage(context.getString(R.string.logout_confirm))
+                .setPositiveButton(context.getString(R.string.yes_upper), new OnLogoutClickListener(context))
+                .setNegativeButton(context.getString(R.string.no_upper), null)
+                .create()
+                .show();
+    }
+
+    private static class OnLogoutClickListener implements OnClickListener {
+        private Context dialogContext;
+
+        public OnLogoutClickListener(Context ctx) {
+            dialogContext = ctx;
+        }
+        public void onClick(DialogInterface arg0, int arg1) {
+            // Close Facebook session and clear token info if any
+            Session session = Session.getActiveSession();
+            if (session != null) {
+                session.closeAndClearTokenInformation();
+            }
+
+            new UserContext(dialogContext).clear();
+            dialogContext.startActivity(new Intent(dialogContext, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        }
+    }
     
     public static Action getLogoutAction(Context context, UserContext userContext) {
     	return new DSLogoutAction(context, userContext);

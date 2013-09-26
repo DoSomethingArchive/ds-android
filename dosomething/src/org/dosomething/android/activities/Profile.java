@@ -2,12 +2,17 @@ package org.dosomething.android.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -20,7 +25,6 @@ import android.widget.Toast;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.markupartist.android.widget.ActionBar.Action;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
@@ -33,7 +37,6 @@ import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Challenge;
-import org.dosomething.android.widget.CustomActionBar;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,7 +52,6 @@ import java.util.Map;
 
 import roboguice.inject.InjectView;
 
-//public class Profile extends AbstractActivity {
 public class Profile extends AbstractActionBarActivity {
 
 	//private static final String TAG = "Profile";
@@ -62,17 +64,19 @@ public class Profile extends AbstractActionBarActivity {
 	@Inject private @Named("DINComp-CondBold")Typeface headerTypeface;
 	@Inject private Cache cache;
 	@Inject private DSDao dao;
-	
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+
 	@InjectView(R.id.content) private LinearLayout content;
 	
 	private ListView list;
 	
 	private Context context;
-	private Action profileAction;
 	private boolean initializingActivity = true;
 	
 	private List<Campaign> webCampaigns;
+
+    @InjectView(R.id.drawer_layout) private DrawerLayout mDrawerLayout;
+    @InjectView(R.id.left_drawer) private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
 	
 	@Override
 	protected String getPageName() {
@@ -82,15 +86,12 @@ public class Profile extends AbstractActionBarActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Progress bar needs to be requested before setContentView is called
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.profile);
         
         context = this;
-        
-        actionBar.addAction(Campaigns.getHomeAction(this));
-        
-        if (userContext.isLoggedIn()) {
-			actionBar.addAction(configAction);
-        }
         
         if (getIntent() != null && getIntent().getExtras() != null) {
 	        boolean bFromCauseSel = getIntent().getExtras().getBoolean(FROM_CAUSE_SEL);
@@ -101,45 +102,44 @@ public class Profile extends AbstractActionBarActivity {
 	        	getIntent().removeExtra(FROM_CAUSE_SEL);
 	        }
         }
+
+        // Setup drawer navigation toggling
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                mDrawerLayout,
+                R.drawable.ic_drawer,
+                R.string.drawer_open,
+                R.string.drawer_close
+        ) {};
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
-	
-	private final Action configAction = new Action() {
-		@Override
-		public int getDrawable() {
-			return R.drawable.action_bar_config;
-		}
-		
-		@Override
-		public void performAction(View v) {
-			Context ctx = getApplicationContext();
-			startActivity(new Intent(ctx, ProfileConfig.class));
-		}
-	};
-	
-	private final Action loginAction = new Action(){
 
-		@Override
-		public int getDrawable() {
-			return R.drawable.action_bar_login;
-		}
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
 
-		@Override
-		public void performAction(View view) {
-			Context ctx = getApplicationContext();
-			startActivityForResult(new Intent(ctx, Login.class), REQ_LOGIN_FOR_PROFILE);
-		}
-	};
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		if(requestCode == REQ_LOGIN_FOR_PROFILE && resultCode == RESULT_OK){
-			if(new UserContext(this).isLoggedIn()){
-				startActivity(Profile.getIntent(getApplicationContext()));
-			}
-		}
-	}
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+
+        return super.onOptionsItemSelected(item);
+    }
 	
 	@Override
 	protected void onResume() {
@@ -147,34 +147,71 @@ public class Profile extends AbstractActionBarActivity {
 		
 		content.removeAllViews();
 		
-		if (profileAction != null) {
-			actionBar.removeAction(profileAction);
-			profileAction = null;
-		}
-		
 		if (userContext.isLoggedIn()) {
             // Only set title to Profile if user's logged in
-            actionBar.setTitle(R.string.profile_title);
-
-			// Add logout action
-			profileAction = Login.getLogoutAction(this, userContext);
-			actionBar.addAction(profileAction);
+            getSupportActionBar().setTitle(R.string.profile_title);
 
 			// Start process to find campaigns the user's signed up for
 			new CampaignTask().execute();
 		}
 		else {
-			// Add login action
-			profileAction = loginAction;
-			actionBar.addAction(profileAction);
-			
 			// Show the "no campaigns" layout
 			content.addView(inflater.inflate(R.layout.profile_logged_out, null));
 
             Button btnAction = (Button)findViewById(R.id.profile_action_button);
             btnAction.setTypeface(headerTypeface, Typeface.BOLD);
 		}
+
+        setupDrawerNavigation();
 	}
+
+    private void setupDrawerNavigation() {
+        // Navigation options change depending on if user is logged in or not
+        String[] navItems = new String[3];
+        if (userContext.isLoggedIn()) {
+            navItems[0] = getString(R.string.drawer_item_campaigns);
+            navItems[1] = getString(R.string.drawer_item_settings);
+            navItems[2] = getString(R.string.drawer_item_logout);
+        }
+        else {
+            navItems[0] = getString(R.string.drawer_item_campaigns);
+            navItems[1] = getString(R.string.drawer_item_logout);
+        }
+
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, navItems));
+        mDrawerList.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View view, int pos, long id) {
+                Context ctx = getApplicationContext();
+                switch (pos) {
+                    case 0:
+                        startActivity(new Intent(ctx, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        break;
+                    case 1:
+                        if (userContext.isLoggedIn())
+                            startActivity(new Intent(ctx, ProfileConfig.class));
+                        else
+                            Login.logout(context);
+                        break;
+                    case 2:
+                        Login.logout(context);
+                        break;
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQ_LOGIN_FOR_PROFILE && resultCode == RESULT_OK){
+            if(new UserContext(this).isLoggedIn()){
+                startActivity(Profile.getIntent(getApplicationContext()));
+            }
+        }
+    }
 	
 	public void findCampaigns(View v) {
 		startActivity(new Intent(this, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -423,9 +460,7 @@ public class Profile extends AbstractActionBarActivity {
 
 		@Override
 		protected void onFinish() {
-			if(actionBar != null){
-				actionBar.setProgressBarVisibility(ProgressBar.GONE);
-			}
+            setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		}
 
 		@Override
@@ -439,7 +474,7 @@ public class Profile extends AbstractActionBarActivity {
 	private class CampaignTask extends AbstractFetchCampaignsTask {
 		
 		public CampaignTask() {
-			super(Profile.this.context, userContext, cache, actionBar);
+			super(Profile.this.context, userContext, cache, null);
 		}
 
 		@Override
@@ -458,9 +493,7 @@ public class Profile extends AbstractActionBarActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if(actionBar != null){
-				actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
-			}
+            setProgressBarIndeterminateVisibility(Boolean.TRUE);
 		}
 
 		@Override
