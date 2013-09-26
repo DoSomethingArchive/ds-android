@@ -1,27 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-import org.dosomething.android.analytics.Analytics;
-import org.dosomething.android.cache.Cache;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.dao.DSDao;
-import org.dosomething.android.domain.UserCampaign;
-import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
-import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.tasks.NoInternetException;
-import org.dosomething.android.widget.CustomActionBar;
-
-import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -43,494 +21,481 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
+import org.dosomething.android.cache.Cache;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.dao.DSDao;
+import org.dosomething.android.domain.UserCampaign;
+import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.tasks.NoInternetException;
+import org.dosomething.android.widget.CustomActionBar;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import roboguice.inject.InjectView;
+
 public class Campaign extends AbstractActivity {
 
-	private static final String CAMPAIGN = "campaign";
-	private static final String CAMPAIGN_ID = "campaign-id";
-	private static final String SMS_REFER = "sms-refer";
+    private static final String CAMPAIGN = "campaign";
+    private static final String CAMPAIGN_ID = "campaign-id";
+    private static final String SMS_REFER = "sms-refer";
 
-	private static final int REQ_LOGIN_FOR_SIGN_UP = 111;
-	private static final int SMS_REFER_ACTIVITY = 112;
+    private static final int REQ_LOGIN_FOR_SIGN_UP = 111;
+    private static final int SMS_REFER_ACTIVITY = 112;
 
-	@Inject private ImageLoader imageLoader;
-	@Inject private UserContext userContext;
-	@Inject private Cache cache;
-	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
+    @Inject private ImageLoader imageLoader;
+    @Inject private UserContext userContext;
+    @Inject private Cache cache;
+    @Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
-	@InjectView(R.id.image) private ImageView imgLogo;
-	@InjectView(R.id.background) private ImageView imgBackground;
-	@InjectView(R.id.image_container) private LinearLayout llImageContainer;
-	@InjectView(R.id.dates) private TextView txtDates;
-	@InjectView(R.id.teaser) private TextView txtTeaser;
-	@InjectView(R.id.actions) private Button btnActions;
-	@InjectView(R.id.howTo) private Button btnHowTo;
-	@InjectView(R.id.gallery) private Button btnGallery;
-	@InjectView(R.id.people) private Button btnPeople;
-	@InjectView(R.id.prizes) private Button btnPrizes;
-	@InjectView(R.id.resources) private Button btnResources;
-	@InjectView(R.id.faq) private Button btnFaq;
-	@InjectView(R.id.report_back) private Button btnReportBack;
-	@InjectView(R.id.sign_up) private Button btnSignUp;
-	@InjectView(R.id.frmVideo) private FrameLayout frmVideo;
-	@InjectView(R.id.imgVideoThumb) private ImageView imgVideoThumb;
-	@InjectView(R.id.imgThumb) private ImageView imgThumb;
-	@InjectView(R.id.sms_refer_container) private LinearLayout llSMSReferContainer;
-	@InjectView(R.id.sms_refer_text) private TextView txtSMSRefer;
-	@InjectView(R.id.sms_refer) private Button btnSMSRefer;
+    @InjectView(R.id.actionbar) private CustomActionBar actionBar;
+    @InjectView(R.id.image) private ImageView imgLogo;
+    @InjectView(R.id.background) private ImageView imgBackground;
+    @InjectView(R.id.image_container) private LinearLayout llImageContainer;
+    @InjectView(R.id.dates) private TextView txtDates;
+    @InjectView(R.id.teaser) private TextView txtTeaser;
+    @InjectView(R.id.actions) private Button btnActions;
+    @InjectView(R.id.howTo) private Button btnHowTo;
+    @InjectView(R.id.gallery) private Button btnGallery;
+    @InjectView(R.id.people) private Button btnPeople;
+    @InjectView(R.id.prizes) private Button btnPrizes;
+    @InjectView(R.id.resources) private Button btnResources;
+    @InjectView(R.id.faq) private Button btnFaq;
+    @InjectView(R.id.report_back) private Button btnReportBack;
+    @InjectView(R.id.sign_up) private Button btnSignUp;
+    @InjectView(R.id.frmVideo) private FrameLayout frmVideo;
+    @InjectView(R.id.imgVideoThumb) private ImageView imgVideoThumb;
+    @InjectView(R.id.imgThumb) private ImageView imgThumb;
+    @InjectView(R.id.sms_refer_container) private LinearLayout llSMSReferContainer;
+    @InjectView(R.id.sms_refer_text) private TextView txtSMSRefer;
+    @InjectView(R.id.sms_refer) private Button btnSMSRefer;
 
-	private org.dosomething.android.transfer.Campaign campaign;
+    private org.dosomething.android.transfer.Campaign campaign;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.campaign);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.campaign);
 
-		actionBar.addAction(Campaigns.getHomeAction(this));
+        actionBar.addAction(Campaigns.getHomeAction(this));
 
-		campaign = (org.dosomething.android.transfer.Campaign) getIntent().getSerializableExtra(CAMPAIGN);
+        campaign = (org.dosomething.android.transfer.Campaign) getIntent().getSerializableExtra(CAMPAIGN);
 
-		if (campaign != null) {
-			// then ok to continue doing what we did before
-			populateFields();
-		}
-		else {
-			String campaignId = getIntent().getStringExtra(CAMPAIGN_ID);
-			actionBar.setTitle(getString(R.string.campaign_loading));
-			// load appropriate campaign from cache, otherwise download and get this isht
-			new CampaignsFetchTask(this, campaignId).execute();
-		}
+        if (campaign != null) {
+            // then ok to continue doing what we did before
+            populateFields();
+        }
+        else {
+            String campaignId = getIntent().getStringExtra(CAMPAIGN_ID);
+            actionBar.setTitle(getString(R.string.campaign_loading));
+            // load appropriate campaign from cache, otherwise download and get this isht
+            new CampaignsFetchTask(this, campaignId).execute();
+        }
+    }
 
-		// onResume is called next
-	}
-	
-	private void populateFields() {
-		actionBar.setTitle(campaign.getName());
+    private void populateFields() {
+        actionBar.setTitle(campaign.getName());
 
-		txtDates.setText(formatDateRange(campaign));
-		txtDates.setTypeface(headerTypeface, Typeface.BOLD);
-		
-		txtTeaser.setText(campaign.getTeaser());
+        SimpleDateFormat mf = new SimpleDateFormat("MMM d", Locale.US);
+        txtDates.setText(getString(R.string.campaign_date_ends, mf.format(campaign.getEndDate())));
+        txtDates.setTypeface(headerTypeface);
 
-		llImageContainer.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
-		if(!nullOrEmpty(campaign.getBackgroundUrl())) {
-			imageLoader.displayImage(campaign.getBackgroundUrl(), imgBackground);
-		}
-		imageLoader.displayImage(campaign.getLogoUrl(), imgLogo);
-		
-		btnReportBack.setTypeface(headerTypeface, Typeface.BOLD);
-		btnSignUp.setTypeface(headerTypeface, Typeface.BOLD);
-		btnActions.setTypeface(headerTypeface, Typeface.BOLD);
-		
-		btnHowTo.setTypeface(headerTypeface, Typeface.BOLD);
-		if(!nullOrEmpty(campaign.getHowTos())){
-			btnHowTo.setVisibility(Button.VISIBLE);
-		}
+        txtTeaser.setText(campaign.getTeaser());
 
-		btnGallery.setTypeface(headerTypeface, Typeface.BOLD);
-		if(campaign.getGallery() != null){
-			btnGallery.setVisibility(Button.VISIBLE);
-		}
-		
-		btnPrizes.setTypeface(headerTypeface, Typeface.BOLD);
-		if(campaign.getPrize() != null){
-			btnPrizes.setVisibility(Button.VISIBLE);
-		}
-		
-		btnPeople.setTypeface(headerTypeface, Typeface.BOLD);
-		if (campaign.getPeople() != null) {
-			btnPeople.setVisibility(Button.VISIBLE);
-		}
+        llImageContainer.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
+        if(!nullOrEmpty(campaign.getBackgroundUrl())) {
+            imageLoader.displayImage(campaign.getBackgroundUrl(), imgBackground);
+        }
+        imageLoader.displayImage(campaign.getLogoUrl(), imgLogo);
 
-		btnResources.setTypeface(headerTypeface, Typeface.BOLD);
-		if (!nullOrEmpty(campaign.getResources()) || campaign.getMoreInfo() != null) {
-			btnResources.setVisibility(Button.VISIBLE);
-		}
+        btnReportBack.setTypeface(headerTypeface, Typeface.BOLD);
+        btnSignUp.setTypeface(headerTypeface, Typeface.BOLD);
+        btnActions.setTypeface(headerTypeface, Typeface.BOLD);
 
-		btnFaq.setTypeface(headerTypeface, Typeface.BOLD);
-		if(!nullOrEmpty(campaign.getFaqs())){
-			btnFaq.setVisibility(Button.VISIBLE);
-		}
+        btnHowTo.setTypeface(headerTypeface, Typeface.BOLD);
+        if (!nullOrEmpty(campaign.getHowTos())) {
+            btnHowTo.setVisibility(Button.VISIBLE);
+        }
 
-		if(!nullOrEmpty(campaign.getVideoThumbnail()) && !nullOrEmpty(campaign.getVideoUrl())){
-			imageLoader.displayImage(campaign.getVideoThumbnail(), imgVideoThumb);
-			frmVideo.setVisibility(ImageView.VISIBLE);
-		}else if(!nullOrEmpty(campaign.getImage())){
-			imageLoader.displayImage(campaign.getImage(), imgThumb);
-			imgThumb.setVisibility(ImageView.VISIBLE);
-		}
-		
-		btnSMSRefer.setTypeface(headerTypeface, Typeface.BOLD);
-		if (!nullOrEmpty(campaign.getSMSReferText())) {
-			llSMSReferContainer.setVisibility(LinearLayout.VISIBLE);
-			txtSMSRefer.setText(campaign.getSMSReferText());
-		}
-	}
-	
-	public void playVideo(View v){
-		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(campaign.getVideoUrl())));
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		updateSignUpButton(this);
-	}
+        btnGallery.setTypeface(headerTypeface, Typeface.BOLD);
+        if (campaign.getGallery() != null) {
+            btnGallery.setVisibility(Button.VISIBLE);
+        }
 
-	private static final boolean nullOrEmpty(List<?> list){
-		return list == null || list.isEmpty();
-	}
-	
-	private static boolean nullOrEmpty(String str){
-		return str == null || str.trim().length() == 0;
-	}
+        btnPrizes.setTypeface(headerTypeface, Typeface.BOLD);
+        if (campaign.getPrize() != null) {
+            btnPrizes.setVisibility(Button.VISIBLE);
+        }
 
-	public void onClickActions(View v){
-		startActivity(CampaignActions.getIntent(this, campaign));
-	}
-	
-	public void onClickHowTo(View v){
-		startActivity(CampaignHowTo.getIntent(this, campaign));
-	}
+        btnPeople.setTypeface(headerTypeface, Typeface.BOLD);
+        if (campaign.getPeople() != null) {
+            btnPeople.setVisibility(Button.VISIBLE);
+        }
 
-	public void onClickGallery(View v){
-		startActivity(CampaignGallery.getIntent(this, campaign));
-	}
-	
-	public void onClickPeople(View v) {
-		startActivity(CampaignPeople.getIntent(this, campaign));
-	}
+        btnResources.setTypeface(headerTypeface, Typeface.BOLD);
+        if (!nullOrEmpty(campaign.getResources()) || campaign.getMoreInfo() != null) {
+            btnResources.setVisibility(Button.VISIBLE);
+        }
 
-	public void onClickPrizes(View v){
-		startActivity(CampaignPrizes.getIntent(this, campaign));
-	}
+        btnFaq.setTypeface(headerTypeface, Typeface.BOLD);
+        if (!nullOrEmpty(campaign.getFaqs())) {
+            btnFaq.setVisibility(Button.VISIBLE);
+        }
 
-	public void onClickResources(View v){
-		startActivity(CampaignResources.getIntent(this, campaign));
-	}
+        if (!nullOrEmpty(campaign.getVideoThumbnail()) && !nullOrEmpty(campaign.getVideoUrl())) {
+            imageLoader.displayImage(campaign.getVideoThumbnail(), imgVideoThumb);
+            frmVideo.setVisibility(ImageView.VISIBLE);
+        }
+        else if (!nullOrEmpty(campaign.getImage())) {
+            imageLoader.displayImage(campaign.getImage(), imgThumb);
+            imgThumb.setVisibility(ImageView.VISIBLE);
+        }
 
-	public void onClickFaq(View v){
-		startActivity(CampaignFAQ.getIntent(this, campaign));
-	}
+        btnSMSRefer.setTypeface(headerTypeface, Typeface.BOLD);
+        if (!nullOrEmpty(campaign.getSMSReferText())) {
+            llSMSReferContainer.setVisibility(LinearLayout.VISIBLE);
+            txtSMSRefer.setText(campaign.getSMSReferText());
+        }
+    }
 
-	private String formatDateRange(org.dosomething.android.transfer.Campaign campaign){
-		SimpleDateFormat mf = new SimpleDateFormat("MMMMM", Locale.US);
+    public void playVideo(View v) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(campaign.getVideoUrl())));
+    }
 
-		Calendar scal = Calendar.getInstance();
-		scal.setTime(campaign.getStartDate());
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-		Calendar ecal = Calendar.getInstance();
-		ecal.setTime(campaign.getEndDate());
+        updateSignUpButton(this);
+    }
 
-		int sday = scal.get(Calendar.DAY_OF_MONTH);
-		int eday = ecal.get(Calendar.DAY_OF_MONTH);
+    private static final boolean nullOrEmpty(List<?> list) {
+        return list == null || list.isEmpty();
+    }
 
-		return mf.format(campaign.getStartDate()) + " " + sday + getOrdinalFor(sday)
-				+ "-" + mf.format(campaign.getEndDate()) + " " + eday + getOrdinalFor(eday);
-	}
+    private static boolean nullOrEmpty(String str) {
+        return str == null || str.trim().length() == 0;
+    }
 
-	private static String getOrdinalFor(int value) {
-		int mod = value % 10;
-		
-		switch (mod) {
-		case 1:
-			return "st";
-		case 2:
-			return "nd";
-		case 3:
-			if (value == 13)
-				return "th";
-			else
-				return "rd";
-		default:
-			return "th";
-		}
-	}
-	
-	private boolean useAlternateSignUp() {
-		if (campaign != null) {
-			boolean hasAltText = campaign.getSignUpAltText() != null && campaign.getSignUpAltText().length() > 0;
-			boolean hasAltLink = campaign.getSignUpAltLink() != null && campaign.getSignUpAltLink().length() > 0;
-			
-			if (hasAltText && hasAltLink) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	private boolean useSmsActionSignUp() {
-		if (campaign != null) {
-			boolean hasAltText = campaign.getSignUpAltText() != null && campaign.getSignUpAltText().length() > 0;
-			boolean hasSmsAction = campaign.getSignUpSmsAction() != null && campaign.getSignUpSmsAction().length() > 0;
-			
-			if (hasAltText && hasSmsAction) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
+    public void onClickActions(View v) {
+        startActivity(CampaignActions.getIntent(this, campaign));
+    }
 
-	public void signUp(View v){
-		String uid = new UserContext(this).getUserUid();
-		
-		
-		if (campaign.getCampaignType() == DSConstants.CAMPAIGN_TYPE.SHARE_FOR_GOOD) {
-			startActivity(SFGGallery.getIntent(this, campaign));
-		}
-		else if (useSmsActionSignUp()) {
-			AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-			alertBuilder.setTitle(R.string.campaign_sign_up_sms_action_alert_title)
-						.setMessage(getString(R.string.campaign_sign_up_sms_action_alert_body, campaign.getName()))
-						.setNegativeButton(R.string.cancel_upper, null)
-						.setPositiveButton(R.string.ok_upper, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								// Join the user into the Mobile Commons opt-in path
-								new SMSMobileCommonsOptInTask(Campaign.this, campaign.getSignUpSmsOptIn()).execute();
-							}
-						})
-						.create()
-						.show();
-		}
-		else if (useAlternateSignUp()) {
-			// Log the alternate sign up events to Flurry Analytics
-			HashMap<String, String> param = new HashMap<String, String>();
-			param.put(CAMPAIGN, campaign.getName());
-			Analytics.logEvent("sign-up-submit", param);
-			
-			// and Google Analytics
-			Analytics.logEvent("sign-up", "alt-sign-up", campaign.getName());
-			
-			// Open up the link in another activity to view
-			Intent i = new Intent(Intent.ACTION_VIEW);
-			i.setData(Uri.parse(campaign.getSignUpAltLink()));
-			startActivity(i);
-		}
-		else if (uid != null){
-			startActivity(SignUp.getIntent(this, campaign));
-		}
-		else {
-			startActivityForResult(new Intent(this, Login.class), REQ_LOGIN_FOR_SIGN_UP);
-		}
-	}
-	
-	private boolean hasNoSignUp() {
-		if (campaign != null
-			&& campaign.getSignUp() == null
-			&& (campaign.getSignUpAltLink() == null || campaign.getSignUpAltLink().length() == 0)
-			&& (campaign.getSignUpAltText() == null || campaign.getSignUpAltText().length() == 0)
-			&& (campaign.getSignUpSmsAction() == null || campaign.getSignUpSmsAction().length() == 0)
-			&& campaign.getSignUpSmsOptIn() == 0)
-		{
-			return true;
-		}
-		else
-			return false;
-	}
-	
-	private void updateSignUpButton(Context context) {
-		if (useAlternateSignUp() || useSmsActionSignUp()) {
-			btnSignUp.setEnabled(true);
-			btnSignUp.setText(campaign.getSignUpAltText());
-			btnActions.setVisibility(Button.GONE);
-		}
-		else if (userContext.isLoggedIn() && campaign != null) {
-			if (hasNoSignUp() && campaign.getReportBack() != null) {
-				btnReportBack.setVisibility(Button.VISIBLE);
-				btnSignUp.setVisibility(Button.GONE);
-			}
-			else {
-				UserCampaign userCampaign = new DSDao(context).findUserCampaign(userContext.getUserUid(), campaign.getId());
-				if(userCampaign != null){
-					// If user's already signed up and there is a report back available, then show report back button
-					if (campaign.getReportBack() != null) {
-						btnReportBack.setVisibility(Button.VISIBLE);
-						btnSignUp.setVisibility(Button.GONE);
-					}
-					else {
-						btnSignUp.setEnabled(false);
-						btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
-						
-						btnReportBack.setVisibility(Button.GONE);
-						btnSignUp.setVisibility(Button.VISIBLE);
-					}
-					
-					btnActions.setVisibility(Button.VISIBLE);
-				}
-			}
-		}
-	}
-	
-	public void reportBack(View v) {
-		startActivity(ReportBack.getIntent(this, campaign));
-	}
-	
-	public void smsRefer(View v) {
-		startActivityForResult(CampaignSMSRefer.getIntent(this, campaign), SMS_REFER_ACTIVITY);
-	}
+    public void onClickHowTo(View v) {
+        startActivity(CampaignHowTo.getIntent(this, campaign));
+    }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+    public void onClickGallery(View v) {
+        startActivity(CampaignGallery.getIntent(this, campaign));
+    }
 
-		if(requestCode == REQ_LOGIN_FOR_SIGN_UP && resultCode == RESULT_OK){
-			if(userContext.isLoggedIn()){
-				startActivity(SignUp.getIntent(this, campaign));
-			}
-		}
-		else if (requestCode == SMS_REFER_ACTIVITY && resultCode == RESULT_OK) {
-			boolean smsReferResult = data.getBooleanExtra(SMS_REFER, false);
-			if (smsReferResult) {
-				Toast.makeText(this, getString(R.string.sms_refer_success), Toast.LENGTH_LONG).show();
-			}
-		}
-	}
+    public void onClickPeople(View v) {
+        startActivity(CampaignPeople.getIntent(this, campaign));
+    }
 
-	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {
-		Intent answer = new Intent(context, Campaign.class);
-		answer.putExtra(CAMPAIGN, campaign);
-		return answer;
-	}
-	
-	public static Intent getIntent(Context context, String campaignId) {
-		Intent answer = new Intent(context, Campaign.class);
-		answer.putExtra(CAMPAIGN_ID, campaignId);
-		return answer;
-	}
-	
-	@Override
-	protected String getPageName() {
-		return "campaign";
-	}
-	
-	private class CampaignsFetchTask extends AbstractFetchCampaignsTask {
-		
-		private String campaignId;
-		private Context context;
+    public void onClickPrizes(View v) {
+        startActivity(CampaignPrizes.getIntent(this, campaign));
+    }
 
-		public CampaignsFetchTask(Context _context, String _campaignId) {
-			super(Campaign.this, userContext, cache, actionBar);
-			campaignId = _campaignId;
-			context = _context;
-		}
+    public void onClickResources(View v) {
+        startActivity(CampaignResources.getIntent(this, campaign));
+    }
 
-		@Override
-		protected void onSuccess() {
-			if (campaignId != null) {
-				campaign = getCampaignById(campaignId);
-				if (campaign != null) {
-					populateFields();
-					updateSignUpButton(context);
-				}
-				else {
-					onError(null);
-				}
-			}
-			else {
-				onError(null);
-			}
-		}
+    public void onClickFaq(View v) {
+        startActivity(CampaignFAQ.getIntent(this, campaign));
+    }
 
-		@Override
-		protected void onError(Exception e) {
-			String message;
-			if (e instanceof NoInternetException) {
-				message = getString(R.string.campaigns_no_internet);
-			}
-			else {
-				message = getString(R.string.campaign_load_error);
-			}
-			
-			new AlertDialog.Builder(Campaign.this)
-				.setMessage(message)
-				.setCancelable(false)
-				.setPositiveButton(getString(R.string.ok_upper), new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						startActivity(Campaigns.getIntent(context));
-					}
-				})
-				.create()
-				.show();
-		}
+    private boolean useAlternateSignUp() {
+        if (campaign != null) {
+            boolean hasAltText = campaign.getSignUpAltText() != null && campaign.getSignUpAltText().length() > 0;
+            boolean hasAltLink = campaign.getSignUpAltLink() != null && campaign.getSignUpAltLink().length() > 0;
 
-	}
-	
-	/**
-	 * Webservice task to join the user into the specified Mobile Commons opt-in path
-	 */
-	private class SMSMobileCommonsOptInTask extends AbstractWebserviceTask {
-		
-		private Context context;
-		private int optInPath;
-		private boolean webOpSuccess;
-		
-		public SMSMobileCommonsOptInTask(Context context, int optInPath) {
-			super(userContext);
-			this.context = context;
-			this.optInPath = optInPath;
-		}
+            if (hasAltText && hasAltLink) {
+                return true;
+            }
+        }
 
-		@Override
-		protected void onSuccess() {
-			if (webOpSuccess) {
-				// Log the SMS sign up event to Flurry Analytics
-				HashMap<String, String> param = new HashMap<String, String>();
-				param.put(CAMPAIGN, campaign.getName());
-				Analytics.logEvent("sign-up-submit", param);
-				
-				// and Google Analytics
-				Analytics.logEvent("sign-up", "sms-sign-up", campaign.getName());
-				
-				// Display a Toast message
-				Toast.makeText(context, getString(R.string.campaign_sign_up_sms_success), Toast.LENGTH_LONG).show();
-				
-				// Increment the counter of times an SMS experience was started
-				userContext.addSmsCampaignsStarted();
-			}
-			else {
-				onError(null);
-			}
-		}
+        return false;
+    }
 
-		@Override
-		protected void onFinish() {
-		}
+    private boolean useSmsActionSignUp() {
+        if (campaign != null) {
+            boolean hasAltText = campaign.getSignUpAltText() != null && campaign.getSignUpAltText().length() > 0;
+            boolean hasSmsAction = campaign.getSignUpSmsAction() != null && campaign.getSignUpSmsAction().length() > 0;
 
-		@Override
-		protected void onError(Exception e) {
-			String errorMessage = getString(R.string.campaign_sign_up_sms_error);
-			// If a keyword is available, offer that option in the error message
-			if (!nullOrEmpty(campaign.getSignUpSmsAction())) {
-				errorMessage = getString(R.string.campaign_sign_up_sms_error_with_keyword, campaign.getSignUpSmsAction());
-			}
-			
-			new AlertDialog.Builder(Campaign.this)
-				.setMessage(errorMessage)
-				.setPositiveButton(getString(R.string.ok_upper), null)
-				.create()
-				.show();
-		}
+            if (hasAltText && hasSmsAction) {
+                return true;
+            }
+        }
 
-		@Override
-		protected void doWebOperation() throws Exception {
-			webOpSuccess = false;
-			String phoneNumber = userContext.getPhoneNumber();
-			if (phoneNumber != null && optInPath > 0) {
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("person[phone]", phoneNumber));
-				params.add(new BasicNameValuePair("opt_in_path", Integer.toString(optInPath)));
-				
-				WebserviceResponse response = doPost(DSConstants.MCOMMONS_API_JOIN_URL, params);
-				if (response.getStatusCode() < 400 || response.getStatusCode() > 500) {
-					webOpSuccess = true;
-				}
-			}
-		}
-		
-	}
+        return false;
+    }
+
+    public void signUp(View v) {
+        String uid = new UserContext(this).getUserUid();
+
+        if (campaign.getCampaignType() == DSConstants.CAMPAIGN_TYPE.SHARE_FOR_GOOD) {
+            startActivity(SFGGallery.getIntent(this, campaign));
+        }
+        else if (useSmsActionSignUp()) {
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+            alertBuilder.setTitle(R.string.campaign_sign_up_sms_action_alert_title)
+                .setMessage(getString(R.string.campaign_sign_up_sms_action_alert_body, campaign.getName()))
+                .setNegativeButton(R.string.cancel_upper, null)
+                .setPositiveButton(R.string.ok_upper, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Join the user into the Mobile Commons opt-in path
+                        new SMSMobileCommonsOptInTask(Campaign.this, campaign.getSignUpSmsOptIn()).execute();
+                    }
+                })
+                .create()
+                .show();
+        }
+        else if (useAlternateSignUp()) {
+            // Log the alternate sign up events to Flurry Analytics
+            HashMap<String, String> param = new HashMap<String, String>();
+            param.put(CAMPAIGN, campaign.getName());
+            Analytics.logEvent("sign-up-submit", param);
+
+            // and Google Analytics
+            Analytics.logEvent("sign-up", "alt-sign-up", campaign.getName());
+
+            // Open up the link in another activity to view
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(campaign.getSignUpAltLink()));
+            startActivity(i);
+        }
+        else if (uid != null) {
+            startActivity(SignUp.getIntent(this, campaign));
+        }
+        else {
+            startActivityForResult(new Intent(this, Login.class), REQ_LOGIN_FOR_SIGN_UP);
+        }
+    }
+
+    private boolean hasNoSignUp() {
+        if (campaign != null
+            && campaign.getSignUp() == null
+            && (campaign.getSignUpAltLink() == null || campaign.getSignUpAltLink().length() == 0)
+            && (campaign.getSignUpAltText() == null || campaign.getSignUpAltText().length() == 0)
+            && (campaign.getSignUpSmsAction() == null || campaign.getSignUpSmsAction().length() == 0)
+            && campaign.getSignUpSmsOptIn() == 0)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    private void updateSignUpButton(Context context) {
+        if (useAlternateSignUp() || useSmsActionSignUp()) {
+            btnSignUp.setEnabled(true);
+            btnSignUp.setText(campaign.getSignUpAltText());
+            btnActions.setVisibility(Button.GONE);
+        }
+        else if (userContext.isLoggedIn() && campaign != null) {
+            if (hasNoSignUp() && campaign.getReportBack() != null) {
+                btnReportBack.setVisibility(Button.VISIBLE);
+                btnSignUp.setVisibility(Button.GONE);
+            }
+            else {
+                UserCampaign userCampaign = new DSDao(context).findUserCampaign(userContext.getUserUid(), campaign.getId());
+                if (userCampaign != null) {
+                    // If user's already signed up and there is a report back available, then show report back button
+                    if (campaign.getReportBack() != null) {
+                        btnReportBack.setVisibility(Button.VISIBLE);
+                        btnSignUp.setVisibility(Button.GONE);
+                    }
+                    else {
+                        btnSignUp.setEnabled(false);
+                        btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
+
+                        btnReportBack.setVisibility(Button.GONE);
+                        btnSignUp.setVisibility(Button.VISIBLE);
+                    }
+
+                    btnActions.setVisibility(Button.VISIBLE);
+                }
+            }
+        }
+    }
+
+    public void reportBack(View v) {
+        startActivity(ReportBack.getIntent(this, campaign));
+    }
+
+    public void smsRefer(View v) {
+        startActivityForResult(CampaignSMSRefer.getIntent(this, campaign), SMS_REFER_ACTIVITY);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQ_LOGIN_FOR_SIGN_UP && resultCode == RESULT_OK) {
+            if (userContext.isLoggedIn()) {
+                startActivity(SignUp.getIntent(this, campaign));
+            }
+        }
+        else if (requestCode == SMS_REFER_ACTIVITY && resultCode == RESULT_OK) {
+            boolean smsReferResult = data.getBooleanExtra(SMS_REFER, false);
+            if (smsReferResult) {
+                Toast.makeText(this, getString(R.string.sms_refer_success), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {
+        Intent answer = new Intent(context, Campaign.class);
+        answer.putExtra(CAMPAIGN, campaign);
+        return answer;
+    }
+
+    public static Intent getIntent(Context context, String campaignId) {
+        Intent answer = new Intent(context, Campaign.class);
+        answer.putExtra(CAMPAIGN_ID, campaignId);
+        return answer;
+    }
+
+    @Override
+    protected String getPageName() {
+        return "campaign";
+    }
+
+    private class CampaignsFetchTask extends AbstractFetchCampaignsTask {
+
+        private String campaignId;
+        private Context context;
+
+        public CampaignsFetchTask(Context _context, String _campaignId) {
+            super(Campaign.this, userContext, cache, actionBar);
+            campaignId = _campaignId;
+            context = _context;
+        }
+
+        @Override
+        protected void onSuccess() {
+            if (campaignId != null) {
+                campaign = getCampaignById(campaignId);
+                if (campaign != null) {
+                    populateFields();
+                    updateSignUpButton(context);
+                }
+                else {
+                    onError(null);
+                }
+            }
+            else {
+                onError(null);
+            }
+        }
+
+        @Override
+        protected void onError(Exception e) {
+            String message;
+            if (e instanceof NoInternetException) {
+                message = getString(R.string.campaigns_no_internet);
+            }
+            else {
+                message = getString(R.string.campaign_load_error);
+            }
+
+            new AlertDialog.Builder(Campaign.this)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.ok_upper), new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(Campaigns.getIntent(context));
+                        }
+                    })
+                    .create()
+                    .show();
+        }
+
+    }
+
+    /**
+     * Webservice task to join the user into the specified Mobile Commons opt-in path
+     */
+    private class SMSMobileCommonsOptInTask extends AbstractWebserviceTask {
+
+        private Context context;
+        private int optInPath;
+        private boolean webOpSuccess;
+
+        public SMSMobileCommonsOptInTask(Context context, int optInPath) {
+            super(userContext);
+            this.context = context;
+            this.optInPath = optInPath;
+        }
+
+        @Override
+        protected void onSuccess() {
+            if (webOpSuccess) {
+                // Log the SMS sign up event to Flurry Analytics
+                HashMap<String, String> param = new HashMap<String, String>();
+                param.put(CAMPAIGN, campaign.getName());
+                Analytics.logEvent("sign-up-submit", param);
+
+                // and Google Analytics
+                Analytics.logEvent("sign-up", "sms-sign-up", campaign.getName());
+
+                // Display a Toast message
+                Toast.makeText(context, getString(R.string.campaign_sign_up_sms_success), Toast.LENGTH_LONG).show();
+
+                // Increment the counter of times an SMS experience was started
+                userContext.addSmsCampaignsStarted();
+            }
+            else {
+                onError(null);
+            }
+        }
+
+        @Override
+        protected void onFinish() {
+        }
+
+        @Override
+        protected void onError(Exception e) {
+            String errorMessage = getString(R.string.campaign_sign_up_sms_error);
+            // If a keyword is available, offer that option in the error message
+            if (!nullOrEmpty(campaign.getSignUpSmsAction())) {
+                errorMessage = getString(R.string.campaign_sign_up_sms_error_with_keyword, campaign.getSignUpSmsAction());
+            }
+
+            new AlertDialog.Builder(Campaign.this)
+                    .setMessage(errorMessage)
+                    .setPositiveButton(getString(R.string.ok_upper), null)
+                    .create()
+                    .show();
+        }
+
+        @Override
+        protected void doWebOperation() throws Exception {
+            webOpSuccess = false;
+            String phoneNumber = userContext.getPhoneNumber();
+            if (phoneNumber != null && optInPath > 0) {
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("person[phone]", phoneNumber));
+                params.add(new BasicNameValuePair("opt_in_path", Integer.toString(optInPath)));
+
+                WebserviceResponse response = doPost(DSConstants.MCOMMONS_API_JOIN_URL, params);
+                if (response.getStatusCode() < 400 || response.getStatusCode() > 500) {
+                    webOpSuccess = true;
+                }
+            }
+        }
+
+    }
 
 }

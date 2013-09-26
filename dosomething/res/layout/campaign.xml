@@ -31,12 +31,16 @@
 			        android:layout_height="fill_parent" >
 			        <ImageView android:id="@+id/background" style="@style/CampaignImageBackground"/>
 			        <ImageView android:id="@+id/image" style="@style/CampaignImage"/>
+                    <TextView
+                        android:id="@+id/dates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/CampaignDatesText"/>
 			    </FrameLayout>
 			    
 			</LinearLayout>
             
-            <LinearLayout style="@style/CampaignDatesRow">
-                <TextView android:id="@+id/dates" style="@style/CampaignDatesText"/>
+            <LinearLayout style="@style/CampaignTeaserRow">
                 <TextView android:id="@+id/teaser" style="@style/CampaignTeaserText"/>
             </LinearLayout>
             
@@ -67,7 +71,7 @@
                     android:id="@+id/sms_refer"
                     android:onClick="smsRefer"
                     style="@style/CampaignSignUpButton"
-                    android:text="@string/sms_refer_title" 
+                    android:text="@string/sms_refer_button"
                     android:background="@drawable/main_button_selector" />
                     
             </LinearLayout>
