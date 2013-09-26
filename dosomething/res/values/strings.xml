@@ -63,6 +63,7 @@
     <string name="profile_update_error">There was an error updating your profile. Check your internet connection and try again later.</string>
     <string name="campaigns_title">Projects</string>
     <string name="campaigns_upgrade_popup">A new update is available!</string>
+    <string name="campaign_date_ends">Ends: %1$s</string>
     <string name="campaign_share_title">Share</string>
     <string name="campaign_how_to_title">How To</string>
     <string name="campaign_gallery_title">Gallery</string>
@@ -104,7 +105,7 @@
     <string name="campaign_share_report_header">Thanks for rocking this campaign!</string>
     <string name="campaign_share_chooser">Share on</string>
     
-    <string name="action_complete_button">Do It!</string>
+    <string name="action_complete_button">DO IT</string>
     
     <string name="campaign_actions">ACTIONS</string>
     <string name="campaign_how_to">HOW TO</string>
@@ -140,12 +141,13 @@
     <string name="cause_sex_relationships">Sex and Relationships</string>
     <string name="reminder_title">Do Something Reminder</string>
     <string name="reminder_body_reportback">is ending in a week! Remember to let us know what you\'ve done.</string>
-    <string name="sms_add_contacts">+ Add Friend\'s Number</string>
+    <string name="sms_add_contacts">+ ADD FRIEND\'S NUMBER</string>
     <string name="sms_cell_field">Your Cell Phone Number *</string>
     <string name="sms_friends_label">Friends we\'ll text:</string>
     <string name="sms_help_text">(Also sign up to receive weekly updates. Msg &amp; data rates may apply. Text STOP to opt-out, HELP for help.)</string>
     <string name="sms_name_field">Your Name *</string>
     <string name="sms_no_friends_selected">You must add at least one number.</string>
+    <string name="sms_refer_button">TEXT YOUR FRIENDS</string>
     <string name="sms_refer_contact_has_no_number">There was no phone number found for that contact.</string>
     <string name="sms_refer_title">Text Your Friends</string>
     <string name="sms_refer_success">Thanks! We\'ll be sending your friends a text message soon!</string>
