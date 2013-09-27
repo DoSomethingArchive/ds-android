@@ -24,6 +24,7 @@
     
     <application
         android:icon="@drawable/ic_launcher"
+        android:logo="@drawable/logo_ds_horizontal"
         android:label="@string/app_name"
         android:name="MyApplication"
         android:theme="@android:style/Theme.NoTitleBar"
@@ -39,9 +40,12 @@
         <activity android:name=".activities.Login"/>
         <activity android:name=".activities.Register"/>
         <activity android:name=".activities.CampaignActions"/>
-        <activity android:name=".activities.Campaign"/>
+        <activity android:name=".activities.Campaign"
+            android:label=""
+            android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.Campaigns"
-            android:label="@string/campaigns_title"/>
+            android:label=""
+            android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.CampaignFAQ"/>
         <activity android:name=".activities.CampaignGallery"/>
         <activity android:name=".activities.CampaignHowTo"/>
@@ -62,7 +66,7 @@
         <activity android:name=".activities.SFGGallery"/>
         <activity android:name=".activities.SFGItem"/>
         <activity android:name=".activities.SFGSubmit"/>
-        <activity android:name="com.facebook.LoginActivity"></activity>
+        <activity android:name="com.facebook.LoginActivity"/>
         
         <provider
             android:name="com.xtify.sdk.db.Provider"

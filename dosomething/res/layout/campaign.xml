@@ -1,49 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical" >
-	
-    <org.dosomething.android.widget.CustomActionBar
-	    android:id="@+id/actionbar"
-	    style="@style/ActionBar"/>
-    
-    <ScrollView 
-		android:orientation="vertical"
-		android:layout_weight="1.0"
-		android:layout_width="fill_parent"
-		android:layout_height="0dp"
-		android:fillViewport="true">
-    
+
+    <ScrollView
+        android:orientation="vertical"
+        android:layout_weight="1.0"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true">
+
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
             <LinearLayout android:id="@+id/image_container"
-			    android:layout_width="fill_parent"
-			    android:layout_height="156dp"
-			    android:orientation="vertical">
-			    
-			    <FrameLayout 
-			        android:id="@+id/frame"
-			        android:layout_width="fill_parent"
-			        android:layout_height="fill_parent" >
-			        <ImageView android:id="@+id/background" style="@style/CampaignImageBackground"/>
-			        <ImageView android:id="@+id/image" style="@style/CampaignImage"/>
+                android:layout_width="match_parent"
+                android:layout_height="156dp"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                    <ImageView android:id="@+id/background" style="@style/CampaignImageBackground"/>
+                    <ImageView android:id="@+id/image" style="@style/CampaignImage"/>
                     <TextView
                         android:id="@+id/dates"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/CampaignDatesText"/>
-			    </FrameLayout>
-			    
-			</LinearLayout>
-            
+                </FrameLayout>
+
+            </LinearLayout>
+
             <LinearLayout style="@style/CampaignTeaserRow">
                 <TextView android:id="@+id/teaser" style="@style/CampaignTeaserText"/>
             </LinearLayout>
-            
+
             <LinearLayout style="@style/CampaignSignUpRow">
                 <Button
                     android:id="@+id/sign_up"
@@ -59,30 +55,30 @@
                     android:background="@drawable/main_button_selector"
                     android:visibility="gone" />
             </LinearLayout>
-            
-            <LinearLayout 
+
+            <LinearLayout
                 android:id="@+id/sms_refer_container"
                 android:visibility="gone"
                 style="@style/CampaignSignUpRow" >
-                
+
                 <TextView android:id="@+id/sms_refer_text" style="@style/CampaignSMSReferText" />
-                
+
                 <Button
                     android:id="@+id/sms_refer"
                     android:onClick="smsRefer"
                     style="@style/CampaignSignUpButton"
                     android:text="@string/sms_refer_button"
                     android:background="@drawable/main_button_selector" />
-                    
+
             </LinearLayout>
-            
+
             <FrameLayout android:id="@+id/frmVideo"
                 android:visibility="gone"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="playVideo">
                 <ImageView android:id="@+id/imgVideoThumb"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="centerInside"
                     android:gravity="center"
@@ -93,15 +89,15 @@
                     android:layout_gravity="center"
                     android:src="@drawable/play"/>
             </FrameLayout>
-            
+
             <ImageView android:id="@+id/imgThumb"
                 android:visibility="gone"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="centerInside"
                 android:gravity="center"
                 android:adjustViewBounds="true"/>
-            
+
             <!-- Nav buttons to campaign subpages -->
             <Button android:id="@+id/actions"
                 android:onClick="onClickActions"
@@ -138,8 +134,8 @@
                 style="@style/CampaignButton"
                 android:visibility="gone"
                 android:text="@string/campaign_faq"/>
-            
+
         </LinearLayout>
     </ScrollView>
-    
+
 </LinearLayout>

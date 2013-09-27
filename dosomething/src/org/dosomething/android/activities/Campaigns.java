@@ -1,35 +1,23 @@
 package org.dosomething.android.activities;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-import org.dosomething.android.cache.Cache;
-import org.dosomething.android.cache.DSPreferences;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
-import org.dosomething.android.tasks.NoInternetException;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.widget.CustomActionBar;
-import org.dosomething.android.widget.ProgressBarImageLoadingListener;
-
-import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -49,11 +37,27 @@ import com.google.inject.name.Named;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.markupartist.android.widget.ActionBar.Action;
-import com.markupartist.android.widget.ActionBar.IntentAction;
+import com.markupartist.android.widget.ActionBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class Campaigns extends AbstractActivity {
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
+import org.dosomething.android.cache.Cache;
+import org.dosomething.android.cache.DSPreferences;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
+import org.dosomething.android.tasks.NoInternetException;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.widget.ProgressBarImageLoadingListener;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import roboguice.inject.InjectView;
+
+public class Campaigns extends AbstractActionBarActivity {
 	
 	//private static final String TAG = "Campaigns";
 	private static final int REQ_LOGIN_FOR_PROFILE = 112;
@@ -63,13 +67,15 @@ public class Campaigns extends AbstractActivity {
 	@Inject private UserContext userContext;
 	@Inject private Cache cache;
 	@Inject @Named("DINComp-CondBold")Typeface calloutTypeface;
-	
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+
 	@InjectView(R.id.popup) private RelativeLayout popupView;
 	@InjectView(R.id.popupMsg) private TextView popupMsgView;
 	@InjectView(R.id.popupClose) private Button popupCloseButton;
 	@InjectView(R.id.list) private PullToRefreshListView pullToRefreshView;
-	
+    @InjectView(R.id.drawer_layout) private DrawerLayout mDrawerLayout;
+    @InjectView(R.id.left_drawer) private ListView mDrawerList;
+
+    private ActionBarDrawerToggle mDrawerToggle;
 	private ListView list;
 	private CampaignListAdapter listAdapter;
 	
@@ -83,58 +89,118 @@ public class Campaigns extends AbstractActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Progress bar needs to be requested before setContentView is called
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.campaigns);
-        
+
         list = pullToRefreshView.getRefreshableView();
         pullToRefreshView.setOnRefreshListener(new OnRefreshListener<ListView>() {
-        	@Override
-        	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-        		fetchCampaigns(true);
-        	}
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                fetchCampaigns(true);
+            }
         });
-        
-        actionBar.addAction(profileButtonAction);
-        
+
         popupMsgView.setTypeface(calloutTypeface);
         // Upgrade notification popup click listeners
         popupMsgView.setOnClickListener(new OnClickListener() {
-        	@Override
-        	public void onClick(View v) {
-        		// Open link to the Google Play Store
-        		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=org.dosomething.android")));
-        	}
+            @Override
+            public void onClick(View v) {
+                // Open link to the Google Play Store
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=org.dosomething.android")));
+            }
         });
         popupCloseButton.setOnClickListener(new OnClickListener() {
-        	@Override
-        	public void onClick(View v) {
-        		popupView.setVisibility(View.GONE);
-        	}
+            @Override
+            public void onClick(View v) {
+                popupView.setVisibility(View.GONE);
+            }
         });
-        
-        // onResume is always called next
+
+        // Setup drawer navigation
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                mDrawerLayout,
+                R.drawable.ic_drawer,
+                R.string.drawer_open,
+                R.string.drawer_close
+        ) {};
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+
+        return super.onOptionsItemSelected(item);
     }
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+        setupDrawerNavigation();
 		
 		fetchCampaigns(false);
 	}
-	
-	private final Action profileButtonAction = new Action(){
 
-		@Override
-		public int getDrawable() {
-			return R.drawable.action_bar_profile;
-		}
+    private void setupDrawerNavigation() {
+        // Navigation options change depending on if user is logged in or not
+        String[] navItems = new String[3];
+        if (userContext.isLoggedIn()) {
+            navItems[0] = getString(R.string.drawer_item_profile);
+            navItems[1] = getString(R.string.drawer_item_settings);
+            navItems[2] = getString(R.string.drawer_item_logout);
+        }
+        else {
+            navItems[0] = getString(R.string.drawer_item_profile);
+            navItems[1] = getString(R.string.drawer_item_login);
+        }
 
-		@Override
-		public void performAction(View view) {
-			Context context = getApplicationContext();
-			startActivity(Profile.getIntent(context));
-			finish();
-		}
-	};
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, navItems));
+        mDrawerList.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View view, int pos, long id) {
+                Context ctx = getApplicationContext();
+                switch (pos) {
+                    case 0:
+                        startActivity(Profile.getIntent(ctx));
+                        break;
+                    case 1:
+                        if (userContext.isLoggedIn())
+                            startActivity(new Intent(ctx, ProfileConfig.class));
+                        else
+                            Login.logout(ctx);
+                        break;
+                    case 2:
+                        Login.logout(ctx);
+                        break;
+                }
+            }
+        });
+    }
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -153,9 +219,10 @@ public class Campaigns extends AbstractActivity {
 		task.setForceSearch(forceSearch);
 		task.execute();
 	}
-	
-	public static Action getHomeAction(Context context){
-		return new IntentAction(context, new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), R.drawable.action_bar_home);
+
+    // TODO: remove all references to this
+	public static ActionBar.Action getHomeAction(Context context){
+		return new ActionBar.IntentAction(context, new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), R.drawable.action_bar_home);
 	}
 	
 	public static Intent getIntent(Context context) {
@@ -218,7 +285,7 @@ public class Campaigns extends AbstractActivity {
 		private boolean forceSearch;
 
 		public CampaignsTask() {
-			super(Campaigns.this, userContext, cache, actionBar);
+			super(Campaigns.this, userContext, cache, null);
 			
 			forceSearch = false;
 		}

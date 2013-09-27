@@ -1,37 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <org.dosomething.android.widget.CustomActionBar
-        android:id="@+id/actionbar"
-        style="@style/ActionBar"
-        app:title="@string/campaigns_title" />
-    
-    <RelativeLayout
-        android:id="@+id/popup"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/popup_height"
-        android:visibility="gone">
+    <!-- The main content view -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
 
-        <Button
-            android:id="@+id/popupClose"
-            style="@style/UpgradePopupButton"
-            android:text="X" />
+        <RelativeLayout
+            android:id="@+id/popup"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/popup_height"
+            android:visibility="gone">
 
-        <TextView 
-            android:id="@+id/popupMsg"
-            style="@style/UpgradePopupMessage"
-            android:text="@string/campaigns_upgrade_popup"/>
-        
-    </RelativeLayout>
+            <Button
+                android:id="@+id/popupClose"
+                style="@style/UpgradePopupButton"
+                android:text="X" />
 
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.0" />
-    
-</LinearLayout>
+            <TextView
+                android:id="@+id/popupMsg"
+                style="@style/UpgradePopupMessage"
+                android:text="@string/campaigns_upgrade_popup"/>
+
+        </RelativeLayout>
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.0" />
+
+    </LinearLayout>
+
+    <!-- The navigation drawer -->
+    <ListView android:id="@+id/left_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="@color/campaign_button_background"/>
+</android.support.v4.widget.DrawerLayout>
