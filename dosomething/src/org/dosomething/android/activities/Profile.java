@@ -65,6 +65,12 @@ public class Profile extends AbstractActionBarActivity {
     @Inject private DSDao dao;
 
     @InjectView(R.id.content) private LinearLayout content;
+    // Side navigation drawer
+    @InjectView(R.id.drawer_layout) private DrawerLayout mDrawerLayout;
+    @InjectView(R.id.left_drawer) private ListView mDrawerList;
+
+    // Class to handle toggling of the navigation drawer
+    private ActionBarDrawerToggle mDrawerToggle;
 
     private ListView list;
 
@@ -72,10 +78,6 @@ public class Profile extends AbstractActionBarActivity {
     private boolean initializingActivity = true;
 
     private List<Campaign> webCampaigns;
-
-    @InjectView(R.id.drawer_layout) private DrawerLayout mDrawerLayout;
-    @InjectView(R.id.left_drawer) private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected String getPageName() {
@@ -148,7 +150,7 @@ public class Profile extends AbstractActionBarActivity {
 
         if (userContext.isLoggedIn()) {
             // Only set title to Profile if user's logged in
-            getSupportActionBar().setTitle(R.string.profile_title);
+//            getSupportActionBar().setTitle(R.string.profile_title);
 
             // Start process to find campaigns the user's signed up for
             new CampaignTask().execute();
@@ -185,16 +187,16 @@ public class Profile extends AbstractActionBarActivity {
                 Context ctx = getApplicationContext();
                 switch (pos) {
                     case 0:
-                        startActivity(new Intent(ctx, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        startActivity(Campaigns.getIntent(ctx));
                         break;
                     case 1:
                         if (userContext.isLoggedIn())
                             startActivity(new Intent(ctx, ProfileConfig.class));
                         else
-                            Login.logout(context);
+                            Login.logout(ctx);
                         break;
                     case 2:
-                        Login.logout(context);
+                        Login.logout(ctx);
                         break;
                 }
             }

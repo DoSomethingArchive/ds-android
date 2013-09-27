@@ -9,7 +9,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -33,7 +35,6 @@ import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.tasks.NoInternetException;
-import org.dosomething.android.widget.CustomActionBar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ import java.util.Locale;
 
 import roboguice.inject.InjectView;
 
-public class Campaign extends AbstractActivity {
+public class Campaign extends AbstractActionBarActivity {
 
     private static final String CAMPAIGN = "campaign";
     private static final String CAMPAIGN_ID = "campaign-id";
@@ -57,7 +58,6 @@ public class Campaign extends AbstractActivity {
     @Inject private Cache cache;
     @Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 
-    @InjectView(R.id.actionbar) private CustomActionBar actionBar;
     @InjectView(R.id.image) private ImageView imgLogo;
     @InjectView(R.id.background) private ImageView imgBackground;
     @InjectView(R.id.image_container) private LinearLayout llImageContainer;
@@ -78,15 +78,14 @@ public class Campaign extends AbstractActivity {
     @InjectView(R.id.sms_refer_container) private LinearLayout llSMSReferContainer;
     @InjectView(R.id.sms_refer_text) private TextView txtSMSRefer;
     @InjectView(R.id.sms_refer) private Button btnSMSRefer;
-
     private org.dosomething.android.transfer.Campaign campaign;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.campaign);
 
-        actionBar.addAction(Campaigns.getHomeAction(this));
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setContentView(R.layout.campaign);
 
         campaign = (org.dosomething.android.transfer.Campaign) getIntent().getSerializableExtra(CAMPAIGN);
 
@@ -96,14 +95,35 @@ public class Campaign extends AbstractActivity {
         }
         else {
             String campaignId = getIntent().getStringExtra(CAMPAIGN_ID);
-            actionBar.setTitle(getString(R.string.campaign_loading));
+            getSupportActionBar().setTitle(R.string.campaign_loading);
             // load appropriate campaign from cache, otherwise download and get this isht
             new CampaignsFetchTask(this, campaignId).execute();
         }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateSignUpButton(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // If home button is selected on ActionBar, then end the activity
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void populateFields() {
-        actionBar.setTitle(campaign.getName());
 
         SimpleDateFormat mf = new SimpleDateFormat("MMM d", Locale.US);
         txtDates.setText(getString(R.string.campaign_date_ends, mf.format(campaign.getEndDate())));
@@ -169,13 +189,6 @@ public class Campaign extends AbstractActivity {
 
     public void playVideo(View v) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(campaign.getVideoUrl())));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        updateSignUpButton(this);
     }
 
     private static final boolean nullOrEmpty(List<?> list) {
@@ -377,7 +390,7 @@ public class Campaign extends AbstractActivity {
         private Context context;
 
         public CampaignsFetchTask(Context _context, String _campaignId) {
-            super(Campaign.this, userContext, cache, actionBar);
+            super(Campaign.this, userContext, cache, null);
             campaignId = _campaignId;
             context = _context;
         }
