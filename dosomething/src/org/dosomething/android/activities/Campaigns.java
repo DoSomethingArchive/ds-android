@@ -232,8 +232,7 @@ public class Campaigns extends AbstractActionBarActivity {
 
     private class CampaignItemClickListener implements OnItemClickListener {
         @Override
-        public void onItemClick(AdapterView<?> av, View v, int position,
-                                long id) {
+        public void onItemClick(AdapterView<?> av, View v, int position, long id) {
 
             int openHeight = getResources().getDimensionPixelSize(R.dimen.campaign_row_height_open);
             if (v.getLayoutParams().height == openHeight) {

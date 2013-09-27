@@ -3,13 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:background="@color/light_background"
-    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
-    
-    <org.dosomething.android.widget.CustomActionBar
-        android:id="@+id/actionbar" 
-        style="@style/ActionBar" 
-        app:title="@string/campaign_people_title"/>
+    android:background="@color/light_background">
     
     <TextView android:id="@+id/intro"
         android:textIsSelectable="false"

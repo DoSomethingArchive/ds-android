@@ -42,7 +42,7 @@
         <activity android:name=".activities.CampaignActions"/>
         <activity android:name=".activities.Campaign"
             android:label=""
-            android:theme="@style/DSActionBarTheme"/>
+            android:theme="@style/DSActionBarTheme"/>/
         <activity android:name=".activities.Campaigns"
             android:label=""
             android:theme="@style/DSActionBarTheme"/>
@@ -55,7 +55,9 @@
         <activity android:name=".activities.CampaignShare"/>
         <activity android:name=".activities.CampaignSMSRefer"/>
         <activity android:name=".activities.CauseSelector"/>
-        <activity android:name=".activities.GalleryImageItemDisplay"/>
+        <activity android:name=".activities.GalleryImageItemDisplay"
+            android:label=""
+            android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.Profile"
             android:label=""
             android:theme="@style/DSActionBarTheme"/>

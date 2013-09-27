@@ -1,21 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.dosomething.android.R;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.GalleryItem;
-import org.dosomething.android.transfer.GalleryItem.GalleryItemType;
-import org.dosomething.android.widget.CustomActionBar;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -31,11 +15,26 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
-import android.widget.ProgressBar;
 
 import com.commonsware.cwac.endless.EndlessAdapter;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.GalleryItem;
+import org.dosomething.android.transfer.GalleryItem.GalleryItemType;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import roboguice.inject.InjectView;
 
 public class CampaignGallery extends AbstractActivity {
 	
@@ -49,8 +48,7 @@ public class CampaignGallery extends AbstractActivity {
 	@Inject LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
 	@Inject private UserContext userContext;
-	
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+
 	@InjectView(R.id.gridview) private GridView gridview;
 	
 	private Context context;
@@ -73,8 +71,6 @@ public class CampaignGallery extends AbstractActivity {
         campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
         
         imagePixels = getResources().getDimensionPixelSize(R.dimen.gallery_item);
-        
-        actionBar.addAction(Campaigns.getHomeAction(this));
         
         gridview.setOnItemClickListener(listener);
         
@@ -229,11 +225,9 @@ public class CampaignGallery extends AbstractActivity {
 			super(userContext);
 			this.feedUrl = feedUrl;
 		}
-		
+
 		@Override
-		protected void onPreExecute() {
-			actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
-		}
+		protected void onPreExecute() {}
 		
 		@Override
 		protected void onSuccess() {
@@ -242,9 +236,7 @@ public class CampaignGallery extends AbstractActivity {
 		}
 
 		@Override
-		protected void onFinish() {
-			actionBar.setProgressBarVisibility(ProgressBar.GONE);
-		}
+		protected void onFinish() {}
 
 		@Override
 		protected void onError(Exception e) {

@@ -1,17 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.MoreInfo;
-import org.dosomething.android.transfer.MoreInfoItem;
-import org.dosomething.android.transfer.Resource;
-import org.dosomething.android.widget.CustomActionBar;
-
-import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -33,6 +21,18 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.MoreInfo;
+import org.dosomething.android.transfer.MoreInfoItem;
+import org.dosomething.android.transfer.Resource;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import roboguice.inject.InjectView;
+
 public class CampaignResources extends AbstractActivity {
 	
 	private static final String CAMPAIGN = "campaign";
@@ -45,8 +45,7 @@ public class CampaignResources extends AbstractActivity {
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
-	
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+
 	@InjectView(R.id.intro) private TextView introText;
 	@InjectView(R.id.list) private ListView list;
 	
@@ -59,8 +58,6 @@ public class CampaignResources extends AbstractActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaign_resources);
-        
-        actionBar.addAction(Campaigns.getHomeAction(this));
         
         Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
         
