@@ -1,13 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.util.List;
-
-import org.dosomething.android.R;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.Faq;
-import org.dosomething.android.widget.CustomActionBar;
-
-import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -22,14 +14,21 @@ import android.widget.TextView;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
+import org.dosomething.android.R;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.Faq;
+
+import java.util.List;
+
+import roboguice.inject.InjectView;
+
 public class CampaignFAQ extends AbstractActivity {
 	
 	private static final String CAMPAIGN = "campaign";
 	
 	@Inject private LayoutInflater inflater;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
-	
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+
 	@InjectView(R.id.list) private ExpandableListView list;
 	
 	@Override
@@ -41,8 +40,6 @@ public class CampaignFAQ extends AbstractActivity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.campaign_faq);
-	    
-	    actionBar.addAction(Campaigns.getHomeAction(this));
 	    
 	    Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
 	    

@@ -1,15 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.util.List;
-
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.FadeInResizeBitmapDisplayer;
-import org.dosomething.android.R;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.HowTo;
-import org.dosomething.android.widget.CustomActionBar;
-
-import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -26,6 +16,17 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.FadeInResizeBitmapDisplayer;
+import org.dosomething.android.R;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.HowTo;
+import org.dosomething.android.widget.CustomActionBar;
+
+import java.util.List;
+
+import roboguice.inject.InjectView;
 
 public class CampaignHowTo extends AbstractActivity {
 	
@@ -51,7 +52,7 @@ public class CampaignHowTo extends AbstractActivity {
         actionBar.addAction(Campaigns.getHomeAction(this));
         
         Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
-        
+
         list.setAdapter(new MyAdapter(getApplicationContext(), campaign.getHowTos()));
     }
 	

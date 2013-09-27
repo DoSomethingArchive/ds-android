@@ -1,12 +1,5 @@
 package org.dosomething.android.activities;
 
-import org.dosomething.android.R;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.Prize;
-import org.dosomething.android.transfer.PrizeItem;
-import org.dosomething.android.widget.CustomActionBar;
-
-import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -23,6 +16,13 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.dosomething.android.R;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.Prize;
+import org.dosomething.android.transfer.PrizeItem;
+
+import roboguice.inject.InjectView;
+
 public class CampaignPrizes extends AbstractActivity {
 	
 	private static final String CAMPAIGN = "campaign";
@@ -30,8 +30,7 @@ public class CampaignPrizes extends AbstractActivity {
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
-	
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+
 	@InjectView(R.id.content) private LinearLayout content;
 	
 	@Override
@@ -43,8 +42,6 @@ public class CampaignPrizes extends AbstractActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaign_prizes);
-        
-        actionBar.addAction(Campaigns.getHomeAction(this));
         
         Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
         Prize prize = campaign.getPrize();
