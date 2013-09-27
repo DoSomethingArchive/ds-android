@@ -262,16 +262,16 @@ public class Campaign extends AbstractActionBarActivity {
         else if (useSmsActionSignUp()) {
             AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
             alertBuilder.setTitle(R.string.campaign_sign_up_sms_action_alert_title)
-                .setMessage(getString(R.string.campaign_sign_up_sms_action_alert_body, campaign.getName()))
-                .setNegativeButton(R.string.cancel_upper, null)
-                .setPositiveButton(R.string.ok_upper, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Join the user into the Mobile Commons opt-in path
-                        new SMSMobileCommonsOptInTask(Campaign.this, campaign.getSignUpSmsOptIn()).execute();
-                    }
-                })
-                .create()
-                .show();
+                    .setMessage(getString(R.string.campaign_sign_up_sms_action_alert_body, campaign.getName()))
+                    .setNegativeButton(R.string.cancel_upper, null)
+                    .setPositiveButton(R.string.ok_upper, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // Join the user into the Mobile Commons opt-in path
+                            new SMSMobileCommonsOptInTask(Campaign.this, campaign.getSignUpSmsOptIn()).execute();
+                        }
+                    })
+                    .create()
+                    .show();
         }
         else if (useAlternateSignUp()) {
             // Log the alternate sign up events to Flurry Analytics
@@ -297,11 +297,11 @@ public class Campaign extends AbstractActionBarActivity {
 
     private boolean hasNoSignUp() {
         if (campaign != null
-            && campaign.getSignUp() == null
-            && (campaign.getSignUpAltLink() == null || campaign.getSignUpAltLink().length() == 0)
-            && (campaign.getSignUpAltText() == null || campaign.getSignUpAltText().length() == 0)
-            && (campaign.getSignUpSmsAction() == null || campaign.getSignUpSmsAction().length() == 0)
-            && campaign.getSignUpSmsOptIn() == 0)
+                && campaign.getSignUp() == null
+                && (campaign.getSignUpAltLink() == null || campaign.getSignUpAltLink().length() == 0)
+                && (campaign.getSignUpAltText() == null || campaign.getSignUpAltText().length() == 0)
+                && (campaign.getSignUpSmsAction() == null || campaign.getSignUpSmsAction().length() == 0)
+                && campaign.getSignUpSmsOptIn() == 0)
         {
             return true;
         }
