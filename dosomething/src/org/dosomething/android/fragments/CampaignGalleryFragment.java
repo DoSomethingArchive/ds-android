@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 import roboguice.fragment.RoboFragment;
 
 /**
- * TODO: when user leaves the fragment, cancel webservice task
+ * Gallery of images for a campaign.
  */
 public class CampaignGalleryFragment extends RoboFragment {
 
@@ -56,6 +56,7 @@ public class CampaignGalleryFragment extends RoboFragment {
     private int imagePixels;
     private Campaign campaign;
     private String feedUrl;
+    private GalleryFeedTask mGalleryFeedTask;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,7 +82,21 @@ public class CampaignGalleryFragment extends RoboFragment {
 
         feedUrl = campaign.getGallery().getFeed();
 
-        new GalleryFeedTask(feedUrl).execute();
+        mGalleryFeedTask = new GalleryFeedTask(feedUrl);
+        mGalleryFeedTask.execute();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // Cancel any retrieval task in progress and hide the progress bar
+        if (mGalleryFeedTask != null) {
+            mGalleryFeedTask.cancel(true);
+            Activity activity = getActivity();
+            if (activity != null)
+                activity.setProgressBarIndeterminateVisibility(Boolean.FALSE);
+        }
     }
 
     private AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {

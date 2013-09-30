@@ -43,13 +43,11 @@
             <LinearLayout style="@style/CampaignSignUpRow">
                 <Button
                     android:id="@+id/sign_up"
-                    android:onClick="signUp"
                     style="@style/CampaignSignUpButton"
                     android:text="@string/campaign_sign_up_button"
                     android:background="@drawable/main_button_selector"/>
                 <Button
                     android:id="@+id/report_back"
-                    android:onClick="reportBack"
                     style="@style/CampaignSignUpButton"
                     android:text="@string/campaign_report_back_button"
                     android:background="@drawable/main_button_selector"
@@ -65,7 +63,6 @@
 
                 <Button
                     android:id="@+id/sms_refer"
-                    android:onClick="smsRefer"
                     style="@style/CampaignSignUpButton"
                     android:text="@string/sms_refer_button"
                     android:background="@drawable/main_button_selector" />

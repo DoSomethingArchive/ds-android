@@ -51,7 +51,7 @@ import roboguice.fragment.RoboFragment;
 /**
  * TODO
  */
-public class CampaignMainFragment extends RoboFragment {
+public class CampaignMainFragment extends RoboFragment implements View.OnClickListener {
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
     private static final String CAMPAIGN_ID = "campaign-id";
@@ -110,6 +110,11 @@ public class CampaignMainFragment extends RoboFragment {
         Bundle args = getArguments();
         campaign = (Campaign)args.getSerializable(CAMPAIGN);
 
+        // Setup click listener for buttons
+        btnReportBack.setOnClickListener(this);
+        btnSignUp.setOnClickListener(this);
+        btnSMSRefer.setOnClickListener(this);
+
         populateFields();
     }
 
@@ -118,6 +123,21 @@ public class CampaignMainFragment extends RoboFragment {
         super.onResume();
 
         updateSignUpButton(getActivity());
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.report_back:
+                startActivity(ReportBack.getIntent(getActivity(), campaign));
+                break;
+            case R.id.sign_up:
+                signUp(v);
+                break;
+            case R.id.sms_refer:
+                startActivityForResult(CampaignSMSRefer.getIntent(getActivity(), campaign), SMS_REFER_ACTIVITY);
+                break;
+        }
     }
 
     private void populateFields() {
@@ -263,14 +283,6 @@ public class CampaignMainFragment extends RoboFragment {
                 }
             }
         }
-    }
-
-    public void reportBack(View v) {
-        startActivity(ReportBack.getIntent(getActivity(), campaign));
-    }
-
-    public void smsRefer(View v) {
-        startActivityForResult(CampaignSMSRefer.getIntent(getActivity(), campaign), SMS_REFER_ACTIVITY);
     }
 
     /**

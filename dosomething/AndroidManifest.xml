@@ -47,7 +47,9 @@
             android:label=""
             android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.CampaignShare"/>
-        <activity android:name=".activities.CampaignSMSRefer"/>
+        <activity android:name=".activities.CampaignSMSRefer"
+            android:label=""
+            android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.CauseSelector"/>
         <activity android:name=".activities.GalleryImageItemDisplay"
             android:label=""
@@ -57,8 +59,12 @@
             android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.ProfileConfig"/>
         <activity android:name=".activities.Project"/>
-        <activity android:name=".activities.ReportBack"/>
-        <activity android:name=".activities.SignUp"/>
+        <activity android:name=".activities.ReportBack"
+            android:label=""
+            android:theme="@style/DSActionBarTheme"/>
+        <activity android:name=".activities.SignUp"
+            android:label=""
+            android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.SFGGallery"/>
         <activity android:name=".activities.SFGItem"/>
         <activity android:name=".activities.SFGSubmit"/>
