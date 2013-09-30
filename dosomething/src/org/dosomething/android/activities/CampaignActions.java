@@ -1,20 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.dosomething.android.R;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.dao.DSDao;
-import org.dosomething.android.domain.CompletedCampaignAction;
-import org.dosomething.android.domain.UserCampaign;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.Challenge;
-import org.dosomething.android.widget.CustomActionBar;
-
-import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -37,6 +22,22 @@ import android.widget.TextView;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.dao.DSDao;
+import org.dosomething.android.domain.CompletedCampaignAction;
+import org.dosomething.android.domain.UserCampaign;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.Challenge;
+import org.dosomething.android.widget.CustomActionBar;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import roboguice.inject.InjectView;
 
 public class CampaignActions extends AbstractActivity {
 	
@@ -122,7 +123,7 @@ public class CampaignActions extends AbstractActivity {
 	}
 	
 	private enum ChallengeType {
-		SIGN_UP("sign-up"),REPORT_BACK("report-back"),SHARE("share"),RESOURCES("resources");
+		SIGN_UP("sign-up"),REPORT_BACK("report-back"),SHARE("share");
 		
 		private final String value;
 		
@@ -265,9 +266,6 @@ public class CampaignActions extends AbstractActivity {
 							break;
 						case REPORT_BACK:
 							startActivity(ReportBack.getIntent(context, campaign));
-							break;
-						case RESOURCES:
-							startActivity(CampaignResources.getIntent(context, campaign));
 							break;
 						case SHARE:
 							startActivity(Intent.createChooser(campaign.getShareIntent(), getString(R.string.campaign_share_chooser)));
