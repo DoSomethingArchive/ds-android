@@ -4,17 +4,26 @@
     <style name="DSActionBarTheme"
         parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/DSActionBar</item>
+        <item name="android:actionBarTabStyle">@style/DSActionBarTabStyle</item>
 
         <!-- Support library compatibility -->
         <item name="actionBarStyle">@style/DSActionBar</item>
+        <item name="actionBarTabStyle">@style/DSActionBarTabStyle</item>
     </style>
 
     <!-- ActionBar styles -->
     <style name="DSActionBar"
         parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/actionbar_background</item>
+        <item name="android:backgroundStacked">#000000</item>
 
         <!-- Support library compatibility -->
         <item name="background">@color/actionbar_background</item>
+        <item name="backgroundStacked">#000000</item>
+    </style>
+    <style name="DSActionBarTabStyle"
+        parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_dscustom</item>
+        <item name="background">@drawable/tab_indicator_ab_dscustom</item>
     </style>
 </resources>

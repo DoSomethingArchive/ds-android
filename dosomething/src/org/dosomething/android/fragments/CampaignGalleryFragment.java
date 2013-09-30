@@ -1,5 +1,6 @@
 package org.dosomething.android.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -36,7 +37,7 @@ import java.util.regex.Pattern;
 import roboguice.fragment.RoboFragment;
 
 /**
- * TODO
+ * TODO: when user leaves the fragment, cancel webservice task
  */
 public class CampaignGalleryFragment extends RoboFragment {
 
@@ -223,18 +224,25 @@ public class CampaignGalleryFragment extends RoboFragment {
 
         @Override
         protected void onPreExecute() {
-            getActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
+            Activity activity = getActivity();
+            if (activity != null)
+                activity.setProgressBarIndeterminateVisibility(Boolean.TRUE);
         }
 
         @Override
         protected void onSuccess() {
-            DSEndlessGridAdapter adapter = new DSEndlessGridAdapter(new DSGridAdapter(getActivity(), loadedItems));
-            gridView.setAdapter(adapter);
+            Activity activity = getActivity();
+            if (activity != null) {
+                DSEndlessGridAdapter adapter = new DSEndlessGridAdapter(new DSGridAdapter(activity, loadedItems));
+                gridView.setAdapter(adapter);
+            }
         }
 
         @Override
         protected void onFinish() {
-            getActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
+            Activity activity = getActivity();
+            if (activity != null)
+                activity.setProgressBarIndeterminateVisibility(Boolean.FALSE);
         }
 
         @Override

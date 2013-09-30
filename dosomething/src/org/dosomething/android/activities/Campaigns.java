@@ -167,15 +167,19 @@ public class Campaigns extends AbstractActionBarActivity {
 
     private void setupDrawerNavigation() {
         // Navigation options change depending on if user is logged in or not
-        String[] navItems = new String[3];
+        String[] navItems;
         if (userContext.isLoggedIn()) {
-            navItems[0] = getString(R.string.drawer_item_profile);
-            navItems[1] = getString(R.string.drawer_item_settings);
-            navItems[2] = getString(R.string.drawer_item_logout);
+            navItems = new String[4];
+            navItems[0] = getString(R.string.drawer_item_campaigns);
+            navItems[1] = getString(R.string.drawer_item_profile);
+            navItems[2] = getString(R.string.drawer_item_settings);
+            navItems[3] = getString(R.string.drawer_item_logout);
         }
         else {
-            navItems[0] = getString(R.string.drawer_item_profile);
-            navItems[1] = getString(R.string.drawer_item_login);
+            navItems = new String[3];
+            navItems[0] = getString(R.string.drawer_item_campaigns);
+            navItems[1] = getString(R.string.drawer_item_profile);
+            navItems[2] = getString(R.string.drawer_item_login);
         }
 
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
@@ -186,15 +190,19 @@ public class Campaigns extends AbstractActionBarActivity {
                 Context ctx = getApplicationContext();
                 switch (pos) {
                     case 0:
-                        startActivity(Profile.getIntent(ctx));
+                        // Already on this page. Just close the drawer.
+                        mDrawerLayout.closeDrawer(mDrawerList);
                         break;
                     case 1:
+                        startActivity(Profile.getIntent(ctx));
+                        break;
+                    case 2:
                         if (userContext.isLoggedIn())
                             startActivity(new Intent(ctx, ProfileConfig.class));
                         else
                             Login.logout(ctx);
                         break;
-                    case 2:
+                    case 3:
                         Login.logout(ctx);
                         break;
                 }
