@@ -7,4 +7,4 @@
     android:choiceMode="singleChoice"
     android:divider="@android:color/transparent"
     android:dividerHeight="0dp"
-    android:background="@color/campaign_button_background"/>
+    android:background="@color/blue_menu_background"/>

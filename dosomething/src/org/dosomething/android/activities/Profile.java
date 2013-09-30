@@ -149,9 +149,6 @@ public class Profile extends AbstractActionBarActivity {
         content.removeAllViews();
 
         if (userContext.isLoggedIn()) {
-            // Only set title to Profile if user's logged in
-//            getSupportActionBar().setTitle(R.string.profile_title);
-
             // Start process to find campaigns the user's signed up for
             new CampaignTask().execute();
         }
@@ -168,13 +165,16 @@ public class Profile extends AbstractActionBarActivity {
 
     private void setupDrawerNavigation() {
         // Navigation options change depending on if user is logged in or not
-        String[] navItems = new String[3];
+        String[] navItems;
         if (userContext.isLoggedIn()) {
+            navItems = new String[4];
             navItems[0] = getString(R.string.drawer_item_campaigns);
-            navItems[1] = getString(R.string.drawer_item_settings);
-            navItems[2] = getString(R.string.drawer_item_logout);
+            navItems[1] = getString(R.string.drawer_item_profile);
+            navItems[2] = getString(R.string.drawer_item_settings);
+            navItems[3] = getString(R.string.drawer_item_logout);
         }
         else {
+            navItems = new String[2];
             navItems[0] = getString(R.string.drawer_item_campaigns);
             navItems[1] = getString(R.string.drawer_item_logout);
         }
@@ -191,11 +191,15 @@ public class Profile extends AbstractActionBarActivity {
                         break;
                     case 1:
                         if (userContext.isLoggedIn())
-                            startActivity(new Intent(ctx, ProfileConfig.class));
+                            // Already on this page. Just close the drawer.
+                            mDrawerLayout.closeDrawer(mDrawerList);
                         else
                             Login.logout(ctx);
                         break;
                     case 2:
+                        startActivity(new Intent(ctx, ProfileConfig.class));
+                        break;
+                    case 3:
                         Login.logout(ctx);
                         break;
                 }
