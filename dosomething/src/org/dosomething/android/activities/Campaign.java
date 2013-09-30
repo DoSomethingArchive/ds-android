@@ -309,30 +309,6 @@ public class Campaign extends AbstractActionBarActivity {
         startActivity(CampaignActions.getIntent(this, campaign));
     }
 
-    public void onClickHowTo(View v) {
-        startActivity(CampaignHowTo.getIntent(this, campaign));
-    }
-
-    public void onClickGallery(View v) {
-        startActivity(CampaignGallery.getIntent(this, campaign));
-    }
-
-    public void onClickPeople(View v) {
-        startActivity(CampaignPeople.getIntent(this, campaign));
-    }
-
-    public void onClickPrizes(View v) {
-        startActivity(CampaignPrizes.getIntent(this, campaign));
-    }
-
-    public void onClickResources(View v) {
-        startActivity(CampaignResources.getIntent(this, campaign));
-    }
-
-    public void onClickFaq(View v) {
-        startActivity(CampaignFAQ.getIntent(this, campaign));
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -20,7 +20,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
-import org.dosomething.android.activities.CampaignGallery;
 import org.dosomething.android.activities.GalleryImageItemDisplay;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
@@ -184,13 +183,6 @@ public class CampaignGalleryFragment extends RoboFragment {
             return answer;
         }
     }
-
-    public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){
-        Intent answer = new Intent(context, CampaignGallery.class);
-        answer.putExtra(CAMPAIGN, campaign);
-        return answer;
-    }
-
 
     private static List<GalleryItem> getPage(String feedUrl, int page) throws Exception{
 
