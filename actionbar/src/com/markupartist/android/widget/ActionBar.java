@@ -69,7 +69,7 @@ public class ActionBar extends RelativeLayout implements OnClickListener {
 
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.ActionBar);
-        CharSequence title = a.getString(R.styleable.ActionBar_title);
+        CharSequence title = a.getString(R.styleable.ActionBar_ab_title);
         if (title != null) {
             setTitle(title);
         }
