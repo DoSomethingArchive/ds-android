@@ -42,6 +42,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
+import org.dosomething.android.adapters.DrawerListAdapter;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.context.UserContext;
@@ -50,6 +51,7 @@ import org.dosomething.android.tasks.NoInternetException;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.widget.ProgressBarImageLoadingListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -167,23 +169,20 @@ public class Campaigns extends AbstractActionBarActivity {
 
     private void setupDrawerNavigation() {
         // Navigation options change depending on if user is logged in or not
-        String[] navItems;
+        List<String> navItems = new ArrayList<String>();
         if (userContext.isLoggedIn()) {
-            navItems = new String[4];
-            navItems[0] = getString(R.string.drawer_item_campaigns);
-            navItems[1] = getString(R.string.drawer_item_profile);
-            navItems[2] = getString(R.string.drawer_item_settings);
-            navItems[3] = getString(R.string.drawer_item_logout);
+            navItems.add(0, getString(R.string.drawer_item_campaigns));
+            navItems.add(1, getString(R.string.drawer_item_profile));
+            navItems.add(2, getString(R.string.drawer_item_settings));
+            navItems.add(3, getString(R.string.drawer_item_logout));
         }
         else {
-            navItems = new String[3];
-            navItems[0] = getString(R.string.drawer_item_campaigns);
-            navItems[1] = getString(R.string.drawer_item_profile);
-            navItems[2] = getString(R.string.drawer_item_login);
+            navItems.add(0, getString(R.string.drawer_item_campaigns));
+            navItems.add(1, getString(R.string.drawer_item_profile));
+            navItems.add(2, getString(R.string.drawer_item_login));
         }
 
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, navItems));
+        mDrawerList.setAdapter(new DrawerListAdapter(this, navItems));
         mDrawerList.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int pos, long id) {

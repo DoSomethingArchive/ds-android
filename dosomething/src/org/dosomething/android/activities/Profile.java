@@ -28,6 +28,7 @@ import com.google.inject.name.Named;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
+import org.dosomething.android.adapters.DrawerListAdapter;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
@@ -165,22 +166,20 @@ public class Profile extends AbstractActionBarActivity {
 
     private void setupDrawerNavigation() {
         // Navigation options change depending on if user is logged in or not
-        String[] navItems;
+        List<String> navItems = new ArrayList<String>();
         if (userContext.isLoggedIn()) {
-            navItems = new String[4];
-            navItems[0] = getString(R.string.drawer_item_campaigns);
-            navItems[1] = getString(R.string.drawer_item_profile);
-            navItems[2] = getString(R.string.drawer_item_settings);
-            navItems[3] = getString(R.string.drawer_item_logout);
+            navItems.add(0, getString(R.string.drawer_item_campaigns));
+            navItems.add(1, getString(R.string.drawer_item_profile));
+            navItems.add(2, getString(R.string.drawer_item_settings));
+            navItems.add(3, getString(R.string.drawer_item_logout));
         }
         else {
-            navItems = new String[2];
-            navItems[0] = getString(R.string.drawer_item_campaigns);
-            navItems[1] = getString(R.string.drawer_item_logout);
+            navItems.add(0, getString(R.string.drawer_item_campaigns));
+            navItems.add(1, getString(R.string.drawer_item_profile));
+            navItems.add(2, getString(R.string.drawer_item_login));
         }
 
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, navItems));
+        mDrawerList.setAdapter(new DrawerListAdapter(this, navItems));
         mDrawerList.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int pos, long id) {
@@ -190,14 +189,14 @@ public class Profile extends AbstractActionBarActivity {
                         startActivity(Campaigns.getIntent(ctx));
                         break;
                     case 1:
-                        if (userContext.isLoggedIn())
-                            // Already on this page. Just close the drawer.
-                            mDrawerLayout.closeDrawer(mDrawerList);
-                        else
-                            Login.logout(ctx);
+                        // Already on this page, so just close the drawer.
+                        mDrawerLayout.closeDrawer(mDrawerList);
                         break;
                     case 2:
-                        startActivity(new Intent(ctx, ProfileConfig.class));
+                        if (userContext.isLoggedIn())
+                            startActivity(new Intent(ctx, ProfileConfig.class));
+                        else
+                            startActivityForResult(new Intent(ctx, Login.class), REQ_LOGIN_FOR_PROFILE);
                         break;
                     case 3:
                         Login.logout(ctx);
@@ -220,10 +219,6 @@ public class Profile extends AbstractActionBarActivity {
 
     public void findCampaigns(View v) {
         startActivity(new Intent(this, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-    }
-
-    public void goLoginRegister(View v) {
-        startActivityForResult(new Intent(this, Login.class), REQ_LOGIN_FOR_PROFILE);
     }
 
     public static Intent getIntent(Context context) {
