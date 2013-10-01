@@ -1,24 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-import org.dosomething.android.analytics.Analytics;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.widget.CustomActionBar;
-import org.json.JSONObject;
-
-import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -28,6 +9,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -40,12 +22,30 @@ import android.widget.Toast;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-public class Register extends AbstractActivity {
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import roboguice.inject.InjectView;
+
+public class Register extends AbstractActionBarActivity {
 	
 	@Inject private UserContext userContext;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
-	
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+
 	@InjectView(R.id.username_name) private EditText username;
 	@InjectView(R.id.mobile) private EditText mobile;
 	@InjectView(R.id.first_name) private EditText firstName;
@@ -73,10 +73,11 @@ public class Register extends AbstractActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         
         context = this;
-        
-        actionBar.setHomeAction(Campaigns.getHomeAction(context));
         
         birthday.setOnFocusChangeListener(birthdayFocusListener);
         birthday.setOnClickListener(birthdayClickListener);
@@ -91,6 +92,18 @@ public class Register extends AbstractActivity {
         if (mobile != null && userContext.getPhoneNumber() != null) {
         	mobile.setText(userContext.getPhoneNumber());
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // If home button is selected on ActionBar, then end the activity
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
     
     private final OnClickListener birthdayClickListener = new OnClickListener() {
