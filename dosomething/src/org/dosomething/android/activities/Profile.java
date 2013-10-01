@@ -1,6 +1,8 @@
 package org.dosomething.android.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
@@ -217,6 +219,24 @@ public class Profile extends AbstractActionBarActivity {
                 startActivity(Profile.getIntent(getApplicationContext()));
             }
         }
+    }
+
+    /**
+     * Get confirmation from user that they want to exit the application when the press the Back button
+     */
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton(R.string.yes_upper, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Profile.this.finish();
+                    }
+                })
+                .setNegativeButton(R.string.no_upper, null)
+                .create()
+                .show();
     }
 
     public void findCampaigns(View v) {
