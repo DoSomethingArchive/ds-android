@@ -1,15 +1,15 @@
 package org.dosomething.android.activities;
 
-import org.dosomething.android.R;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.widget.CustomActionBar;
-
-import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import org.dosomething.android.R;
+import org.dosomething.android.transfer.Campaign;
+
+import roboguice.inject.InjectView;
 
 public class CampaignShare extends AbstractActivity {
 	
@@ -18,8 +18,7 @@ public class CampaignShare extends AbstractActivity {
 	
 	public static final int SIGNED_UP = 222;
 	public static final int REPORTED_BACK = 223;
-	
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+
 	@InjectView(R.id.header) private TextView header;
 	
 	private Campaign campaign;
@@ -34,8 +33,6 @@ public class CampaignShare extends AbstractActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaign_share);
-        
-        actionBar.addAction(Campaigns.getHomeAction(this));
         
         campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
         type = getIntent().getExtras().getInt(TYPE);

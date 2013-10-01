@@ -384,6 +384,7 @@ public class Profile extends AbstractActionBarActivity {
 
         // If no campaigns were found, change to the layout with no profile activity
         if (signedUpCampaigns.isEmpty()) {
+            content.removeAllViews();
             content.addView(inflater.inflate(R.layout.profile_no_campaigns, null));
 
             Button btnAction = (Button)findViewById(R.id.profile_action_button);

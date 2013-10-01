@@ -37,7 +37,6 @@ import com.google.inject.name.Named;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.markupartist.android.widget.ActionBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.dosomething.android.DSConstants;
@@ -227,11 +226,6 @@ public class Campaigns extends AbstractActionBarActivity {
 
         task.setForceSearch(forceSearch);
         task.execute();
-    }
-
-    // TODO: remove all references to this
-    public static ActionBar.Action getHomeAction(Context context){
-        return new ActionBar.IntentAction(context, new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), R.drawable.action_bar_home);
     }
 
     public static Intent getIntent(Context context) {
