@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.google.inject.Inject;
-import com.markupartist.android.widget.ActionBar.Action;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -187,45 +186,39 @@ public class Login extends AbstractFragmentActivity {
         	}
         }
     }
-    
-    public static Action getLogoutAction(Context context, UserContext userContext) {
-    	return new DSLogoutAction(context, userContext);
-    }
-    
-    private static class DSLogoutAction implements Action {
-    	private Context context;
-    	private UserContext userContext;
-    	
-    	public DSLogoutAction(Context context, UserContext userContext) {
-			this.context = context;
-			this.userContext = userContext;
-		}
-    	
-    	@Override
-		public int getDrawable() {
-			return R.drawable.action_bar_logout;
-		}
 
-		@Override
-		public void performAction(View view) {
-			new AlertDialog.Builder(context)
-				.setMessage(context.getString(R.string.logout_confirm))
-				.setPositiveButton(context.getString(R.string.yes_upper), new OnClickListener() {
-					public void onClick(DialogInterface arg0, int arg1) {
-						// Close Facebook session and clear token info if any
-				    	Session session = Session.getActiveSession();
-				    	if (session != null) {
-				    		session.closeAndClearTokenInformation();
-				    	}
-				    	
-						userContext.clear();
-						context.startActivity(new Intent(context, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-					}
-				})
-				.setNegativeButton(context.getString(R.string.no_upper), null)
-				.create()
-				.show();
-		}
+    /**
+     * Provide Intent for other activities to open this activity
+     */
+    public static Intent getIntent(Context context) {
+        return new Intent(context, Login.class);
+    }
+
+    public static void logout(Context context) {
+        new AlertDialog.Builder(context)
+                .setMessage(context.getString(R.string.logout_confirm))
+                .setPositiveButton(context.getString(R.string.yes_upper), new OnLogoutClickListener(context))
+                .setNegativeButton(context.getString(R.string.no_upper), null)
+                .create()
+                .show();
+    }
+
+    private static class OnLogoutClickListener implements OnClickListener {
+        private Context dialogContext;
+
+        public OnLogoutClickListener(Context ctx) {
+            dialogContext = ctx;
+        }
+        public void onClick(DialogInterface arg0, int arg1) {
+            // Close Facebook session and clear token info if any
+            Session session = Session.getActiveSession();
+            if (session != null) {
+                session.closeAndClearTokenInformation();
+            }
+
+            new UserContext(dialogContext).clear();
+            dialogContext.startActivity(new Intent(dialogContext, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        }
     }
     
 	private class DSLoginTask extends AbstractWebserviceTask {

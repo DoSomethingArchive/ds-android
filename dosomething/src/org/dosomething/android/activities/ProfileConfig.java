@@ -1,7 +1,15 @@
 package org.dosomething.android.activities;
 
-import java.util.List;
-import java.util.Locale;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.inject.Inject;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
@@ -10,28 +18,21 @@ import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.widget.CustomActionBar;
 import org.json.JSONObject;
 
+import java.util.List;
+import java.util.Locale;
+
 import roboguice.inject.InjectView;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.google.inject.Inject;
-
-public class ProfileConfig extends AbstractActivity {
+public class ProfileConfig extends AbstractActionBarActivity {
 	
 	private static final String FROM_PROFILE_CONFIG = "from_profile_config";
 	
 	@Inject private UserContext userContext;
 	@Inject private DSPreferences dsPrefs;
 	@Inject private DSDao dao;
-	
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+
 	@InjectView(R.id.first_name) private EditText firstNameView;
 	@InjectView(R.id.last_name) private EditText lastNameView;
 	@InjectView(R.id.email) private EditText emailView;
@@ -55,9 +56,10 @@ public class ProfileConfig extends AbstractActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile_config);
-		
-		// Add logout action
-		actionBar.addAction(Login.getLogoutAction(this, userContext));
+
+        // Enable home button on ActionBar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 	}
 	
 	@Override
@@ -117,6 +119,18 @@ public class ProfileConfig extends AbstractActivity {
 		int smsCampaignsStarted = userContext.getSmsCampaignsStarted();
 		smsCampaignsStartedView.setText(getString(R.string.profile_config_sms_campaigns_started, smsCampaignsStarted));
 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // If home button is selected on ActionBar, then end the activity
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 	
 	/**
 	 * Launch the CauseSelector activity for user to edit their selected causes
@@ -156,6 +170,13 @@ public class ProfileConfig extends AbstractActivity {
 		
 		finish();
 	}
+
+    /**
+     * Provide Intent for other activities to open this activity
+     */
+    public static Intent getIntent(Context context) {
+        return new Intent(context, ProfileConfig.class);
+    }
 	
 	/**
 	 * Task to update user's profile on the server
