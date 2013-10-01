@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -30,7 +31,6 @@ import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Challenge;
-import org.dosomething.android.widget.CustomActionBar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,7 +39,7 @@ import java.util.Set;
 
 import roboguice.inject.InjectView;
 
-public class CampaignActions extends AbstractActivity {
+public class CampaignActions extends AbstractActionBarActivity {
 	
 	private static final String CAMPAIGN = "campaign";
 	
@@ -47,8 +47,7 @@ public class CampaignActions extends AbstractActivity {
 	@Inject private ImageLoader imageLoader;
 	@Inject private UserContext userContext;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
-	
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+
 	@InjectView(R.id.list) private ListView list;
 	
 	private Context context;
@@ -64,16 +63,14 @@ public class CampaignActions extends AbstractActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.campaign_actions);
-        
+
+        // Enable ActionBar home button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         context = this;
         
-        actionBar.addAction(Campaigns.getHomeAction(this));
-        
-        actionBar.addAction(Login.getLogoutAction(this, userContext));
-        
         campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
-        
-        actionBar.setTitle(campaign.getName());
         
         dao = new DSDao(this);
         
@@ -97,6 +94,18 @@ public class CampaignActions extends AbstractActivity {
         }
         
         list.setAdapter(new MyAdapter(getApplicationContext(), challenges));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // If home button is selected on ActionBar, then end the activity
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 	public void viewCampaign(View v){
