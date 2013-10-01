@@ -1,11 +1,13 @@
 package org.dosomething.android.tasks;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.util.Log;
+import android.widget.ProgressBar;
+
+import com.markupartist.android.widget.ActionBar;
 
 import org.acra.ErrorReporter;
 import org.dosomething.android.DSConstants;
@@ -17,12 +19,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.widget.ProgressBar;
-
-import com.markupartist.android.widget.ActionBar;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask {
 
@@ -32,6 +35,7 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 
 	private List<Campaign> campaigns;
 
+    // TODO: remove ActionBar parameter
 	public AbstractFetchCampaignsTask(Context context, UserContext userContext, Cache cache, ActionBar actionBar){
 		super(userContext);
 		this.context = context;
@@ -42,9 +46,9 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 	@Override
 	protected void doWebOperation() throws Exception {
 
-		if(cache != null){
+//		if(cache != null){
 			campaigns = cache.getCampaigns();
-		}
+//		}
 
 		if(campaigns == null){
 			
@@ -57,7 +61,12 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 				try{
 					String url = DSConstants.CAMPAIGN_API_URL + "?q=campaigns";
 
+                    long startTime = Calendar.getInstance().getTimeInMillis();
+                    Log.v("CAMPAIGN FETCH", "start time: " + startTime);
 					JSONObject json = doGet(url).getBodyAsJSONObject();
+                    long endTime = Calendar.getInstance().getTimeInMillis();
+                    Log.v("CAMPAIGN FETCH", "end time: " + endTime);
+                    Log.v("CAMPAIGN FETCH", "elapsed time: " + (endTime - startTime));
 
 					setCampaigns(json);
 					
@@ -161,6 +170,10 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 		if(actionBar != null){
 			actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
 		}
+        else if (context != null && context instanceof Activity) {
+            Activity activityContext = (Activity)context;
+            activityContext.setProgressBarIndeterminateVisibility(Boolean.TRUE);
+        }
 	}
 
 	@Override
@@ -168,6 +181,10 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 		if(actionBar != null){
 			actionBar.setProgressBarVisibility(ProgressBar.GONE);
 		}
+        else if (context != null && context instanceof Activity) {
+            Activity activityContext = (Activity)context;
+            activityContext.setProgressBarIndeterminateVisibility(Boolean.FALSE);
+        }
 	}
 
 }

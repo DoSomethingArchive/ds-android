@@ -15,10 +15,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64OutputStream;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -26,7 +28,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -43,7 +44,6 @@ import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.WebForm;
 import org.dosomething.android.transfer.WebFormField;
 import org.dosomething.android.transfer.WebFormSelectOptions;
-import org.dosomething.android.widget.CustomActionBar;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -59,18 +59,15 @@ import java.util.Locale;
 
 import roboguice.inject.InjectView;
 
-public abstract class AbstractWebForm extends AbstractActivity {
-	
-//	private static final String TAG = "AbstractWebForm";
-//	private static final String CAMPAIGN = "campaign";
+public abstract class AbstractWebForm extends AbstractActionBarActivity {
+
 	private static final int PICK_IMAGE_REQUEST = 0xFF0;
 	private static final int PICK_SFG_IMAGE_REQUEST = 0xFF1;
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private UserContext userContext;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
-	
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+
 	@InjectView(R.id.required_instructions) private TextView lblRequiredInstructions;
 	@InjectView(R.id.submit) private Button btnSubmit;
 	
@@ -85,11 +82,13 @@ public abstract class AbstractWebForm extends AbstractActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(getContentViewResourceId());
-		
-		actionBar.addAction(Campaigns.getHomeAction(this));
-		
-		actionBar.addAction(Login.getLogoutAction(this, userContext));
+
+        // Enable ActionBar home button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 		
 		LinearLayout webform = (LinearLayout)findViewById(R.id.web_form);
 		
@@ -115,6 +114,18 @@ public abstract class AbstractWebForm extends AbstractActivity {
         });
         
         prePopulate();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // If home button is selected on ActionBar, then end the activity
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 	
 	@Override
@@ -764,13 +775,13 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
+            setProgressBarIndeterminateVisibility(Boolean.TRUE);
 		}
 
 		@Override
 		protected void onFinish() {
 			if (!submitTaskInProgress) {
-				actionBar.setProgressBarVisibility(ProgressBar.GONE);
+                setProgressBarIndeterminateVisibility(Boolean.FALSE);
 			}
 		}
 
@@ -826,7 +837,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
+            setProgressBarIndeterminateVisibility(Boolean.TRUE);
 			submitTaskInProgress = true;
 		}
 
@@ -847,7 +858,7 @@ public abstract class AbstractWebForm extends AbstractActivity {
 
 		@Override
 		protected void onFinish() {
-			actionBar.setProgressBarVisibility(ProgressBar.GONE);
+            setProgressBarIndeterminateVisibility(Boolean.FALSE);
 			submitTaskInProgress = false;
 		}
 

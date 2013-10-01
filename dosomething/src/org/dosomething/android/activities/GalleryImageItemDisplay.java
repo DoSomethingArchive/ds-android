@@ -1,13 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.util.HashMap;
-
-import org.dosomething.android.R;
-import org.dosomething.android.analytics.Analytics;
-import org.dosomething.android.widget.CustomActionBar;
-import org.dosomething.android.widget.ProgressBarImageLoadingListener;
-
-import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,9 +7,11 @@ import android.os.Vibrator;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -34,10 +28,19 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
+import org.dosomething.android.widget.CustomActionBar;
+import org.dosomething.android.widget.ProgressBarImageLoadingListener;
+
+import java.util.HashMap;
+
+import roboguice.inject.InjectView;
+
 /**
  * Activity for displaying an image from a campaign's gallery 
  */
-public class GalleryImageItemDisplay extends AbstractActivity {
+public class GalleryImageItemDisplay extends AbstractActionBarActivity {
 
 	private static final String CAMPAIGN = "campaign";
 	private static final String GALLERY_IMG_AUTHORS = "gallery-img-authors";
@@ -65,9 +68,12 @@ public class GalleryImageItemDisplay extends AbstractActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.gallery_image_fullscreen);
-		
-		actionBar.addAction(Campaigns.getHomeAction(this));
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
 		Bundle bundle = getIntent().getExtras();
 		campaign = (org.dosomething.android.transfer.Campaign)bundle.get(CAMPAIGN);
@@ -81,6 +87,18 @@ public class GalleryImageItemDisplay extends AbstractActivity {
 		imageGalleryPager.setAdapter(imageGalleryPagerAdapter);
 		imageGalleryPager.setCurrentItem(imageGalleryPos);
 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // If home button is selected on ActionBar, then end the activity
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 	
 	private class GalleryPagerAdapter extends PagerAdapter {
 		

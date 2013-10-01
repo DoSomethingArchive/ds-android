@@ -12,12 +12,13 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +32,6 @@ import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.widget.CustomActionBar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ import java.util.List;
 
 import roboguice.inject.InjectView;
 
-public class CampaignSMSRefer extends AbstractActivity {
+public class CampaignSMSRefer extends AbstractActionBarActivity {
 	
 	private static final String CAMPAIGN = "campaign";
 	private static final String SMS_REFER = "sms-refer";
@@ -48,7 +48,6 @@ public class CampaignSMSRefer extends AbstractActivity {
 	@Inject private LayoutInflater inflater;
 	@Inject private UserContext userContext;
     @Inject private @Named("DINComp-CondBold")Typeface typefaceDin;
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.sms_cell_input) private EditText etCellInput;
 	@InjectView(R.id.sms_friends_container) private LinearLayout llFriendsContainer;
 	@InjectView(R.id.sms_friends_label) private TextView tvFriendsLabel;
@@ -63,9 +62,13 @@ public class CampaignSMSRefer extends AbstractActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.sms_refer);
-		
-		actionBar.addAction(Campaigns.getHomeAction(this));
+
+        // Enable ActionBar home button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 		
 		campaign = (org.dosomething.android.transfer.Campaign) getIntent().getExtras().get(CAMPAIGN);
 		String smsReferText = campaign.getSMSReferText();
@@ -93,6 +96,18 @@ public class CampaignSMSRefer extends AbstractActivity {
 	protected String getPageName() {
 		return "sms-refer";
 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // If home button is selected on ActionBar, then end the activity
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 	
 	// Open user's contacts list and allow them to select numbers from it
 	public void addNumbers(View v) {
@@ -234,7 +249,7 @@ public class CampaignSMSRefer extends AbstractActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
+            setProgressBarIndeterminateVisibility(Boolean.TRUE);
 		}
 
 		@Override
@@ -274,7 +289,7 @@ public class CampaignSMSRefer extends AbstractActivity {
 
 		@Override
 		protected void onFinish() {
-			actionBar.setProgressBarVisibility(ProgressBar.GONE);
+            setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		}
 
 		@Override

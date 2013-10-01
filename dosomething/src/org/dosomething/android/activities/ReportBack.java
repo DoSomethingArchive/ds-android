@@ -1,7 +1,8 @@
 package org.dosomething.android.activities;
 
-import java.util.HashMap;
-import java.util.List;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
@@ -12,9 +13,8 @@ import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Challenge;
 import org.dosomething.android.transfer.WebForm;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
+import java.util.HashMap;
+import java.util.List;
 
 public class ReportBack extends AbstractWebForm {
 	
@@ -74,7 +74,7 @@ public class ReportBack extends AbstractWebForm {
 		return R.layout.report_back;
 	}
 	
-	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign){
+	public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {
 		Intent answer = new Intent(context, ReportBack.class);
 		answer.putExtra(CAMPAIGN, campaign);
 		return answer;
