@@ -314,17 +314,6 @@
         <item name="android:background">@drawable/secondary_button_selector</item>
     </style>
     
-    <style name="CampaignButton">
-        <item name="android:background">@drawable/campaign_button_selector</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/font_size_button</item>
-        <item name="android:textColor">#fff</item>
-        <item name="android:gravity">left</item>
-        <item name="android:padding">20dp</item>
-    </style>
-    
     <style name="CauseListContainer">
         <item name="android:background">@drawable/white_border_background</item>
         <item name="android:orientation">vertical</item>

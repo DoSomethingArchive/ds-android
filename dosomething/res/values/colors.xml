@@ -2,6 +2,7 @@
 <resources>
 <color name="actionbar_separator">#173781</color>
 <color name="actionbar_title">#FFFFFF</color>
+<color name="actionbar_background">#173781</color>
 <color name="actionbar_background_start">#173781</color>
 <color name="actionbar_background_end">#173781</color>
 <color name="actionbar_background_item_pressed_start">#2458C9</color>
@@ -24,8 +25,8 @@
 <color name="campaign_share_text">#fed200</color>
 <color name="campaign_share_inner_background">#1d1d1b</color>
 <color name="campaign_share_outer_background">#1d59a1</color>
-<color name="campaign_button_background">#1d59a1</color>
-<color name="campaign_button_background_active">#164278</color>
+<color name="blue_menu_background">#1D59A1</color>
+<color name="blue_menu_background_active">#4A7AB4</color>
 <color name="campaign_progress_bar">#FF522053</color>
 <color name="campaign_progress_bar_bg">#FF868686</color>
 <color name="cause_text">#333333</color>
@@ -34,8 +35,6 @@
 <color name="campaigns_callout_text">#FFFECC05</color>
 <color name="campaigns_past_campaign_callout_background">#DD868686</color>
 <color name="campaigns_past_campaign_callout_text">#FFEFEFEF</color>
-
-<color name="blue_menu_active">#4A7AB4</color>
 <color name="dark_blue">#173781</color>
 <color name="dark_grey_background">#2A2C2B</color>
 <color name="share_button_blue">#3D75B1</color>
