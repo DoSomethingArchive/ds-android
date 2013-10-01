@@ -1,5 +1,31 @@
 package org.dosomething.android.activities;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
+import org.dosomething.android.adapters.DrawerListAdapter;
+import org.dosomething.android.cache.Cache;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.dao.DSDao;
+import org.dosomething.android.domain.CompletedCampaignAction;
+import org.dosomething.android.domain.UserCampaign;
+import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.Challenge;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,33 +53,6 @@ import android.widget.Toast;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-import org.dosomething.android.adapters.DrawerListAdapter;
-import org.dosomething.android.cache.Cache;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.dao.DSDao;
-import org.dosomething.android.domain.CompletedCampaignAction;
-import org.dosomething.android.domain.UserCampaign;
-import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
-import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.Challenge;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import roboguice.inject.InjectView;
 
 public class Profile extends AbstractActionBarActivity {
 
@@ -497,7 +496,7 @@ public class Profile extends AbstractActionBarActivity {
     private class CampaignTask extends AbstractFetchCampaignsTask {
 
         public CampaignTask() {
-            super(Profile.this.context, userContext, cache, null);
+            super(Profile.this.context, userContext, cache);
         }
 
         @Override

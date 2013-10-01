@@ -1,5 +1,24 @@
 package org.dosomething.android.activities;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
+import org.dosomething.android.cache.Cache;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.fragments.CampaignFaqFragment;
+import org.dosomething.android.fragments.CampaignGalleryFragment;
+import org.dosomething.android.fragments.CampaignHowToFragment;
+import org.dosomething.android.fragments.CampaignMainFragment;
+import org.dosomething.android.fragments.CampaignPeopleFragment;
+import org.dosomething.android.fragments.CampaignPrizesFragment;
+import org.dosomething.android.fragments.CampaignResourcesFragment;
+import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
+import org.dosomething.android.tasks.NoInternetException;
+
+import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,26 +38,6 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
-
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-import org.dosomething.android.cache.Cache;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.fragments.CampaignFaqFragment;
-import org.dosomething.android.fragments.CampaignGalleryFragment;
-import org.dosomething.android.fragments.CampaignHowToFragment;
-import org.dosomething.android.fragments.CampaignMainFragment;
-import org.dosomething.android.fragments.CampaignPeopleFragment;
-import org.dosomething.android.fragments.CampaignPrizesFragment;
-import org.dosomething.android.fragments.CampaignResourcesFragment;
-import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
-import org.dosomething.android.tasks.NoInternetException;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import roboguice.inject.InjectView;
 
 public class Campaign extends AbstractActionBarActivity {
 
@@ -349,7 +348,7 @@ public class Campaign extends AbstractActionBarActivity {
         private Context context;
 
         public CampaignsFetchTask(Context _context, String _campaignId) {
-            super(Campaign.this, userContext, cache, null);
+            super(Campaign.this, userContext, cache);
             campaignId = _campaignId;
             context = _context;
         }
