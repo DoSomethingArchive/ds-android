@@ -183,25 +183,27 @@ public class Profile extends AbstractActionBarActivity {
         mDrawerList.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int pos, long id) {
-                Context ctx = getApplicationContext();
+                Context ctx = view.getContext();
                 switch (pos) {
                     case 0:
                         startActivity(Campaigns.getIntent(ctx));
                         break;
                     case 1:
-                        // Already on this page, so just close the drawer.
-                        mDrawerLayout.closeDrawer(mDrawerList);
+                        // Already on this page, so do nothing.
                         break;
                     case 2:
                         if (userContext.isLoggedIn())
-                            startActivity(new Intent(ctx, ProfileConfig.class));
+                            startActivity(ProfileConfig.getIntent(ctx));
                         else
-                            startActivityForResult(new Intent(ctx, Login.class), REQ_LOGIN_FOR_PROFILE);
+                            startActivityForResult(Login.getIntent(ctx), REQ_LOGIN_FOR_PROFILE);
                         break;
                     case 3:
                         Login.logout(ctx);
                         break;
                 }
+
+                // Close the side navigation drawer
+                mDrawerLayout.closeDrawer(mDrawerList);
             }
         });
     }

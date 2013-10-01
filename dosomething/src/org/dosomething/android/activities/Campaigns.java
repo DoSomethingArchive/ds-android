@@ -186,25 +186,27 @@ public class Campaigns extends AbstractActionBarActivity {
         mDrawerList.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int pos, long id) {
-                Context ctx = getApplicationContext();
+                Context ctx = view.getContext();
                 switch (pos) {
                     case 0:
-                        // Already on this page. Just close the drawer.
-                        mDrawerLayout.closeDrawer(mDrawerList);
+                        // Already on this page, so do nothing.
                         break;
                     case 1:
                         startActivity(Profile.getIntent(ctx));
                         break;
                     case 2:
                         if (userContext.isLoggedIn())
-                            startActivity(new Intent(ctx, ProfileConfig.class));
+                            startActivity(ProfileConfig.getIntent(ctx));
                         else
-                            Login.logout(ctx);
+                            startActivityForResult(Login.getIntent(ctx), REQ_LOGIN_FOR_PROFILE);
                         break;
                     case 3:
                         Login.logout(ctx);
                         break;
                 }
+
+                // Close the side navigation drawer
+                mDrawerLayout.closeDrawer(mDrawerList);
             }
         });
     }

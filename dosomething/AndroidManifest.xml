@@ -39,7 +39,9 @@
         
         <activity android:name=".activities.Login"/>
         <activity android:name=".activities.Register"/>
-        <activity android:name=".activities.CampaignActions"/>
+        <activity android:name=".activities.CampaignActions"
+            android:label=""
+            android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.Campaign"
             android:label=""
             android:theme="@style/DSActionBarTheme"/>/
@@ -57,8 +59,9 @@
         <activity android:name=".activities.Profile"
             android:label=""
             android:theme="@style/DSActionBarTheme"/>
-        <activity android:name=".activities.ProfileConfig"/>
-        <activity android:name=".activities.Project"/>
+        <activity android:name=".activities.ProfileConfig"
+            android:label=""
+            android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.ReportBack"
             android:label=""
             android:theme="@style/DSActionBarTheme"/>

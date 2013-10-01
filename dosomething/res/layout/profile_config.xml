@@ -5,13 +5,7 @@
     android:orientation="vertical"
     android:background="@color/profile_background"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android" >
-    
-    <org.dosomething.android.widget.CustomActionBar
-        android:id="@+id/actionbar"
-        style="@style/ActionBar"
-        app:title="@string/profile_config"/>
+    android:focusableInTouchMode="true" >
     
     <ScrollView 
         android:orientation="vertical"
