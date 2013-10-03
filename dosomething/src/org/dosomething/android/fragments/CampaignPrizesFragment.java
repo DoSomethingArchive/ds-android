@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
+import org.dosomething.android.activities.DSWebViewActivity;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Prize;
 import org.dosomething.android.transfer.PrizeItem;
@@ -113,7 +114,9 @@ public class CampaignPrizesFragment extends RoboFragment {
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(rules)));
+                Intent i = new Intent(v.getContext(), DSWebViewActivity.class);
+                i.setData(Uri.parse(rules));
+                startActivity(i);
             }
         });
 
