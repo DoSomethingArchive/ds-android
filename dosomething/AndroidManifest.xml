@@ -56,7 +56,9 @@
         <activity android:name=".activities.CampaignSMSRefer"
             android:label=""
             android:theme="@style/DSActionBarTheme"/>
-        <activity android:name=".activities.CauseSelector"/>
+        <activity android:name=".activities.CauseSelector"
+            android:label=""
+            android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.DSWebViewActivity"
             android:label=""
             android:theme="@style/DSActionBarTheme"/>
