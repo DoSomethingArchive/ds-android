@@ -1,21 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.FadeInResizeBitmapDisplayer;
-import org.dosomething.android.R;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.SFGGalleryItem;
-import org.dosomething.android.widget.CustomActionBar;
-import org.dosomething.android.widget.ProgressBarImageLoadingListener;
-
-import roboguice.inject.InjectView;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -38,13 +22,28 @@ import com.google.inject.name.Named;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.FadeInResizeBitmapDisplayer;
+import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.SFGGalleryItem;
+import org.dosomething.android.widget.ProgressBarImageLoadingListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import roboguice.inject.InjectView;
+
 public class SFGItem extends AbstractActivity {
 	
 	@Inject private ImageLoader imageLoader;
 	@Inject @Named("DINComp-CondBold")Typeface dinTypeface;
 	@Inject private UserContext userContext;
 
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.image) private ImageView imageView;
 	@InjectView(R.id.share_count) private TextView shareCountView;
 	@InjectView(R.id.shelter) private TextView shelterView;
@@ -68,9 +67,6 @@ public class SFGItem extends AbstractActivity {
 		setContentView(R.layout.sfgitem);
 		
 		sfgItem = (SFGGalleryItem)getIntent().getExtras().get(DSConstants.EXTRAS_KEY.SFGITEM.getValue());
-		if (sfgItem != null) {
-			actionBar.setTitle(sfgItem.getName());
-		}
 		
 		campaign = (Campaign)getIntent().getExtras().get(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue());
 		

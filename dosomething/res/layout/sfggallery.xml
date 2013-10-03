@@ -3,15 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@color/light_background"
-    xmlns:app="http://schemas.android.com/apk/res/org.dosomething.android">
-    
-    <org.dosomething.android.widget.CustomActionBar
-        android:id="@+id/actionbar"
-        style="@style/ActionBar" />
-    <org.dosomething.android.widget.ActionBarSubMenu 
-        android:id="@+id/actionbar_submenu"
-        style="@style/ActionBarSubMenu"/>
+    android:background="@color/light_background">
     
     <LinearLayout
         android:id="@+id/filters"
