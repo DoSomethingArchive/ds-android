@@ -18,7 +18,6 @@ dependencies {
     compile files('libs/universal-image-loader-1.8.4.jar')
     compile files('libs/xtify-android-sdk-2.3.2.1.jar')
     compile project(':facebook')
-    compile project(':actionbar')
     compile project(':Android-PullToRefresh:library')
 }
 

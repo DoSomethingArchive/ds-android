@@ -1,25 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.FadeInResizeBitmapDisplayer;
-import org.dosomething.android.R;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.SFGData;
-import org.dosomething.android.transfer.SFGGalleryItem;
-import org.dosomething.android.transfer.WebFormSelectOptions;
-import org.dosomething.android.widget.ActionBarSubMenu;
-import org.dosomething.android.widget.CustomActionBar;
-import org.dosomething.android.widget.CustomActionBar.SubMenuAction;
-import org.dosomething.android.widget.ProgressBarImageLoadingListener;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -53,6 +33,24 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.FadeInResizeBitmapDisplayer;
+import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.SFGData;
+import org.dosomething.android.transfer.SFGGalleryItem;
+import org.dosomething.android.transfer.WebFormSelectOptions;
+import org.dosomething.android.widget.ProgressBarImageLoadingListener;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import roboguice.inject.InjectView;
+
 /**
  * SFG = Share For Good
  * Main gallery page for Share for Good campaign types. Displays list of the 
@@ -66,8 +64,7 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 	@Inject private ImageLoader imageLoader;
 	@Inject private UserContext userContext;
 	@Inject @Named("DINComp-CondBold")Typeface dinTypeface;
-	
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
+
 	@InjectView(R.id.list) private PullToRefreshListView pullToRefreshView;
 	@InjectView(R.id.filters) private LinearLayout filtersView;
 	@InjectView(R.id.type_filter) private Spinner typeFilterSpinner;
@@ -111,7 +108,10 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 		// Set Action Bar title
 		campaign = (Campaign) getIntent().getExtras().get(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue());
 		Boolean objShowSubs = (Boolean)getIntent().getExtras().get(DSConstants.EXTRAS_KEY.SHOW_SUBMISSIONS.getValue());
-		if (objShowSubs != null && objShowSubs.booleanValue()) {
+
+        /**
+         * TODO: implement new ActionBar next time a Share for Good campaign comes around.
+        if (objShowSubs != null && objShowSubs.booleanValue()) {
 			actionBar.setTitle(getString(R.string.campaign_sfg_my_submissions));
 		}
 		else {
@@ -126,6 +126,7 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 		subMenuView.addMenuItem(this, getString(R.string.campaign_gallery), SFGGallery.getIntent(this, campaign));
 		subMenuView.addMenuItem(this, getString(R.string.campaign_sfg_my_pets), SFGGallery.getIntent(this, campaign, true));
 		subMenuView.addMenuItem(this, getString(R.string.campaign_sfg_submit_pet), SFGSubmit.getIntent(this, campaign, userContext));
+		 */
 		
 		// Setup spinners with filter options pulled from campaign data
 		typeFilterSpinner = (Spinner)findViewById(R.id.type_filter);
@@ -378,9 +379,7 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 		}
 		
 		@Override
-		protected void onPreExecute() {
-			actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
-		}
+		protected void onPreExecute() {}
 
 		@Override
 		protected void onSuccess() {
@@ -414,7 +413,6 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 		@Override
 		protected void onFinish() {
 			webTaskInProgress = false;
-			actionBar.setProgressBarVisibility(ProgressBar.GONE);
 			pullToRefreshView.onRefreshComplete();
 		}
 

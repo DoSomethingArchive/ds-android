@@ -1,19 +1,21 @@
 package org.dosomething.android.activities;
 
-import java.util.HashMap;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.cache.DSPreferences;
 
-import roboguice.inject.InjectView;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.ToggleButton;
+import java.util.HashMap;
 
-public class CauseSelector extends AbstractActivity {
+import roboguice.inject.InjectView;
+
+public class CauseSelector extends AbstractActionBarActivity {
 
 	private final static int[] CAUSE_BUTTON_IDS = {
 		R.id.animals_btn,
@@ -47,6 +49,10 @@ public class CauseSelector extends AbstractActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cause_selector);
+
+        // Enable ActionBar Home button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 		
 		if (getIntent() != null && getIntent().getExtras() != null) {
 			boolean bFromProfileConfig = getIntent().getExtras().getBoolean(FROM_PROFILE_CONFIG, false);
@@ -64,6 +70,18 @@ public class CauseSelector extends AbstractActivity {
 		updateCauseDisplayForId(prefs.getCause2());
 		updateCauseDisplayForId(prefs.getCause3());
 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // If home button is selected on ActionBar, then end the activity
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 	
 	private void updateCauseDisplayForId(int cause_id) {
 		DSPreferences prefs = new DSPreferences(this);
