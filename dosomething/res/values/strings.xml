@@ -76,7 +76,7 @@
     <string name="campaign_gallery_title">Gallery</string>
     <string name="campaign_moreInfo_title">More Information</string>
     <string name="campaign_people_title">Meet The People</string>
-    <string name="campaign_prizes_title">Prizes</string>
+    <string name="campaign_prizes_title">Scholarship</string>
     <string name="report_back_title">Tell Us</string>
     <string name="sign_up_title">Sign Up</string>
     <string name="campaign_faq_title">FAQ</string>
@@ -99,10 +99,10 @@
     <string name="campaign_sfg_submit_success">Thanks for your submission!</string>
     <string name="campaign_sfg_submitting">Submitting…</string>
     <string name="campaign_sfg_update_error">Unable to update. Please check your internet connection and try again.</string>
-    <string name="campaign_sign_up_button">SIGN UP!</string>
+    <string name="campaign_sign_up_button">DO IT</string>
     <string name="campaign_sign_up_button_already_signed_up">Already Signed Up</string>
-    <string name="campaign_sign_up_sms_action_alert_title">Start the SMS Experience</string>
-    <string name="campaign_sign_up_sms_action_alert_body">You\'re about to begin the \"%1$s\" SMS experience. A message will be sent to you from DoSomething.org at 38383 for you to start.\n\nMessage and data rates may apply. Text STOP to opt-out, HELP for help.</string>
+    <string name="campaign_sign_up_sms_action_alert_title">About the Texting Experience</string>
+    <string name="campaign_sign_up_sms_action_alert_body">You\'re about to begin the %1$s experience. We\'ll send you a message from 38383 so you can get started.</string>
     <string name="campaign_sign_up_sms_error">There was an error starting the SMS experience. Please try again.</string>
     <string name="campaign_sign_up_sms_error_with_keyword">There was an error starting the SMS experience. Try again or text %1$s to 38383 to begin.</string>
     <string name="campaign_sign_up_sms_success">You\'ll be getting a message soon from 38383 to begin!</string>
@@ -118,7 +118,7 @@
     <string name="campaign_how_to">HOW TO</string>
     <string name="campaign_gallery">GALLERY</string>
     <string name="campaign_people">MEET THE PEOPLE</string>
-    <string name="campaign_prizes">PRIZES</string>
+    <string name="campaign_prizes">SCHOLARSHIP</string>
     <string name="campaign_locator">LOCATOR</string>
     <string name="campaign_moreInfo">MORE INFORMATION</string>
     <string name="campaign_resources">RESOURCES</string>
@@ -154,9 +154,9 @@
     <string name="sms_help_text">(Also sign up to receive weekly updates. Msg &amp; data rates may apply. Text STOP to opt-out, HELP for help.)</string>
     <string name="sms_name_field">Your Name *</string>
     <string name="sms_no_friends_selected">You must add at least one number.</string>
-    <string name="sms_refer_button">TEXT YOUR FRIENDS</string>
+    <string name="sms_refer_button">SHARE WITH FRIENDS</string>
     <string name="sms_refer_contact_has_no_number">There was no phone number found for that contact.</string>
-    <string name="sms_refer_title">Text Your Friends</string>
+    <string name="sms_refer_title">Share With Friends</string>
     <string name="sms_refer_success">Thanks! We\'ll be sending your friends a text message soon!</string>
     
     <string name="splash_version">v</string>

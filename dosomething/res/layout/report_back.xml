@@ -30,7 +30,7 @@
             
             <Button
 		        android:id="@+id/submit"
-		        style="@style/WebFormRowSubmit"
+		        style="@style/ButtonPrimary"
 		        android:text="@string/go_upper" />
         </LinearLayout>
         
