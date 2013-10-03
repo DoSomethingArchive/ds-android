@@ -23,6 +23,13 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/font_size_header_2</item>
     </style>
+    <style name="ButtonPrimary">
+        <item name="android:background">@drawable/main_button_selector</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:textSize">@dimen/font_size_button</item>
+    </style>
     <style name="ButtonSecondary">
         <item name="android:background">@drawable/secondary_button_selector</item>
         <item name="android:layout_width">match_parent</item>
@@ -519,13 +526,6 @@
         <item name="android:layout_marginTop">2dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-    </style>
-    <style name="WebFormRowSubmit">
-        <item name="android:background">@drawable/main_button_selector</item>
-        <item name="android:layout_marginTop">15dp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/font_size_button</item>
     </style>
     <style name="WelcomeInner">
         <item name="android:background">@drawable/white_border_background</item>
