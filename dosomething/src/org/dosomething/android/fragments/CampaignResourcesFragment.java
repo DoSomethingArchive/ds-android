@@ -22,6 +22,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
+import org.dosomething.android.activities.DSWebViewActivity;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.MoreInfo;
 import org.dosomething.android.transfer.MoreInfoItem;
@@ -110,7 +111,7 @@ public class CampaignResourcesFragment extends RoboFragment {
                 Resource resource = irItem.getResource();
 
                 if (resource.getLinkUrl() != null && resource.getLinkUrl().length() > 0) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    Intent i = new Intent(v.getContext(), DSWebViewActivity.class);
                     i.setData(Uri.parse(resource.getLinkUrl()));
                     startActivity(i);
                 }
@@ -186,6 +187,17 @@ public class CampaignResourcesFragment extends RoboFragment {
             }
 
             return v;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            InfoResourceItem irItem = getItem(position);
+
+            // Don't allow the "More Info" items to be clickable
+            if (irItem.getType() == IRIType.MOREINFO)
+                return false;
+            else
+                return true;
         }
 
     }

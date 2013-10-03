@@ -57,6 +57,9 @@
             android:label=""
             android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.CauseSelector"/>
+        <activity android:name=".activities.DSWebViewActivity"
+            android:label=""
+            android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.GalleryImageItemDisplay"
             android:label=""
             android:theme="@style/DSActionBarTheme"/>
