@@ -30,12 +30,9 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
-import org.dosomething.android.widget.CustomActionBar;
 import org.dosomething.android.widget.ProgressBarImageLoadingListener;
 
 import java.util.HashMap;
-
-import roboguice.inject.InjectView;
 
 /**
  * Activity for displaying an image from a campaign's gallery 
@@ -50,7 +47,6 @@ public class GalleryImageItemDisplay extends AbstractActionBarActivity {
 	
 	@Inject LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	private ViewPager imageGalleryPager;
 	
 	private org.dosomething.android.transfer.Campaign campaign;

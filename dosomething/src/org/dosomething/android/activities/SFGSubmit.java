@@ -1,7 +1,15 @@
 package org.dosomething.android.activities;
 
-import java.io.File;
-import java.util.HashMap;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+
+import com.google.inject.Inject;
 
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
@@ -14,26 +22,16 @@ import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.WebForm;
-import org.dosomething.android.widget.CustomActionBar;
+
+import java.io.File;
+import java.util.HashMap;
 
 import roboguice.inject.InjectView;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ProgressBar;
-
-import com.google.inject.Inject;
 
 public class SFGSubmit extends AbstractWebForm {
 
 	@Inject private UserContext userContext;
 
-	@InjectView(R.id.actionbar) private CustomActionBar actionBar;
 	@InjectView(R.id.submit) private Button btnSubmit;
 
 	private Campaign campaign;
@@ -62,8 +60,6 @@ public class SFGSubmit extends AbstractWebForm {
 		webForm = campaign.getReportBack();
 
 		super.onCreate(savedInstanceState);
-
-		actionBar.setTitle(campaign.getReportBack().getPageTitle());
 
 		// Overrides the OnClickListener set for this button in the parent class
 		btnSubmit.setOnClickListener(new OnClickListener() {
@@ -180,7 +176,6 @@ public class SFGSubmit extends AbstractWebForm {
 			
 			// Disable submit button and show progress indicator
 			btnSubmit.setEnabled(false);
-			actionBar.setProgressBarVisibility(ProgressBar.VISIBLE);
 			progressDialog = new ProgressDialog(taskContext);
 			progressDialog.setIndeterminate(true);
 			progressDialog.setMessage(getString(R.string.campaign_sfg_submitting));
@@ -202,7 +197,6 @@ public class SFGSubmit extends AbstractWebForm {
 		protected void onFinish() {
 			// Re-enable submit button and remove progress indicator
 			btnSubmit.setEnabled(true);
-			actionBar.setProgressBarVisibility(ProgressBar.GONE);
 			progressDialog.dismiss();
 		}
 
