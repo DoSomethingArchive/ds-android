@@ -256,19 +256,22 @@ public class CampaignActions extends AbstractActionBarActivity {
 		public void onClick(View v) {
 			String text = challenge.getText();
 				
-			if(text != null){
+			if (text != null) {
 				addActionCompleted(text);
 			}
 			
 			String completion = challenge.getCompletionPage();
-			if(completion != null){
-				if(completion.startsWith("http")){
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(completion)));
-				}else{
+			if (completion != null) {
+				if (completion.startsWith("http")) {
+                    Intent i = new Intent(v.getContext(), DSWebViewActivity.class);
+                    i.setData(Uri.parse(completion));
+                    startActivity(i);
+				}
+                else {
 					
 					ChallengeType type = ChallengeType.findByValue(challenge.getCompletionPage());
 					
-					if(type != null){
+					if (type != null) {
 						switch(type){
 						case SIGN_UP:
 							startActivity(CampaignShare.getIntentForSignedUp(context, campaign));
