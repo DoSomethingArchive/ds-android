@@ -46,12 +46,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import roboguice.fragment.RoboFragment;
-
 /**
- * TODO
+ * First sub-page/fragment presented to user after selecting a campaign.
  */
-public class CampaignMainFragment extends RoboFragment implements View.OnClickListener {
+public class CampaignMainFragment extends AbstractCampaignFragment implements View.OnClickListener {
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
     private static final String CAMPAIGN_ID = "campaign-id";
@@ -80,6 +78,16 @@ public class CampaignMainFragment extends RoboFragment implements View.OnClickLi
     private Button btnSMSRefer;
 
     private Campaign campaign;
+
+    @Override
+    public String getFragmentName() {
+        if (campaign != null) {
+            return campaign.getName();
+        }
+        else {
+            return "Campaign-Main";
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

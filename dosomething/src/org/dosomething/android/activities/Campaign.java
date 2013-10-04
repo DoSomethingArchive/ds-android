@@ -1,24 +1,6 @@
 package org.dosomething.android.activities;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-import org.dosomething.android.cache.Cache;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.fragments.CampaignFaqFragment;
-import org.dosomething.android.fragments.CampaignGalleryFragment;
-import org.dosomething.android.fragments.CampaignHowToFragment;
-import org.dosomething.android.fragments.CampaignMainFragment;
-import org.dosomething.android.fragments.CampaignPeopleFragment;
-import org.dosomething.android.fragments.CampaignPrizesFragment;
-import org.dosomething.android.fragments.CampaignResourcesFragment;
-import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
-import org.dosomething.android.tasks.NoInternetException;
-
-import roboguice.inject.InjectView;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,6 +21,28 @@ import android.widget.Toast;
 
 import com.google.inject.Inject;
 
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
+import org.dosomething.android.analytics.Analytics;
+import org.dosomething.android.cache.Cache;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.fragments.AbstractCampaignFragment;
+import org.dosomething.android.fragments.CampaignFaqFragment;
+import org.dosomething.android.fragments.CampaignGalleryFragment;
+import org.dosomething.android.fragments.CampaignHowToFragment;
+import org.dosomething.android.fragments.CampaignMainFragment;
+import org.dosomething.android.fragments.CampaignPeopleFragment;
+import org.dosomething.android.fragments.CampaignPrizesFragment;
+import org.dosomething.android.fragments.CampaignResourcesFragment;
+import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
+import org.dosomething.android.tasks.NoInternetException;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import roboguice.inject.InjectView;
+
 public class Campaign extends AbstractActionBarActivity {
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
@@ -53,12 +57,18 @@ public class Campaign extends AbstractActionBarActivity {
     @InjectView(R.id.pager) private ViewPager mViewPager;
 
     private org.dosomething.android.transfer.Campaign campaign;
+    private Activity mActivity;
     private CampaignPagerAdapter mCampaignPagerAdapter;
-    private ActionBar.TabListener mTabListener;
+
+    @Override
+    protected String getPageName() {
+        return "Campaign";
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = this;
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.campaign);
@@ -67,7 +77,6 @@ public class Campaign extends AbstractActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        mTabListener = new ActionBarTabListener();
 
         // Setup ActionBar with available campaign info, or get it if we don't have it
         campaign = (org.dosomething.android.transfer.Campaign) getIntent().getSerializableExtra(CAMPAIGN);
@@ -88,6 +97,9 @@ public class Campaign extends AbstractActionBarActivity {
                 @Override
                 public void onPageScrollStateChanged(int i) {}
             });
+
+            // Log a page view for the initial subpage shown when the activity first loads
+            logCampaignSubpageView(0);
         }
         else {
             String campaignId = getIntent().getStringExtra(CAMPAIGN_ID);
@@ -98,7 +110,7 @@ public class Campaign extends AbstractActionBarActivity {
     }
 
     /**
-     * TODO
+     * Sets fragments to display in the Tabbed Action bar.
      */
     private class CampaignPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -165,11 +177,6 @@ public class Campaign extends AbstractActionBarActivity {
             return mTabHash.size();
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return "THIS IS A TEST, MARAH";
-        }
-
         public int getTabItemByTitle(String title) {
             for (Map.Entry<Integer, String> entry : mTabHash.entrySet()) {
                 if (title.contentEquals(entry.getValue())) {
@@ -179,19 +186,6 @@ public class Campaign extends AbstractActionBarActivity {
 
             return -1;
         }
-    }
-
-    /**
-     * TODO
-     */
-    private class ActionBarTabListener implements ActionBar.TabListener {
-        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-            mViewPager.setCurrentItem(tab.getPosition());
-        }
-
-        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {}
-
-        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {}
     }
 
     @Override
@@ -217,10 +211,24 @@ public class Campaign extends AbstractActionBarActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.removeAllTabs();
 
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                if (mViewPager != null && mCampaignPagerAdapter != null) {
+                    mViewPager.setCurrentItem(tab.getPosition());
+
+                    logCampaignSubpageView(tab.getPosition());
+                }
+            }
+
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {}
+
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {}
+        };
+
         // First tab will always be the main campaign content
         actionBar.addTab(actionBar.newTab()
                         .setText(campaign.getName())
-                        .setTabListener(mTabListener)
+                        .setTabListener(tabListener)
         );
 
         HashMap<Integer, String> tabHash = new HashMap<Integer, String>();
@@ -232,7 +240,7 @@ public class Campaign extends AbstractActionBarActivity {
         if (!nullOrEmpty(campaign.getHowTos())) {
             actionBar.addTab(actionBar.newTab()
                             .setText(R.string.campaign_how_to_title)
-                            .setTabListener(mTabListener)
+                            .setTabListener(tabListener)
             );
 
             tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_how_to_title));
@@ -242,7 +250,7 @@ public class Campaign extends AbstractActionBarActivity {
         if (campaign.getGallery() != null) {
             actionBar.addTab(actionBar.newTab()
                             .setText(R.string.campaign_gallery_title)
-                            .setTabListener(mTabListener)
+                            .setTabListener(tabListener)
             );
 
             tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_gallery_title));
@@ -252,7 +260,7 @@ public class Campaign extends AbstractActionBarActivity {
         if (campaign.getPrize() != null) {
             actionBar.addTab(actionBar.newTab()
                             .setText(R.string.campaign_prizes_title)
-                            .setTabListener(mTabListener)
+                            .setTabListener(tabListener)
             );
 
             tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_prizes_title));
@@ -262,7 +270,7 @@ public class Campaign extends AbstractActionBarActivity {
         if (campaign.getPeople() != null) {
             actionBar.addTab(actionBar.newTab()
                             .setText(R.string.campaign_people_title)
-                            .setTabListener(mTabListener)
+                            .setTabListener(tabListener)
             );
 
             tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_people_title));
@@ -272,7 +280,7 @@ public class Campaign extends AbstractActionBarActivity {
         if (!nullOrEmpty(campaign.getResources()) || campaign.getMoreInfo() != null) {
             actionBar.addTab(actionBar.newTab()
                             .setText(R.string.campaign_resources_title)
-                            .setTabListener(mTabListener)
+                            .setTabListener(tabListener)
             );
 
             tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_resources_title));
@@ -282,7 +290,7 @@ public class Campaign extends AbstractActionBarActivity {
         if (!nullOrEmpty(campaign.getFaqs())) {
             actionBar.addTab(actionBar.newTab()
                             .setText(R.string.campaign_faq_title)
-                            .setTabListener(mTabListener)
+                            .setTabListener(tabListener)
             );
 
             tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_faq_title));
@@ -290,6 +298,24 @@ public class Campaign extends AbstractActionBarActivity {
         }
 
         return tabHash;
+    }
+
+    /**
+     * Log the view of a campaign subpage to analytics.
+     *
+     * @param position Position of fragment in the list of tabs
+     */
+    private void logCampaignSubpageView(int position) {
+        if (mCampaignPagerAdapter != null) {
+            // Log fragment view to Analytics. Not done on Fragment.onResume() or something similar
+            // because the ViewPager will load up fragments for adjacent tabs even if they won't
+            // eventually come into the user's view.
+            AbstractCampaignFragment fragment = (AbstractCampaignFragment)mCampaignPagerAdapter.getItem(position);
+            if (fragment != null) {
+                String fragName = fragment.getFragmentName();
+                Analytics.logCampaignPageView(mActivity, fragName, campaign);
+            }
+        }
     }
 
     public void playVideo(View v) {
@@ -335,11 +361,6 @@ public class Campaign extends AbstractActionBarActivity {
         Intent answer = new Intent(context, Campaign.class);
         answer.putExtra(CAMPAIGN_ID, campaignId);
         return answer;
-    }
-
-    @Override
-    protected String getPageName() {
-        return "campaign";
     }
 
     private class CampaignsFetchTask extends AbstractFetchCampaignsTask {

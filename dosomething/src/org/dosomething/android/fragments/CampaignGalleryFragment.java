@@ -34,12 +34,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import roboguice.fragment.RoboFragment;
-
 /**
  * Gallery of images for a campaign.
  */
-public class CampaignGalleryFragment extends RoboFragment {
+public class CampaignGalleryFragment extends AbstractCampaignFragment {
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
     private static final String GALLERY_IMG_AUTHORS = "gallery-img-authors";
@@ -57,6 +55,11 @@ public class CampaignGalleryFragment extends RoboFragment {
     private Campaign campaign;
     private String feedUrl;
     private GalleryFeedTask mGalleryFeedTask;
+
+    @Override
+    public String getFragmentName() {
+        return "Gallery";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

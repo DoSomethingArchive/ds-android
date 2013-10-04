@@ -24,12 +24,10 @@ import org.dosomething.android.transfer.HowTo;
 
 import java.util.List;
 
-import roboguice.fragment.RoboFragment;
-
 /**
- * TODO
+ * Campaign sub-page for information on How To participate in a campaign.
  */
-public class CampaignHowToFragment extends RoboFragment {
+public class CampaignHowToFragment extends AbstractCampaignFragment {
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
 
@@ -38,6 +36,11 @@ public class CampaignHowToFragment extends RoboFragment {
     @Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 
     private ListView list;
+
+    @Override
+    public String getFragmentName() {
+        return "How-To";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
