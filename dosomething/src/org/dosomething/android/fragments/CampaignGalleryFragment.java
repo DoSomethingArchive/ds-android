@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 
 import com.commonsware.cwac.endless.EndlessAdapter;
@@ -26,6 +25,7 @@ import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.GalleryItem;
+import org.dosomething.android.widget.SquareImageView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -184,17 +184,9 @@ public class CampaignGalleryFragment extends RoboFragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ImageView answer;
-
-            if(convertView != null){
-                answer = (ImageView) convertView;
-            }else{
-                answer = new ImageView(context);
-                answer.setLayoutParams(new GridView.LayoutParams(imagePixels, imagePixels));
-                answer.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            }
-
+            SquareImageView answer = (SquareImageView)inflater.inflate(R.layout.gallery_square_image, parent, false);
             GalleryItem item = getItem(position);
+
             imageLoader.displayImage(item.getThumb(), answer);
             return answer;
         }
