@@ -22,12 +22,10 @@ import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Prize;
 import org.dosomething.android.transfer.PrizeItem;
 
-import roboguice.fragment.RoboFragment;
-
 /**
- * TODO
+ * Campaign sub-page for scholarships and prizes.
  */
-public class CampaignPrizesFragment extends RoboFragment {
+public class CampaignPrizesFragment extends AbstractCampaignFragment {
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
 
@@ -37,6 +35,11 @@ public class CampaignPrizesFragment extends RoboFragment {
     @Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 
     private LinearLayout content;
+
+    @Override
+    public String getFragmentName() {
+        return "Prizes";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -19,12 +19,10 @@ import org.dosomething.android.transfer.Faq;
 
 import java.util.List;
 
-import roboguice.fragment.RoboFragment;
-
 /**
- * TODO
+ * Campaign sub-page for FAQs.
  */
-public class CampaignFaqFragment extends RoboFragment {
+public class CampaignFaqFragment extends AbstractCampaignFragment {
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
 
@@ -32,6 +30,11 @@ public class CampaignFaqFragment extends RoboFragment {
     @Inject @Named("DINComp-CondBold")Typeface headerTypeface;
 
     private ExpandableListView list;
+
+    @Override
+    public String getFragmentName() {
+        return "FAQ";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

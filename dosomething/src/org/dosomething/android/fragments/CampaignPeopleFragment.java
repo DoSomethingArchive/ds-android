@@ -25,12 +25,10 @@ import org.dosomething.android.transfer.PeopleItem;
 
 import java.util.List;
 
-import roboguice.fragment.RoboFragment;
-
 /**
- * TODO
+ * Campaign sub-page for people information.
  */
-public class CampaignPeopleFragment extends RoboFragment {
+public class CampaignPeopleFragment extends AbstractCampaignFragment {
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
 
@@ -40,6 +38,11 @@ public class CampaignPeopleFragment extends RoboFragment {
 
     private TextView introText;
     private ListView list;
+
+    @Override
+    public String getFragmentName() {
+        return "People";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

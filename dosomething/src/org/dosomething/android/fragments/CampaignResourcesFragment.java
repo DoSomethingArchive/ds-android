@@ -31,12 +31,10 @@ import org.dosomething.android.transfer.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-import roboguice.fragment.RoboFragment;
-
 /**
- * TODO
+ * Campaign sub-page for more resources.
  */
-public class CampaignResourcesFragment extends RoboFragment {
+public class CampaignResourcesFragment extends AbstractCampaignFragment {
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
 
@@ -51,6 +49,11 @@ public class CampaignResourcesFragment extends RoboFragment {
 
     private TextView introText;
     private ListView list;
+
+    @Override
+    public String getFragmentName() {
+        return "Resources";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

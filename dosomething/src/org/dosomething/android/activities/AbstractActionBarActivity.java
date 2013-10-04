@@ -71,18 +71,15 @@ public abstract class AbstractActionBarActivity extends ActionBarActivity implem
         super.onResume();
         eventManager.fire(new OnResumeEvent());
 
-        boolean bLogged = false;
+        // If this is the campaign page, do not log a page view. Allow the Fragments to handle it.
         if (getIntent() != null && getIntent().getExtras() != null) {
             org.dosomething.android.transfer.Campaign campaign = (org.dosomething.android.transfer.Campaign) getIntent().getExtras().get(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue());
             if (campaign != null) {
-                Analytics.logCampaignPageView(this, this.getPageName(), campaign);
-                bLogged = true;
+                return;
             }
         }
 
-        if (!bLogged) {
-            Analytics.logPageView(this, this.getPageName());
-        }
+        Analytics.logPageView(this, this.getPageName());
     }
 
     protected void onRestart() {
