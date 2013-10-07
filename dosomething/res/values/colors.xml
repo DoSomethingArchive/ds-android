@@ -38,5 +38,6 @@
 <color name="dark_blue">#173781</color>
 <color name="dark_grey_background">#2A2C2B</color>
 <color name="share_button_blue">#3D75B1</color>
+<color name="transparent_white">#33FFFFFF</color>
 <color name="white">#FFF</color>
 </resources>

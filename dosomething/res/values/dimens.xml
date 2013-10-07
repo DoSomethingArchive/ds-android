@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="gallery_item">100dp</dimen>
-    <dimen name="popup_button_width">45dp</dimen>
-    <dimen name="popup_height">45dp</dimen>
-    <dimen name="campaign_row_height_open">160dp</dimen>
-    <dimen name="campaign_row_height_closed">80dp</dimen>
     <dimen name="actionbar_submenu_item_height">44dp</dimen>
     <dimen name="actionbar_submenu_item_padding">12dp</dimen>
+    <dimen name="campaign_row_height_closed">80dp</dimen>
+    <dimen name="campaign_row_height_open">160dp</dimen>
     <dimen name="font_size_button">24sp</dimen>
     <dimen name="font_size_header_1">26sp</dimen>
     <dimen name="font_size_header_2">20sp</dimen>
     <dimen name="font_size_medium">16sp</dimen>
     <dimen name="font_size_small">14sp</dimen>
+    <dimen name="gallery_item">100dp</dimen>
+    <dimen name="pager_dot_diameter">16dp</dimen>
+    <dimen name="popup_button_width">45dp</dimen>
+    <dimen name="popup_height">45dp</dimen>
 </resources>
