@@ -3,26 +3,33 @@ package org.dosomething.android.activities;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 import org.dosomething.android.R;
 
 import java.util.Arrays;
 
-public class LoginFragment extends Fragment {
+import roboguice.fragment.RoboFragment;
+
+public class LoginFragment extends RoboFragment implements View.OnClickListener {
+
+    @Inject private @Named("DINComp-CondBold")Typeface dinTypeface;
+
+    private Button mBtnLogin;
+    private LoginButton mBtnFacebookLogin;
 	
 	private UiLifecycleHelper uiHelper;
-	
-	private LoginButton fbLoginButton;
 	
 	private Login loginActivity;
 	
@@ -46,19 +53,23 @@ public class LoginFragment extends Fragment {
 	    View view = inflater.inflate(R.layout.login, container, false);
 
         // Set custom typeface for the buttons
-        Typeface typefaceDin = Typeface.createFromAsset(getActivity().getAssets(), "DINComp-CondBold.ttf");
-        Button loginButton = (Button)view.findViewById(R.id.loginButton);
-        loginButton.setTypeface(typefaceDin, Typeface.BOLD);
-        Button signUpButton = (Button)view.findViewById(R.id.signUpButton);
-        signUpButton.setTypeface(typefaceDin, Typeface.BOLD);
+        mBtnLogin = (Button)view.findViewById(R.id.button_login);
+        mBtnLogin.setTypeface(dinTypeface, Typeface.BOLD);
+
+        // Set click listener on buttons
+        mBtnLogin.setOnClickListener(this);
 	    
 	    // Cache reference to owning Activity
 	    loginActivity = (Login) getActivity();
 	    
 	    // Set Fragment to handle login button action and set FB permissions we want
-	    fbLoginButton = (LoginButton) view.findViewById(R.id.facebookLoginButton);
-	    fbLoginButton.setFragment(this);
-	    fbLoginButton.setReadPermissions(Arrays.asList("email", "user_birthday"));
+	    mBtnFacebookLogin = (LoginButton) view.findViewById(R.id.button_facebook_login);
+	    mBtnFacebookLogin.setFragment(this);
+	    mBtnFacebookLogin.setReadPermissions(Arrays.asList("email", "user_birthday"));
+
+        // Set typeface for OR text
+        TextView orText = (TextView)view.findViewById(R.id.or_text);
+        orText.setTypeface(dinTypeface, Typeface.BOLD);
 
 	    return view;
 	}
@@ -101,6 +112,15 @@ public class LoginFragment extends Fragment {
 	    super.onSaveInstanceState(outState);
 	    uiHelper.onSaveInstanceState(outState);
 	}
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.button_login:
+                loginActivity.logIn();
+                break;
+        }
+    }
 	
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 		// If session state has changed to a logged in state, execute Facebook
