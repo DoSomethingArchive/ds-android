@@ -8,6 +8,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,15 +30,14 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class Login extends AbstractFragmentActivity {
+//public class Login extends AbstractFragmentActivity {
+public class Login extends AbstractActionBarActivity {
 
     private static final int REQ_SIGN_UP = 112;
 
     private LoginFragment loginFragment;
 
     @Inject private UserContext userContext;
-
-    private Context context;
 
     private DSFacebookLoginTask fbLoginTask;
     private DSLoginTask dsLoginTask;
@@ -50,7 +50,9 @@ public class Login extends AbstractFragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
@@ -61,6 +63,18 @@ public class Login extends AbstractFragmentActivity {
             // Or set the fragment from restored state info
             loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(android.R.id.content);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // If home button is selected on ActionBar, then end the activity
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -239,7 +253,7 @@ public class Login extends AbstractFragmentActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd = ProgressDialog.show(context, null, getString(R.string.logging_in));
+            pd = ProgressDialog.show(Login.this, null, getString(R.string.logging_in));
 
             // Clear the UserContext of any data that could be lingering (ex: session cookie info)
             userContext.clear();
@@ -319,7 +333,7 @@ public class Login extends AbstractFragmentActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd = ProgressDialog.show(context, null, getString(R.string.logging_in));
+            pd = ProgressDialog.show(Login.this, null, getString(R.string.logging_in));
         }
 
         public void executeWithToken(String accessToken) {

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
@@ -60,8 +59,6 @@ public class Register extends AbstractActionBarActivity {
 	
 	private Date savedBirthday;
 	
-	private Context context;
-	
 	public AbstractWebserviceTask registerTask;
 	
 	@Override
@@ -76,8 +73,6 @@ public class Register extends AbstractActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        
-        context = this;
         
         birthday.setOnFocusChangeListener(birthdayFocusListener);
         birthday.setOnClickListener(birthdayClickListener);
@@ -190,7 +185,7 @@ public class Register extends AbstractActionBarActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			pd = ProgressDialog.show(context, null, getString(R.string.registering));
+			pd = ProgressDialog.show(Register.this, null, getString(R.string.registering));
 		}
 
 		@Override
