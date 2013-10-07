@@ -54,7 +54,9 @@
         <activity android:name=".activities.GalleryImageItemDisplay"
             android:label=""
             android:theme="@style/DSActionBarTheme"/>
-        <activity android:name=".activities.Login"/>
+        <activity android:name=".activities.Login"
+            android:label=""
+            android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.Profile"
             android:label=""
             android:theme="@style/DSActionBarTheme"/>
