@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
 
+import com.google.inject.Inject;
+
 import org.dosomething.android.R;
 import org.dosomething.android.cache.DSPreferences;
+import org.dosomething.android.context.UserContext;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -18,10 +21,13 @@ import roboguice.inject.InjectView;
  */
 public class SplashScreenActivity extends RoboActivity {
 
-    private final int SPLASH_DURATION = 3000; // in milliseconds
+    // Duration of the splash screen in milliseconds
+    private final int SPLASH_DURATION = 3000;
 
     // Alarm notification key
     private static final String NOTIF_ALARM_CAMPAIGN = "AlarmReminder.campaign";
+
+    @Inject private UserContext userContext;
 
     @InjectView(R.id.versionName) private TextView mVersion;
 
@@ -46,11 +52,12 @@ public class SplashScreenActivity extends RoboActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                DSPreferences prefs = new DSPreferences(SplashScreenActivity.this);
-                // If this is the initial app execution, go to the Welcome Activity
-                if (prefs != null && !prefs.getHasRun()) {
+                // Go to Welcome activity if there is no logged in user
+                if (userContext != null && !userContext.isLoggedIn()) {
                     // Set boolean to indicate that this app has now been run
+                    DSPreferences prefs = new DSPreferences(SplashScreenActivity.this);
                     prefs.setHasRun();
+
                     Intent i = new Intent(SplashScreenActivity.this, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 }
