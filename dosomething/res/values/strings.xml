@@ -11,7 +11,8 @@
     <string name="auth_failed">User authentication has failed.</string>
     <string name="facebook_app_id">525191857506466</string>
     <string name="facebook_auth_failed">Facebook login failed. Please try again.</string>
-    <string name="facebook_log_in">Login with Facebook</string>
+    <string name="facebook_join">JOIN WITH FACEBOOK</string>
+    <string name="facebook_sign_in">SIGN IN WITH FACEBOOK</string>
     <string name="form_submit_failed">The form submit has failed. Please try again.</string>
     <string name="gallery_feed_failed">The gallery has failed to load. Please try again.</string>
     <string name="campaign_load_error">There was an error loading the current campaign. Please try again later.</string>

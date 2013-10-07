@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import roboguice.inject.InjectView;
 
-//public class Login extends AbstractFragmentActivity {
 public class Login extends AbstractActionBarActivity {
 
     private static final int REQ_SIGN_UP = 112;
@@ -38,6 +38,8 @@ public class Login extends AbstractActionBarActivity {
     private LoginFragment loginFragment;
 
     @Inject private UserContext userContext;
+
+    @InjectView(R.id.button_login) private Button mBtnLogin;
 
     private DSFacebookLoginTask fbLoginTask;
     private DSLoginTask dsLoginTask;
@@ -80,7 +82,7 @@ public class Login extends AbstractActionBarActivity {
     /**
      * Execute task for normal DoSomething login with username/email and password
      */
-    public void logIn(View v){
+    public void logIn() {
         EditText username = (EditText)findViewById(R.id.username);
         EditText password = (EditText)findViewById(R.id.password);
 
@@ -165,10 +167,6 @@ public class Login extends AbstractActionBarActivity {
     private void goToProfile(){
         startActivity(new Intent(this, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         finish();
-    }
-
-    public void signUp(View v){
-        startActivityForResult(new Intent(this, Register.class), REQ_SIGN_UP);
     }
 
     /**
