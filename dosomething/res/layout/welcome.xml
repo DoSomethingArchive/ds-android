@@ -42,8 +42,7 @@
                     android:background="@drawable/main_button_selector"
                     android:textStyle="bold"
                     android:textSize="16dp"
-	                android:text="@string/get_started_upper"
-	                android:onClick="continueToCauses"/>
+	                android:text="@string/get_started_upper"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
