@@ -48,7 +48,7 @@ public class ProfileConfig extends AbstractActionBarActivity {
 	private String initialLastName;
 
 	@Override
-	protected String getPageName() {
+	public String getPageName() {
 		return "profile-config";
 	}
 	

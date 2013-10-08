@@ -1,17 +1,18 @@
 package org.dosomething.android.context;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-import org.dosomething.android.DSConstants;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.telephony.TelephonyManager;
 
 import com.google.inject.Inject;
+
+import org.dosomething.android.DSConstants;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class UserContext {
 	
@@ -286,6 +287,69 @@ public class UserContext {
 		editor.putLong(EXPIRES_AT, expiresAt);
 		editor.commit();
 	}
+
+    /**
+     * Takes json object returned from a successful login/registration and updates the user
+     * context with the contained info.
+     *
+     * @param obj JSONObject of user and profile data
+     */
+    public void updateWithUserObject(JSONObject obj) throws Exception {
+        JSONObject user = obj.getJSONObject("user");
+
+        if (user != null && obj != null) {
+            setLoggedIn(
+                    user.optString("name", ""),
+                    user.optString("mail", ""),
+                    user.getString("uid"),
+                    obj.getString("sessid"),
+                    obj.getString("session_name"),
+                    obj.getLong("session_cache_expire"));
+
+            setCreatedTime(user.getString("created"));
+        }
+
+        JSONObject profile = obj.optJSONObject("profile");
+        if (profile != null) {
+
+            String firstName;
+            if (profile.optJSONObject("field_user_first_name") != null
+                    && profile.optJSONObject("field_user_first_name").optJSONArray("und") != null
+                    && profile.optJSONObject("field_user_first_name").optJSONArray("und").optJSONObject(0) != null
+                    && (firstName = profile.optJSONObject("field_user_first_name").optJSONArray("und").getJSONObject(0).optString("value", null)) != null)
+            {
+                setFirstName(firstName);
+            }
+
+            String lastName;
+            if (profile.optJSONObject("field_user_last_name") != null
+                    && profile.optJSONObject("field_user_last_name").optJSONArray("und") != null
+                    && profile.optJSONObject("field_user_last_name").optJSONArray("und").optJSONObject(0) != null
+                    && (lastName = profile.optJSONObject("field_user_last_name").optJSONArray("und").optJSONObject(0).optString("value", null)) != null)
+            {
+                setLastName(lastName);
+            }
+
+
+            JSONObject address;
+            if (profile.optJSONObject("field_user_address") != null
+                    && profile.optJSONObject("field_user_address").optJSONArray("und") != null
+                    && (address = profile.optJSONObject("field_user_address").optJSONArray("und").optJSONObject(0)) != null)
+            {
+                String addr1 = address.optString("thoroughfare");
+                String addr2 = address.optString("premise");
+                String city = address.optString("locality");
+                String state = address.optString("administrative_area");
+                String zip = address.optString("postal_code");
+
+                setAddr1(addr1);
+                setAddr2(addr2);
+                setAddrCity(city);
+                setAddrState(state);
+                setAddrZip(zip);
+            }
+        }
+    }
 	
 	public void clear(){
 		SharedPreferences settings = context.getSharedPreferences(MY_PREFS, 0);

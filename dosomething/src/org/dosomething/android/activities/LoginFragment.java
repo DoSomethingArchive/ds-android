@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.dosomething.android.R;
+import org.dosomething.android.tasks.DSFacebookLogin;
 
 import java.util.Arrays;
 
@@ -128,7 +129,7 @@ public class LoginFragment extends RoboFragment implements View.OnClickListener 
 	    if (state.isOpened()) {
 			String fbAccessToken = session.getAccessToken();
 			if (fbAccessToken != null && fbAccessToken.length() > 0) {
-				loginActivity.dsFacebookLogin(fbAccessToken);
+				DSFacebookLogin.execute(getActivity(), fbAccessToken);
 			}
 	    }
 	}

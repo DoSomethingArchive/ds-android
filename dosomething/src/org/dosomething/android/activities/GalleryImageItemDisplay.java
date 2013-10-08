@@ -57,7 +57,7 @@ public class GalleryImageItemDisplay extends AbstractActionBarActivity {
 	private String[] imageAuthors;
 	
 	@Override
-	protected String getPageName() {
+	public String getPageName() {
 		return "campaign-gallery-image";
 	}
 
