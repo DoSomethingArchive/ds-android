@@ -37,7 +37,7 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
             android:layout_weight="1.0"
-            android:text="REGISTER"/>
+            android:text="@string/register_upper"/>
 
         <Button
             android:id="@+id/button_login"
@@ -45,7 +45,7 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
             android:layout_weight="1.0"
-            android:text="LOGIN"/>
+            android:text="@string/log_in_upper"/>
 
     </LinearLayout>
     

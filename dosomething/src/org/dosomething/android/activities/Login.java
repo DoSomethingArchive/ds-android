@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,8 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import roboguice.inject.InjectView;
-
 public class Login extends AbstractActionBarActivity {
 
     private static final int REQ_SIGN_UP = 112;
@@ -38,8 +35,6 @@ public class Login extends AbstractActionBarActivity {
     private LoginFragment loginFragment;
 
     @Inject private UserContext userContext;
-
-    @InjectView(R.id.button_login) private Button mBtnLogin;
 
     private DSFacebookLoginTask fbLoginTask;
     private DSLoginTask dsLoginTask;
@@ -161,7 +156,6 @@ public class Login extends AbstractActionBarActivity {
                 userContext.setAddrZip(zip);
             }
         }
-
     }
 
     private void goToProfile(){

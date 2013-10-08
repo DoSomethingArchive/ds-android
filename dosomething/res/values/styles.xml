@@ -63,16 +63,6 @@
         <item name="android:textColor">@color/login_input_text</item>
         <item name="android:padding">10dp</item>
     </style>
-    <style name="LoginButton">
-        <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:background">@drawable/main_button_selector</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/font_size_button</item>
-    </style>
     <style name="RegisterDisclaimer">
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:textColor">@color/register_disclaimer_text</item>
@@ -102,14 +92,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginRight">5dp</item>
-        <item name="android:textSize">@dimen/font_size_button</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-    <style name="RegisterButton">
-        <item name="android:background">@drawable/main_button_selector</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">5dp</item>
         <item name="android:textSize">@dimen/font_size_button</item>
         <item name="android:textStyle">bold</item>
     </style>

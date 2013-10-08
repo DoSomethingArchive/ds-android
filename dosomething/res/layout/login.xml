@@ -51,7 +51,7 @@
             android:layout_margin="10dp"/>
 
         <Button
-            style="@style/LoginButton"
+            style="@style/ButtonPrimary"
             android:id="@+id/button_login"
             android:layout_marginTop="10dp"
             android:text="@string/log_in_upper"/>
