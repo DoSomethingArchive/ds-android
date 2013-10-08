@@ -25,6 +25,7 @@ import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.activities.Register;
 import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.DSFacebookLogin;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -108,6 +109,21 @@ public class RegisterFragment extends RoboFragment implements View.OnClickListen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        // For scenarios where the main activity is launched and user
+        // session is not null, the session state change notification
+        // may not be triggered. Trigger it if it's open/closed.
+        Session session = Session.getActiveSession();
+        if (session != null && (session.isOpened() || session.isClosed()) ) {
+            onSessionStateChange(session, session.getState(), null);
+        }
+
+        mUiHelper.onResume();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mUiHelper.onActivityResult(requestCode, resultCode, data);
@@ -146,7 +162,7 @@ public class RegisterFragment extends RoboFragment implements View.OnClickListen
         if (state.isOpened()) {
             String fbAccessToken = session.getAccessToken();
             if (fbAccessToken != null && fbAccessToken.length() > 0) {
-                mRegisterActivity.dsFacebookLogin(fbAccessToken);
+                DSFacebookLogin.execute(getActivity(), fbAccessToken);
             }
         }
     }

@@ -93,7 +93,7 @@ public class CampaignSMSRefer extends AbstractActionBarActivity {
 	}
 
 	@Override
-	protected String getPageName() {
+	public String getPageName() {
 		return "sms-refer";
 	}
 

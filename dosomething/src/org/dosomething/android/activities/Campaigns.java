@@ -82,7 +82,7 @@ public class Campaigns extends AbstractActionBarActivity {
     private final OnItemClickListener itemClickListener = new CampaignItemClickListener();
 
     @Override
-    protected String getPageName() {
+    public String getPageName() {
         return "campaigns";
     }
 
