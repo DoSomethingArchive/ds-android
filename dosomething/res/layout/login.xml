@@ -37,7 +37,6 @@
 
         <EditText
             android:id="@+id/username"
-            android:focusableInTouchMode="true"
             android:hint="@string/username"
             android:inputType="text"
             android:layout_margin="10dp"
