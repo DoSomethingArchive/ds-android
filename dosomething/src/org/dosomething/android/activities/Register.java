@@ -1,21 +1,14 @@
 package org.dosomething.android.activities;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
@@ -27,39 +20,24 @@ import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
+import org.dosomething.android.fragments.RegisterFragment;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
-import roboguice.inject.InjectView;
 
 public class Register extends AbstractActionBarActivity {
 	
 	@Inject private UserContext userContext;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
-
-	@InjectView(R.id.username_name) private EditText username;
-	@InjectView(R.id.mobile) private EditText mobile;
-	@InjectView(R.id.first_name) private EditText firstName;
-	@InjectView(R.id.last_name) private EditText lastName;
-	@InjectView(R.id.email) private EditText email;
-	@InjectView(R.id.password) private EditText password;
-	@InjectView(R.id.confirm_password) private EditText confirmPassword;
-	@InjectView(R.id.birthday) private EditText birthday;
-	@InjectView(R.id.disclaimer) private TextView disclaimer;
-	@InjectView(R.id.cancel) private Button cancel;
-	@InjectView(R.id.submit) private Button submit;
-	
-	private Date savedBirthday;
 	
 	public AbstractWebserviceTask registerTask;
+    private DSFacebookLoginTask fbLoginTask;
 	
 	@Override
 	protected String getPageName() {
@@ -69,23 +47,19 @@ public class Register extends AbstractActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        
-        birthday.setOnFocusChangeListener(birthdayFocusListener);
-        birthday.setOnClickListener(birthdayClickListener);
-        
-        disclaimer.setMovementMethod(LinkMovementMethod.getInstance());
-        disclaimer.setText(Html.fromHtml(getString(R.string.register_disclaimer)));
-        
-        cancel.setTypeface(headerTypeface, Typeface.BOLD);
-        submit.setTypeface(headerTypeface, Typeface.BOLD);
-        
-        // Prepopulate mobile # field with # found on phone
-        if (mobile != null && userContext.getPhoneNumber() != null) {
-        	mobile.setText(userContext.getPhoneNumber());
+
+        RegisterFragment registerFragment;
+        if (savedInstanceState == null) {
+            // Add the fragment on initial activity setup
+            registerFragment = new RegisterFragment();
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, registerFragment).commit();
+        }
+        else {
+            // Or set the fragment from restored state info
+            registerFragment = (RegisterFragment) getSupportFragmentManager().findFragmentById(android.R.id.content);
         }
     }
 
@@ -100,36 +74,17 @@ public class Register extends AbstractActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    
-    private final OnClickListener birthdayClickListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			showBirthdayPicker();
-		}
-	};
-    
-    private final OnFocusChangeListener birthdayFocusListener = new OnFocusChangeListener() {
-		@Override
-		public void onFocusChange(View v, boolean hasFocus) {
-			if(hasFocus) {
-				showBirthdayPicker();
-			}
-		}
-	};
-    
-    private void showBirthdayPicker(){
-    	new DatePickerDialog(this, dateListener, 1995, 0, 1).show();
-    }
-    
-    public void register(View v){
-    	String username = this.username.getText().toString();
-    	String mobile = this.mobile.getText().toString();
-    	String first = this.firstName.getText().toString();
-    	String last = this.lastName.getText().toString();
-    	String email = this.email.getText().toString();
-    	String password = this.password.getText().toString();
-    	String confirmPassword = this.confirmPassword.getText().toString();
-    	String birthday = this.birthday.getText().toString();
+
+    /**
+     * Execute task to register user with the information provided.
+     */
+    public void register() {
+    	String mobile = ((EditText)findViewById(R.id.mobile)).getText().toString();
+    	String first = ((EditText)findViewById(R.id.first_name)).getText().toString();
+    	String email = ((EditText)findViewById(R.id.email)).getText().toString();
+    	String password = ((EditText)findViewById(R.id.password)).getText().toString();
+    	String confirmPassword = ((EditText)findViewById(R.id.confirm_password)).getText().toString();
+    	String birthday = ((EditText)findViewById(R.id.birthday)).getText().toString();
     	
     	if(!password.equals(confirmPassword)) {
     		new AlertDialog.Builder(Register.this)
@@ -139,19 +94,10 @@ public class Register extends AbstractActionBarActivity {
 				.create()
 				.show();
     	} else {
-    		registerTask = new RegisterTask(username, mobile, first, last, email, password, birthday);
+    		registerTask = new RegisterTask(mobile, first, email, password, birthday);
     		registerTask.execute();
     	}
     }
-    
-    private final OnDateSetListener dateListener = new OnDateSetListener() {
-		
-		@Override
-		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-			savedBirthday = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
-			birthday.setText(new SimpleDateFormat(DSConstants.DATE_FORMAT, Locale.US).format(savedBirthday));
-		}
-	};
     
     public void cancel(View v){
     	setResult(RESULT_CANCELED);
@@ -159,10 +105,8 @@ public class Register extends AbstractActionBarActivity {
     }
 	
 	private class RegisterTask extends AbstractWebserviceTask {
-		private String username;
 		private String mobile;
 		private String first;
-		private String last;
 		private String email;
 		private String password;
 		private String birthday;
@@ -172,11 +116,10 @@ public class Register extends AbstractActionBarActivity {
 		
 		private ProgressDialog pd;
 		
-		public RegisterTask(String username, String mobile, String first, String last, String email, String password, String birthday) {
+		public RegisterTask(String mobile, String first, String email, String password, String birthday) {
 			super(userContext);
-			this.username = username;
+            this.mobile = mobile;
 			this.first = first;
-			this.last = last;
 			this.email = email;
 			this.password = password;
 			this.birthday = birthday;
@@ -228,14 +171,12 @@ public class Register extends AbstractActionBarActivity {
 			SimpleDateFormat dateFormat = new SimpleDateFormat(DSConstants.DATE_FORMAT, Locale.US);
 			
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair("name", username));
 			params.add(new BasicNameValuePair("pass", password));
 			params.add(new BasicNameValuePair("mail", email));
 			params.add(new BasicNameValuePair("profile_main[field_user_birthday][und][0][value][date]", birthday));
 			params.add(new BasicNameValuePair("profile_main[field_user_official_rules][und]", "1")); // must be 1
 			params.add(new BasicNameValuePair("profile_main[field_user_anniversary][und][0][value][date]", dateFormat.format(new Date())));
 			params.add(new BasicNameValuePair("profile_main[field_user_first_name][und][0][value]", first));
-			params.add(new BasicNameValuePair("profile_main[field_user_last_name][und][0][value]", last));
 			params.add(new BasicNameValuePair("profile_main[field_user_mobile][und][0][value]", mobile));
 			
 			WebserviceResponse response = doPost(DSConstants.API_URL_USER_REGISTER, params);
@@ -251,11 +192,173 @@ public class Register extends AbstractActionBarActivity {
 				JSONObject obj = response.getBodyAsJSONObject();
 				JSONObject user = obj.getJSONObject("user");
 				
-				userContext.setLoggedIn(username, user.getString("mail"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
+				userContext.setLoggedIn("", user.getString("mail"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
 				
 				registerSuccess = true;
 			}
 		}
-		
 	}
+
+    /**
+     * After logging in with Facebook, execute login to DoSomething backend with
+     * the given Facebook access token.
+     *
+     * @param accessToken Access token provided by Facebook Graph API
+     */
+    public void dsFacebookLogin(String accessToken) {
+        if (fbLoginTask == null) {
+            fbLoginTask = new DSFacebookLoginTask();
+            fbLoginTask.executeWithToken(accessToken);
+        }
+        // If a FB login task was already create, don't execute another one unless
+        // it's already finished executing its previous task.
+        else if (fbLoginTask.getStatus() == AsyncTask.Status.FINISHED) {
+            fbLoginTask.executeWithToken(accessToken);
+        }
+    }
+
+    private class DSFacebookLoginTask extends AbstractWebserviceTask {
+
+        private String accessToken;
+
+        private boolean loginSuccess;
+
+        private ProgressDialog pd;
+
+        public DSFacebookLoginTask() {
+            super(userContext);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = ProgressDialog.show(Register.this, null, getString(R.string.logging_in));
+        }
+
+        public void executeWithToken(String accessToken) {
+            this.accessToken = accessToken;
+            this.execute();
+        }
+
+        @Override
+        protected void onSuccess() {
+            if (loginSuccess) {
+                // Track login with analytics - Flurry Analytics
+                HashMap<String, String> param = new HashMap<String, String>();
+                param.put("facebook", "login-success");
+                Analytics.logEvent(getPageName(), param);
+
+                // and Google Analytics
+                Analytics.logEvent("login", "facebook-login", "success");
+
+                goToProfile();
+            }
+            else {
+                Toast.makeText(Register.this, getString(R.string.log_in_auth_failed), Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        protected void onFinish() {
+            if (pd != null && pd.isShowing()) {
+                try {
+                    pd.dismiss();
+                    pd = null;
+                }
+                catch (IllegalArgumentException e) {
+                    // Catching error if progress dialog is dismissed after activity ends
+                    //Log.w(getPageName(), "Dismissing progress dialog after Login activity ended");
+                }
+            }
+        }
+
+        @Override
+        protected void onError(Exception e) {
+            Toast.makeText(Register.this, getString(R.string.log_in_failed), Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected void doWebOperation() throws Exception {
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("access_token", accessToken));
+
+            WebserviceResponse response = doPost(DSConstants.API_URL_FBLOGIN, params);
+
+            if (response.getStatusCode() >= 400 && response.getStatusCode() < 500) {
+                loginSuccess = false;
+            }
+            else {
+                updateUserContext(response.getBodyAsJSONObject());
+                loginSuccess = true;
+            }
+        }
+    }
+
+    /**
+     * After a login succeeds, takes json object returned and updates the user
+     * context with the contained info.
+     *
+     * @param obj JSONObject of user and profile data
+     */
+    private void updateUserContext(JSONObject obj) throws Exception {
+        JSONObject user = obj.getJSONObject("user");
+
+        if (user != null && obj != null) {
+            userContext.setLoggedIn(
+                    user.optString("name", ""),
+                    user.optString("mail", ""),
+                    user.getString("uid"),
+                    obj.getString("sessid"),
+                    obj.getString("session_name"),
+                    obj.getLong("session_cache_expire"));
+
+            userContext.setCreatedTime(user.getString("created"));
+        }
+
+        JSONObject profile = obj.optJSONObject("profile");
+        if (profile != null) {
+
+            String firstName;
+            if (profile.optJSONObject("field_user_first_name") != null
+                    && profile.optJSONObject("field_user_first_name").optJSONArray("und") != null
+                    && profile.optJSONObject("field_user_first_name").optJSONArray("und").optJSONObject(0) != null
+                    && (firstName = profile.optJSONObject("field_user_first_name").optJSONArray("und").getJSONObject(0).optString("value", null)) != null)
+            {
+                userContext.setFirstName(firstName);
+            }
+
+            String lastName;
+            if (profile.optJSONObject("field_user_last_name") != null
+                    && profile.optJSONObject("field_user_last_name").optJSONArray("und") != null
+                    && profile.optJSONObject("field_user_last_name").optJSONArray("und").optJSONObject(0) != null
+                    && (lastName = profile.optJSONObject("field_user_last_name").optJSONArray("und").optJSONObject(0).optString("value", null)) != null)
+            {
+                userContext.setLastName(lastName);
+            }
+
+
+            JSONObject address;
+            if (profile.optJSONObject("field_user_address") != null
+                    && profile.optJSONObject("field_user_address").optJSONArray("und") != null
+                    && (address = profile.optJSONObject("field_user_address").optJSONArray("und").optJSONObject(0)) != null)
+            {
+                String addr1 = address.optString("thoroughfare");
+                String addr2 = address.optString("premise");
+                String city = address.optString("locality");
+                String state = address.optString("administrative_area");
+                String zip = address.optString("postal_code");
+
+                userContext.setAddr1(addr1);
+                userContext.setAddr2(addr2);
+                userContext.setAddrCity(city);
+                userContext.setAddrState(state);
+                userContext.setAddrZip(zip);
+            }
+        }
+    }
+
+    private void goToProfile(){
+        startActivity(new Intent(this, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        finish();
+    }
 }
