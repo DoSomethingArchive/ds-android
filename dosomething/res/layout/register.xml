@@ -42,39 +42,38 @@
 
             <EditText
                 android:id="@+id/first_name"
-                style="@style/RegisterInput"
-                android:hint="@string/first_name_upper"
-                android:inputType="text" />
+                style="@style/WebFormRowInput"
+                android:hint="@string/first_name"
+                android:inputType="text"
+                android:layout_margin="10dp"/>
 
             <EditText
                 android:id="@+id/mobile"
-                style="@style/RegisterInput"
-                android:hint="@string/mobile_upper"
-                android:inputType="phone" />
+                style="@style/WebFormRowInput"
+                android:hint="@string/mobile"
+                android:inputType="phone"
+                android:layout_margin="10dp"/>
 
             <EditText
                 android:id="@+id/email"
-                style="@style/RegisterInput"
-                android:hint="@string/email_address_upper"
-                android:inputType="textEmailAddress" />
+                style="@style/WebFormRowInput"
+                android:hint="@string/email_address"
+                android:inputType="textEmailAddress"
+                android:layout_margin="10dp"/>
 
             <EditText
                 android:id="@+id/password"
-                style="@style/RegisterInput"
-                android:hint="@string/password_upper"
-                android:inputType="textPassword" />
-
-            <EditText
-                android:id="@+id/confirm_password"
-                style="@style/RegisterInput"
-                android:hint="@string/confirm_password_upper"
-                android:inputType="textPassword" />
+                style="@style/WebFormRowInput"
+                android:hint="@string/register_password"
+                android:inputType="textPassword"
+                android:layout_margin="10dp"/>
 
             <EditText
                 android:id="@+id/birthday"
-                style="@style/RegisterInput"
-                android:hint="@string/birthday_upper"
-                android:inputType="date" />
+                style="@style/WebFormRowInput"
+                android:hint="@string/birthday"
+                android:inputType="date"
+                android:layout_margin="10dp"/>
 
             <TextView
                 android:id="@+id/disclaimer"

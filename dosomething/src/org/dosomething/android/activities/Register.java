@@ -81,20 +81,10 @@ public class Register extends AbstractActionBarActivity {
     	String first = ((EditText)findViewById(R.id.first_name)).getText().toString();
     	String email = ((EditText)findViewById(R.id.email)).getText().toString();
     	String password = ((EditText)findViewById(R.id.password)).getText().toString();
-    	String confirmPassword = ((EditText)findViewById(R.id.confirm_password)).getText().toString();
     	String birthday = ((EditText)findViewById(R.id.birthday)).getText().toString();
-    	
-    	if(!password.equals(confirmPassword)) {
-    		new AlertDialog.Builder(Register.this)
-				.setMessage(getString(R.string.confirm_password_failed))
-				.setCancelable(false)
-				.setPositiveButton(getString(R.string.ok_upper), null)
-				.create()
-				.show();
-    	} else {
-    		registerTask = new RegisterTask(mobile, first, email, password, birthday);
-    		registerTask.execute();
-    	}
+
+        registerTask = new RegisterTask(mobile, first, email, password, birthday);
+        registerTask.execute();
     }
     
     public void cancel(View v){
