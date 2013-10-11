@@ -37,7 +37,7 @@ import java.util.Locale;
 import roboguice.fragment.RoboFragment;
 
 /**
- * TODO
+ * Fragment for the registration screen.
  */
 public class RegisterFragment extends RoboFragment implements View.OnClickListener {
 

@@ -23,7 +23,7 @@ import roboguice.inject.InjectView;
 
 public class Welcome extends AbstractFragmentActivity implements View.OnClickListener {
 
-    private final int NUM_WALKTHROUGH_PAGES = 5;
+    private final int NUM_WALKTHROUGH_PAGES = 3;
 
     @Inject private @Named("DINComp-CondBold")Typeface dinTypeface;
 

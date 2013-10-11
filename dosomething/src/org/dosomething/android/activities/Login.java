@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,13 +19,14 @@ import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
+import org.dosomething.android.fragments.LoginFragment;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Login extends AbstractActionBarActivity {
+public class Login extends AbstractFragmentActivity {
 
     private static final int REQ_SIGN_UP = 112;
 
@@ -37,16 +37,13 @@ public class Login extends AbstractActionBarActivity {
     private DSLoginTask dsLoginTask;
 
     @Override
-    public String getPageName() {
+    protected String getPageName() {
         return "Login";
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
 
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
@@ -57,18 +54,6 @@ public class Login extends AbstractActionBarActivity {
             // Or set the fragment from restored state info
             loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(android.R.id.content);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // If home button is selected on ActionBar, then end the activity
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
