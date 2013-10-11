@@ -40,24 +40,16 @@ public class WalkthroughFragment extends RoboFragment {
         // TODO: change out dummy images and text for finalized walkthrough content
         switch(mPageNumber) {
             case 0:
-                imageView.setImageResource(R.drawable.cause_animals);
-                textView.setText("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.");
+                imageView.setImageResource(R.drawable.walkthrough_bg1);
+                textView.setText(R.string.walkthrough_screen1);
                 break;
             case 1:
-                imageView.setImageResource(R.drawable.cause_bullying);
-                textView.setText("Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.");
+                imageView.setImageResource(R.drawable.walkthrough_bg2);
+                textView.setText(R.string.walkthrough_screen2);
                 break;
             case 2:
-                imageView.setImageResource(R.drawable.cause_disasters);
-                textView.setText("Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat");
-                break;
-            case 3:
-                imageView.setImageResource(R.drawable.cause_discrimination);
-                textView.setText("Vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.");
-                break;
-            case 4:
-                imageView.setImageResource(R.drawable.cause_health);
-                textView.setText("Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.");
+                imageView.setImageResource(R.drawable.walkthrough_bg3);
+                textView.setText(R.string.walkthrough_screen3);
                 break;
         }
 

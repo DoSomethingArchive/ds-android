@@ -1,4 +1,4 @@
-package org.dosomething.android.activities;
+package org.dosomething.android.fragments;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -17,12 +17,16 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.dosomething.android.R;
+import org.dosomething.android.activities.Login;
 import org.dosomething.android.tasks.DSFacebookLogin;
 
 import java.util.Arrays;
 
 import roboguice.fragment.RoboFragment;
 
+/**
+ * Fragment for the Login screen.
+ */
 public class LoginFragment extends RoboFragment implements View.OnClickListener {
 
     @Inject private @Named("DINComp-CondBold")Typeface dinTypeface;

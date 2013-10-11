@@ -1,95 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_background"
-    android:orientation="vertical" >
+    android:background="@drawable/walkthrough_background"
+    android:fillViewport="true">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.0"
-        android:fillViewport="true"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <ImageView
+            android:id="@+id/ds_logo"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/login_logo" />
+
+        <com.facebook.widget.LoginButton
+            xmlns:fb="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/button_facebook_login"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp" >
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            fb:login_text="@string/facebook_join"
+            fb:logout_text="@string/facebook_join"/>
 
-            <com.facebook.widget.LoginButton
-                xmlns:fb="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/button_facebook_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="20dp"
-                android:textStyle="bold"
-                fb:login_text="@string/facebook_join"
-                fb:logout_text="@string/facebook_join"/>
+        <TextView
+            android:id="@+id/or_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:text="@string/login_or"
+            android:textSize="@dimen/font_size_header_2"/>
 
-            <TextView
-                android:id="@+id/or_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="OR"
-                android:textSize="@dimen/font_size_header_2"/>
+        <EditText
+            android:id="@+id/first_name"
+            style="@style/WebFormRowInput"
+            android:hint="@string/first_name"
+            android:inputType="text"/>
 
-            <EditText
-                android:id="@+id/first_name"
-                style="@style/WebFormRowInput"
-                android:hint="@string/first_name"
-                android:inputType="text"
-                android:layout_margin="10dp"/>
+        <EditText
+            android:id="@+id/mobile"
+            style="@style/WebFormRowInput"
+            android:hint="@string/mobile"
+            android:inputType="phone"/>
 
-            <EditText
-                android:id="@+id/mobile"
-                style="@style/WebFormRowInput"
-                android:hint="@string/mobile"
-                android:inputType="phone"
-                android:layout_margin="10dp"/>
+        <EditText
+            android:id="@+id/email"
+            style="@style/WebFormRowInput"
+            android:hint="@string/email_address"
+            android:inputType="textEmailAddress"/>
 
-            <EditText
-                android:id="@+id/email"
-                style="@style/WebFormRowInput"
-                android:hint="@string/email_address"
-                android:inputType="textEmailAddress"
-                android:layout_margin="10dp"/>
+        <EditText
+            android:id="@+id/password"
+            style="@style/WebFormRowInput"
+            android:hint="@string/register_password"
+            android:inputType="textPassword"/>
 
-            <EditText
-                android:id="@+id/password"
-                style="@style/WebFormRowInput"
-                android:hint="@string/register_password"
-                android:inputType="textPassword"
-                android:layout_margin="10dp"/>
+        <EditText
+            android:id="@+id/birthday"
+            style="@style/WebFormRowInput"
+            android:hint="@string/birthday"
+            android:inputType="date"/>
 
-            <EditText
-                android:id="@+id/birthday"
-                style="@style/WebFormRowInput"
-                android:hint="@string/birthday"
-                android:inputType="date"
-                android:layout_margin="10dp"/>
+        <TextView
+            android:id="@+id/disclaimer"
+            style="@style/RegisterDisclaimer" />
 
-            <TextView
-                android:id="@+id/disclaimer"
-                style="@style/RegisterDisclaimer" />
+        <TextView
+            style="@style/RequiredInstructions"
+            android:text="@string/required_instructions" />
 
-            <TextView
-                style="@style/RequiredInstructions"
-                android:text="@string/required_instructions" />
+        <Button
+            android:id="@+id/button_register"
+            style="@style/ButtonPrimary"
+            android:text="@string/register_upper"/>
 
-            <Button
-                android:id="@+id/button_register"
-                style="@style/ButtonPrimary"
-                android:padding="10dp"
-                android:text="@string/register_upper"/>
-
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

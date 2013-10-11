@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -30,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class Register extends AbstractActionBarActivity {
+public class Register extends AbstractFragmentActivity {
 	
 	@Inject private UserContext userContext;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
@@ -46,9 +45,6 @@ public class Register extends AbstractActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
         RegisterFragment registerFragment;
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
@@ -59,18 +55,6 @@ public class Register extends AbstractActionBarActivity {
             // Or set the fragment from restored state info
             registerFragment = (RegisterFragment) getSupportFragmentManager().findFragmentById(android.R.id.content);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // If home button is selected on ActionBar, then end the activity
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**

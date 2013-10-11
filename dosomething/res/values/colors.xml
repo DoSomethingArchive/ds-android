@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<color name="actionbar_background">#173781</color>
-<color name="button_primary_background">#FFCB15</color>
+<color name="actionbar_background">#0054A6</color>
+<color name="button_primary_background">#F9D500</color>
 <color name="button_primary_background_active">#FFDA40</color>
-<color name="button_primary_border">#FEB800</color>
+<color name="button_primary_border">#E6B80E</color>
 <color name="button_secondary_background">#D5D0D0</color>
 <color name="button_secondary_background_active">#DFDFDF</color>
 <color name="button_secondary_border">#C4C4C4</color>
-<color name="login_background_top">#18408B</color>
-<color name="login_background_bottom">#2262AC</color>
-<color name="login_background_inputs_top">#18408B</color>
-<color name="login_background_inputs_bottom">#1E1D1C</color>
-<color name="login_input_background">#333131</color>
-<color name="login_input_text">#999898</color>
 <color name="register_label">#505050</color>
 <color name="light_background">#EFEFEF</color>
 <color name="register_disclaimer_text">#7A7C7F</color>
@@ -39,5 +33,4 @@
 <color name="dark_grey_background">#2A2C2B</color>
 <color name="share_button_blue">#3D75B1</color>
 <color name="transparent_white">#33FFFFFF</color>
-<color name="white">#FFF</color>
 </resources>
