@@ -38,7 +38,7 @@ public class SFGSubmit extends AbstractWebForm {
 	private WebForm webForm;
 
 	@Override
-	protected String getPageName() {
+	public String getPageName() {
 		return "sfg-submit";
 	}
 

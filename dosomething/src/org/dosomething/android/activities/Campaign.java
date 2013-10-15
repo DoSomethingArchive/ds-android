@@ -61,7 +61,7 @@ public class Campaign extends AbstractActionBarActivity {
     private CampaignPagerAdapter mCampaignPagerAdapter;
 
     @Override
-    protected String getPageName() {
+    public String getPageName() {
         return "Campaign";
     }
 

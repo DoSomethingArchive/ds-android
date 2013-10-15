@@ -240,7 +240,7 @@ public class CampaignActions extends AbstractActionBarActivity {
 	}
 	
 	@Override
-	protected String getPageName() {
+	public String getPageName() {
 		return "campaign-actions";
 	}
 	

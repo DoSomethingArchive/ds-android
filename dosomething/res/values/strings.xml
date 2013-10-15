@@ -2,22 +2,24 @@
 <resources>
     <string name="app_name">Do Something</string>
     <string name="special_smiley">&#9786;</string>
-    <string name="username">Email / Username</string>
+    <string name="username">Email / Cell # / Username</string>
     <string name="password">Password</string>
     <string name="log_in_auth_failed">Password is incorrect. Please try again.</string>
     <string name="log_in_failed">Login failed. Please check your internet connection and try again.</string>
     <string name="register_failed">Registration failed. Please check your internet connection and try again.</string>
-    <string name="confirm_password_failed">The passwords entered do not match.</string>
     <string name="auth_failed">User authentication has failed.</string>
     <string name="facebook_app_id">525191857506466</string>
     <string name="facebook_auth_failed">Facebook login failed. Please try again.</string>
-    <string name="facebook_log_in">Login with Facebook</string>
+    <string name="facebook_join">Join With Facebook</string>
+    <string name="facebook_sign_in">Login With Facebook</string>
     <string name="form_submit_failed">The form submit has failed. Please try again.</string>
     <string name="gallery_feed_failed">The gallery has failed to load. Please try again.</string>
     <string name="campaign_load_error">There was an error loading the current campaign. Please try again later.</string>
     <string name="campaigns_failed">The current campaigns have failed to load. Please try again.</string>
     <string name="campaigns_no_internet">An internet connection is required. Please enable an internet connection and try again.</string>
+    <string name="log_in">Log In</string>
     <string name="log_in_upper">LOG IN</string>
+    <string name="register_password">Password *</string>
     <string name="sign_up_upper">BECOME A MEMBER</string>
     <string name="get_started_upper">GET STARTED</string>
     <string name="go_upper">GO</string>
@@ -29,26 +31,26 @@
     <string name="edit_upper">EDIT</string>
     <string name="save_upper">SAVE</string>
     <string name="username_upper">USERNAME *</string>
-    <string name="mobile_upper">CELL PHONE NUMBER</string>
+    <string name="mobile">Cell Phone Number</string>
     <string name="first_name">First Name</string>
-    <string name="first_name_upper">FIRST NAME *</string>
     <string name="last_name">Last Name</string>
     <string name="last_name_upper">LAST NAME *</string>
     <string name="email">Email</string>
-    <string name="email_address_upper">EMAIL ADDRESS *</string>
+    <string name="email_address">Email Address</string>
     <string name="password_upper">PASSWORD *</string>
-    <string name="confirm_password_upper">CONFIRM PASSWORD *</string>
-    <string name="birthday_upper">BIRTHDAY *</string>
+    <string name="birthday">Birthday *</string>
     <string name="link_description">External Link</string>
     <string name="select_image">Select Image</string>
     <string name="required_field">%1$s is required.</string>
     <string name="required_instructions">* Required Field</string>
+    <string name="login_or">or</string>
     <string name="logging_in">Logging in&#8230;</string>
     <string name="registering">Registering&#8230;</string>
     <string name="logout_confirm">Are you sure you want to logout?</string>
-    
+    <string name="register">Register</string>
+    <string name="register_upper">REGISTER</string>
     <string name="register_title">Become A Member</string>
-    <string name="register_disclaimer">By tapping \"Go\", you accept the &lt;a href="http://www.dosomething.org/about/terms-of-service">terms of use&lt;/a> and &lt;a href="http://www.dosomething.org/about/privacy">privacy policy&lt;/a>.</string>
+    <string name="register_disclaimer">By registering you accept the &lt;a href="http://www.dosomething.org/about/terms-of-service">terms of use&lt;/a> and &lt;a href="http://www.dosomething.org/about/privacy">privacy policy&lt;/a>.</string>
     <string name="profile_browse_campaigns">PICK A PROJECT</string>
     <string name="profile_config">Profile Stats</string>
     <string name="profile_config_campaigns_joined">Campaigns Joined: %1$d</string>
@@ -158,7 +160,8 @@
     <string name="sms_refer_contact_has_no_number">There was no phone number found for that contact.</string>
     <string name="sms_refer_title">Share With Friends</string>
     <string name="sms_refer_success">Thanks! We\'ll be sending your friends a text message soon!</string>
-    
     <string name="splash_version">v</string>
-    <string name="welcome_text">DoSomething.org provides easy and fun ways for young people to take action around the causes they care about!</string>
+    <string name="walkthrough_screen1">Join over 2.2 million young people taking action.</string>
+    <string name="walkthrough_screen2">Make the world suck less.\nJoin a campaign to get started.</string>
+    <string name="walkthrough_screen3">Use the DoSomething app to kick ass in your community.</string>
 </resources>
