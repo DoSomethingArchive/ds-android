@@ -1,22 +1,12 @@
 package org.dosomething.android.activities;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
@@ -28,146 +18,72 @@ import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
+import org.dosomething.android.fragments.RegisterFragment;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import roboguice.inject.InjectView;
-
-public class Register extends AbstractActionBarActivity {
+public class Register extends AbstractFragmentActivity {
 	
 	@Inject private UserContext userContext;
 	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
-
-	@InjectView(R.id.username_name) private EditText username;
-	@InjectView(R.id.mobile) private EditText mobile;
-	@InjectView(R.id.first_name) private EditText firstName;
-	@InjectView(R.id.last_name) private EditText lastName;
-	@InjectView(R.id.email) private EditText email;
-	@InjectView(R.id.password) private EditText password;
-	@InjectView(R.id.confirm_password) private EditText confirmPassword;
-	@InjectView(R.id.birthday) private EditText birthday;
-	@InjectView(R.id.disclaimer) private TextView disclaimer;
-	@InjectView(R.id.cancel) private Button cancel;
-	@InjectView(R.id.submit) private Button submit;
-	
-	private Date savedBirthday;
-	
-	private Context context;
 	
 	public AbstractWebserviceTask registerTask;
 	
 	@Override
-	protected String getPageName() {
-		return "register";
+	public String getPageName() {
+		return "Register";
 	}
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        
-        context = this;
-        
-        birthday.setOnFocusChangeListener(birthdayFocusListener);
-        birthday.setOnClickListener(birthdayClickListener);
-        
-        disclaimer.setMovementMethod(LinkMovementMethod.getInstance());
-        disclaimer.setText(Html.fromHtml(getString(R.string.register_disclaimer)));
-        
-        cancel.setTypeface(headerTypeface, Typeface.BOLD);
-        submit.setTypeface(headerTypeface, Typeface.BOLD);
-        
-        // Prepopulate mobile # field with # found on phone
-        if (mobile != null && userContext.getPhoneNumber() != null) {
-        	mobile.setText(userContext.getPhoneNumber());
+        RegisterFragment registerFragment;
+        if (savedInstanceState == null) {
+            // Add the fragment on initial activity setup
+            registerFragment = new RegisterFragment();
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, registerFragment).commit();
+        }
+        else {
+            // Or set the fragment from restored state info
+            registerFragment = (RegisterFragment) getSupportFragmentManager().findFragmentById(android.R.id.content);
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // If home button is selected on ActionBar, then end the activity
-            case android.R.id.home:
-                finish();
-                return true;
-        }
+    /**
+     * Execute task to register user with the information provided.
+     */
+    public void register() {
+    	String mobile = ((EditText)findViewById(R.id.mobile)).getText().toString();
+    	String first = ((EditText)findViewById(R.id.first_name)).getText().toString();
+    	String email = ((EditText)findViewById(R.id.email)).getText().toString();
+    	String password = ((EditText)findViewById(R.id.password)).getText().toString();
+    	String birthday = ((EditText)findViewById(R.id.birthday)).getText().toString();
 
-        return super.onOptionsItemSelected(item);
+        registerTask = new RegisterTask(mobile, first, email, password, birthday);
+        registerTask.execute();
     }
-    
-    private final OnClickListener birthdayClickListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			showBirthdayPicker();
-		}
-	};
-    
-    private final OnFocusChangeListener birthdayFocusListener = new OnFocusChangeListener() {
-		@Override
-		public void onFocusChange(View v, boolean hasFocus) {
-			if(hasFocus) {
-				showBirthdayPicker();
-			}
-		}
-	};
-    
-    private void showBirthdayPicker(){
-    	new DatePickerDialog(this, dateListener, 1995, 0, 1).show();
-    }
-    
-    public void register(View v){
-    	String username = this.username.getText().toString();
-    	String mobile = this.mobile.getText().toString();
-    	String first = this.firstName.getText().toString();
-    	String last = this.lastName.getText().toString();
-    	String email = this.email.getText().toString();
-    	String password = this.password.getText().toString();
-    	String confirmPassword = this.confirmPassword.getText().toString();
-    	String birthday = this.birthday.getText().toString();
-    	
-    	if(!password.equals(confirmPassword)) {
-    		new AlertDialog.Builder(Register.this)
-				.setMessage(getString(R.string.confirm_password_failed))
-				.setCancelable(false)
-				.setPositiveButton(getString(R.string.ok_upper), null)
-				.create()
-				.show();
-    	} else {
-    		registerTask = new RegisterTask(username, mobile, first, last, email, password, birthday);
-    		registerTask.execute();
-    	}
-    }
-    
-    private final OnDateSetListener dateListener = new OnDateSetListener() {
-		
-		@Override
-		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-			savedBirthday = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
-			birthday.setText(new SimpleDateFormat(DSConstants.DATE_FORMAT, Locale.US).format(savedBirthday));
-		}
-	};
     
     public void cancel(View v){
     	setResult(RESULT_CANCELED);
     	finish();
     }
+
+    private void goToProfile(){
+        startActivity(new Intent(this, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        finish();
+    }
 	
 	private class RegisterTask extends AbstractWebserviceTask {
-		private String username;
 		private String mobile;
 		private String first;
-		private String last;
 		private String email;
 		private String password;
 		private String birthday;
@@ -177,11 +93,10 @@ public class Register extends AbstractActionBarActivity {
 		
 		private ProgressDialog pd;
 		
-		public RegisterTask(String username, String mobile, String first, String last, String email, String password, String birthday) {
+		public RegisterTask(String mobile, String first, String email, String password, String birthday) {
 			super(userContext);
-			this.username = username;
+            this.mobile = mobile;
 			this.first = first;
-			this.last = last;
 			this.email = email;
 			this.password = password;
 			this.birthday = birthday;
@@ -190,7 +105,7 @@ public class Register extends AbstractActionBarActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			pd = ProgressDialog.show(context, null, getString(R.string.registering));
+			pd = ProgressDialog.show(Register.this, null, getString(R.string.registering));
 		}
 
 		@Override
@@ -205,8 +120,7 @@ public class Register extends AbstractActionBarActivity {
 				// and Google Analytics
 				Analytics.logEvent("login", "register", "success");
 				
-				setResult(RESULT_OK);
-		    	finish();
+				goToProfile();
 			} else {
 				new AlertDialog.Builder(Register.this)
 					.setMessage(validationMessage)
@@ -233,14 +147,12 @@ public class Register extends AbstractActionBarActivity {
 			SimpleDateFormat dateFormat = new SimpleDateFormat(DSConstants.DATE_FORMAT, Locale.US);
 			
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair("name", username));
 			params.add(new BasicNameValuePair("pass", password));
 			params.add(new BasicNameValuePair("mail", email));
 			params.add(new BasicNameValuePair("profile_main[field_user_birthday][und][0][value][date]", birthday));
 			params.add(new BasicNameValuePair("profile_main[field_user_official_rules][und]", "1")); // must be 1
 			params.add(new BasicNameValuePair("profile_main[field_user_anniversary][und][0][value][date]", dateFormat.format(new Date())));
 			params.add(new BasicNameValuePair("profile_main[field_user_first_name][und][0][value]", first));
-			params.add(new BasicNameValuePair("profile_main[field_user_last_name][und][0][value]", last));
 			params.add(new BasicNameValuePair("profile_main[field_user_mobile][und][0][value]", mobile));
 			
 			WebserviceResponse response = doPost(DSConstants.API_URL_USER_REGISTER, params);
@@ -256,11 +168,10 @@ public class Register extends AbstractActionBarActivity {
 				JSONObject obj = response.getBodyAsJSONObject();
 				JSONObject user = obj.getJSONObject("user");
 				
-				userContext.setLoggedIn(username, user.getString("mail"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
+				userContext.setLoggedIn("", user.getString("mail"), user.getString("uid"), obj.getString("sessid"), obj.getString("session_name"), obj.getLong("session_cache_expire"));
 				
 				registerSuccess = true;
 			}
 		}
-		
 	}
 }

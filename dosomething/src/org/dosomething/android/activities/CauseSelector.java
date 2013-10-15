@@ -41,7 +41,7 @@ public class CauseSelector extends AbstractActionBarActivity {
 	private boolean launchProfileOnFinish = true;
 	
 	@Override
-	protected String getPageName() {
+	public String getPageName() {
 		return "cause-selector";
 	}
 	

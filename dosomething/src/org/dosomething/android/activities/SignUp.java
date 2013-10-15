@@ -1,9 +1,10 @@
 package org.dosomething.android.activities;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
@@ -15,11 +16,10 @@ import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Challenge;
 import org.dosomething.android.transfer.WebForm;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 public class SignUp extends AbstractWebForm {
 	
@@ -31,7 +31,7 @@ public class SignUp extends AbstractWebForm {
 	private WebForm webForm;
 	
 	@Override
-	protected String getPageName() {
+	public  String getPageName() {
 		return "sign-up";
 	}
 	

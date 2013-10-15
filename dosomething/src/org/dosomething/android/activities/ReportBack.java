@@ -23,7 +23,7 @@ public class ReportBack extends AbstractWebForm {
 	private WebForm webForm;
 	
 	@Override
-	protected String getPageName() {
+	public String getPageName() {
 		return "report-back";
 	}
 	

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:orientation="horizontal"
+    android:background="@drawable/fb_login_button">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:src="@drawable/fb_login_logo"/>
+
+    <com.facebook.widget.LoginButton
+        xmlns:fb="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/loginButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        fb:login_text="Join With Facebook"
+        fb:logout_text="Join With Facebook"
+        style="@style/ButtonDSFacebookLogin"/>
+</LinearLayout>

@@ -46,7 +46,7 @@ public abstract class AbstractActionBarActivity extends ActionBarActivity implem
 
     protected EventManager eventManager;
 
-    protected String getPageName() {
+    public String getPageName() {
         return "AbstractActionBarActivity";
     }
 
