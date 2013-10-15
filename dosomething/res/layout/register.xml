@@ -18,18 +18,14 @@
             android:layout_marginTop="6dp"
             android:src="@drawable/login_logo" />
 
-        <com.facebook.widget.LoginButton
-            xmlns:fb="http://schemas.android.com/apk/res-auto"
+        <org.dosomething.android.widget.DSFacebookLoginButton
             android:id="@+id/button_facebook_login"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
-            android:textStyle="bold"
-            fb:login_text="@string/facebook_join"
-            fb:logout_text="@string/facebook_join"/>
+            android:layout_marginTop="20dp"/>
 
         <TextView
             android:id="@+id/or_text"

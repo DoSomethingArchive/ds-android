@@ -16,6 +16,12 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/font_size_header_2</item>
     </style>
+    <style name="ButtonDSFacebookLogin">
+        <item name="android:padding">0dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/font_size_facebook_button</item>
+        <item name="android:textStyle">bold</item>
+    </style>
     <style name="ButtonPrimary">
         <item name="android:background">@drawable/main_button_selector</item>
         <item name="android:layout_width">match_parent</item>
@@ -487,5 +493,5 @@
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
         <item name="android:paddingBottom">20dp</item>
-    </style>    
+    </style>
 </resources>
