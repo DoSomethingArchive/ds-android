@@ -8,6 +8,7 @@
     <string name="log_in_failed">Login failed. Please check your internet connection and try again.</string>
     <string name="register_failed">Registration failed. Please check your internet connection and try again.</string>
     <string name="auth_failed">User authentication has failed.</string>
+    <string name="exit_confirm">Are you sure you want to exit?</string>
     <string name="facebook_app_id">525191857506466</string>
     <string name="facebook_auth_failed">Facebook login failed. Please try again.</string>
     <string name="facebook_join">Join With Facebook</string>
@@ -61,6 +62,7 @@
     <string name="profile_config_your_causes">Your Causes</string>
     <string name="profile_logged_out_teaser">Make the world suck less. Pick a project to get started.</string>
     <string name="profile_login_button">GET STARTED NOW</string>
+    <string name="profile_session_stale_error">Uh oh. We've lost authentication with the server. It's probably the gremlins. Please login again.</string>
     <string name="profile_title">Profile</string>
     <string name="profile_update_error">There was an error updating your profile. Check your internet connection and try again later.</string>
     <string name="drawer_close">Navigation Closed</string>

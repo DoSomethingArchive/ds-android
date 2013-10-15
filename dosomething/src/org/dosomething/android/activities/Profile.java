@@ -1,31 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-import org.dosomething.android.adapters.DrawerListAdapter;
-import org.dosomething.android.cache.Cache;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.dao.DSDao;
-import org.dosomething.android.domain.CompletedCampaignAction;
-import org.dosomething.android.domain.UserCampaign;
-import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
-import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.Challenge;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -53,6 +27,34 @@ import android.widget.Toast;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
+import org.dosomething.android.adapters.DrawerListAdapter;
+import org.dosomething.android.cache.Cache;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.dao.DSDao;
+import org.dosomething.android.domain.CompletedCampaignAction;
+import org.dosomething.android.domain.UserCampaign;
+import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
+import org.dosomething.android.tasks.AbstractWebserviceTask;
+import org.dosomething.android.tasks.ErrorResponseCodeException;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.transfer.Challenge;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import roboguice.inject.InjectView;
 
 public class Profile extends AbstractActionBarActivity {
 
@@ -165,6 +167,44 @@ public class Profile extends AbstractActionBarActivity {
         setupDrawerNavigation();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQ_LOGIN_FOR_PROFILE && resultCode == RESULT_OK){
+            if(new UserContext(this).isLoggedIn()){
+                startActivity(Profile.getIntent(getApplicationContext()));
+            }
+        }
+    }
+
+    /**
+     * Get confirmation from user that they want to exit the application when the press the Back button
+     */
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage(getString(R.string.exit_confirm))
+                .setPositiveButton(R.string.yes_upper, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Profile.this.finish();
+                    }
+                })
+                .setNegativeButton(R.string.no_upper, null)
+                .create()
+                .show();
+    }
+
+    private final OnItemClickListener itemClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> av, View v, int position, long id) {
+            Campaign campaign = (Campaign) list.getAdapter().getItem(position);
+
+            startActivity(CampaignActions.getIntent(getApplicationContext(), campaign));
+        }
+    };
+
     private void setupDrawerNavigation() {
         // Navigation options change depending on if user is logged in or not
         List<String> navItems = new ArrayList<String>();
@@ -209,35 +249,6 @@ public class Profile extends AbstractActionBarActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == REQ_LOGIN_FOR_PROFILE && resultCode == RESULT_OK){
-            if(new UserContext(this).isLoggedIn()){
-                startActivity(Profile.getIntent(getApplicationContext()));
-            }
-        }
-    }
-
-    /**
-     * Get confirmation from user that they want to exit the application when the press the Back button
-     */
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setMessage("Are you sure you want to exit?")
-                .setPositiveButton(R.string.yes_upper, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Profile.this.finish();
-                    }
-                })
-                .setNegativeButton(R.string.no_upper, null)
-                .create()
-                .show();
-    }
-
     public void findCampaigns(View v) {
         startActivity(new Intent(this, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
@@ -245,16 +256,6 @@ public class Profile extends AbstractActionBarActivity {
     public static Intent getIntent(Context context) {
         return new Intent(context, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
-
-    private final OnItemClickListener itemClickListener = new OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> av, View v, int position,
-                                long id) {
-            Campaign campaign = (Campaign) list.getAdapter().getItem(position);
-
-            startActivity(CampaignActions.getIntent(getApplicationContext(), campaign));
-        }
-    };
 
     private class CampaignListAdapter extends ArrayAdapter<Campaign> {
 
@@ -441,6 +442,7 @@ public class Profile extends AbstractActionBarActivity {
      */
     private class UserTask extends AbstractWebserviceTask {
         private ArrayList<Integer> gids = new ArrayList<Integer>();
+        private boolean isSessionStale = false;
 
         public UserTask() {
             super(userContext);
@@ -451,8 +453,21 @@ public class Profile extends AbstractActionBarActivity {
             String uid = new UserContext(context).getUserUid();
             String url = DSConstants.API_URL_BASE + "user/"+uid+".json";
 
-            WebserviceResponse response = doGet(url);
-            if (!response.hasErrorStatusCode()) {
+            WebserviceResponse response = null;
+            try {
+                response = doGet(url);
+            }
+            catch (ErrorResponseCodeException e) {
+                // If web op receives a 401, indicates session cookie info is stale
+                if (e.getResponseCode() == 401) {
+                    isSessionStale = true;
+                }
+                else {
+                    e.printStackTrace();
+                }
+            }
+
+            if (response != null && !response.hasErrorStatusCode()) {
                 // gid's found in group_audience object show what campaigns, clubs,
                 // and other OG groups the user is signed up for
                 JSONObject jsonResponse = response.getBodyAsJSONObject();
@@ -471,6 +486,7 @@ public class Profile extends AbstractActionBarActivity {
                     // The group_audience field is returned as an array when empty :(
                     // Catching the type-mismatch error here, and doing nothing
                     // since there should be no groups to add anyway.
+                    e.printStackTrace();
                 }
             }
         }
@@ -483,6 +499,15 @@ public class Profile extends AbstractActionBarActivity {
         @Override
         protected void onFinish() {
             setProgressBarIndeterminateVisibility(Boolean.FALSE);
+
+            // If the session's stale, then logout the user and force a re-login
+            if (isSessionStale) {
+                new AlertDialog.Builder(Profile.this)
+                        .setMessage(getString(R.string.profile_session_stale_error))
+                        .setPositiveButton(R.string.ok_upper, new Login.OnLogoutClickListener(Profile.this))
+                        .create()
+                        .show();
+            }
         }
 
         @Override
