@@ -204,6 +204,6 @@ public class RegisterFragment extends RoboFragment implements View.OnClickListen
     private void showBirthdayPicker() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, -13);
-        new DatePickerDialog(getActivity(), dateListener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1).show();
+        new DatePickerDialog(getActivity(), dateListener, cal.get(Calendar.YEAR), 0/*MONTH*/, 1/*DAY*/).show();
     }
 }
