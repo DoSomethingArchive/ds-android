@@ -132,10 +132,12 @@ public class Register extends AbstractFragmentActivity {
 			
 		}
 		
-		@Override
-		protected void onFinish() {
-			pd.dismiss();
-		}
+        @Override
+        protected void onFinish() {
+            if (pd != null) {
+                pd.dismiss();
+            }
+        }
 
 		@Override
 		protected void onError(Exception e) {

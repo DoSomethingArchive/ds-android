@@ -110,7 +110,7 @@ public class Login extends AbstractFragmentActivity {
                 .show();
     }
 
-    private static class OnLogoutClickListener implements OnClickListener {
+    public static class OnLogoutClickListener implements OnClickListener {
         private Context dialogContext;
 
         public OnLogoutClickListener(Context ctx) {
