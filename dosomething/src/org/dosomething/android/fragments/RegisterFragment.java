@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.widget.LoginButton;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
@@ -26,6 +25,7 @@ import org.dosomething.android.R;
 import org.dosomething.android.activities.Register;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.DSFacebookLogin;
+import org.dosomething.android.widget.DSFacebookLoginButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ public class RegisterFragment extends RoboFragment implements View.OnClickListen
     @Inject private UserContext userContext;
     @Inject private @Named("DINComp-CondBold")Typeface dinTypeface;
 
-    private LoginButton mBtnFacebookLogin;
+    private DSFacebookLoginButton mBtnFacebookLogin;
     private Button mBtnRegister;
     private EditText mEditBirthday;
     private EditText mEditMobile;
@@ -83,9 +83,9 @@ public class RegisterFragment extends RoboFragment implements View.OnClickListen
         mRegisterActivity = (Register)getActivity();
 
         // Set Fragment to handle login button action and set FB permissions we want
-        mBtnFacebookLogin = (LoginButton) view.findViewById(R.id.button_facebook_login);
-        mBtnFacebookLogin.setFragment(this);
-        mBtnFacebookLogin.setReadPermissions(Arrays.asList("email", "user_birthday"));
+        mBtnFacebookLogin = (DSFacebookLoginButton) view.findViewById(R.id.button_facebook_login);
+        mBtnFacebookLogin.getButton().setFragment(this);
+        mBtnFacebookLogin.getButton().setReadPermissions(Arrays.asList("email", "user_birthday"));
 
         // Set typeface for OR text
         TextView orText = (TextView)view.findViewById(R.id.or_text);

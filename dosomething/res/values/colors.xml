@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <color name="actionbar_background">#0054A6</color>
+<color name="button_facebook_background">#006FB1</color>
 <color name="button_primary_background">#F9D500</color>
 <color name="button_primary_background_active">#FFDA40</color>
 <color name="button_primary_border">#E6B80E</color>
