@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <style name="SplashScreen">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:padding">0dp</item>
-        <item name="android:windowBackground">@drawable/splash_background</item>
-        <item name="android:windowFrame">@null</item>
-    </style>
     <style name="ActionBarSubMenu">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -20,101 +13,60 @@
         <item name="android:gravity">right</item>
         <item name="android:layout_weight">1.0</item>
         <item name="android:padding">@dimen/actionbar_submenu_item_padding</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/font_size_header_2</item>
+    </style>
+    <style name="ButtonDSFacebookLogin">
+        <item name="android:padding">0dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/font_size_facebook_button</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="ButtonPrimary">
         <item name="android:background">@drawable/main_button_selector</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
         <item name="android:layout_marginTop">15dp</item>
+        <item name="android:minHeight">@dimen/button_min_height</item>
         <item name="android:textSize">@dimen/font_size_button</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="ButtonSecondary">
         <item name="android:background">@drawable/secondary_button_selector</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
         <item name="android:layout_marginTop">15dp</item>
+        <item name="android:minHeight">@dimen/button_min_height</item>
         <item name="android:textSize">@dimen/font_size_button</item>
+        <item name="android:textStyle">bold</item>
     </style>
-    <style name="LoginLogo">
-        <item name="android:src">@drawable/login_logo</item>
-        <item name="android:layout_margin">10dp</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-    </style>
-    <style name="LoginInputsLayout">
-        <item name="android:background">@drawable/login_inputs_background</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:layout_marginTop">2dp</item>
-        <item name="android:layout_marginLeft">18dp</item>
-        <item name="android:layout_marginRight">18dp</item>
-        <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:paddingTop">26dp</item>
-        <item name="android:paddingLeft">14dp</item>
-        <item name="android:paddingRight">14dp</item>
-        <item name="android:paddingBottom">14dp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-    <style name="LoginInput">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:background">@color/login_input_background</item>
-        <item name="android:textColor">@color/login_input_text</item>
-        <item name="android:padding">10dp</item>
-    </style>
-    <style name="LoginButton">
-        <item name="android:layout_gravity">center_horizontal</item>
+    <style name="RegisterDisclaimer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
-        <item name="android:background">@drawable/main_button_selector</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/font_size_button</item>
-    </style>
-    <style name="RegisterDisclaimer">
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:textColor">@color/register_disclaimer_text</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="RequiredInstructions">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:textColor">@color/required_instructions_text</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
     </style>
-    <style name="RegisterInput">
-        <item name="android:layout_marginTop">2dp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-    <style name="RegisterLabel">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/register_label</item>
-        <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-    <style name="RegisterCancelButton">
-        <item name="android:background">@drawable/secondary_button_selector</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginRight">5dp</item>
-        <item name="android:textSize">@dimen/font_size_button</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-    <style name="RegisterButton">
-        <item name="android:background">@drawable/main_button_selector</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">5dp</item>
-        <item name="android:textSize">@dimen/font_size_button</item>
-        <item name="android:textStyle">bold</item>
+    <style name="PagerProgressDot">
+        <item name="android:layout_width">@dimen/pager_dot_diameter</item>
+        <item name="android:layout_height">@dimen/pager_dot_diameter</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
     </style>
     <style name="ProfileConfigCauseButton">
         <item name="android:layout_width">80dp</item>
@@ -518,14 +470,16 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/register_label</item>
         <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="WebFormRowInput">
-        <item name="android:layout_marginTop">2dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginTop">2dp</item>
     </style>
     <style name="WelcomeInner">
         <item name="android:background">@drawable/white_border_background</item>
@@ -539,5 +493,5 @@
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
         <item name="android:paddingBottom">20dp</item>
-    </style>    
+    </style>
 </resources>

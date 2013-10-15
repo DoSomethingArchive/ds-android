@@ -55,7 +55,7 @@
 			    android:background="@drawable/share_button_selector"
 			    android:gravity="center"
 			    android:text="@string/campaign_sfg_share_me"
-			    android:textColor="@color/white"
+			    android:textColor="@android:color/white"
 			    android:textSize="@dimen/font_size_header_2"
 			    android:textStyle="bold"/>
 		    <RelativeLayout
@@ -93,7 +93,7 @@
                 android:background="@drawable/flat_yellow_button_selector"
                 android:gravity="center"
                 android:text="@string/campaign_sfg_find_me"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/font_size_header_2"
                 android:textStyle="bold"
                 android:visibility="gone"/>

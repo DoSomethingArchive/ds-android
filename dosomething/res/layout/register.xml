@@ -1,124 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/light_background"
-    android:orientation="vertical" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/walkthrough_background"
+    android:fillViewport="true">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.0"
-        android:fillViewport="true"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <ImageView
+            android:id="@+id/ds_logo"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/login_logo" />
+
+        <org.dosomething.android.widget.DSFacebookLoginButton
+            android:id="@+id/button_facebook_login"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp" >
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"/>
 
-            <TextView
-                style="@style/RegisterLabel"
-                android:text="@string/username_upper" />
+        <TextView
+            android:id="@+id/or_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:text="@string/login_or"
+            android:textSize="@dimen/font_size_header_2"/>
 
-            <EditText
-                android:id="@+id/username_name"
-                style="@style/RegisterInput"
-                android:inputType="text" />
+        <EditText
+            android:id="@+id/first_name"
+            style="@style/WebFormRowInput"
+            android:hint="@string/first_name"
+            android:inputType="text"/>
 
-            <TextView
-                style="@style/RegisterLabel"
-                android:text="@string/mobile_upper" />
+        <EditText
+            android:id="@+id/mobile"
+            style="@style/WebFormRowInput"
+            android:hint="@string/mobile"
+            android:inputType="phone"/>
 
-            <EditText
-                android:id="@+id/mobile"
-                style="@style/RegisterInput"
-                android:inputType="phone" />
+        <EditText
+            android:id="@+id/email"
+            style="@style/WebFormRowInput"
+            android:hint="@string/email_address"
+            android:inputType="textEmailAddress"/>
 
-            <TextView
-                style="@style/RegisterLabel"
-                android:text="@string/first_name_upper" />
+        <EditText
+            android:id="@+id/password"
+            style="@style/WebFormRowInput"
+            android:hint="@string/register_password"
+            android:inputType="textPassword"/>
 
-            <EditText
-                android:id="@+id/first_name"
-                style="@style/RegisterInput"
-                android:inputType="textPersonName" />
+        <EditText
+            android:id="@+id/birthday"
+            style="@style/WebFormRowInput"
+            android:hint="@string/birthday"
+            android:inputType="date"/>
 
-            <TextView
-                style="@style/RegisterLabel"
-                android:text="@string/last_name_upper" />
+        <TextView
+            android:id="@+id/disclaimer"
+            style="@style/RegisterDisclaimer" />
 
-            <EditText
-                android:id="@+id/last_name"
-                style="@style/RegisterInput"
-                android:inputType="textPersonName" />
+        <TextView
+            style="@style/RequiredInstructions"
+            android:text="@string/required_instructions" />
 
-            <TextView
-                style="@style/RegisterLabel"
-                android:text="@string/email_address_upper" />
+        <Button
+            android:id="@+id/button_register"
+            style="@style/ButtonPrimary"
+            android:text="@string/register_upper"/>
 
-            <EditText
-                android:id="@+id/email"
-                style="@style/RegisterInput"
-                android:inputType="textEmailAddress" />
-
-            <TextView
-                style="@style/RegisterLabel"
-                android:text="@string/password_upper" />
-
-            <EditText
-                android:id="@+id/password"
-                style="@style/RegisterInput"
-                android:inputType="textPassword" />
-
-            <TextView
-                style="@style/RegisterLabel"
-                android:text="@string/confirm_password_upper" />
-
-            <EditText
-                android:id="@+id/confirm_password"
-                style="@style/RegisterInput"
-                android:inputType="textPassword" />
-
-            <TextView
-                style="@style/RegisterLabel"
-                android:text="@string/birthday_upper" />
-
-            <EditText
-                android:id="@+id/birthday"
-                style="@style/RegisterInput"
-                android:inputType="date" />
-
-            <TextView
-                android:id="@+id/disclaimer"
-                style="@style/RegisterDisclaimer" />
-
-            <TextView
-                style="@style/RequiredInstructions"
-                android:text="@string/required_instructions" />
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp" >
-
-                <Button
-                    android:id="@+id/cancel"
-                    style="@style/RegisterCancelButton"
-                    android:layout_weight="1.0"
-                    android:onClick="cancel"
-                    android:text="@string/cancel_upper" />
-
-                <Button
-                    android:id="@+id/submit"
-                    style="@style/RegisterButton"
-                    android:layout_weight="1.0"
-                    android:onClick="register"
-                    android:text="@string/go_upper" />
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

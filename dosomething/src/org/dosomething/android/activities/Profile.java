@@ -82,7 +82,7 @@ public class Profile extends AbstractActionBarActivity {
     private List<Campaign> webCampaigns;
 
     @Override
-    protected String getPageName() {
+    public String getPageName() {
         return "profile";
     }
 
