@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Do Something</string>
     <string name="special_smiley">&#9786;</string>
-    <string name="username">Email / Cell # / Username</string>
+    <string name="username">Email / Cell</string>
     <string name="password">Password</string>
     <string name="log_in_auth_failed">Password is incorrect. Please try again.</string>
     <string name="log_in_failed">Login failed. Please check your internet connection and try again.</string>

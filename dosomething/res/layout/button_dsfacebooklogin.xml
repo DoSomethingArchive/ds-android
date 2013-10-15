@@ -18,7 +18,7 @@
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        fb:login_text="Join With Facebook"
-        fb:logout_text="Join With Facebook"
+        fb:login_text="@string/facebook_join"
+        fb:logout_text="@string/facebook_join"
         style="@style/ButtonDSFacebookLogin"/>
 </LinearLayout>
