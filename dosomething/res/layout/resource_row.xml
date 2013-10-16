@@ -8,9 +8,11 @@
     <TextView
         android:id="@+id/body"
         style="@style/SubpageRowBody"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/image" />
 
     <ImageView
+        android:id="@id/image"
         style="@style/ResourceRowImage"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
