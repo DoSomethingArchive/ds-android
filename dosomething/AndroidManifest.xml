@@ -11,16 +11,22 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="org.dosomething.android.permission.C2D_MESSAGE" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
+    
+    <!-- GCM requires a Google Account -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    
+    <!-- Gives permission to register with GCM and receive messages -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    
+    <!-- Ensures only this app can receive the messages and registration result -->
     <permission
         android:name="org.dosomething.android.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+    <uses-permission android:name="org.dosomething.android.permission.C2D_MESSAGE" />
     
     <application
         android:icon="@drawable/ic_launcher"
@@ -84,43 +90,40 @@
             android:screenOrientation="portrait"/>
         <activity android:name="com.facebook.LoginActivity"/>
         
-        <provider
-            android:name="com.xtify.sdk.db.Provider"
-            android:authorities="org.dosomething.android.XTIFY_PROVIDER"
-            android:exported="false" />
-        <receiver android:name="com.xtify.sdk.c2dm.C2DMBroadcastReceiver">
-            <intent-filter android:permission="com.google.android.c2dm.permission.SEND" >
+        <!-- Required for Urban Airship GCM -->
+        <receiver android:name="com.urbanairship.CoreReceiver" />
+        <receiver android:name="com.urbanairship.push.GCMPushReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="org.dosomething.android" />
-            </intent-filter>
-            <intent-filter android:permission="com.google.android.c2dm.permission.SEND" >
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
                 <category android:name="org.dosomething.android" />
             </intent-filter>
-        </receiver>
-         
-        <receiver android:name="com.xtify.sdk.NotifActionReceiver" />
-        <receiver android:name="com.xtify.sdk.wi.AlarmReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-            </intent-filter>
+            
+            <!-- Required for detecting when app is upgraded so it can request a new GCM ID-->
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
         
+        <service android:name="com.urbanairship.push.PushService"
+            android:label="Push Notification Service" />
+        <service android:name="com.urbanairship.analytics.EventService"
+            android:label="Event Service"/>
+        
+        <!-- Required for persisting preferences related to push and location -->
+        <provider android:name="com.urbanairship.UrbanAirshipProvider"
+            android:authorities="org.dosomething.android.urbanairship.provider"
+            android:exported="false"
+            android:multiprocess="true" />
+        
+        <!-- For segments support -->
+        <service android:name="com.urbanairship.location.LocationService"
+            android:label="Sergments Service" />
+        
         <receiver android:process=":remote" android:name=".receivers.AlarmReceiver"></receiver>
         
-        <service android:name="com.xtify.sdk.location.LocationUpdateService" />
-        <service android:name="com.xtify.sdk.c2dm.C2DMIntentService" />
-        <service android:name="com.xtify.sdk.alarm.MetricsIntentService" />
-        <service android:name="com.xtify.sdk.alarm.TagIntentService" />
-        <service android:name="com.xtify.sdk.alarm.RegistrationIntentService" />
-        <service android:name="com.xtify.sdk.alarm.LocationIntentService" />
         <meta-data android:value="@string/facebook_app_id" android:name="com.facebook.sdk.ApplicationId"/>
         
     </application>

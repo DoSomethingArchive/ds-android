@@ -5,8 +5,10 @@ public class DSConstants {
     // Class is non-instantiable
     private DSConstants() {}
 
-    // Flag to enable/disable analytics tracking. Should be set to false during development to avoid dirtying the data.
-    public static final boolean analyticsEnabled = false;
+    // Flag indicating production use. Should be set to false during development to avoid dirtying the data.
+    // - enables/disables analytics tracking
+    // - indicates which key to use for Urban Airship push notifications
+    public static final boolean inProduction = false;
 
     // IDs and keys for web services
     public static final String FACEBOOK_APP_ID = "525191857506466";

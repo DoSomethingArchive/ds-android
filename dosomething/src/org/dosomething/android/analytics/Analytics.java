@@ -16,7 +16,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 public class Analytics {
 
 	public static void startSession(Activity activity) {
-		if (!DSConstants.analyticsEnabled)
+		if (!DSConstants.inProduction)
 			return;
 
 		// Flurry Analytics
@@ -27,7 +27,7 @@ public class Analytics {
 	}
 	
 	public static void endSession(Activity activity) {
-		if (!DSConstants.analyticsEnabled)
+		if (!DSConstants.inProduction)
 			return;
 
 		// Flurry Analytics
@@ -38,7 +38,7 @@ public class Analytics {
 	}
 	
 	public static void logPageView(Context context, String pageName) {
-		if (!DSConstants.analyticsEnabled)
+		if (!DSConstants.inProduction)
 			return;
 
 		// Flurry Analytics
@@ -50,7 +50,7 @@ public class Analytics {
 	}
 	
 	public static void logCampaignPageView(Context context, String pageName, Campaign campaign) {
-		if (!DSConstants.analyticsEnabled)
+		if (!DSConstants.inProduction)
 			return;
 
 		// Flurry Analytics
@@ -66,7 +66,7 @@ public class Analytics {
 	}
 	
 	public static void logEvent(String eventId, Map<String,String> parameters) {
-		if (!DSConstants.analyticsEnabled)
+		if (!DSConstants.inProduction)
 			return;
 
 		// Flurry Analytics event tracking
@@ -74,7 +74,7 @@ public class Analytics {
 	}
 	
 	public static void logEvent(String category, String action, String label) {
-		if (!DSConstants.analyticsEnabled)
+		if (!DSConstants.inProduction)
 			return;
 
 		// Google Analytics event tracking
@@ -82,7 +82,7 @@ public class Analytics {
 	}
 	
 	public static void logEvent(String category, String action, String label, Long value) {
-		if (!DSConstants.analyticsEnabled)
+		if (!DSConstants.inProduction)
 			return;
 
 		// Google Analytics event tracking
