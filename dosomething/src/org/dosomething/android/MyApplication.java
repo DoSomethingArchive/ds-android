@@ -8,6 +8,7 @@ import com.urbanairship.push.PushManager;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
+import org.dosomething.android.receivers.UAPushNotificationReceiver;
 
 @ReportsCrashes(formKey="dEhCTHFETWdJcUYxX0s0TUV0RzV0Ync6MQ")
 public class MyApplication extends Application {
@@ -22,6 +23,9 @@ public class MyApplication extends Application {
         uaOptions.analyticsEnabled = DSConstants.inProduction;
 
         UAirship.takeOff(this, uaOptions);
+
+        // Register receiver to handle UA pushes
+        PushManager.shared().setIntentReceiver(UAPushNotificationReceiver.class);
 
         // TODO: this should be configurable by the user
         PushManager.enablePush();

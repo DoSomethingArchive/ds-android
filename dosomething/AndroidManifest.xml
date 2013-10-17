@@ -122,7 +122,8 @@
         <service android:name="com.urbanairship.location.LocationService"
             android:label="Sergments Service" />
         
-        <receiver android:process=":remote" android:name=".receivers.AlarmReceiver"></receiver>
+        <receiver android:process=":remote" android:name=".receivers.AlarmReceiver"/>
+        <receiver android:name=".receivers.UAPushNotificationReceiver"/>
         
         <meta-data android:value="@string/facebook_app_id" android:name="com.facebook.sdk.ApplicationId"/>
         
