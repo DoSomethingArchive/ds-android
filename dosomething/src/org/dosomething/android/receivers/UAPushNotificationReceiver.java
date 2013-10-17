@@ -10,8 +10,10 @@ import com.urbanairship.push.PushManager;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.activities.SplashScreenActivity;
+import org.dosomething.android.analytics.Analytics;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -26,8 +28,6 @@ public class UAPushNotificationReceiver extends BroadcastReceiver {
         String action = intent.getAction();
 
         if (action.equals(PushManager.ACTION_NOTIFICATION_OPENED)) {
-            Log.v(TAG, "ACTION_NOTIFICATION_OPENED");
-
             if (!DSConstants.inProduction) {
                 debugPushExtras(intent);
             }
@@ -36,6 +36,17 @@ public class UAPushNotificationReceiver extends BroadcastReceiver {
             Intent launch = new Intent(Intent.ACTION_MAIN);
             launch.setClass(UAirship.shared().getApplicationContext(), SplashScreenActivity.class);
             launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            // Log the open event to Analytics
+            String eventTag = "UA_PUSH";
+            String eventAction = "OPEN";
+            String msg = intent.getStringExtra(PushManager.EXTRA_ALERT);
+
+            HashMap<String, String> param = new HashMap<String, String>();
+            param.put(eventAction, msg);
+
+            Analytics.logEvent(eventTag, param); // Flurry Analytics wrapper
+            Analytics.logEvent(eventTag, eventAction, msg); // Google Analytics wrapper
 
             // TODO: Open to specific screens based on key/value pairs received from the push notification
 
