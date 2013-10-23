@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- TODO -->
 <resources>
+    <!-- Google Analytics -->
     <string name="ga_trackingId">GA_TRACKINGID_PLACEHOLDER</string>
     <bool name="ga_autoActivityTracking">true</bool>
     <bool name="ga_reportUncaughtExceptions">true</bool>
     <bool name="ga_debug">false</bool>
+
+    <!-- Flurry Analytics -->
+    <string name="flurry_api_key">FLURRY_API_KEY_PLACEHOLDER</string>
 </resources>

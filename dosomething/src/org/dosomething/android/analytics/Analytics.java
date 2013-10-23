@@ -8,6 +8,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.urbanairship.UAirship;
 
 import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
 import org.dosomething.android.transfer.Campaign;
 
 import java.util.HashMap;
@@ -21,7 +22,8 @@ public class Analytics {
             return;
 
         // Flurry Analytics
-        FlurryAgent.onStartSession(activity, DSConstants.FLURRY_API_KEY);
+        String flurryApiKey = activity.getString(R.string.flurry_api_key);
+        FlurryAgent.onStartSession(activity, flurryApiKey);
 
         // Google Analytics
         EasyTracker.getInstance().activityStart(activity);
