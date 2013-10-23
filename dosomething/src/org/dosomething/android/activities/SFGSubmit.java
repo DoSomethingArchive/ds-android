@@ -106,7 +106,8 @@ public class SFGSubmit extends AbstractWebForm {
 				}
 
 				// API key and user uid need to also be part of content sent
-				entity.addPart("key", new StringBody(DSConstants.PICS_API_KEY));
+                String apiKey = SFGSubmit.this.getString(R.string.createandshare_api_key);
+				entity.addPart("key", new StringBody(apiKey));
 				entity.addPart("post[uid]",	new StringBody(userContext.getUserUid()));
 
 				// Execute web task
@@ -207,7 +208,8 @@ public class SFGSubmit extends AbstractWebForm {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			String url = webForm.getPostUrl() + "?key=" + DSConstants.PICS_API_KEY;
+            String apiKey = SFGSubmit.this.getString(R.string.createandshare_api_key);
+			String url = webForm.getPostUrl() + "?key=" + apiKey;
 			WebserviceResponse response = doPostMultipart(url, entityData);
 			if (response.getStatusCode() >= 200 && response.getStatusCode() < 400) {
 				bSubmitSuccess = true;

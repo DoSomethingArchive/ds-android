@@ -149,7 +149,8 @@ public class SFGItem extends AbstractActivity {
 	    params.putString("link", campaign.getSFGData().getGalleryUrl() + sfgItem.getId());
 	    params.putString("picture", campaign.getSFGData().getGalleryUrl() + sfgItem.getImageURL());
 
-	    Builder feedDialogBuilder = new WebDialog.Builder(SFGItem.this, DSConstants.FACEBOOK_APP_ID, "feed", params);
+        String fbAppId = SFGItem.this.getString(R.string.facebook_app_id);
+	    Builder feedDialogBuilder = new WebDialog.Builder(SFGItem.this, fbAppId, "feed", params);
 	    WebDialog feedDialog = feedDialogBuilder.build();
 	    feedDialog.setOnCompleteListener(new WebDialog.OnCompleteListener() {
 			@Override
@@ -215,7 +216,8 @@ public class SFGItem extends AbstractActivity {
 
 		@Override
 		protected void doWebOperation() throws Exception {
-			String url = campaign.getSFGData().getGalleryUrl() + "shares.json?key=" + DSConstants.PICS_API_KEY;
+            String apiKey = SFGItem.this.getString(R.string.createandshare_api_key);
+			String url = campaign.getSFGData().getGalleryUrl() + "shares.json?key=" + apiKey;
 			
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("share[uid]", uid));

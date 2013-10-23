@@ -330,8 +330,9 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 		
 		public SFGGalleryWebserviceTask(String _url, String _endpointOverride, int _startId) {
 			super(userContext);
-			
-			this.url = _url + _endpointOverride + ".json?key=" + DSConstants.PICS_API_KEY + "&userid=" + userContext.getUserUid();
+
+            String apiKey = SFGGallery.this.getString(R.string.createandshare_api_key);
+			this.url = _url + _endpointOverride + ".json?key=" + apiKey + "&userid=" + userContext.getUserUid();
 			
 			if (_startId > 0) {
 				this.url += "&last=" + _startId;
@@ -363,8 +364,9 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 			if (options.length() == 0) {
 				options = campaign.getSFGData().getDefaultEndpoint();
 			}
-			
-			this.url = _url + options + ".json?key=" + DSConstants.PICS_API_KEY;
+
+            String apiKey = SFGGallery.this.getString(R.string.createandshare_api_key);
+			this.url = _url + options + ".json?key=" + apiKey;
 			
 			if (_startId > 0) {
 				this.url += "&last="+_startId;
