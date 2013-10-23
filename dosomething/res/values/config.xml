@@ -13,6 +13,14 @@
     <!-- Flurry Analytics -->
     <string name="flurry_api_key">FLURRY_API_KEY_PLACEHOLDER</string>
 
+    <!-- Urban Airship push notifications -->
+    <string name="ua_developmentAppKey">UA_DEVELOPMENT_APP_KEY_PLACEHOLDER</string>
+    <string name="ua_developmentAppSecret">UA_DEVELOPMENT_APP_SECRET_PLACEHOLDER</string>
+    <string name="ua_gcmSender">UA_GCM_SENDER_PLACEHOLDER</string>
+    <string name="ua_productionAppKey">UA_PRODUCTION_APP_KEY_PLACEHOLDER</string>
+    <string name="ua_productionAppSecret">UA_PRODUCTION_APP_SECRET_PLACEHOLDER</string>
+    <string name="ua_transport">gcm</string>
+
     <!-- Create and Share/Pics 4 Pets API Key -->
     <string name="createandshare_api_key">PICS_API_KEY_PLACEHOLDER</string>
 </resources>

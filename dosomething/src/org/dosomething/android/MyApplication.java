@@ -19,6 +19,12 @@ public class MyApplication extends Application {
         super.onCreate();
 
         AirshipConfigOptions uaOptions = AirshipConfigOptions.loadDefaultOptions(this);
+        uaOptions.gcmSender = getString(R.string.ua_gcmSender);
+        uaOptions.transport = getString(R.string.ua_transport);
+        uaOptions.developmentAppKey = getString(R.string.ua_developmentAppKey);
+        uaOptions.developmentAppSecret = getString(R.string.ua_developmentAppSecret);
+        uaOptions.productionAppKey = getString(R.string.ua_productionAppKey);
+        uaOptions.productionAppSecret = getString(R.string.ua_productionAppSecret);
         uaOptions.inProduction = DSConstants.inProduction;
         uaOptions.analyticsEnabled = DSConstants.inProduction;
 
