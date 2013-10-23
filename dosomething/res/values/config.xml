@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO -->
+<!--
+    This file contains configuration values, including sensitive information.
+    To add new values that shouldn't be made public, update the ~/.gitencrypt/
+    scripts on your box.
+-->
 <resources>
     <!-- Google Analytics -->
     <string name="ga_trackingId">GA_TRACKINGID_PLACEHOLDER</string>
