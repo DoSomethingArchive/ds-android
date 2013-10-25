@@ -1,23 +1,5 @@
 package org.dosomething.android.activities;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-import org.dosomething.android.adapters.DrawerListAdapter;
-import org.dosomething.android.cache.Cache;
-import org.dosomething.android.cache.DSPreferences;
-import org.dosomething.android.context.UserContext;
-import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
-import org.dosomething.android.tasks.NoInternetException;
-import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.widget.ProgressBarImageLoadingListener;
-
-import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -56,6 +38,25 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
+import org.dosomething.android.adapters.DrawerListAdapter;
+import org.dosomething.android.cache.Cache;
+import org.dosomething.android.cache.DSPreferences;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
+import org.dosomething.android.tasks.NoInternetException;
+import org.dosomething.android.transfer.Campaign;
+import org.dosomething.android.widget.ProgressBarImageLoadingListener;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import roboguice.inject.InjectView;
 
 public class Campaigns extends AbstractActionBarActivity {
 
@@ -170,14 +171,12 @@ public class Campaigns extends AbstractActionBarActivity {
         List<String> navItems = new ArrayList<String>();
         if (userContext.isLoggedIn()) {
             navItems.add(0, getString(R.string.drawer_item_campaigns));
-            navItems.add(1, getString(R.string.drawer_item_profile));
-            navItems.add(2, getString(R.string.drawer_item_settings));
-            navItems.add(3, getString(R.string.drawer_item_logout));
+            navItems.add(1, getString(R.string.drawer_item_settings));
+            navItems.add(2, getString(R.string.drawer_item_logout));
         }
         else {
             navItems.add(0, getString(R.string.drawer_item_campaigns));
-            navItems.add(1, getString(R.string.drawer_item_profile));
-            navItems.add(2, getString(R.string.drawer_item_login));
+            navItems.add(1, getString(R.string.drawer_item_login));
         }
 
         mDrawerList.setAdapter(new DrawerListAdapter(this, navItems));
@@ -190,15 +189,12 @@ public class Campaigns extends AbstractActionBarActivity {
                         // Already on this page, so do nothing.
                         break;
                     case 1:
-                        startActivity(Profile.getIntent(ctx));
-                        break;
-                    case 2:
                         if (userContext.isLoggedIn())
                             startActivity(ProfileConfig.getIntent(ctx));
                         else
                             startActivityForResult(Login.getIntent(ctx), REQ_LOGIN_FOR_PROFILE);
                         break;
-                    case 3:
+                    case 2:
                         Login.logout(ctx);
                         break;
                 }
