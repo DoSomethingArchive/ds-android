@@ -71,6 +71,9 @@
     <string name="drawer_item_profile">Profile</string>
     <string name="drawer_item_settings">Settings</string>
     <string name="drawer_open">Navigation Open</string>
+    <string name="campaigns_tab_browse_title">Do It</string>
+    <string name="campaigns_tab_completed_title">Done</string>
+    <string name="campaigns_tab_in_progress_title">Doing It</string>
     <string name="campaigns_title">Campaigns</string>
     <string name="campaigns_upgrade_popup">A new update is available!</string>
     <string name="campaign_date_ends">Ends: %1$s</string>

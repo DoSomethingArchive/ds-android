@@ -3,12 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="@dimen/campaign_row_height_open"
     android:orientation="vertical"
-    android:animateLayoutChanges="true" >
+    android:animateLayoutChanges="true">
     
     <FrameLayout 
         android:id="@+id/frame"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        android:layout_margin="5dp"
+        android:background="@drawable/container_dropshadow">
         <ImageView android:id="@+id/background" style="@style/CampaignRowBackground"/>
         <ImageView android:id="@+id/image" style="@style/CampaignRowImage"/>
         <TextView android:id="@+id/callout" style="@style/CampaignCallout"/>

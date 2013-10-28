@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/popup"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/popup_height"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/popupClose"
+            style="@style/UpgradePopupButton"
+            android:text="X" />
+
+        <TextView
+            android:id="@+id/popupMsg"
+            style="@style/UpgradePopupMessage"
+            android:text="@string/campaigns_upgrade_popup"/>
+
+    </RelativeLayout>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:divider="@null"/>
+
+</LinearLayout>
