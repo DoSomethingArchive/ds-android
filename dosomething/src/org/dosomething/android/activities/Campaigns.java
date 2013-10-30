@@ -21,6 +21,7 @@ import android.widget.ListView;
 
 import com.google.inject.Inject;
 
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.adapters.DrawerListAdapter;
 import org.dosomething.android.context.UserContext;
@@ -101,6 +102,12 @@ public class Campaigns extends AbstractActionBarActivity implements ActionBar.Ta
             @Override
             public void onPageScrollStateChanged(int i) {}
         });
+
+        // Set the initial tab it should be on based on arguments passed to this activity
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            int tabIndex = getIntent().getExtras().getInt(DSConstants.EXTRAS_KEY.CAMPAIGNS_TAB.getValue(), 0);
+            mViewPager.setCurrentItem(tabIndex);
+        }
     }
 
     @Override
@@ -208,6 +215,12 @@ public class Campaigns extends AbstractActionBarActivity implements ActionBar.Ta
 
     public static Intent getIntent(Context context) {
         Intent answer = new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return answer;
+    }
+
+    public static Intent getIntent(Context context, DSConstants.CAMPAIGNS_TAB tab) {
+        Intent answer = new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGNS_TAB.getValue(), tab.ordinal());
         return answer;
     }
 

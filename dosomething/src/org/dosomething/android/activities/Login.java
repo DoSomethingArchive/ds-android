@@ -77,8 +77,8 @@ public class Login extends AbstractFragmentActivity {
         return dsLoginTask;
     }
 
-    private void goToProfile(){
-        startActivity(new Intent(this, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+    private void goToCampaigns() {
+        startActivity(Campaigns.getIntent(this, DSConstants.CAMPAIGNS_TAB.DOING_IT));
         finish();
     }
 
@@ -164,7 +164,7 @@ public class Login extends AbstractFragmentActivity {
                 // and Google Analytics
                 Analytics.logEvent("login", "ds-login", "success");
 
-                goToProfile();
+                goToCampaigns();
             }
             else {
                 Toast.makeText(Login.this, getString(R.string.log_in_auth_failed), Toast.LENGTH_LONG).show();

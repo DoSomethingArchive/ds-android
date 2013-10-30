@@ -3,7 +3,6 @@ package org.dosomething.android.tasks;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -12,7 +11,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.activities.AbstractActionBarActivity;
-import org.dosomething.android.activities.Profile;
+import org.dosomething.android.activities.Campaigns;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 
@@ -42,10 +41,10 @@ public class DSFacebookLogin {
         }
     }
 
-    private static void goToProfile(Context context) {
+    private static void goToCampaigns(Context context) {
         if (context instanceof Activity) {
             Activity activity = (Activity)context;
-            activity.startActivity(new Intent(context, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            activity.startActivity(Campaigns.getIntent(context, DSConstants.CAMPAIGNS_TAB.DO));
             activity.finish();
         }
     }
@@ -96,7 +95,7 @@ public class DSFacebookLogin {
                 // and Google Analytics
                 Analytics.logEvent(pageName, "facebook-login", "success");
 
-                goToProfile(context);
+                goToCampaigns(context);
             }
             else {
                 Toast.makeText(context, context.getString(R.string.log_in_auth_failed), Toast.LENGTH_LONG).show();

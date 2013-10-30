@@ -2,7 +2,6 @@ package org.dosomething.android.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -76,8 +75,8 @@ public class Register extends AbstractFragmentActivity {
     	finish();
     }
 
-    private void goToProfile(){
-        startActivity(new Intent(this, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+    private void goToCampaigns() {
+        startActivity(Campaigns.getIntent(this, DSConstants.CAMPAIGNS_TAB.DO));
         finish();
     }
 	
@@ -120,7 +119,7 @@ public class Register extends AbstractFragmentActivity {
 				// and Google Analytics
 				Analytics.logEvent("login", "register", "success");
 				
-				goToProfile();
+				goToCampaigns();
 			} else {
 				new AlertDialog.Builder(Register.this)
 					.setMessage(validationMessage)
