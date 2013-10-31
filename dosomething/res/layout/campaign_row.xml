@@ -4,12 +4,17 @@
     android:layout_height="@dimen/campaign_row_height_open"
     android:orientation="vertical"
     android:animateLayoutChanges="true">
-    
+
+    <!-- FrameLayout margins skewed to accommodate the drop shadow added to bottom and right edges
+        of the view -->
     <FrameLayout 
         android:id="@+id/frame"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_margin="5dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="7dp"
         android:background="@drawable/container_dropshadow">
         <ImageView android:id="@+id/background" style="@style/CampaignRowBackground"/>
         <ImageView android:id="@+id/image" style="@style/CampaignRowImage"/>
