@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Camera;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.Transformation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -135,19 +139,8 @@ public class CampaignsListFragment extends RoboFragment {
     private class CampaignItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> av, View v, int position, long id) {
-
-            int openHeight = getResources().getDimensionPixelSize(R.dimen.campaign_row_height_open);
-            if (v.getLayoutParams().height == openHeight) {
-                Campaign campaign = (Campaign) list.getAdapter().getItem(position);
-                startActivity(org.dosomething.android.activities.Campaign.getIntent(getActivity(), campaign));
-            }
-            else {
-                listAdapter.setItemOpenState(position - 1, true);
-
-                ExpandCampaignAnimation anim = new ExpandCampaignAnimation(v);
-                v.setAnimation(anim);
-                anim.start();
-            }
+            Campaign campaign = (Campaign) list.getAdapter().getItem(position);
+            startActivity(org.dosomething.android.activities.Campaign.getIntent(getActivity(), campaign));
         }
     };
 
@@ -193,8 +186,6 @@ public class CampaignsListFragment extends RoboFragment {
 
         @Override
         protected void onSuccess() {
-            list.setOnItemClickListener(itemClickListener);
-
             // Don't display campaigns that require a higher version than what we have
             int version = 0;
             try {
@@ -217,8 +208,12 @@ public class CampaignsListFragment extends RoboFragment {
                 }
             }
 
+            // Adapter to display the list items
             listAdapter = new CampaignListAdapter(getActivity(), campaigns);
             list.setAdapter(listAdapter);
+
+            // Handle click events
+            list.setOnItemClickListener(itemClickListener);
         }
 
         @Override
@@ -267,12 +262,12 @@ public class CampaignsListFragment extends RoboFragment {
 
     private class CampaignListAdapter extends ArrayAdapter<Campaign> {
 
-        private boolean itemOpenState[];
+        private int lastItemUpdatePosition;
 
-        public CampaignListAdapter(Context context, List<Campaign> objects){
+        public CampaignListAdapter(Context context, List<Campaign> objects) {
             super(context, android.R.layout.simple_expandable_list_item_1, objects);
 
-            this.itemOpenState = new boolean[objects.size()];
+            this.lastItemUpdatePosition = 0;
         }
 
         @Override
@@ -298,25 +293,12 @@ public class CampaignsListFragment extends RoboFragment {
 
             Calendar cal = Calendar.getInstance();
             Date todayDate = cal.getTime();
-            if (itemOpenState[position] != true && todayDate.after(campaign.getEndDate())) {
-                // Semi-hide past campaigns
-                itemOpenState[position] = false;
-                int closedHeight = getResources().getDimensionPixelSize(R.dimen.campaign_row_height_closed);
-                if (v.getLayoutParams() != null)
-                    v.getLayoutParams().height = closedHeight;
-                else {
-                    v.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, closedHeight));
-                }
+            int openHeight = getResources().getDimensionPixelSize(R.dimen.campaign_row_height_open);
+            if (v.getLayoutParams() != null) {
+                v.getLayoutParams().height = openHeight;
             }
             else {
-                itemOpenState[position] = true;
-                int openHeight = getResources().getDimensionPixelSize(R.dimen.campaign_row_height_open);
-                if (v.getLayoutParams() != null) {
-                    v.getLayoutParams().height = openHeight;
-                }
-                else {
-                    v.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, openHeight));
-                }
+                v.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, openHeight));
             }
 
             TextView textView = (TextView) v.findViewById(R.id.callout);
@@ -367,13 +349,24 @@ public class CampaignsListFragment extends RoboFragment {
                 }
             }
 
-            return v;
-        }
+            // Apply animation when item comes onto the screen, but only when scrolling down
+            if (position > lastItemUpdatePosition) {
+                Animation animRotate = new Rotate3dAnimation(0, 0, -15, 0, 0, 0);
+                animRotate.setDuration(350);
 
-        public void setItemOpenState(int position, boolean opened) {
-            if (itemOpenState.length > position) {
-                itemOpenState[position] = opened;
+                Animation animTranslate = new TranslateAnimation(0, 0, v.getHeight() / 2, 0);
+                animTranslate.setDuration(400);
+
+                AnimationSet animSet = new AnimationSet(false);
+                animSet.addAnimation(animRotate);
+                animSet.addAnimation(animTranslate);
+
+                v.setAnimation(animSet);
             }
+
+            lastItemUpdatePosition = position;
+
+            return v;
         }
 
         private int getCauseDrawable(int cause_id) {
@@ -401,6 +394,59 @@ public class CampaignsListFragment extends RoboFragment {
                 return R.drawable.cause_relationships_tag;
             else
                 return -1;
+        }
+
+    }
+
+    /**
+     * Animation to rotate a view about the x, y, and/or z axis.
+     * Kudos to this gist for the help: https://gist.github.com/methodin/5678214
+     */
+    public class Rotate3dAnimation extends Animation {
+        private final float fromXDegrees;
+        private final float toXDegrees;
+        private final float fromYDegrees;
+        private final float toYDegrees;
+        private final float fromZDegrees;
+        private final float toZDegrees;
+        private Camera camera;
+        private int width = 0;
+        private int height = 0;
+
+        public Rotate3dAnimation(float fromXDegrees, float toXDegrees, float fromYDegrees, float toYDegrees, float fromZDegrees, float toZDegrees) {
+            this.fromXDegrees = fromXDegrees;
+            this.toXDegrees = toXDegrees;
+            this.fromYDegrees = fromYDegrees;
+            this.toYDegrees = toYDegrees;
+            this.fromZDegrees = fromZDegrees;
+            this.toZDegrees = toZDegrees;
+        }
+
+        @Override
+        public void initialize(int width, int height, int parentWidth, int parentHeight) {
+            super.initialize(width, height, parentWidth, parentHeight);
+            this.width = width / 2;
+            this.height = height / 2;
+            camera = new Camera();
+        }
+
+        @Override
+        protected void applyTransformation(float interpolatedTime, Transformation t) {
+            float xDegrees = fromXDegrees + ((toXDegrees - fromXDegrees) * interpolatedTime);
+            float yDegrees = fromYDegrees + ((toYDegrees - fromYDegrees) * interpolatedTime);
+            float zDegrees = fromZDegrees + ((toZDegrees - fromZDegrees) * interpolatedTime);
+
+            final Matrix matrix = t.getMatrix();
+
+            camera.save();
+            camera.rotateX(xDegrees);
+            camera.rotateY(yDegrees);
+            camera.rotateZ(zDegrees);
+            camera.getMatrix(matrix);
+            camera.restore();
+
+            matrix.preTranslate(-this.width, -this.height);
+            matrix.postTranslate(this.width, this.height);
         }
 
     }
