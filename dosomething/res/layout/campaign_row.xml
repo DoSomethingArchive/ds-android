@@ -35,6 +35,15 @@
         android:layout_marginTop="7dp"
         android:background="@drawable/container_dropshadow"
         android:visibility="invisible">
+        <!-- Button must not be focusable in order for ListView to still receive click events -->
+        <Button
+            android:id="@+id/preview_close"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:focusable="false"
+            android:text="x"/>
         <TextView
             android:id="@+id/preview_title"
             android:layout_height="wrap_content"

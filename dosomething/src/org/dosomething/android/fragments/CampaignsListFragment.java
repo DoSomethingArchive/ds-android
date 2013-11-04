@@ -24,6 +24,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -128,11 +129,11 @@ public class CampaignsListFragment extends RoboFragment {
      *
      * @param view View to execute animation on
      */
-    private void doCardFlipAnimation(View view) {
+    private void doCardFlipAnimation(View view, boolean reverse) {
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         ScaleAnimation anim = new ScaleAnimation(1f, 0f, 1f, 1f, display.getWidth() / 2, display.getHeight() / 2);
-        anim.setDuration(250);
-        anim.setAnimationListener(new CardFlipAnimationListener(view));
+        anim.setDuration(175);
+        anim.setAnimationListener(new CardFlipAnimationListener(view, reverse));
         view.startAnimation(anim);
     }
 
@@ -160,7 +161,7 @@ public class CampaignsListFragment extends RoboFragment {
 
             View cardBackside = view.findViewById(R.id.frame_backside);
             if (cardBackside != null && cardBackside.getVisibility() == View.INVISIBLE) {
-                doCardFlipAnimation(view);
+                doCardFlipAnimation(view, false);
             }
             else {
                 startActivity(org.dosomething.android.activities.Campaign.getIntent(getActivity(), campaign));
@@ -270,6 +271,17 @@ public class CampaignsListFragment extends RoboFragment {
             View v = convertView;
             if (v == null) {
                 v = inflater.inflate(R.layout.campaign_row, null);
+
+                // Set click listener for the close button
+                Button closeButton = (Button)v.findViewById(R.id.preview_close);
+                closeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // This seems sorta hacky. Must guarantee that this Button is two levels under
+                        // the containing row layout, and that the Layout is a FrameLayout
+                        doCardFlipAnimation((FrameLayout)view.getParent().getParent(), true);
+                    }
+                });
             }
 
             // Ensure front side of the item is visible
@@ -281,11 +293,11 @@ public class CampaignsListFragment extends RoboFragment {
             Campaign campaign = getItem(position);
 
             ImageView bgImageView = (ImageView) v.findViewById(R.id.background);
-            if(campaign.getBackgroundUrl()!=null) {
+            bgImageView.setImageDrawable(null);
+            bgImageView.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
+
+            if (campaign.getBackgroundUrl() != null) {
                 imageLoader.displayImage(campaign.getBackgroundUrl(), bgImageView);
-            } else {
-                bgImageView.setImageDrawable(null);
-                bgImageView.setBackgroundColor(Color.parseColor(campaign.getBackgroundColor()));
             }
 
             ImageView imageView = (ImageView) v.findViewById(R.id.image);
@@ -406,8 +418,12 @@ public class CampaignsListFragment extends RoboFragment {
         // The view the animation is being executed on
         private View cardView;
 
-        public CardFlipAnimationListener(View view) {
+        // Set to true if animation should flip from backside to front
+        private boolean reverseFlip;
+
+        public CardFlipAnimationListener(View view, boolean reverse) {
             this.cardView = view;
+            this.reverseFlip = reverse;
         }
 
         @Override
@@ -417,12 +433,22 @@ public class CampaignsListFragment extends RoboFragment {
         public void onAnimationEnd(Animation animation) {
             Display display = getActivity().getWindowManager().getDefaultDisplay();
             ScaleAnimation anim = new ScaleAnimation(0f, 1f, 1f, 1f, display.getWidth() / 2, display.getHeight() / 2);
-            anim.setDuration(250);
+            anim.setDuration(175);
             cardView.startAnimation(anim);
 
             View cardBackside = cardView.findViewById(R.id.frame_backside);
-            if (cardBackside != null) {
-                cardBackside.setVisibility(View.VISIBLE);
+            View cardFrontside = cardView.findViewById(R.id.frame);
+            if (reverseFlip) {
+                if (cardBackside != null)
+                    cardBackside.setVisibility(View.INVISIBLE);
+                if (cardFrontside != null)
+                    cardFrontside.setVisibility(View.VISIBLE);
+            }
+            else {
+                if (cardBackside != null)
+                    cardBackside.setVisibility(View.VISIBLE);
+                if (cardFrontside != null)
+                    cardFrontside.setVisibility(View.INVISIBLE);
             }
         }
 
