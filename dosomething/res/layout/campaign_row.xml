@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="@dimen/campaign_row_height_open"
-    android:orientation="vertical"
-    android:animateLayoutChanges="true">
+    android:layout_height="@dimen/campaign_row_height_open">
 
     <!-- FrameLayout margins skewed to accommodate the drop shadow added to bottom and right edges
         of the view -->
@@ -26,7 +24,33 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
     </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/frame_backside"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/container_dropshadow"
+        android:visibility="invisible">
+        <TextView
+            android:id="@+id/preview_title"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="32sp"
+            android:text="DUMMY TITLE"/>
+
+        <TextView
+            android:id="@+id/preview_body"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@id/preview_title"
+            android:text="Lorem ipsum dolor sit amet"/>
+
+    </RelativeLayout>
     
     
     
-</LinearLayout> 
+</FrameLayout>

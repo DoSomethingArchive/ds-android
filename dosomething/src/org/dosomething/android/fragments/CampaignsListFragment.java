@@ -11,12 +11,13 @@ import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
@@ -123,6 +124,19 @@ public class CampaignsListFragment extends RoboFragment {
     }
 
     /**
+     * Animates an item in the list to flip over.
+     *
+     * @param view View to execute animation on
+     */
+    private void doCardFlipAnimation(View view) {
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        ScaleAnimation anim = new ScaleAnimation(1f, 0f, 1f, 1f, display.getWidth() / 2, display.getHeight() / 2);
+        anim.setDuration(250);
+        anim.setAnimationListener(new CardFlipAnimationListener(view));
+        view.startAnimation(anim);
+    }
+
+    /**
      * Executes task to fetch the list of campaign.
      *
      * @param forceSearch Set to true if data should be forced to retrieve data
@@ -136,42 +150,23 @@ public class CampaignsListFragment extends RoboFragment {
         task.execute();
     }
 
+    /**
+     * Click listener for the list.
+     */
     private class CampaignItemClickListener implements AdapterView.OnItemClickListener {
         @Override
-        public void onItemClick(AdapterView<?> av, View v, int position, long id) {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Campaign campaign = (Campaign) list.getAdapter().getItem(position);
-            startActivity(org.dosomething.android.activities.Campaign.getIntent(getActivity(), campaign));
+
+            View cardBackside = view.findViewById(R.id.frame_backside);
+            if (cardBackside != null && cardBackside.getVisibility() == View.INVISIBLE) {
+                doCardFlipAnimation(view);
+            }
+            else {
+                startActivity(org.dosomething.android.activities.Campaign.getIntent(getActivity(), campaign));
+            }
         }
     };
-
-    private class ExpandCampaignAnimation extends Animation {
-        private View campaignView;
-        private int heightDelta, startingHeight;
-        private int animDuration = 150;	// in milliseconds
-
-        public ExpandCampaignAnimation(View v) {
-            this.campaignView = v;
-            this.setDuration(animDuration);
-            this.setInterpolator(new AccelerateInterpolator());
-
-            this.startingHeight = getResources().getDimensionPixelSize(R.dimen.campaign_row_height_closed);
-            int targetHeight = getResources().getDimensionPixelSize(R.dimen.campaign_row_height_open);
-            this.heightDelta = targetHeight - this.startingHeight;
-        }
-
-        @Override
-        protected void applyTransformation(float interpolatedTime, Transformation t) {
-            int newHeight = (int)(this.heightDelta * interpolatedTime) + this.startingHeight;
-            campaignView.getLayoutParams().height = newHeight;
-            campaignView.requestLayout();
-        }
-
-        @Override
-        public boolean willChangeBounds() {
-            return true;
-        }
-    }
-
 
     private class CampaignsTask extends AbstractFetchCampaignsTask {
 
@@ -276,6 +271,12 @@ public class CampaignsListFragment extends RoboFragment {
             if (v == null) {
                 v = inflater.inflate(R.layout.campaign_row, null);
             }
+
+            // Ensure front side of the item is visible
+            View backside = v.findViewById(R.id.frame_backside);
+            backside.setVisibility(View.INVISIBLE);
+            View frontside = v.findViewById(R.id.frame);
+            frontside.setVisibility(View.VISIBLE);
 
             Campaign campaign = getItem(position);
 
@@ -399,6 +400,37 @@ public class CampaignsListFragment extends RoboFragment {
     }
 
     /**
+     * Listener on card flip animation to trigger the second half of the animation.
+     */
+    private class CardFlipAnimationListener implements Animation.AnimationListener {
+        // The view the animation is being executed on
+        private View cardView;
+
+        public CardFlipAnimationListener(View view) {
+            this.cardView = view;
+        }
+
+        @Override
+        public void onAnimationStart(Animation animation) {}
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            Display display = getActivity().getWindowManager().getDefaultDisplay();
+            ScaleAnimation anim = new ScaleAnimation(0f, 1f, 1f, 1f, display.getWidth() / 2, display.getHeight() / 2);
+            anim.setDuration(250);
+            cardView.startAnimation(anim);
+
+            View cardBackside = cardView.findViewById(R.id.frame_backside);
+            if (cardBackside != null) {
+                cardBackside.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {}
+    }
+
+    /**
      * Animation to rotate a view about the x, y, and/or z axis.
      * Kudos to this gist for the help: https://gist.github.com/methodin/5678214
      */
@@ -413,7 +445,8 @@ public class CampaignsListFragment extends RoboFragment {
         private int width = 0;
         private int height = 0;
 
-        public Rotate3dAnimation(float fromXDegrees, float toXDegrees, float fromYDegrees, float toYDegrees, float fromZDegrees, float toZDegrees) {
+        public Rotate3dAnimation(float fromXDegrees, float toXDegrees, float fromYDegrees,
+                                 float toYDegrees, float fromZDegrees, float toZDegrees) {
             this.fromXDegrees = fromXDegrees;
             this.toXDegrees = toXDegrees;
             this.fromYDegrees = fromYDegrees;
