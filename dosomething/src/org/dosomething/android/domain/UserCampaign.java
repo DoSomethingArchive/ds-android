@@ -8,15 +8,15 @@ public class UserCampaign {
 
     public static final String TABLE_NAME = "user_campaign";
 
-    public static final String FIELD_ID = "id";
-    public static final String FIELD_CAMPAIGN_ID = "campaign_id";
-    public static final String FIELD_UID = "uid";
-    public static final String FIELD_CAMPAIGN_NAME = "campaign_name";
-    public static final String FIELD_CAUSE_TYPE = "cause_type";
-    public static final String FIELD_COMPLETED_STEPS = "completed_steps";
-    public static final String FIELD_DATE_COMPLETED = "date_completed";
-    public static final String FIELD_DATE_ENDS = "date_ends";
-    public static final String FIELD_DATE_STARTS = "date_starts";
+    public static final String COL_ID = "id";
+    public static final String COL_CAMPAIGN_ID = "campaign_id";
+    public static final String COL_UID = "uid";
+    public static final String COL_CAMPAIGN_NAME = "campaign_name";
+    public static final String COL_CAUSE_TYPE = "cause_type";
+    public static final String COL_COMPLETED_STEPS = "completed_steps";
+    public static final String COL_DATE_COMPLETED = "date_completed";
+    public static final String COL_DATE_ENDS = "date_ends";
+    public static final String COL_DATE_STARTS = "date_starts";
 
     /**
      * Create the user_campaign table and its columns.
@@ -25,16 +25,16 @@ public class UserCampaign {
      */
     public static final void createTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
-                FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                FIELD_CAMPAIGN_ID + " TEXT NOT NULL, " +
-                FIELD_UID + " TEXT NOT NULL, " +
+                COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_CAMPAIGN_ID + " TEXT NOT NULL, " +
+                COL_UID + " TEXT NOT NULL, " +
                 // Added in version 2 of the database
-                FIELD_CAMPAIGN_NAME + " TEXT, " +
-                FIELD_CAUSE_TYPE + " TEXT, " +
-                FIELD_COMPLETED_STEPS + " TEXT, " +
-                FIELD_DATE_COMPLETED + " INTEGER, " +
-                FIELD_DATE_ENDS + " INTEGER, " +
-                FIELD_DATE_STARTS + " INTEGER);"
+                COL_CAMPAIGN_NAME + " TEXT, " +
+                COL_CAUSE_TYPE + " TEXT, " +
+                COL_COMPLETED_STEPS + " TEXT, " +
+                COL_DATE_COMPLETED + " INTEGER, " +
+                COL_DATE_ENDS + " INTEGER, " +
+                COL_DATE_STARTS + " INTEGER);"
         );
     }
 
@@ -44,12 +44,12 @@ public class UserCampaign {
      * @param db Database being upgraded
      */
     public static final void upgradeToV2(SQLiteDatabase db) {
-        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + FIELD_CAMPAIGN_NAME + " TEXT;");
-        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + FIELD_CAUSE_TYPE + " TEXT");
-        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + FIELD_COMPLETED_STEPS +" TEXT;");
-        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + FIELD_DATE_COMPLETED + " INTEGER;");
-        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + FIELD_DATE_ENDS + " INTEGER;");
-        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + FIELD_DATE_STARTS + " INTEGER;");
+        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_CAMPAIGN_NAME + " TEXT;");
+        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_CAUSE_TYPE + " TEXT");
+        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_COMPLETED_STEPS +" TEXT;");
+        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_DATE_COMPLETED + " INTEGER;");
+        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_DATE_ENDS + " INTEGER;");
+        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_DATE_STARTS + " INTEGER;");
     }
 
     ////////////////////
@@ -124,14 +124,14 @@ public class UserCampaign {
     public ContentValues getContentValues() {
         ContentValues cv = new ContentValues();
 
-        cv.put(FIELD_CAMPAIGN_ID, mCampaignId);
-        cv.put(FIELD_UID, mUid);
-        cv.put(FIELD_CAMPAIGN_NAME, mCampaignName);
-        cv.put(FIELD_CAUSE_TYPE, mCauseType);
-        cv.put(FIELD_COMPLETED_STEPS, mCompletedSteps);
-        cv.put(FIELD_DATE_COMPLETED, mDateCompleted);
-        cv.put(FIELD_DATE_ENDS, mDateEnds);
-        cv.put(FIELD_DATE_STARTS, mDateStarts);
+        cv.put(COL_CAMPAIGN_ID, mCampaignId);
+        cv.put(COL_UID, mUid);
+        cv.put(COL_CAMPAIGN_NAME, mCampaignName);
+        cv.put(COL_CAUSE_TYPE, mCauseType);
+        cv.put(COL_COMPLETED_STEPS, mCompletedSteps);
+        cv.put(COL_DATE_COMPLETED, mDateCompleted);
+        cv.put(COL_DATE_ENDS, mDateEnds);
+        cv.put(COL_DATE_STARTS, mDateStarts);
 
         return cv;
     }
@@ -174,8 +174,17 @@ public class UserCampaign {
 
 	@Override
 	public String toString() {
-		return "UserCampaign [id=" + mId + ", campaignId=" + mCampaignId
-				+ ", uid=" + mUid + "]";
+        return "UserCampaign [" +
+                COL_ID + "=" + mId + ", " +
+                COL_CAMPAIGN_ID + "=" + mCampaignId + ", " +
+                COL_UID + "=" + mUid + ", " +
+                COL_CAMPAIGN_NAME + "=" + mCampaignName + ", " +
+                COL_CAUSE_TYPE + "=" + mCauseType + ", " +
+                COL_COMPLETED_STEPS + "=" + mCompletedSteps + ", " +
+                COL_DATE_COMPLETED + "=" + mDateCompleted + ", " +
+                COL_DATE_ENDS + "=" + mDateEnds + ", " +
+                COL_DATE_STARTS + "=" + mDateStarts +
+                "]";
 	}
 
     /**

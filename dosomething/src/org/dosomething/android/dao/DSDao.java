@@ -37,7 +37,16 @@ public class DSDao {
 		
 		SQLHelper sql = new SQLHelper(context);
 		
-		Cursor c = sql.getReadableDatabase().query("user_campaign", new String[]{"id", "campaign_id", "uid"}, "uid = ? and campaign_id = ?", new String[]{uid, campaignId}, null, null, null);
+		Cursor c = sql.getReadableDatabase().query(
+                UserCampaign.TABLE_NAME,
+                new String[] {UserCampaign.COL_ID, UserCampaign.COL_CAMPAIGN_ID, UserCampaign.COL_UID},
+                UserCampaign.COL_UID + "=? and " + UserCampaign.COL_CAMPAIGN_ID + "=?",
+                new String[] {uid, campaignId},
+                null,
+                null,
+                null
+        );
+
 		if(c.moveToFirst()){
 			answer = new UserCampaign(c);
 		}
@@ -53,7 +62,16 @@ public class DSDao {
 		
 		SQLHelper sql = new SQLHelper(context);
 		
-		Cursor c = sql.getReadableDatabase().query("user_campaign", new String[]{"id", "campaign_id", "uid"}, "uid = ?", new String[]{uid}, null, null, null);
+		Cursor c = sql.getReadableDatabase().query(
+                UserCampaign.TABLE_NAME,
+                new String[] {UserCampaign.COL_ID, UserCampaign.COL_CAMPAIGN_ID, UserCampaign.COL_UID},
+                UserCampaign.COL_UID + "=?",
+                new String[] {uid},
+                null,
+                null,
+                null
+        );
+
 		while(c.moveToNext()){
 			UserCampaign uc = new UserCampaign(c);
 			answer.add(uc);
@@ -82,10 +100,10 @@ public class DSDao {
         // Find out if this campaign's already been added to the table -
         // indicating it's already been signed up for.
 		Cursor cursor = db.query(
-                "user_campaign",
-                new String[]{"id"},
-                "uid=? and campaign_id=?",
-                new String[]{uid, campaignId},
+                UserCampaign.TABLE_NAME,
+                new String[] {UserCampaign.COL_ID},
+                UserCampaign.COL_UID + "=? and " + UserCampaign.COL_CAMPAIGN_ID + "=?",
+                new String[] {uid, campaignId},
                 null,
                 null,
                 null,
@@ -235,12 +253,12 @@ public class DSDao {
 		removeCompletedAction(action.getUserCampaignId(), action.getActionText());
 		
 		ContentValues cv = new ContentValues();
-		cv.put("user_campaign_id", action.getUserCampaignId());
-		cv.put("action_text", action.getActionText());
+		cv.put(CompletedCampaignAction.COL_USER_CAMPAIGN_ID, action.getUserCampaignId());
+		cv.put(CompletedCampaignAction.COL_ACTION_TEXT, action.getActionText());
 		
 		SQLHelper sql = new SQLHelper(context);
         
-        sql.getWritableDatabase().insertOrThrow("completed_campaign_action", null, cv);
+        sql.getWritableDatabase().insertOrThrow(CompletedCampaignAction.TABLE_NAME, null, cv);
          
         sql.close();
 	}
@@ -250,7 +268,15 @@ public class DSDao {
 
 		SQLHelper sql = new SQLHelper(context);
 
-		Cursor cursor = sql.getReadableDatabase().query("completed_campaign_action", new String[]{"id", "user_campaign_id", "action_text"}, "user_campaign_id = ?", new String[]{Long.toString(userCampaignId)}, null, null, null);
+        Cursor cursor = sql.getReadableDatabase().query(
+                CompletedCampaignAction.TABLE_NAME,
+                new String[] {CompletedCampaignAction.COL_ID, CompletedCampaignAction.COL_USER_CAMPAIGN_ID, CompletedCampaignAction.COL_ACTION_TEXT},
+                CompletedCampaignAction.COL_USER_CAMPAIGN_ID + "=?",
+                new String[] {Long.toString(userCampaignId)},
+                null,
+                null,
+                null
+        );
 
 		if(cursor != null){
 			while(cursor.moveToNext()){
@@ -269,7 +295,11 @@ public class DSDao {
 	public void removeCompletedAction(Long userCampaignId, String actionText) {
 		SQLHelper sql = new SQLHelper(context);
 		
-		sql.getWritableDatabase().delete("completed_campaign_action", "user_campaign_id = ? and action_text = ?", new String[]{Long.toString(userCampaignId), actionText});
+        sql.getWritableDatabase().delete(
+                CompletedCampaignAction.TABLE_NAME,
+                CompletedCampaignAction.COL_USER_CAMPAIGN_ID + "=? and " + CompletedCampaignAction.COL_ACTION_TEXT + "=?",
+                new String[] {Long.toString(userCampaignId), actionText}
+        );
 		
 		sql.close();
 	}

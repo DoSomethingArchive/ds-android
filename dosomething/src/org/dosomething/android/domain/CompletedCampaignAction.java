@@ -7,6 +7,10 @@ public class CompletedCampaignAction {
 
     public static final String TABLE_NAME = "completed_campaign_action";
 
+    public static final String COL_ID = "id";
+    public static final String COL_USER_CAMPAIGN_ID = "user_campaign_id";
+    public static final String COL_ACTION_TEXT = "action_text";
+
     /**
      * Create the completed_campaign_action table and its columns.
      *
@@ -14,52 +18,48 @@ public class CompletedCampaignAction {
      */
     public static final void createTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "user_campaign_id INTEGER REFERENCES user_campaign, " +
-                "action_text TEXT NOT NULL);"
+                COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_USER_CAMPAIGN_ID + " INTEGER REFERENCES user_campaign, " +
+                COL_ACTION_TEXT + " TEXT NOT NULL);"
         );
     }
 	
-	private Long id;
-	private Long userCampaignId;
-	private String actionText;
+	private Long mId;
+	private Long mUserCampaignId;
+	private String mActionText;
 	
 	public CompletedCampaignAction(Long userCampaignId, String actionText) {
 		super();
-		this.userCampaignId = userCampaignId;
-		this.actionText = actionText;
+		mUserCampaignId = userCampaignId;
+		mActionText = actionText;
 	}
 	
 	public CompletedCampaignAction(Cursor cursor){
 		int i = 0;
 		
-		setId(cursor.getLong(i++));
-		setUserCampaignId(cursor.getLong(i++));
-		setActionText(cursor.getString(i++));
+		mId = cursor.getLong(i++);
+		mUserCampaignId = cursor.getLong(i++);
+		mActionText = cursor.getString(i++);
 	}
 	
 	public Long getId() {
-		return id;
+		return mId;
 	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+
 	public Long getUserCampaignId() {
-		return userCampaignId;
+		return mUserCampaignId;
 	}
-	public void setUserCampaignId(Long userCampaignId) {
-		this.userCampaignId = userCampaignId;
-	}
+
 	public String getActionText() {
-		return actionText;
-	}
-	public void setActionText(String actionText) {
-		this.actionText = actionText;
+		return mActionText;
 	}
 
 	@Override
 	public String toString() {
-		return "CompletedCampaignAction [id=" + id + ", userCampaignId="
-				+ userCampaignId + ", actionText=" + actionText + "]";
+        return "CompletedCampaignAction [" +
+                COL_ID + "=" + mId + ", " +
+                COL_USER_CAMPAIGN_ID + "=" + mUserCampaignId + ", " +
+                COL_ACTION_TEXT + "=" + mActionText +
+                "]";
 	}
 }
