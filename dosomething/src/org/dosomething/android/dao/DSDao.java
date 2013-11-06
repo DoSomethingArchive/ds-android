@@ -1,5 +1,18 @@
 package org.dosomething.android.dao;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.google.inject.Inject;
+
+import org.dosomething.android.domain.CompletedCampaignAction;
+import org.dosomething.android.domain.UserCampaign;
+import org.dosomething.android.transfer.Campaign;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,19 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.dosomething.android.domain.CompletedCampaignAction;
-import org.dosomething.android.domain.UserCampaign;
-import org.dosomething.android.transfer.Campaign;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-
-import com.google.inject.Inject;
 
 public class DSDao {
 	
@@ -64,28 +64,49 @@ public class DSDao {
 		
 		return answer;
 	}
-	
-	public Long setSignedUp(String uid, String campaignId){
-		ContentValues cv = new ContentValues();
-		cv.put("uid", uid);
-		cv.put("campaign_id", campaignId);
-		
+
+    /**
+     * Inserts a row into the database, or finds the already existing row, to indicate that this
+     * user has signed up for the given campaign.
+     *
+     * @param userCampaign UserCampaign object of the campaign being signed up for
+     * @return Key id of the campaign's row in the db table
+     */
+	public Long setSignedUp(UserCampaign userCampaign) {
 		SQLHelper sql = new SQLHelper(context);
 		SQLiteDatabase db = sql.getWritableDatabase();
-		
-		Cursor cursor = db.query("user_campaign", new String[]{"id"}, "uid=? and campaign_id=?", new String[]{uid, campaignId}, null, null, null, "1");
-		
-		Long answer;
-		if(cursor.moveToFirst()) {
-			answer = cursor.getLong(0);
-		} else {
-			answer = db.insertOrThrow("user_campaign", null, cv);
-		}
-        
+
+        String uid = userCampaign.getUid();
+        String campaignId = userCampaign.getCampaignId();
+
+        // Find out if this campaign's already been added to the table -
+        // indicating it's already been signed up for.
+		Cursor cursor = db.query(
+                "user_campaign",
+                new String[]{"id"},
+                "uid=? and campaign_id=?",
+                new String[]{uid, campaignId},
+                null,
+                null,
+                null,
+                "1"
+        );
+
+        Long keyId;
+        // If campaign's already signed up for, just return that pre-existing key id
+        if (cursor != null && cursor.moveToFirst()) {
+            UserCampaign uc = new UserCampaign(cursor);
+            keyId = uc.getId();
+        }
+        // Otherwise, insert the campaign into the table
+        else {
+            keyId = db.insertOrThrow(UserCampaign.TABLE_NAME, null, userCampaign.getContentValues());
+        }
+
 		cursor.close();
         sql.close();
         
-        return answer;
+        return keyId;
 	}
 	
 	/**

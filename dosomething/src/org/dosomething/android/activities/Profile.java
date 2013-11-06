@@ -362,7 +362,11 @@ public class Profile extends AbstractActionBarActivity {
                         if (campaign.getGid() == gids.get(i).intValue()) {
 
                             // Save campaign as being signed up for
-                            Long userCampaignId = dao.setSignedUp(uid, campaign.getId());
+                            UserCampaign uc = new UserCampaign.UserCampaignCVBuilder()
+                                    .campaignId(campaign.getId())
+                                    .uid(uid)
+                                    .build();
+                            Long userCampaignId = dao.setSignedUp(uc);
                             // And mark the sign-up challenge as completed
                             List<Challenge> challenges = campaign.getChallenges();
                             if (challenges != null) {

@@ -11,6 +11,7 @@ import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.domain.CompletedCampaignAction;
+import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.receivers.AlarmReceiver;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.Challenge;
@@ -56,8 +57,12 @@ public class SignUp extends AbstractWebForm {
 		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
 		
 		DSDao dao = new DSDao(this);
-		
-		Long userCampaignId = dao.setSignedUp(new UserContext(this).getUserUid(), campaign.getId());
+
+        UserCampaign uc = new UserCampaign.UserCampaignCVBuilder()
+                .campaignId(campaign.getId())
+                .uid(new UserContext(this).getUserUid())
+                .build();
+        Long userCampaignId = dao.setSignedUp(uc);
 		
 		List<Challenge> challenges = campaign.getChallenges();
 		

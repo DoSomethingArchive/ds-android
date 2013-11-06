@@ -1,16 +1,28 @@
 package org.dosomething.android.domain;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 public class CompletedCampaignAction {
 
-	public static final String CREATE_TABLE = "create table completed_campaign_action (id integer primary key autoincrement, user_campaign_id integer references user_campaign, action_text text not null);";
+    public static final String TABLE_NAME = "completed_campaign_action";
+
+    /**
+     * Create the completed_campaign_action table and its columns.
+     *
+     * @param db The database the table is being created to
+     */
+    public static final void createTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "user_campaign_id INTEGER REFERENCES user_campaign, " +
+                "action_text TEXT NOT NULL);"
+        );
+    }
 	
 	private Long id;
 	private Long userCampaignId;
 	private String actionText;
-	
-	public CompletedCampaignAction(){}
 	
 	public CompletedCampaignAction(Long userCampaignId, String actionText) {
 		super();
