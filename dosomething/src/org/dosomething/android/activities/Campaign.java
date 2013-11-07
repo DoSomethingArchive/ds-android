@@ -110,6 +110,13 @@ public class Campaign extends AbstractActionBarActivity {
     }
 
     /**
+     * Set the current tab to the index given.
+     */
+    public void setCurrentTab(int index) {
+        mViewPager.setCurrentItem(index);
+    }
+
+    /**
      * Sets fragments to display in the Tabbed Action bar.
      */
     private class CampaignPagerAdapter extends FragmentStatePagerAdapter {

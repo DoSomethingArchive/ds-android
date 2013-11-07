@@ -35,7 +35,6 @@ import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.transfer.Campaign;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,7 +74,7 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
     private Button btnSMSRefer;
     private Button btnUnsign;
 
-    private Campaign campaign;
+    private org.dosomething.android.transfer.Campaign campaign;
 
     @Override
     public String getFragmentName() {
@@ -114,7 +113,7 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
         btnUnsign = (Button)view.findViewById(R.id.unsign_up);
 
         Bundle args = getArguments();
-        campaign = (Campaign)args.getSerializable(CAMPAIGN);
+        campaign = (org.dosomething.android.transfer.Campaign)args.getSerializable(CAMPAIGN);
 
         // Setup click listener for buttons
         btnSignUp.setOnClickListener(this);
@@ -250,8 +249,13 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
                 // Display a Toast message for success
                 Toast.makeText(getActivity(), getString(R.string.campaign_sign_up_success), Toast.LENGTH_LONG).show();
 
+                // Change to the next tab
+                if (activity instanceof org.dosomething.android.activities.Campaign) {
+                    org.dosomething.android.activities.Campaign campActivity = (org.dosomething.android.activities.Campaign)activity;
+                    campActivity.setCurrentTab(1);
+                }
+
                 // TODO: notify server that user signed up
-                // TODO: change tabs to the Learn tab
             }
         }
         // If the user is not logged in somehow, send to the Login activity
