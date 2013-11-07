@@ -249,9 +249,14 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
                 // Display a Toast message for success
                 Toast.makeText(getActivity(), getString(R.string.campaign_sign_up_success), Toast.LENGTH_LONG).show();
 
-                // Change to the next tab
+                // Update the ActionBar tabs on the Activity
                 if (activity instanceof org.dosomething.android.activities.Campaign) {
                     org.dosomething.android.activities.Campaign campActivity = (org.dosomething.android.activities.Campaign)activity;
+
+                    // Enable the rest of the tabs
+                    campActivity.refreshActionBarTabs();
+
+                    // Change to the next tab
                     campActivity.setCurrentTab(1);
                 }
 
@@ -289,6 +294,10 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
         if (removedRows > 0) {
             Toast.makeText(activity, "Removed sign up for the campaign", Toast.LENGTH_LONG).show();
             updateSignUpButton(activity);
+
+            if (activity instanceof org.dosomething.android.activities.Campaign) {
+                ((org.dosomething.android.activities.Campaign)activity).refreshActionBarTabs();
+            }
         }
         else {
             Toast.makeText(activity, "Unable to remove sign up for this campaign", Toast.LENGTH_LONG).show();

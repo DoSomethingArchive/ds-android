@@ -26,6 +26,7 @@ import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
+import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.fragments.AbstractCampaignFragment;
 import org.dosomething.android.fragments.CampaignFaqFragment;
 import org.dosomething.android.fragments.CampaignGalleryFragment;
@@ -193,6 +194,10 @@ public class Campaign extends AbstractActionBarActivity {
 
             return -1;
         }
+
+        public void setTabHash(HashMap<Integer, String> hash) {
+            mTabHash = hash;
+        }
     }
 
     @Override
@@ -205,6 +210,15 @@ public class Campaign extends AbstractActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Rebuild the tabs in the ActionBar.
+     */
+    public void refreshActionBarTabs() {
+        HashMap<Integer, String> tabHash = setupActionBarTabs();
+        mCampaignPagerAdapter.setTabHash(tabHash);
+        mCampaignPagerAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -238,11 +252,18 @@ public class Campaign extends AbstractActionBarActivity {
                         .setTabListener(tabListener)
         );
 
+
         HashMap<Integer, String> tabHash = new HashMap<Integer, String>();
         int tabIndex = 0;
 
         tabHash.put(Integer.valueOf(tabIndex), campaign.getName());
         tabIndex++;
+
+        String uid = new UserContext(this).getUserUid();
+        boolean isSignedUp = new DSDao(this).isSignedUpForCampaign(uid, campaign.getId());
+        if (!isSignedUp) {
+            return tabHash;
+        }
 
         if (!nullOrEmpty(campaign.getHowTos())) {
             actionBar.addTab(actionBar.newTab()
