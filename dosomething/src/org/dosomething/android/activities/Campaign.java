@@ -330,10 +330,6 @@ public class Campaign extends AbstractActionBarActivity {
         return str == null || str.trim().length() == 0;
     }
 
-    public void onClickActions(View v) {
-        startActivity(CampaignActions.getIntent(this, campaign));
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

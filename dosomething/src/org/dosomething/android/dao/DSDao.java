@@ -1,13 +1,11 @@
 package org.dosomething.android.dao;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.google.inject.Inject;
 
-import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.transfer.Campaign;
 import org.json.JSONException;
@@ -247,61 +245,6 @@ public class DSDao {
 			fos.write(newContent.getBytes());
 			fos.close();
 		}
-	}
-	
-	public void addCompletedAction(CompletedCampaignAction action){
-		removeCompletedAction(action.getUserCampaignId(), action.getActionText());
-		
-		ContentValues cv = new ContentValues();
-		cv.put(CompletedCampaignAction.COL_USER_CAMPAIGN_ID, action.getUserCampaignId());
-		cv.put(CompletedCampaignAction.COL_ACTION_TEXT, action.getActionText());
-		
-		SQLHelper sql = new SQLHelper(context);
-        
-        sql.getWritableDatabase().insertOrThrow(CompletedCampaignAction.TABLE_NAME, null, cv);
-         
-        sql.close();
-	}
-	
-	public List<CompletedCampaignAction> getCompletedActions(Long userCampaignId){
-		List<CompletedCampaignAction> answer = new ArrayList<CompletedCampaignAction>();
-
-		SQLHelper sql = new SQLHelper(context);
-
-        Cursor cursor = sql.getReadableDatabase().query(
-                CompletedCampaignAction.TABLE_NAME,
-                new String[] {CompletedCampaignAction.COL_ID, CompletedCampaignAction.COL_USER_CAMPAIGN_ID, CompletedCampaignAction.COL_ACTION_TEXT},
-                CompletedCampaignAction.COL_USER_CAMPAIGN_ID + "=?",
-                new String[] {Long.toString(userCampaignId)},
-                null,
-                null,
-                null
-        );
-
-		if(cursor != null){
-			while(cursor.moveToNext()){
-				CompletedCampaignAction c = new CompletedCampaignAction(cursor);
-				answer.add(c);
-			}
-
-			cursor.close();
-		}
-
-		sql.close();
-
-		return answer;
-	}
-
-	public void removeCompletedAction(Long userCampaignId, String actionText) {
-		SQLHelper sql = new SQLHelper(context);
-		
-        sql.getWritableDatabase().delete(
-                CompletedCampaignAction.TABLE_NAME,
-                CompletedCampaignAction.COL_USER_CAMPAIGN_ID + "=? and " + CompletedCampaignAction.COL_ACTION_TEXT + "=?",
-                new String[] {Long.toString(userCampaignId), actionText}
-        );
-		
-		sql.close();
 	}
 	
 }

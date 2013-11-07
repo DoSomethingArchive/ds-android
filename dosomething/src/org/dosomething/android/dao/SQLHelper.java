@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
 
 public class SQLHelper extends SQLiteOpenHelper {
@@ -20,7 +19,6 @@ public class SQLHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		UserCampaign.createTable(db);
-        CompletedCampaignAction.createTable(db);
 	}
 
 	@Override

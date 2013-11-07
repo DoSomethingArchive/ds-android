@@ -8,14 +8,11 @@ import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
-import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.Challenge;
 import org.dosomething.android.transfer.WebForm;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class ReportBack extends AbstractWebForm {
 	
@@ -46,17 +43,6 @@ public class ReportBack extends AbstractWebForm {
                 .uid(new UserContext(this).getUserUid())
                 .build();
         Long userCampaignId = dao.setSignedUp(uc);
-		
-		List<Challenge> challenges = campaign.getChallenges();
-		
-		if(challenges != null){
-			for(Challenge challenge : challenges){
-				if("report-back".equals(challenge.getCompletionPage())){
-					dao.addCompletedAction(new CompletedCampaignAction(userCampaignId, challenge.getText()));
-					break;
-				}
-			}
-		}
 		
 		// Track submission in analytics - Flurry Analytics
 		HashMap<String, String> param = new HashMap<String, String>();
