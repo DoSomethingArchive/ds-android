@@ -29,15 +29,23 @@ public class DSDao {
 	public DSDao(Context context){
 		this.context = context;
 	}
-	
-	public UserCampaign findUserCampaign(String uid, String campaignId){
+
+    /**
+     * Retrieve the UserCampaign info from the database. A row will only be found if the user
+     * has signed up for the campaign.
+     *
+     * @param uid User's UID
+     * @param campaignId Campaign ID for the campaign
+     * @return UserCampaign object if a matching campaign was found. Otherwise, null.
+     */
+	public UserCampaign findUserCampaign(String uid, String campaignId) {
 		UserCampaign answer = null;
 		
 		SQLHelper sql = new SQLHelper(context);
 		
 		Cursor c = sql.getReadableDatabase().query(
                 UserCampaign.TABLE_NAME,
-                new String[] {UserCampaign.COL_ID, UserCampaign.COL_CAMPAIGN_ID, UserCampaign.COL_UID},
+                UserCampaign.getAllColumns(),
                 UserCampaign.COL_UID + "=? and " + UserCampaign.COL_CAMPAIGN_ID + "=?",
                 new String[] {uid, campaignId},
                 null,
@@ -80,6 +88,45 @@ public class DSDao {
 		
 		return answer;
 	}
+
+    /**
+     * Check if a given user has signed up for a given campaign.
+     *
+     * @param uid User's UID
+     * @param campaignId Campaign ID for the campaign
+     * @return boolean true if user did sign up for this campaign. Otherwise, false.
+     */
+    public boolean isSignedUpForCampaign(String uid, String campaignId) {
+        if (findUserCampaign(uid, campaignId) != null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * Deletes a user's sign up for a campaign from the table.
+     *
+     * @param uid User's UID
+     * @param campaignId Campaign ID for the campaign
+     * @return int > 0 if successfuly. Otherwise, 0.
+     */
+    public int removeSignUp(String uid, String campaignId) {
+        SQLHelper sql = new SQLHelper(context);
+        SQLiteDatabase db = sql.getWritableDatabase();
+
+        int rowsRemoved = db.delete(
+                UserCampaign.TABLE_NAME,
+                UserCampaign.COL_UID + "=? and " + UserCampaign.COL_CAMPAIGN_ID + "=?",
+                new String[] {uid, campaignId}
+        );
+
+        db.close();
+        sql.close();
+
+        return rowsRemoved;
+    }
 
     /**
      * Inserts a row into the database, or finds the already existing row, to indicate that this

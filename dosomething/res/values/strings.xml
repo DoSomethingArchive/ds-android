@@ -105,22 +105,20 @@
     <string name="campaign_sfg_submit_success">Thanks for your submission!</string>
     <string name="campaign_sfg_submitting">Submitting…</string>
     <string name="campaign_sfg_update_error">Unable to update. Please check your internet connection and try again.</string>
-    <string name="campaign_sign_up_button">DO IT</string>
-    <string name="campaign_sign_up_button_already_signed_up">Already Signed Up</string>
+    <string name="campaign_sign_up_button">DO THIS</string>
+    <string name="campaign_sign_up_button_already_signed_up">YOU\'RE SIGNED UP</string>
     <string name="campaign_sign_up_sms_action_alert_title">About the Texting Experience</string>
     <string name="campaign_sign_up_sms_action_alert_body">You\'re about to begin the %1$s experience. We\'ll send you a message from 38383 so you can get started.</string>
     <string name="campaign_sign_up_sms_error">There was an error starting the SMS experience. Please try again.</string>
     <string name="campaign_sign_up_sms_error_with_keyword">There was an error starting the SMS experience. Try again or text %1$s to 38383 to begin.</string>
     <string name="campaign_sign_up_sms_success">You\'ll be getting a message soon from 38383 to begin!</string>
+    <string name="campaign_sign_up_success">You\'re signed up!</string>
 
     <string name="campaign_share_button">SHARE THIS CAMPAIGN</string>
     <string name="campaign_share_signup_header">Thanks for signing up!</string>
     <string name="campaign_share_report_header">Thanks for rocking this campaign!</string>
     <string name="campaign_share_chooser">Share on</string>
 
-    <string name="action_complete_button">DO IT</string>
-
-    <string name="campaign_actions">ACTIONS</string>
     <string name="campaign_how_to">HOW TO</string>
     <string name="campaign_gallery">GALLERY</string>
     <string name="campaign_people">MEET THE PEOPLE</string>
@@ -130,8 +128,6 @@
     <string name="campaign_resources">RESOURCES</string>
     <string name="campaign_faq">FAQ</string>
     <string name="campaign_loading">Loading Campaign…</string>
-
-    <string name="campaign_action_list">Campaign Action List</string>
 
     <string name="campaign_prizes_rules">Official Rules and Regulations</string>
     <string name="gallery_image_item_display_error">Unable to load the image</string>

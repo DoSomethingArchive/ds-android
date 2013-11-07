@@ -47,11 +47,11 @@
                     android:text="@string/campaign_sign_up_button"
                     android:background="@drawable/main_button_selector"/>
                 <Button
-                    android:id="@+id/report_back"
+                    android:id="@+id/unsign_up"
                     style="@style/CampaignSignUpButton"
-                    android:text="@string/campaign_report_back_button"
                     android:background="@drawable/main_button_selector"
-                    android:visibility="gone" />
+                    android:text="Remove Sign Up"
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <LinearLayout

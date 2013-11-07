@@ -16,6 +16,7 @@ public class UserCampaign {
     public static final String COL_COMPLETED_STEPS = "completed_steps";
     public static final String COL_DATE_COMPLETED = "date_completed";
     public static final String COL_DATE_ENDS = "date_ends";
+    public static final String COL_DATE_SIGNED_UP = "date_signed_up";
     public static final String COL_DATE_STARTS = "date_starts";
 
     /**
@@ -34,6 +35,7 @@ public class UserCampaign {
                 COL_COMPLETED_STEPS + " TEXT, " +
                 COL_DATE_COMPLETED + " INTEGER, " +
                 COL_DATE_ENDS + " INTEGER, " +
+                COL_DATE_SIGNED_UP + " INTEGER, " +
                 COL_DATE_STARTS + " INTEGER);"
         );
     }
@@ -49,6 +51,7 @@ public class UserCampaign {
         db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_COMPLETED_STEPS +" TEXT;");
         db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_DATE_COMPLETED + " INTEGER;");
         db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_DATE_ENDS + " INTEGER;");
+        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_DATE_SIGNED_UP + " INTEGER;");
         db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_DATE_STARTS + " INTEGER;");
     }
 
@@ -84,6 +87,9 @@ public class UserCampaign {
     // Date the campaign ends (in seconds)
     private Long mDateEnds;
 
+    // Date the user signed up for the campaign (in seconds)
+    private Long mDateSignedUp;
+
     // Date the campaign starts (in seconds)
     private Long mDateStarts;
 
@@ -103,6 +109,7 @@ public class UserCampaign {
         mCompletedSteps = cursor.getString(columnIdx++);
         mDateCompleted = cursor.getLong(columnIdx++);
         mDateEnds = cursor.getLong(columnIdx++);
+        mDateSignedUp = cursor.getLong(columnIdx++);
         mDateStarts = cursor.getLong(columnIdx++);
 	}
 
@@ -110,7 +117,8 @@ public class UserCampaign {
      * Constructor to be used by the UserCampaignCVBuilder
      */
     private UserCampaign(String campaignId, String uid, String campaignName, String causeType,
-                         String completedSteps, Long dateCompleted, Long dateEnds, Long dateStarts) {
+                         String completedSteps, Long dateCompleted, Long dateEnds, Long dateSignedUp,
+                         Long dateStarts) {
         mCampaignId = campaignId;
         mUid = uid;
         mCampaignName = campaignName;
@@ -118,7 +126,28 @@ public class UserCampaign {
         mCompletedSteps = completedSteps;
         mDateCompleted = dateCompleted;
         mDateEnds = dateEnds;
+        mDateSignedUp = dateSignedUp;
         mDateStarts = dateStarts;
+    }
+
+    /**
+     * Retrieve all column names from the user_campaign table.
+     *
+     * @return String[] of the column names
+     */
+    public static String[] getAllColumns() {
+        return new String[] {
+                COL_ID,
+                COL_CAMPAIGN_ID,
+                COL_UID,
+                COL_CAMPAIGN_NAME,
+                COL_CAUSE_TYPE,
+                COL_COMPLETED_STEPS,
+                COL_DATE_COMPLETED,
+                COL_DATE_ENDS,
+                COL_DATE_SIGNED_UP,
+                COL_DATE_STARTS,
+        };
     }
 
     public ContentValues getContentValues() {
@@ -131,6 +160,7 @@ public class UserCampaign {
         cv.put(COL_COMPLETED_STEPS, mCompletedSteps);
         cv.put(COL_DATE_COMPLETED, mDateCompleted);
         cv.put(COL_DATE_ENDS, mDateEnds);
+        cv.put(COL_DATE_SIGNED_UP, mDateSignedUp);
         cv.put(COL_DATE_STARTS, mDateStarts);
 
         return cv;
@@ -183,6 +213,7 @@ public class UserCampaign {
                 COL_COMPLETED_STEPS + "=" + mCompletedSteps + ", " +
                 COL_DATE_COMPLETED + "=" + mDateCompleted + ", " +
                 COL_DATE_ENDS + "=" + mDateEnds + ", " +
+                COL_DATE_SIGNED_UP + "=" + mDateSignedUp + ", " +
                 COL_DATE_STARTS + "=" + mDateStarts +
                 "]";
 	}
@@ -206,6 +237,7 @@ public class UserCampaign {
         private String mCompletedSteps;
         private Long mDateCompleted;
         private Long mDateEnds;
+        private Long mDateSignedUp;
         private Long mDateStarts;
 
         public UserCampaignCVBuilder() {
@@ -214,6 +246,7 @@ public class UserCampaign {
             mCompletedSteps = null;
             mDateCompleted = null;
             mDateEnds = null;
+            mDateSignedUp = null;
             mDateStarts = null;
         }
 
@@ -252,6 +285,11 @@ public class UserCampaign {
             return this;
         }
 
+        public UserCampaignCVBuilder dateSignedUp(Long dateSignedUp) {
+            this.mDateSignedUp = dateSignedUp;
+            return this;
+        }
+
         public UserCampaignCVBuilder dateStarts(Long dateStarts) {
             this.mDateStarts = dateStarts;
             return this;
@@ -259,7 +297,7 @@ public class UserCampaign {
 
         public UserCampaign build() {
             return new UserCampaign(mCampaignId, mUid, mCampaignName, mCauseType, mCompletedSteps,
-                    mDateCompleted, mDateEnds, mDateStarts);
+                    mDateCompleted, mDateEnds, mDateSignedUp, mDateStarts);
         }
     }
 }
