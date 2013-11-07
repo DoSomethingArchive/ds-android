@@ -34,6 +34,7 @@ import org.dosomething.android.fragments.CampaignHowToFragment;
 import org.dosomething.android.fragments.CampaignMainFragment;
 import org.dosomething.android.fragments.CampaignPeopleFragment;
 import org.dosomething.android.fragments.CampaignPrizesFragment;
+import org.dosomething.android.fragments.CampaignProgressDeniedFragment;
 import org.dosomething.android.fragments.CampaignResourcesFragment;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.tasks.NoInternetException;
@@ -92,7 +93,17 @@ public class Campaign extends AbstractActionBarActivity {
 
                 @Override
                 public void onPageSelected(int position) {
-                    getSupportActionBar().setSelectedNavigationItem(position);
+                    ActionBar ab = getSupportActionBar();
+                    if (ab.getNavigationItemCount() > position) {
+                        getSupportActionBar().setSelectedNavigationItem(position);
+                    }
+                    else {
+                        // When user has not yet signed up for the campaign, only one tab will
+                        // be viewable. But a second fragment (CampaignProgressDeniedFragment)
+                        // will be in the adapter. This allows the user to partially scroll to that
+                        // fragment, but will always be scrolled back to the main sign up fragment.
+                        setCurrentTab(0);
+                    }
                 }
 
                 @Override
@@ -176,6 +187,10 @@ public class Campaign extends AbstractActionBarActivity {
                     fragment.setArguments(args);
                     return fragment;
                 }
+                else if (tabTitle.contentEquals(getString(R.string.campaign_fragment_progress_denied_title))) {
+                    CampaignProgressDeniedFragment fragment = new CampaignProgressDeniedFragment();
+                    return fragment;
+                }
             }
             return null;
         }
@@ -217,8 +232,8 @@ public class Campaign extends AbstractActionBarActivity {
      */
     public void refreshActionBarTabs() {
         HashMap<Integer, String> tabHash = setupActionBarTabs();
-        mCampaignPagerAdapter.setTabHash(tabHash);
-        mCampaignPagerAdapter.notifyDataSetChanged();
+        mCampaignPagerAdapter = new CampaignPagerAdapter(getSupportFragmentManager(), tabHash);
+        mViewPager.setAdapter(mCampaignPagerAdapter);
     }
 
     /**
@@ -259,9 +274,12 @@ public class Campaign extends AbstractActionBarActivity {
         tabHash.put(Integer.valueOf(tabIndex), campaign.getName());
         tabIndex++;
 
+        // If the user has not signed up for the campaign, add another fragment that can be scrolled
+        // to but won't have a tab. Fragment will prompt user to sign up to progress.
         String uid = new UserContext(this).getUserUid();
         boolean isSignedUp = new DSDao(this).isSignedUpForCampaign(uid, campaign.getId());
         if (!isSignedUp) {
+            tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_fragment_progress_denied_title));
             return tabHash;
         }
 
