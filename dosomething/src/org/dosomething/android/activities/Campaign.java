@@ -35,6 +35,7 @@ import org.dosomething.android.fragments.CampaignMainFragment;
 import org.dosomething.android.fragments.CampaignPeopleFragment;
 import org.dosomething.android.fragments.CampaignPrizesFragment;
 import org.dosomething.android.fragments.CampaignProgressDeniedFragment;
+import org.dosomething.android.fragments.CampaignReportBackFragment;
 import org.dosomething.android.fragments.CampaignResourcesFragment;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.tasks.NoInternetException;
@@ -184,6 +185,11 @@ public class Campaign extends AbstractActionBarActivity {
                 }
                 else if (tabTitle.contentEquals(getString(R.string.campaign_resources_title))) {
                     CampaignResourcesFragment fragment = new CampaignResourcesFragment();
+                    fragment.setArguments(args);
+                    return fragment;
+                }
+                else if (tabTitle.contentEquals(getString(R.string.campaign_fragment_reportback_title))) {
+                    CampaignReportBackFragment fragment = new CampaignReportBackFragment();
                     fragment.setArguments(args);
                     return fragment;
                 }
@@ -340,6 +346,17 @@ public class Campaign extends AbstractActionBarActivity {
             );
 
             tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_faq_title));
+            tabIndex++;
+        }
+
+        // The report back tab should always be last
+        if (campaign.getReportBack() != null) {
+            actionBar.addTab(actionBar.newTab()
+                    .setText(R.string.campaign_fragment_reportback_title)
+                    .setTabListener(tabListener)
+            );
+
+            tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_fragment_reportback_title));
             tabIndex++;
         }
 

@@ -2,11 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:orientation="vertical">
+    android:background="@color/light_background">
 
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_centerInParent="true"
         android:text="Tell Us Placeholder"/>
+
+    <Button
+        android:id="@+id/reportBack"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Select a Photo"
+        style="@style/ButtonPrimary"/>
+
 </RelativeLayout>

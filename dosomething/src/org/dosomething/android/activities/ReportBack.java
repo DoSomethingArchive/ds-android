@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
@@ -15,8 +16,12 @@ import org.dosomething.android.transfer.WebForm;
 import java.util.HashMap;
 
 public class ReportBack extends AbstractWebForm {
-	
-	private static final String CAMPAIGN = "campaign";
+
+    // Key for the campaign data passed to the fragment through arguments
+    private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
+
+    // Key for the image path to attach to the report back
+    private static final String REPORT_BACK_IMG = DSConstants.EXTRAS_KEY.REPORT_BACK_IMG.getValue();
 	
 	private WebForm webForm;
 	
@@ -29,6 +34,12 @@ public class ReportBack extends AbstractWebForm {
 	protected void onCreate(Bundle savedInstanceState) {
 		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
 		webForm = campaign.getReportBack();
+
+        String imgPath = getIntent().getExtras().getString(REPORT_BACK_IMG);
+        if (imgPath != null && imgPath.length() > 0) {
+            mPreselectedImage = imgPath;
+        }
+
 		super.onCreate(savedInstanceState);
 	}
 	

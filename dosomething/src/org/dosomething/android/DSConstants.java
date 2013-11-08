@@ -33,6 +33,7 @@ public class DSConstants {
     public static enum EXTRAS_KEY {
         CAMPAIGN("campaign"),
         CAMPAIGNS_TAB("campaigns-tab"),
+        REPORT_BACK_IMG("report-back-img"),
         SFGITEM("sfg-item"),
         SHOW_SUBMISSIONS("show-submissions"),
         TOAST_MSG("toast-msg");

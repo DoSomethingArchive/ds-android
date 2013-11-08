@@ -75,6 +75,9 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
 	
 	private WebFormFieldBinding pendingImageResult;
 	private boolean submitTaskInProgress;
+
+    // Path to a preselected image to attach to this webform submission
+    protected String mPreselectedImage;
 	
 	protected abstract int getContentViewResourceId();
 	protected abstract WebForm getWebForm();
@@ -184,6 +187,11 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
 			else if (name.equals("zip") || name.equals("zip_code")) {
 				binding.setFormValue(Collections.singletonList(userContext.getAddrZip()));
 			}
+            else if (name.startsWith("field_webform_pictures[und]") &&
+                    mPreselectedImage != null &&
+                    mPreselectedImage.length() > 0) {
+                binding.setSelectedImage(mPreselectedImage);
+            }
 		}
 	}
 	
