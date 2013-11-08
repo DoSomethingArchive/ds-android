@@ -18,6 +18,11 @@
             android:layout_marginTop="6dp"
             android:src="@drawable/login_logo" />
 
+<!--
+        NOTE: Disabling Facebook login/register because web does not allow for it,
+            but would like to keep this an open conversation since it drastically
+            simplifies the sign up process on the app.
+-->
         <org.dosomething.android.widget.DSFacebookLoginButton
             android:id="@+id/button_facebook_login"
             android:layout_width="match_parent"
@@ -25,7 +30,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/or_text"
@@ -35,7 +41,8 @@
             android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
             android:text="@string/login_or"
-            android:textSize="@dimen/font_size_header_2"/>
+            android:textSize="@dimen/font_size_header_2"
+            android:visibility="gone"/>
 
         <EditText
             android:id="@+id/first_name"
