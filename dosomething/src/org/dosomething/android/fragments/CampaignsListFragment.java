@@ -161,6 +161,14 @@ public class CampaignsListFragment extends RoboFragment {
 
             View cardBackside = view.findViewById(R.id.frame_backside);
             if (cardBackside != null && cardBackside.getVisibility() == View.INVISIBLE) {
+                TextView title = (TextView)view.findViewById(R.id.preview_title);
+                title.setText(campaign.getName());
+                title.setTypeface(typefaceDin);
+
+                TextView body = (TextView)view.findViewById(R.id.preview_body);
+                body.setText(campaign.getTeaser());
+                body.setTypeface(typefaceDin);
+
                 doCardFlipAnimation(view, false);
             }
             else {
