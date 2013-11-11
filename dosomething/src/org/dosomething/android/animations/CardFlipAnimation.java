@@ -1,8 +1,9 @@
 package org.dosomething.android.animations;
 
-import android.app.Activity;
+import android.content.Context;
 import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 
@@ -18,11 +19,11 @@ public class CardFlipAnimation {
      *
      * @param view View to execute animation on
      */
-    public static void doCardFlipAnimation(Activity activity, View view, boolean reverse) {
-        Display display = activity.getWindowManager().getDefaultDisplay();
+    public static void animate(Context context, View view, boolean reverse) {
+        Display display = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         ScaleAnimation anim = new ScaleAnimation(1f, 0f, 1f, 1f, display.getWidth() / 2, display.getHeight() / 2);
         anim.setDuration(175);
-        anim.setAnimationListener(new CardFlipAnimationListener(activity, view, reverse));
+        anim.setAnimationListener(new CardFlipAnimationListener(context, view, reverse));
         view.startAnimation(anim);
     }
 
@@ -31,8 +32,8 @@ public class CardFlipAnimation {
      */
     private static class CardFlipAnimationListener implements Animation.AnimationListener {
 
-        // Activity animation is called from
-        private Activity mActivity;
+        // Current context
+        private Context mContext;
 
         // The view the animation is being executed on
         private View mCardView;
@@ -40,8 +41,8 @@ public class CardFlipAnimation {
         // Set to true if animation should flip from backside to front
         private boolean mReverseFlip;
 
-        public CardFlipAnimationListener(Activity activity, View view, boolean reverse) {
-            mActivity = activity;
+        public CardFlipAnimationListener(Context context, View view, boolean reverse) {
+            mContext = context;
             mCardView = view;
             mReverseFlip = reverse;
         }
@@ -51,7 +52,7 @@ public class CardFlipAnimation {
 
         @Override
         public void onAnimationEnd(Animation animation) {
-            Display display = mActivity.getWindowManager().getDefaultDisplay();
+            Display display = ((WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
             ScaleAnimation anim = new ScaleAnimation(0f, 1f, 1f, 1f, display.getWidth() / 2, display.getHeight() / 2);
             anim.setDuration(175);
             mCardView.startAnimation(anim);

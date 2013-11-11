@@ -152,7 +152,7 @@ public class CampaignsListFragment extends RoboFragment {
                 body.setText(campaign.getTeaser());
                 body.setTypeface(typefaceDin);
 
-                CardFlipAnimation.doCardFlipAnimation(getActivity(), view, false);
+                CardFlipAnimation.animate(getActivity(), view, false);
             }
             else {
                 startActivity(org.dosomething.android.activities.Campaign.getIntent(getActivity(), campaign));
@@ -270,7 +270,7 @@ public class CampaignsListFragment extends RoboFragment {
                     public void onClick(View view) {
                         // This seems sorta hacky. Must guarantee that this Button is two levels under
                         // the containing row layout, and that the Layout is a FrameLayout
-                        CardFlipAnimation.doCardFlipAnimation(getActivity(), (FrameLayout)view.getParent().getParent(), true);
+                        CardFlipAnimation.animate(getActivity(), (FrameLayout)view.getParent().getParent(), true);
                     }
                 });
             }

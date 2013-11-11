@@ -6,12 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.dosomething.android.R;
+import org.dosomething.android.animations.CardFlipAnimation;
 import org.dosomething.android.cache.PersistentCampaignsCache;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.transfer.Campaign;
@@ -56,10 +59,20 @@ public class UserCampaignListAdapter extends ArrayAdapter<UserCampaign> {
             v = inflater.inflate(R.layout.user_campaign_row, null);
         }
 
+        // Set click listener for the close button
+        Button closeButton = (Button)v.findViewById(R.id.preview_close);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // This seems sorta hacky. Must guarantee that this Button is two levels under
+                // the containing row layout, and that the Layout is a FrameLayout
+                CardFlipAnimation.animate(mContext, (FrameLayout) view.getParent().getParent(), true);
+            }
+        });
+
         UserCampaign campaign = getItem(position);
 
-        campaign.getCampaignId();
-        campaign.getDateSignedUp();
+
 
         // Ensure front side of the item is visible
         View backside = v.findViewById(R.id.frame_backside);
@@ -91,9 +104,5 @@ public class UserCampaignListAdapter extends ArrayAdapter<UserCampaign> {
         }
 
         return v;
-    }
-
-    public int getCount() {
-        return 1;
     }
 }
