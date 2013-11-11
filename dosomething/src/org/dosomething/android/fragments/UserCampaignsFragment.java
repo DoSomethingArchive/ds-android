@@ -16,11 +16,14 @@ import com.google.inject.name.Named;
 import org.dosomething.android.R;
 import org.dosomething.android.adapters.UserCampaignListAdapter;
 import org.dosomething.android.animations.CardFlipAnimation;
+import org.dosomething.android.cache.PersistentCampaignsCache;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.domain.UserCampaign;
+import org.dosomething.android.transfer.Campaign;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import roboguice.fragment.RoboFragment;
@@ -109,23 +112,23 @@ public class UserCampaignsFragment extends RoboFragment {
     private class CampaignItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            UserCampaign campaign = (UserCampaign) mListView.getAdapter().getItem(position);
+            UserCampaign userCampaign = (UserCampaign) mListView.getAdapter().getItem(position);
 
             View cardBackside = view.findViewById(R.id.frame_backside);
             if (cardBackside != null && cardBackside.getVisibility() == View.INVISIBLE) {
                 TextView title = (TextView)view.findViewById(R.id.preview_title);
-                title.setText(campaign.getCampaignName());
+                title.setText(userCampaign.getCampaignName());
                 title.setTypeface(mTypefaceDin);
 
                 TextView body = (TextView)view.findViewById(R.id.preview_body);
                 Date date = new Date();
                 String dateText = "";
                 if (mShowCompletedCampaigns) {
-                    date.setTime(campaign.getDateCompleted().longValue() * 1000);
+                    date.setTime(userCampaign.getDateCompleted().longValue() * 1000);
                     dateText = "Completed: " + DateFormat.format("MM/dd/yyyy", date);
                 }
                 else {
-                    date.setTime(campaign.getDateSignedUp().longValue() * 1000);
+                    date.setTime(userCampaign.getDateSignedUp().longValue() * 1000);
                     dateText = "Signed up: " + DateFormat.format("MM/dd/yyyy", date);
                 }
                 body.setText(dateText);
@@ -133,8 +136,23 @@ public class UserCampaignsFragment extends RoboFragment {
 
                 CardFlipAnimation.animate(getActivity(), view, false);
             }
-            else {
-//                startActivity(org.dosomething.android.activities.Campaign.getIntent(getActivity(), campaign));
+            // Open up campaign screen if it's one that's still in progress
+            else if (!mShowCompletedCampaigns) {
+                try {
+                    List<Campaign> cachedCampaigns = new PersistentCampaignsCache(getActivity()).getCampaignsAsList();
+
+                    Iterator<Campaign> iter = cachedCampaigns.iterator();
+                    while (iter.hasNext()) {
+                        Campaign campaign = iter.next();
+                        if (campaign.getId().equals(userCampaign.getCampaignId())) {
+                            startActivity(org.dosomething.android.activities.Campaign.getIntent(getActivity(), campaign));
+                            return;
+                        }
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     };
