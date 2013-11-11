@@ -5,20 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Camera;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -39,6 +34,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
+import org.dosomething.android.animations.CardFlipAnimation;
+import org.dosomething.android.animations.Rotate3dAnimation;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.context.UserContext;
@@ -124,19 +121,6 @@ public class CampaignsListFragment extends RoboFragment {
     }
 
     /**
-     * Animates an item in the list to flip over.
-     *
-     * @param view View to execute animation on
-     */
-    private void doCardFlipAnimation(View view, boolean reverse) {
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        ScaleAnimation anim = new ScaleAnimation(1f, 0f, 1f, 1f, display.getWidth() / 2, display.getHeight() / 2);
-        anim.setDuration(175);
-        anim.setAnimationListener(new CardFlipAnimationListener(view, reverse));
-        view.startAnimation(anim);
-    }
-
-    /**
      * Executes task to fetch the list of campaign.
      *
      * @param forceSearch Set to true if data should be forced to retrieve data
@@ -168,7 +152,7 @@ public class CampaignsListFragment extends RoboFragment {
                 body.setText(campaign.getTeaser());
                 body.setTypeface(typefaceDin);
 
-                doCardFlipAnimation(view, false);
+                CardFlipAnimation.doCardFlipAnimation(getActivity(), view, false);
             }
             else {
                 startActivity(org.dosomething.android.activities.Campaign.getIntent(getActivity(), campaign));
@@ -286,7 +270,7 @@ public class CampaignsListFragment extends RoboFragment {
                     public void onClick(View view) {
                         // This seems sorta hacky. Must guarantee that this Button is two levels under
                         // the containing row layout, and that the Layout is a FrameLayout
-                        doCardFlipAnimation((FrameLayout)view.getParent().getParent(), true);
+                        CardFlipAnimation.doCardFlipAnimation(getActivity(), (FrameLayout)view.getParent().getParent(), true);
                     }
                 });
             }
@@ -414,105 +398,6 @@ public class CampaignsListFragment extends RoboFragment {
                 return R.drawable.cause_relationships_tag;
             else
                 return -1;
-        }
-
-    }
-
-    /**
-     * Listener on card flip animation to trigger the second half of the animation.
-     */
-    private class CardFlipAnimationListener implements Animation.AnimationListener {
-        // The view the animation is being executed on
-        private View cardView;
-
-        // Set to true if animation should flip from backside to front
-        private boolean reverseFlip;
-
-        public CardFlipAnimationListener(View view, boolean reverse) {
-            this.cardView = view;
-            this.reverseFlip = reverse;
-        }
-
-        @Override
-        public void onAnimationStart(Animation animation) {}
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-            Display display = getActivity().getWindowManager().getDefaultDisplay();
-            ScaleAnimation anim = new ScaleAnimation(0f, 1f, 1f, 1f, display.getWidth() / 2, display.getHeight() / 2);
-            anim.setDuration(175);
-            cardView.startAnimation(anim);
-
-            View cardBackside = cardView.findViewById(R.id.frame_backside);
-            View cardFrontside = cardView.findViewById(R.id.frame);
-            if (reverseFlip) {
-                if (cardBackside != null)
-                    cardBackside.setVisibility(View.INVISIBLE);
-                if (cardFrontside != null)
-                    cardFrontside.setVisibility(View.VISIBLE);
-            }
-            else {
-                if (cardBackside != null)
-                    cardBackside.setVisibility(View.VISIBLE);
-                if (cardFrontside != null)
-                    cardFrontside.setVisibility(View.INVISIBLE);
-            }
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {}
-    }
-
-    /**
-     * Animation to rotate a view about the x, y, and/or z axis.
-     * Kudos to this gist for the help: https://gist.github.com/methodin/5678214
-     */
-    public class Rotate3dAnimation extends Animation {
-        private final float fromXDegrees;
-        private final float toXDegrees;
-        private final float fromYDegrees;
-        private final float toYDegrees;
-        private final float fromZDegrees;
-        private final float toZDegrees;
-        private Camera camera;
-        private int width = 0;
-        private int height = 0;
-
-        public Rotate3dAnimation(float fromXDegrees, float toXDegrees, float fromYDegrees,
-                                 float toYDegrees, float fromZDegrees, float toZDegrees) {
-            this.fromXDegrees = fromXDegrees;
-            this.toXDegrees = toXDegrees;
-            this.fromYDegrees = fromYDegrees;
-            this.toYDegrees = toYDegrees;
-            this.fromZDegrees = fromZDegrees;
-            this.toZDegrees = toZDegrees;
-        }
-
-        @Override
-        public void initialize(int width, int height, int parentWidth, int parentHeight) {
-            super.initialize(width, height, parentWidth, parentHeight);
-            this.width = width / 2;
-            this.height = height / 2;
-            camera = new Camera();
-        }
-
-        @Override
-        protected void applyTransformation(float interpolatedTime, Transformation t) {
-            float xDegrees = fromXDegrees + ((toXDegrees - fromXDegrees) * interpolatedTime);
-            float yDegrees = fromYDegrees + ((toYDegrees - fromYDegrees) * interpolatedTime);
-            float zDegrees = fromZDegrees + ((toZDegrees - fromZDegrees) * interpolatedTime);
-
-            final Matrix matrix = t.getMatrix();
-
-            camera.save();
-            camera.rotateX(xDegrees);
-            camera.rotateY(yDegrees);
-            camera.rotateZ(zDegrees);
-            camera.getMatrix(matrix);
-            camera.restore();
-
-            matrix.preTranslate(-this.width, -this.height);
-            matrix.postTranslate(this.width, this.height);
         }
 
     }
