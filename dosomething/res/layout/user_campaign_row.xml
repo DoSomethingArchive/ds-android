@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/campaign_row_height_open">
+
+    <!-- FrameLayout margins skewed to accommodate the drop shadow added to bottom and right edges
+        of the view -->
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/container_dropshadow">
+        <ImageView android:id="@+id/background" style="@style/CampaignRowBackground"/>
+        <ImageView android:id="@+id/image" style="@style/CampaignRowImage"/>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/frame_backside"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="7dp"
+        android:paddingBottom="17dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="17dp"
+        android:paddingTop="10dp"
+        android:background="@drawable/container_dropshadow"
+        android:visibility="invisible">
+        <!-- Button must not be focusable in order for ListView to still receive click events -->
+        <Button
+            android:id="@+id/preview_close"
+            android:layout_height="28dp"
+            android:layout_width="28dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:focusable="false"
+            android:background="@drawable/ic_close_preview"/>
+        <TextView
+            android:id="@+id/preview_title"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_size_header_1"/>
+
+        <TextView
+            android:id="@+id/preview_body"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@id/preview_title"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_size_medium"/>
+    </RelativeLayout>
+
+
+
+</FrameLayout>

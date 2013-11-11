@@ -295,7 +295,7 @@ public class Profile extends AbstractActionBarActivity {
         Map<String, UserCampaign> userCampaignsMap = new HashMap<String, UserCampaign>();
         String uid = new UserContext(context).getUserUid();
         if (uid != null) {
-            List<UserCampaign> allUserCampaigns = dao.findUserCampaigns(uid);
+            List<UserCampaign> allUserCampaigns = dao.findUserCampaigns(uid, false);
             for(UserCampaign userCampaign : allUserCampaigns){
                 userCampaignsMap.put(userCampaign.getCampaignId(), userCampaign);
             }

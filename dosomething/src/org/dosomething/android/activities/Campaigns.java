@@ -26,6 +26,7 @@ import org.dosomething.android.R;
 import org.dosomething.android.adapters.DrawerListAdapter;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.fragments.CampaignsListFragment;
+import org.dosomething.android.fragments.UserCampaignsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -241,13 +242,12 @@ public class Campaigns extends AbstractActionBarActivity implements ActionBar.Ta
                     return new CampaignsListFragment();
                 case 1:
                     // Doing It
-                    return new CampaignsListFragment();
+                    return new UserCampaignsFragment(false);
                 case 2:
                     // Done
-                    return new CampaignsListFragment();
+                    return new UserCampaignsFragment(true);
                 default:
-                    // default to Do It?
-                    return new CampaignsListFragment();
+                    return null;
             }
         }
 

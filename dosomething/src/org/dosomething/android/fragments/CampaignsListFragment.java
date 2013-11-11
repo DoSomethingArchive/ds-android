@@ -73,7 +73,6 @@ public class CampaignsListFragment extends RoboFragment {
     @InjectView(R.id.popupClose) private Button popupCloseButton;
 
     private ListView list;
-    private CampaignListAdapter listAdapter;
 
     private final AdapterView.OnItemClickListener itemClickListener = new CampaignItemClickListener();
 
@@ -213,7 +212,7 @@ public class CampaignsListFragment extends RoboFragment {
             }
 
             // Adapter to display the list items
-            listAdapter = new CampaignListAdapter(getActivity(), campaigns);
+            CampaignListAdapter listAdapter = new CampaignListAdapter(getActivity(), campaigns);
             list.setAdapter(listAdapter);
 
             // Handle click events

@@ -8,9 +8,11 @@ public class UserCampaign {
 
     public static final String TABLE_NAME = "user_campaign";
 
+    // Database Version 1
     public static final String COL_ID = "id";
     public static final String COL_CAMPAIGN_ID = "campaign_id";
     public static final String COL_UID = "uid";
+    // Added in Version 2
     public static final String COL_CAMPAIGN_NAME = "campaign_name";
     public static final String COL_CAUSE_TYPE = "cause_type";
     public static final String COL_COMPLETED_STEPS = "completed_steps";
@@ -18,6 +20,8 @@ public class UserCampaign {
     public static final String COL_DATE_ENDS = "date_ends";
     public static final String COL_DATE_SIGNED_UP = "date_signed_up";
     public static final String COL_DATE_STARTS = "date_starts";
+    public static final String COL_URL_BACKGROUND = "url_background";
+    public static final String COL_URL_LOGO = "url_logo";
 
     /**
      * Create the user_campaign table and its columns.
@@ -196,6 +200,10 @@ public class UserCampaign {
 
     public Long getDateEnds() {
         return mDateEnds;
+    }
+
+    public Long getDateSignedUp() {
+        return mDateSignedUp;
     }
 
     public Long getDateStarts() {
