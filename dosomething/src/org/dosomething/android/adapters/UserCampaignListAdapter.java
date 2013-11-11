@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -15,6 +18,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.dosomething.android.R;
 import org.dosomething.android.animations.CardFlipAnimation;
+import org.dosomething.android.animations.Rotate3dAnimation;
 import org.dosomething.android.cache.PersistentCampaignsCache;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.transfer.Campaign;
@@ -33,6 +37,10 @@ public class UserCampaignListAdapter extends ArrayAdapter<UserCampaign> {
 
     // Current context
     private Context mContext;
+
+    // List position of the last item updated - used to determine if a new View
+    // should be animated in.
+    private int mLastItemUpdatePosition;
 
     // True to show completed campaigns, False to show in progress campaigns
     private boolean mShowCompletedCampaigns;
@@ -102,6 +110,23 @@ public class UserCampaignListAdapter extends ArrayAdapter<UserCampaign> {
                 }
             }
         }
+
+        // Apply animation when item comes onto the screen, but only when scrolling down
+        if (position > mLastItemUpdatePosition) {
+            Animation animRotate = new Rotate3dAnimation(0, 0, -15, 0, 0, 0);
+            animRotate.setDuration(350);
+
+            Animation animTranslate = new TranslateAnimation(0, 0, v.getHeight() / 2, 0);
+            animTranslate.setDuration(400);
+
+            AnimationSet animSet = new AnimationSet(false);
+            animSet.addAnimation(animRotate);
+            animSet.addAnimation(animTranslate);
+
+            v.setAnimation(animSet);
+        }
+
+        mLastItemUpdatePosition = position;
 
         return v;
     }
