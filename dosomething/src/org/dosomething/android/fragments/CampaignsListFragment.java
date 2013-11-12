@@ -141,12 +141,9 @@ public class CampaignsListFragment extends RoboFragment {
      *                    time limit hasn't been reached yet.
      */
     private void fetchCampaigns(boolean forceSearch) {
-        if (mCampaignsTask == null) {
-            mCampaignsTask = new CampaignsTask();
-        }
-
         // Only allow a single task to be executed at a time
-        if (!mCampaignsTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+        if (mCampaignsTask == null || !mCampaignsTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+            mCampaignsTask = new CampaignsTask();
             mCampaignsTask.setForceSearch(forceSearch);
             mCampaignsTask.execute();
         }

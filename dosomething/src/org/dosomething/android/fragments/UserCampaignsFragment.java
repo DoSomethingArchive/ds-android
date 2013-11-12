@@ -52,6 +52,13 @@ public class UserCampaignsFragment extends RoboFragment {
     private final AdapterView.OnItemClickListener itemClickListener = new CampaignItemClickListener();
 
     /**
+     * UserCampaignsFragment contstructor. Defaults to show in-progress campaigns.
+     */
+    public UserCampaignsFragment() {
+        mShowCompletedCampaigns = false;
+    }
+
+    /**
      * UserCampaignsFragment constructor for displaying a list of the campaigns a user
      * is participating in.
      *
