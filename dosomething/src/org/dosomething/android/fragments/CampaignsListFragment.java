@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +72,8 @@ public class CampaignsListFragment extends RoboFragment {
 
     private ListView list;
 
+    private CampaignsTask mCampaignsTask;
+
     private final AdapterView.OnItemClickListener itemClickListener = new CampaignItemClickListener();
 
     @Override
@@ -86,6 +89,16 @@ public class CampaignsListFragment extends RoboFragment {
         super.onResume();
 
         fetchCampaigns(false);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // Cancel the task in progress since we're leaving this fragment.
+        if (mCampaignsTask != null) {
+            mCampaignsTask.cancel(true);
+        }
     }
 
     @Override
@@ -128,10 +141,15 @@ public class CampaignsListFragment extends RoboFragment {
      *                    time limit hasn't been reached yet.
      */
     private void fetchCampaigns(boolean forceSearch) {
-        CampaignsTask task = new CampaignsTask();
+        if (mCampaignsTask == null) {
+            mCampaignsTask = new CampaignsTask();
+        }
 
-        task.setForceSearch(forceSearch);
-        task.execute();
+        // Only allow a single task to be executed at a time
+        if (!mCampaignsTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+            mCampaignsTask.setForceSearch(forceSearch);
+            mCampaignsTask.execute();
+        }
     }
 
     /**
