@@ -90,7 +90,7 @@ public class Campaign extends AbstractActionBarActivity {
             // OnPageChangeListener to update UI when user swipes to a different fragment page
             mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
-                public void onPageScrolled(int i, float v, int i2) {}
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
                 @Override
                 public void onPageSelected(int position) {
@@ -98,17 +98,10 @@ public class Campaign extends AbstractActionBarActivity {
                     if (ab.getNavigationItemCount() > position) {
                         getSupportActionBar().setSelectedNavigationItem(position);
                     }
-                    else {
-                        // When user has not yet signed up for the campaign, only one tab will
-                        // be viewable. But a second fragment (CampaignProgressDeniedFragment)
-                        // will be in the adapter. This allows the user to partially scroll to that
-                        // fragment, but will always be scrolled back to the main sign up fragment.
-                        setCurrentTab(0);
-                    }
                 }
 
                 @Override
-                public void onPageScrollStateChanged(int i) {}
+                public void onPageScrollStateChanged(int state) {}
             });
 
             // Log a page view for the initial subpage shown when the activity first loads
@@ -140,6 +133,11 @@ public class Campaign extends AbstractActionBarActivity {
             super(fm);
 
             mTabHash = tabHash;
+        }
+
+        @Override
+        public int getCount() {
+            return mTabHash.size();
         }
 
         @Override
@@ -202,8 +200,16 @@ public class Campaign extends AbstractActionBarActivity {
         }
 
         @Override
-        public int getCount() {
-            return mTabHash.size();
+        public float getPageWidth(int position) {
+            float width = super.getPageWidth(position);
+
+            // For the "progress denied" fragment, don't allow it to scroll the full width of the screen
+            String tabTitle = mTabHash.get(Integer.valueOf(position));
+            if (tabTitle.contentEquals(getString(R.string.campaign_fragment_progress_denied_title))) {
+                width = 0.7f;
+            }
+
+            return width;
         }
 
         public int getTabItemByTitle(String title) {
