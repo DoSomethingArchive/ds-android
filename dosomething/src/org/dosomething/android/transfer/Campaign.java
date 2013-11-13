@@ -1,5 +1,12 @@
 package org.dosomething.android.transfer;
 
+import android.content.Intent;
+
+import org.dosomething.android.DSConstants;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,13 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import org.dosomething.android.DSConstants;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Intent;
 
 
 public class Campaign implements Serializable {
@@ -64,6 +64,15 @@ public class Campaign implements Serializable {
 	private WebForm reportBack;
 	private WebForm signUp;
 	private SFGData sfgData;
+
+    // List of data to display in the Do It campaign section
+    private List<ICampaignSectionData> mDoItData;
+
+    // List of data to display in the Learn campaign section
+    private List<ICampaignSectionData> mLearnData;
+
+    // List of data to display in the Plan campaign section
+    private List<ICampaignSectionData> mPlanData;
 
 	public Campaign() {}
 	
@@ -201,6 +210,51 @@ public class Campaign implements Serializable {
 		if (sfg != null) {
 			sfgData = new SFGData(sfg);
 		}
+
+        JSONArray doItData = obj.optJSONArray("do-it");
+        if (doItData != null) {
+            mDoItData = new ArrayList<ICampaignSectionData>(doItData.length());
+            for (int i = 0; i < doItData.length(); i++) {
+                JSONObject data = doItData.getJSONObject(i);
+                String type = data.getString("type");
+                if (type.equals(CampaignTextImageData.TYPE_ID)) {
+                    mDoItData.add(new CampaignTextImageData(data));
+                }
+                else if (type.equals(CampaignImageTextData.TYPE_ID)) {
+                    mDoItData.add(new CampaignImageTextData(data));
+                }
+            }
+        }
+
+        JSONArray learnData = obj.optJSONArray("learn");
+        if (learnData != null) {
+            mLearnData = new ArrayList<ICampaignSectionData>(learnData.length());
+            for (int i = 0; i < learnData.length(); i++) {
+                JSONObject data = learnData.getJSONObject(i);
+                String type = data.getString("type");
+                if (type.equals(CampaignTextImageData.TYPE_ID)) {
+                    mLearnData.add(new CampaignTextImageData(data));
+                }
+                else if (type.equals(CampaignImageTextData.TYPE_ID)) {
+                    mLearnData.add(new CampaignImageTextData(data));
+                }
+            }
+        }
+
+        JSONArray planData = obj.optJSONArray("plan");
+        if (planData != null) {
+            mPlanData = new ArrayList<ICampaignSectionData>(planData.length());
+            for (int i = 0; i < planData.length(); i++) {
+                JSONObject data = planData.getJSONObject(i);
+                String type = data.getString("type");
+                if (type.equals(CampaignTextImageData.TYPE_ID)) {
+                    mPlanData.add(new CampaignTextImageData(data));
+                }
+                else if (type.equals(CampaignImageTextData.TYPE_ID)) {
+                    mPlanData.add(new CampaignImageTextData(data));
+                }
+            }
+        }
 	}
 	
 	public JSONObject toJSON() throws JSONException {
@@ -322,6 +376,30 @@ public class Campaign implements Serializable {
 
 		if (sfgData != null)
 			obj.put("sfg-data", sfgData.toJSON());
+
+        if (mDoItData != null && mDoItData.size() > 0) {
+            JSONArray doItData = new JSONArray();
+            for (ICampaignSectionData data : mDoItData) {
+                doItData.put(data.toJSON());
+            }
+            obj.put("do-it", doItData);
+        }
+
+        if (mLearnData != null && mLearnData.size() > 0) {
+            JSONArray learnData = new JSONArray();
+            for (ICampaignSectionData data : mLearnData) {
+                learnData.put(data.toJSON());
+            }
+            obj.put("learn", learnData);
+        }
+
+        if (mPlanData != null && mPlanData.size() > 0) {
+            JSONArray planData = new JSONArray();
+            for (ICampaignSectionData data : mPlanData) {
+                planData.put(data.toJSON());
+            }
+            obj.put("plan", planData);
+        }
 		
 		JSONObject namedObj = new JSONObject();
 		namedObj.put(id, obj);
@@ -578,4 +656,16 @@ public class Campaign implements Serializable {
 	public int getMCommonsBetaOptIn() {
 		return mCommonsBetaOptIn;
 	}
+
+    public List<ICampaignSectionData> getDoItData() {
+        return mDoItData;
+    }
+
+    public List<ICampaignSectionData> getLearnData() {
+        return mLearnData;
+    }
+
+    public List<ICampaignSectionData> getPlanData() {
+        return mPlanData;
+    }
 }

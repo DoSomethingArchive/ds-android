@@ -28,11 +28,14 @@ import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.fragments.AbstractCampaignFragment;
+import org.dosomething.android.fragments.CampaignDoFragment;
 import org.dosomething.android.fragments.CampaignFaqFragment;
 import org.dosomething.android.fragments.CampaignGalleryFragment;
 import org.dosomething.android.fragments.CampaignHowToFragment;
+import org.dosomething.android.fragments.CampaignLearnFragment;
 import org.dosomething.android.fragments.CampaignMainFragment;
 import org.dosomething.android.fragments.CampaignPeopleFragment;
+import org.dosomething.android.fragments.CampaignPlanFragment;
 import org.dosomething.android.fragments.CampaignPrizesFragment;
 import org.dosomething.android.fragments.CampaignProgressDeniedFragment;
 import org.dosomething.android.fragments.CampaignReportBackFragment;
@@ -186,6 +189,21 @@ public class Campaign extends AbstractActionBarActivity {
                     fragment.setArguments(args);
                     return fragment;
                 }
+                else if (tabTitle.contentEquals(getString(R.string.campaign_fragment_do_tab_title))) {
+                    CampaignDoFragment fragment = new CampaignDoFragment();
+                    fragment.setArguments(args);
+                    return fragment;
+                }
+                else if (tabTitle.contentEquals(getString(R.string.campaign_fragment_learn_tab_title))) {
+                    CampaignLearnFragment fragment = new CampaignLearnFragment();
+                    fragment.setArguments(args);
+                    return fragment;
+                }
+                else if (tabTitle.contentEquals(getString(R.string.campaign_fragment_plan_tab_title))) {
+                    CampaignPlanFragment fragment = new CampaignPlanFragment();
+                    fragment.setArguments(args);
+                    return fragment;
+                }
                 else if (tabTitle.contentEquals(getString(R.string.campaign_fragment_reportback_title))) {
                     CampaignReportBackFragment fragment = new CampaignReportBackFragment();
                     fragment.setArguments(args);
@@ -284,75 +302,88 @@ public class Campaign extends AbstractActionBarActivity {
         int tabIndex = 0;
 
         tabHash.put(Integer.valueOf(tabIndex), campaign.getName());
-        tabIndex++;
 
         // If the user has not signed up for the campaign, add another fragment that can be scrolled
         // to but won't have a tab. Fragment will prompt user to sign up to progress.
         String uid = new UserContext(this).getUserUid();
         boolean isSignedUp = new DSDao(this).isSignedUpForCampaign(uid, campaign.getId());
         if (!isSignedUp) {
-            tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_fragment_progress_denied_title));
+            tabHash.put(Integer.valueOf(++tabIndex), getString(R.string.campaign_fragment_progress_denied_title));
             return tabHash;
         }
 
-        if (!nullOrEmpty(campaign.getHowTos())) {
+        // If we have the data for the new format, then use it
+        if (!nullOrEmpty(campaign.getLearnData()) && !nullOrEmpty(campaign.getPlanData()) && !nullOrEmpty(campaign.getDoItData())) {
             actionBar.addTab(actionBar.newTab()
-                            .setText(R.string.campaign_how_to_title)
-                            .setTabListener(tabListener)
-            );
+                    .setText(R.string.campaign_fragment_learn_tab_title)
+                    .setTabListener(tabListener));
+            tabHash.put(Integer.valueOf(++tabIndex), getString(R.string.campaign_fragment_learn_tab_title));
 
-            tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_how_to_title));
-            tabIndex++;
+            actionBar.addTab(actionBar.newTab()
+                    .setText(R.string.campaign_fragment_plan_tab_title)
+                    .setTabListener(tabListener));
+            tabHash.put(Integer.valueOf(++tabIndex), getString(R.string.campaign_fragment_plan_tab_title));
+
+            actionBar.addTab(actionBar.newTab()
+                    .setText(R.string.campaign_fragment_do_tab_title)
+                    .setTabListener(tabListener));
+            tabHash.put(Integer.valueOf(++tabIndex), getString(R.string.campaign_fragment_do_tab_title));
         }
+        // Otherwise, fall back on the older campaign template
+        else{
+            if (!nullOrEmpty(campaign.getHowTos())) {
+                actionBar.addTab(actionBar.newTab()
+                                .setText(R.string.campaign_how_to_title)
+                                .setTabListener(tabListener)
+                );
 
-        if (campaign.getGallery() != null) {
-            actionBar.addTab(actionBar.newTab()
-                            .setText(R.string.campaign_gallery_title)
-                            .setTabListener(tabListener)
-            );
+                tabHash.put(Integer.valueOf(++tabIndex), getString(R.string.campaign_how_to_title));
+            }
 
-            tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_gallery_title));
-            tabIndex++;
-        }
+            if (campaign.getGallery() != null) {
+                actionBar.addTab(actionBar.newTab()
+                                .setText(R.string.campaign_gallery_title)
+                                .setTabListener(tabListener)
+                );
 
-        if (campaign.getPrize() != null) {
-            actionBar.addTab(actionBar.newTab()
-                            .setText(R.string.campaign_prizes_title)
-                            .setTabListener(tabListener)
-            );
+                tabHash.put(Integer.valueOf(++tabIndex), getString(R.string.campaign_gallery_title));
+            }
 
-            tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_prizes_title));
-            tabIndex++;
-        }
+            if (campaign.getPrize() != null) {
+                actionBar.addTab(actionBar.newTab()
+                                .setText(R.string.campaign_prizes_title)
+                                .setTabListener(tabListener)
+                );
 
-        if (campaign.getPeople() != null) {
-            actionBar.addTab(actionBar.newTab()
-                            .setText(R.string.campaign_people_title)
-                            .setTabListener(tabListener)
-            );
+                tabHash.put(Integer.valueOf(++tabIndex), getString(R.string.campaign_prizes_title));
+            }
 
-            tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_people_title));
-            tabIndex++;
-        }
+            if (campaign.getPeople() != null) {
+                actionBar.addTab(actionBar.newTab()
+                                .setText(R.string.campaign_people_title)
+                                .setTabListener(tabListener)
+                );
 
-        if (!nullOrEmpty(campaign.getResources()) || campaign.getMoreInfo() != null) {
-            actionBar.addTab(actionBar.newTab()
-                            .setText(R.string.campaign_resources_title)
-                            .setTabListener(tabListener)
-            );
+                tabHash.put(Integer.valueOf(++tabIndex), getString(R.string.campaign_people_title));
+            }
 
-            tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_resources_title));
-            tabIndex++;
-        }
+            if (!nullOrEmpty(campaign.getResources()) || campaign.getMoreInfo() != null) {
+                actionBar.addTab(actionBar.newTab()
+                                .setText(R.string.campaign_resources_title)
+                                .setTabListener(tabListener)
+                );
 
-        if (!nullOrEmpty(campaign.getFaqs())) {
-            actionBar.addTab(actionBar.newTab()
-                            .setText(R.string.campaign_faq_title)
-                            .setTabListener(tabListener)
-            );
+                tabHash.put(Integer.valueOf(++tabIndex), getString(R.string.campaign_resources_title));
+            }
 
-            tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_faq_title));
-            tabIndex++;
+            if (!nullOrEmpty(campaign.getFaqs())) {
+                actionBar.addTab(actionBar.newTab()
+                                .setText(R.string.campaign_faq_title)
+                                .setTabListener(tabListener)
+                );
+
+                tabHash.put(Integer.valueOf(++tabIndex), getString(R.string.campaign_faq_title));
+            }
         }
 
         // The report back tab should always be last
@@ -362,8 +393,7 @@ public class Campaign extends AbstractActionBarActivity {
                     .setTabListener(tabListener)
             );
 
-            tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_fragment_reportback_title));
-            tabIndex++;
+            tabHash.put(Integer.valueOf(++tabIndex), getString(R.string.campaign_fragment_reportback_title));
         }
 
         return tabHash;

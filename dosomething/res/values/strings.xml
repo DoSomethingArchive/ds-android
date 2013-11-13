@@ -85,6 +85,9 @@
     <string name="campaign_moreInfo_title">More Information</string>
     <string name="campaign_people_title">Meet The People</string>
     <string name="campaign_prizes_title">Scholarship</string>
+    <string name="campaign_fragment_do_tab_title">DO IT</string>
+    <string name="campaign_fragment_learn_tab_title">LEARN</string>
+    <string name="campaign_fragment_plan_tab_title">PLAN</string>
     <string name="campaign_fragment_progress_denied_title">Campaign Progress Denied</string>
     <string name="campaign_fragment_reportback_body">Show off the great work that you\'ve done! Send us a photo of your participation in this campaign.</string>
     <string name="campaign_fragment_reportback_header">Show Off!</string>
