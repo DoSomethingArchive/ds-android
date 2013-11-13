@@ -32,6 +32,8 @@ public class DSConstants {
     // Keys used for data passed to Activity's through Intent extra Bundles
     public static enum EXTRAS_KEY {
         CAMPAIGN("campaign"),
+        CAMPAIGNS_TAB("campaigns-tab"),
+        REPORT_BACK_IMG("report-back-img"),
         SFGITEM("sfg-item"),
         SHOW_SUBMISSIONS("show-submissions"),
         TOAST_MSG("toast-msg");
@@ -56,6 +58,13 @@ public class DSConstants {
         MADE_BY_YOU,
         SHARE_FOR_GOOD,
         SMS
+    }
+
+    // Indicates a tab on the Campaigns page ActionBar
+    public static enum CAMPAIGNS_TAB {
+        DO,
+        DOING_IT,
+        DONE
     }
 
     // Causes and their int values as provided by DoSomething.org action finder circa 2011

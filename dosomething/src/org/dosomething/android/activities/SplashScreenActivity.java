@@ -69,9 +69,9 @@ public class SplashScreenActivity extends RoboActivity {
                         startActivity(i);
                     }
                 }
-                // Otherwise, open to the user's profile page
+                // Otherwise, open to the main campaigns screen
                 else {
-                    Intent i = new Intent(SplashScreenActivity.this, Profile.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Intent i = new Intent(SplashScreenActivity.this, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 }
 

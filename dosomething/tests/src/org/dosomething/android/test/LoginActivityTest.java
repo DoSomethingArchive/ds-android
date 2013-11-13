@@ -108,7 +108,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<Login> {
 	 */
 	public void testLogin() throws InterruptedException {
 		Instrumentation instrumentation = getInstrumentation();
-		Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(Profile.class.getName(), null, false);
+		Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(Campaigns.class.getName(), null, false);
 		
 		CountDownLatch countDownLatch = new CountDownLatch(1);
 		
@@ -123,11 +123,11 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<Login> {
 		
 		AbstractWebserviceTask loginTask = mActivity.getDSLoginTask();
 		
-		Activity profileActivity = monitor.waitForActivityWithTimeout(10000);
-		assertEquals(profileActivity.getClass().getName(), Profile.class.getName());
+		Activity campaignsActivity = monitor.waitForActivityWithTimeout(10000);
+		assertEquals(campaignsActivity.getClass().getName(), Campaigns.class.getName());
 		
 		loginTask.cancel(true);
-		profileActivity.finish();
+		campaignsActivity.finish();
 		
 		instrumentation.removeMonitor(monitor);
 	}

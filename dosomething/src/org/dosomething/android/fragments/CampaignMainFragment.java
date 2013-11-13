@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +28,6 @@ import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.activities.CampaignSMSRefer;
 import org.dosomething.android.activities.Login;
-import org.dosomething.android.activities.ReportBack;
-import org.dosomething.android.activities.SFGGallery;
 import org.dosomething.android.activities.SignUp;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.cache.Cache;
@@ -38,10 +35,10 @@ import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
-import org.dosomething.android.transfer.Campaign;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -68,7 +65,6 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
     private LinearLayout llImageContainer;
     private TextView txtDates;
     private TextView txtTeaser;
-    private Button btnReportBack;
     private Button btnSignUp;
     private FrameLayout frmVideo;
     private ImageView imgVideoThumb;
@@ -76,8 +72,9 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
     private LinearLayout llSMSReferContainer;
     private TextView txtSMSRefer;
     private Button btnSMSRefer;
+    private Button btnUnsign;
 
-    private Campaign campaign;
+    private org.dosomething.android.transfer.Campaign campaign;
 
     @Override
     public String getFragmentName() {
@@ -106,7 +103,6 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
         llImageContainer = (LinearLayout)view.findViewById(R.id.image_container);
         txtDates = (TextView)view.findViewById(R.id.dates);
         txtTeaser = (TextView)view.findViewById(R.id.teaser);
-        btnReportBack = (Button)view.findViewById(R.id.report_back);
         btnSignUp = (Button)view.findViewById(R.id.sign_up);
         frmVideo = (FrameLayout)view.findViewById(R.id.frmVideo);
         imgVideoThumb = (ImageView)view.findViewById(R.id.imgVideoThumb);
@@ -114,14 +110,15 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
         llSMSReferContainer = (LinearLayout)view.findViewById(R.id.sms_refer_container);
         txtSMSRefer = (TextView)view.findViewById(R.id.sms_refer_text);
         btnSMSRefer = (Button)view.findViewById(R.id.sms_refer);
+        btnUnsign = (Button)view.findViewById(R.id.unsign_up);
 
         Bundle args = getArguments();
-        campaign = (Campaign)args.getSerializable(CAMPAIGN);
+        campaign = (org.dosomething.android.transfer.Campaign)args.getSerializable(CAMPAIGN);
 
         // Setup click listener for buttons
-        btnReportBack.setOnClickListener(this);
         btnSignUp.setOnClickListener(this);
         btnSMSRefer.setOnClickListener(this);
+        btnUnsign.setOnClickListener(this);
 
         populateFields();
     }
@@ -136,14 +133,14 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.report_back:
-                startActivity(ReportBack.getIntent(getActivity(), campaign));
-                break;
             case R.id.sign_up:
-                signUp(v);
+                signUp();
                 break;
             case R.id.sms_refer:
                 startActivityForResult(CampaignSMSRefer.getIntent(getActivity(), campaign), SMS_REFER_ACTIVITY);
+                break;
+            case R.id.unsign_up:
+                removeSignUp();
                 break;
         }
     }
@@ -161,7 +158,6 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
         }
         imageLoader.displayImage(campaign.getLogoUrl(), imgLogo);
 
-        btnReportBack.setTypeface(headerTypeface, Typeface.BOLD);
         btnSignUp.setTypeface(headerTypeface, Typeface.BOLD);
 
         if (!nullOrEmpty(campaign.getVideoThumbnail()) && !nullOrEmpty(campaign.getVideoUrl())) {
@@ -206,15 +202,16 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
         return false;
     }
 
-    public void signUp(View v) {
-        Activity assocActivity = getActivity();
-        String uid = new UserContext(assocActivity).getUserUid();
+    /**
+     * Execute the sign up action for this campaign.
+     */
+    public void signUp() {
+        Activity activity = getActivity();
+        String uid = new UserContext(activity).getUserUid();
 
-        if (campaign.getCampaignType() == DSConstants.CAMPAIGN_TYPE.SHARE_FOR_GOOD) {
-            startActivity(SFGGallery.getIntent(assocActivity, campaign));
-        }
-        else if (useSmsActionSignUp()) {
-            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(assocActivity);
+        // For SMS campaigns, opt the user in through the Mobile Commons opt-in path
+        if (useSmsActionSignUp()) {
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
             alertBuilder.setTitle(R.string.campaign_sign_up_sms_action_alert_title)
                     .setMessage(getString(R.string.campaign_sign_up_sms_action_alert_body, campaign.getName()))
                     .setNegativeButton(R.string.cancel_upper, null)
@@ -227,25 +224,48 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
                     .create()
                     .show();
         }
-        else if (useAlternateSignUp()) {
-            // Log the alternate sign up events to Flurry Analytics
-            HashMap<String, String> param = new HashMap<String, String>();
-            param.put(CAMPAIGN, campaign.getName());
-            Analytics.logEvent("sign-up-submit", param);
-
-            // and Google Analytics
-            Analytics.logEvent("sign-up", "alt-sign-up", campaign.getName());
-
-            // Open up the link in another activity to view
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(campaign.getSignUpAltLink()));
-            startActivity(i);
-        }
+        // Non-null UID indicates the user is signed in
         else if (uid != null) {
-            startActivity(SignUp.getIntent(assocActivity, campaign));
+            // If we need additional sign up information for this campaign, launch the Sign Up activity
+            if (!hasNoSignUp()) {
+                startActivity(SignUp.getIntent(activity, campaign));
+            }
+            // Otherwise, notify app and server that user signed up for this campaign
+            else {
+                // Save on the app-side that the user signed up for this campaign
+                UserCampaign uc = new UserCampaign.UserCampaignCVBuilder()
+                        .campaignId(campaign.getId())
+                        .uid(uid)
+                        .campaignName(campaign.getName())
+                        .dateEnds(campaign.getEndDate().getTime() / 1000) // times needs to be in seconds
+                        .dateSignedUp(Calendar.getInstance().getTimeInMillis() / 1000)
+                        .dateStarts(campaign.getStartDate().getTime() / 1000)
+                        .build();
+                new DSDao(getActivity()).setSignedUp(uc);
+
+                // Update the sign up button's look
+                updateSignUpButton(getActivity());
+
+                // Display a Toast message for success
+                Toast.makeText(getActivity(), getString(R.string.campaign_sign_up_success), Toast.LENGTH_LONG).show();
+
+                // Update the ActionBar tabs on the Activity
+                if (activity instanceof org.dosomething.android.activities.Campaign) {
+                    org.dosomething.android.activities.Campaign campActivity = (org.dosomething.android.activities.Campaign)activity;
+
+                    // Enable the rest of the tabs
+                    campActivity.refreshActionBarTabs();
+
+                    // Change to the next tab
+                    campActivity.setCurrentTab(1);
+                }
+
+                // TODO: notify server that user signed up
+            }
         }
+        // If the user is not logged in somehow, send to the Login activity
         else {
-            startActivityForResult(new Intent(assocActivity, Login.class), REQ_LOGIN_FOR_SIGN_UP);
+            startActivityForResult(new Intent(activity, Login.class), REQ_LOGIN_FOR_SIGN_UP);
         }
     }
 
@@ -263,32 +283,54 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
             return false;
     }
 
+    /**
+     * Removes the user's sign up for this campaign. Mainly inteded for development use.
+     */
+    private void removeSignUp() {
+        Activity activity = getActivity();
+        int removedRows = new DSDao(activity).removeSignUp(
+                new UserContext(activity).getUserUid(), campaign.getId());
+
+        if (removedRows > 0) {
+            Toast.makeText(activity, "Removed sign up for the campaign", Toast.LENGTH_LONG).show();
+            updateSignUpButton(activity);
+
+            if (activity instanceof org.dosomething.android.activities.Campaign) {
+                ((org.dosomething.android.activities.Campaign)activity).refreshActionBarTabs();
+            }
+        }
+        else {
+            Toast.makeText(activity, "Unable to remove sign up for this campaign", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Update look and behavior of the sign up button based on the type of campaign and the
+     * user's campaign status.
+     *
+     * @param context Activity context
+     */
     private void updateSignUpButton(Context context) {
+        btnUnsign.setVisibility(View.GONE);
+
         if (useAlternateSignUp() || useSmsActionSignUp()) {
             btnSignUp.setEnabled(true);
             btnSignUp.setText(campaign.getSignUpAltText());
         }
-        else if (userContext.isLoggedIn() && campaign != null) {
-            if (hasNoSignUp() && campaign.getReportBack() != null) {
-                btnReportBack.setVisibility(Button.VISIBLE);
-                btnSignUp.setVisibility(Button.GONE);
+        else {
+            boolean isSignedUp = new DSDao(context).isSignedUpForCampaign(userContext.getUserUid(), campaign.getId());
+            if (isSignedUp) {
+                btnSignUp.setEnabled(false);
+                btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
+
+                // Show a remove sign up button for dev builds
+                if (!DSConstants.inProduction) {
+                    btnUnsign.setVisibility(View.VISIBLE);
+                }
             }
             else {
-                UserCampaign userCampaign = new DSDao(context).findUserCampaign(userContext.getUserUid(), campaign.getId());
-                if (userCampaign != null) {
-                    // If user's already signed up and there is a report back available, then show report back button
-                    if (campaign.getReportBack() != null) {
-                        btnReportBack.setVisibility(Button.VISIBLE);
-                        btnSignUp.setVisibility(Button.GONE);
-                    }
-                    else {
-                        btnSignUp.setEnabled(false);
-                        btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
-
-                        btnReportBack.setVisibility(Button.GONE);
-                        btnSignUp.setVisibility(Button.VISIBLE);
-                    }
-                }
+                btnSignUp.setEnabled(true);
+                btnSignUp.setText(R.string.campaign_sign_up_button);
             }
         }
     }

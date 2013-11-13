@@ -21,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,24 +33,20 @@ import org.dosomething.android.adapters.DrawerListAdapter;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
-import org.dosomething.android.domain.CompletedCampaignAction;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.tasks.ErrorResponseCodeException;
 import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.Challenge;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import roboguice.inject.InjectView;
@@ -200,8 +195,7 @@ public class Profile extends AbstractActionBarActivity {
         @Override
         public void onItemClick(AdapterView<?> av, View v, int position, long id) {
             Campaign campaign = (Campaign) list.getAdapter().getItem(position);
-
-            startActivity(CampaignActions.getIntent(getApplicationContext(), campaign));
+            startActivity(org.dosomething.android.activities.Campaign.getIntent(getApplicationContext(), campaign));
         }
     };
 
@@ -282,22 +276,6 @@ public class Profile extends AbstractActionBarActivity {
             txtName.setTypeface(headerTypeface, Typeface.BOLD);
             txtName.setText(campaign.getName());
 
-            List<CompletedCampaignAction> completeActions = dao.getCompletedActions(userCampaign.getId());
-
-            TextView txtCompleted = (TextView) v.findViewById(R.id.completed);
-            String strCompleted = "Completed: " + completeActions.size() + " of " + campaign.getChallenges().size();
-            if (completeActions.size() == campaign.getChallenges().size()) {
-                strCompleted += " " + getString(R.string.special_smiley);
-            }
-            txtCompleted.setText(strCompleted);
-
-            TextView txtEndDate = (TextView) v.findViewById(R.id.end_date);
-            txtEndDate.setText("Ends: " + new SimpleDateFormat(DF, Locale.US).format(campaign.getEndDate()));
-
-            ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.campaignProgress);
-            int progress = Math.round(((float)completeActions.size() / (float)campaign.getChallenges().size()) * 100.f);
-            progressBar.setProgress(progress);
-
             return v;
         }
 
@@ -317,7 +295,7 @@ public class Profile extends AbstractActionBarActivity {
         Map<String, UserCampaign> userCampaignsMap = new HashMap<String, UserCampaign>();
         String uid = new UserContext(context).getUserUid();
         if (uid != null) {
-            List<UserCampaign> allUserCampaigns = dao.findUserCampaigns(uid);
+            List<UserCampaign> allUserCampaigns = dao.findUserCampaigns(uid, false);
             for(UserCampaign userCampaign : allUserCampaigns){
                 userCampaignsMap.put(userCampaign.getCampaignId(), userCampaign);
             }
@@ -362,17 +340,10 @@ public class Profile extends AbstractActionBarActivity {
                         if (campaign.getGid() == gids.get(i).intValue()) {
 
                             // Save campaign as being signed up for
-                            Long userCampaignId = dao.setSignedUp(uid, campaign.getId());
-                            // And mark the sign-up challenge as completed
-                            List<Challenge> challenges = campaign.getChallenges();
-                            if (challenges != null) {
-                                for (Challenge challenge : challenges) {
-                                    if ("sign-up".equals(challenge.getCompletionPage())) {
-                                        dao.addCompletedAction(new CompletedCampaignAction(userCampaignId, challenge.getText()));
-                                        break;
-                                    }
-                                }
-                            }
+                            UserCampaign uc = new UserCampaign.UserCampaignCVBuilder()
+                                    .campaignId(campaign.getId())
+                                    .uid(uid)
+                                    .build();
 
                             // Add to userCampaignsMap HashMap
                             UserCampaign newUserCampaign = dao.findUserCampaign(uid, campaign.getId());

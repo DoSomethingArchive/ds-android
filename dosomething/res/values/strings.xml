@@ -65,13 +65,18 @@
     <string name="profile_title">Profile</string>
     <string name="profile_update_error">There was an error updating your profile. Check your internet connection and try again later.</string>
     <string name="drawer_close">Navigation Closed</string>
-    <string name="drawer_item_campaigns">Projects</string>
+    <string name="drawer_item_campaigns">Campaigns</string>
     <string name="drawer_item_login">Log In</string>
     <string name="drawer_item_logout">Log Out</string>
     <string name="drawer_item_profile">Profile</string>
     <string name="drawer_item_settings">Settings</string>
     <string name="drawer_open">Navigation Open</string>
-    <string name="campaigns_title">Projects</string>
+    <string name="campaigns_tab_browse_title">Do It</string>
+    <string name="campaigns_tab_completed_title">Done</string>
+    <string name="campaigns_tab_completed_none_found">[WIP] You haven\'t completed any campaigns yet! Sign up and report back on a campaign to complete it.</string>
+    <string name="campaigns_tab_in_progress_title">Doing It</string>
+    <string name="campaigns_tab_in_progress_none_found">[WIP] You haven\'t signed up for any campaigns yet! Find a campaign on the left and sign up for one to get started.</string>
+    <string name="campaigns_title">Campaigns</string>
     <string name="campaigns_upgrade_popup">A new update is available!</string>
     <string name="campaign_date_ends">Ends: %1$s</string>
     <string name="campaign_share_title">Share</string>
@@ -80,6 +85,10 @@
     <string name="campaign_moreInfo_title">More Information</string>
     <string name="campaign_people_title">Meet The People</string>
     <string name="campaign_prizes_title">Scholarship</string>
+    <string name="campaign_fragment_progress_denied_title">Campaign Progress Denied</string>
+    <string name="campaign_fragment_reportback_body">Show off the great work that you\'ve done! Send us a photo of your participation in this campaign.</string>
+    <string name="campaign_fragment_reportback_header">Show Off!</string>
+    <string name="campaign_fragment_reportback_title">Show Off</string>
     <string name="report_back_title">Tell Us</string>
     <string name="sign_up_title">Sign Up</string>
     <string name="campaign_faq_title">FAQ</string>
@@ -102,22 +111,20 @@
     <string name="campaign_sfg_submit_success">Thanks for your submission!</string>
     <string name="campaign_sfg_submitting">Submitting…</string>
     <string name="campaign_sfg_update_error">Unable to update. Please check your internet connection and try again.</string>
-    <string name="campaign_sign_up_button">DO IT</string>
-    <string name="campaign_sign_up_button_already_signed_up">Already Signed Up</string>
+    <string name="campaign_sign_up_button">DO THIS</string>
+    <string name="campaign_sign_up_button_already_signed_up">YOU\'RE SIGNED UP</string>
     <string name="campaign_sign_up_sms_action_alert_title">About the Texting Experience</string>
     <string name="campaign_sign_up_sms_action_alert_body">You\'re about to begin the %1$s experience. We\'ll send you a message from 38383 so you can get started.</string>
     <string name="campaign_sign_up_sms_error">There was an error starting the SMS experience. Please try again.</string>
     <string name="campaign_sign_up_sms_error_with_keyword">There was an error starting the SMS experience. Try again or text %1$s to 38383 to begin.</string>
     <string name="campaign_sign_up_sms_success">You\'ll be getting a message soon from 38383 to begin!</string>
+    <string name="campaign_sign_up_success">You\'re signed up!</string>
 
     <string name="campaign_share_button">SHARE THIS CAMPAIGN</string>
     <string name="campaign_share_signup_header">Thanks for signing up!</string>
     <string name="campaign_share_report_header">Thanks for rocking this campaign!</string>
     <string name="campaign_share_chooser">Share on</string>
 
-    <string name="action_complete_button">DO IT</string>
-
-    <string name="campaign_actions">ACTIONS</string>
     <string name="campaign_how_to">HOW TO</string>
     <string name="campaign_gallery">GALLERY</string>
     <string name="campaign_people">MEET THE PEOPLE</string>
@@ -127,8 +134,6 @@
     <string name="campaign_resources">RESOURCES</string>
     <string name="campaign_faq">FAQ</string>
     <string name="campaign_loading">Loading Campaign…</string>
-
-    <string name="campaign_action_list">Campaign Action List</string>
 
     <string name="campaign_prizes_rules">Official Rules and Regulations</string>
     <string name="gallery_image_item_display_error">Unable to load the image</string>

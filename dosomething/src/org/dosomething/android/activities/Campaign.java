@@ -26,6 +26,7 @@ import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.cache.Cache;
 import org.dosomething.android.context.UserContext;
+import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.fragments.AbstractCampaignFragment;
 import org.dosomething.android.fragments.CampaignFaqFragment;
 import org.dosomething.android.fragments.CampaignGalleryFragment;
@@ -33,6 +34,8 @@ import org.dosomething.android.fragments.CampaignHowToFragment;
 import org.dosomething.android.fragments.CampaignMainFragment;
 import org.dosomething.android.fragments.CampaignPeopleFragment;
 import org.dosomething.android.fragments.CampaignPrizesFragment;
+import org.dosomething.android.fragments.CampaignProgressDeniedFragment;
+import org.dosomething.android.fragments.CampaignReportBackFragment;
 import org.dosomething.android.fragments.CampaignResourcesFragment;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.tasks.NoInternetException;
@@ -87,15 +90,18 @@ public class Campaign extends AbstractActionBarActivity {
             // OnPageChangeListener to update UI when user swipes to a different fragment page
             mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
-                public void onPageScrolled(int i, float v, int i2) {}
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
                 @Override
                 public void onPageSelected(int position) {
-                    getSupportActionBar().setSelectedNavigationItem(position);
+                    ActionBar ab = getSupportActionBar();
+                    if (ab.getNavigationItemCount() > position) {
+                        getSupportActionBar().setSelectedNavigationItem(position);
+                    }
                 }
 
                 @Override
-                public void onPageScrollStateChanged(int i) {}
+                public void onPageScrollStateChanged(int state) {}
             });
 
             // Log a page view for the initial subpage shown when the activity first loads
@@ -110,6 +116,13 @@ public class Campaign extends AbstractActionBarActivity {
     }
 
     /**
+     * Set the current tab to the index given.
+     */
+    public void setCurrentTab(int index) {
+        mViewPager.setCurrentItem(index);
+    }
+
+    /**
      * Sets fragments to display in the Tabbed Action bar.
      */
     private class CampaignPagerAdapter extends FragmentStatePagerAdapter {
@@ -120,6 +133,11 @@ public class Campaign extends AbstractActionBarActivity {
             super(fm);
 
             mTabHash = tabHash;
+        }
+
+        @Override
+        public int getCount() {
+            return mTabHash.size();
         }
 
         @Override
@@ -168,13 +186,30 @@ public class Campaign extends AbstractActionBarActivity {
                     fragment.setArguments(args);
                     return fragment;
                 }
+                else if (tabTitle.contentEquals(getString(R.string.campaign_fragment_reportback_title))) {
+                    CampaignReportBackFragment fragment = new CampaignReportBackFragment();
+                    fragment.setArguments(args);
+                    return fragment;
+                }
+                else if (tabTitle.contentEquals(getString(R.string.campaign_fragment_progress_denied_title))) {
+                    CampaignProgressDeniedFragment fragment = new CampaignProgressDeniedFragment();
+                    return fragment;
+                }
             }
             return null;
         }
 
         @Override
-        public int getCount() {
-            return mTabHash.size();
+        public float getPageWidth(int position) {
+            float width = super.getPageWidth(position);
+
+            // For the "progress denied" fragment, don't allow it to scroll the full width of the screen
+            String tabTitle = mTabHash.get(Integer.valueOf(position));
+            if (tabTitle.contentEquals(getString(R.string.campaign_fragment_progress_denied_title))) {
+                width = 0.7f;
+            }
+
+            return width;
         }
 
         public int getTabItemByTitle(String title) {
@@ -185,6 +220,10 @@ public class Campaign extends AbstractActionBarActivity {
             }
 
             return -1;
+        }
+
+        public void setTabHash(HashMap<Integer, String> hash) {
+            mTabHash = hash;
         }
     }
 
@@ -198,6 +237,15 @@ public class Campaign extends AbstractActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Rebuild the tabs in the ActionBar.
+     */
+    public void refreshActionBarTabs() {
+        HashMap<Integer, String> tabHash = setupActionBarTabs();
+        mCampaignPagerAdapter = new CampaignPagerAdapter(getSupportFragmentManager(), tabHash);
+        mViewPager.setAdapter(mCampaignPagerAdapter);
     }
 
     /**
@@ -231,11 +279,21 @@ public class Campaign extends AbstractActionBarActivity {
                         .setTabListener(tabListener)
         );
 
+
         HashMap<Integer, String> tabHash = new HashMap<Integer, String>();
         int tabIndex = 0;
 
         tabHash.put(Integer.valueOf(tabIndex), campaign.getName());
         tabIndex++;
+
+        // If the user has not signed up for the campaign, add another fragment that can be scrolled
+        // to but won't have a tab. Fragment will prompt user to sign up to progress.
+        String uid = new UserContext(this).getUserUid();
+        boolean isSignedUp = new DSDao(this).isSignedUpForCampaign(uid, campaign.getId());
+        if (!isSignedUp) {
+            tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_fragment_progress_denied_title));
+            return tabHash;
+        }
 
         if (!nullOrEmpty(campaign.getHowTos())) {
             actionBar.addTab(actionBar.newTab()
@@ -297,6 +355,17 @@ public class Campaign extends AbstractActionBarActivity {
             tabIndex++;
         }
 
+        // The report back tab should always be last
+        if (campaign.getReportBack() != null) {
+            actionBar.addTab(actionBar.newTab()
+                    .setText(R.string.campaign_fragment_reportback_title)
+                    .setTabListener(tabListener)
+            );
+
+            tabHash.put(Integer.valueOf(tabIndex), getString(R.string.campaign_fragment_reportback_title));
+            tabIndex++;
+        }
+
         return tabHash;
     }
 
@@ -328,10 +397,6 @@ public class Campaign extends AbstractActionBarActivity {
 
     private static boolean nullOrEmpty(String str) {
         return str == null || str.trim().length() == 0;
-    }
-
-    public void onClickActions(View v) {
-        startActivity(CampaignActions.getIntent(this, campaign));
     }
 
     @Override

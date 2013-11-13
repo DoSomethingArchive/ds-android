@@ -4,21 +4,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
-import org.dosomething.android.domain.CompletedCampaignAction;
+import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.Challenge;
 import org.dosomething.android.transfer.WebForm;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class ReportBack extends AbstractWebForm {
-	
-	private static final String CAMPAIGN = "campaign";
+
+    // Key for the campaign data passed to the fragment through arguments
+    private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
+
+    // Key for the image path to attach to the report back
+    private static final String REPORT_BACK_IMG = DSConstants.EXTRAS_KEY.REPORT_BACK_IMG.getValue();
 	
 	private WebForm webForm;
 	
@@ -31,6 +34,12 @@ public class ReportBack extends AbstractWebForm {
 	protected void onCreate(Bundle savedInstanceState) {
 		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
 		webForm = campaign.getReportBack();
+
+        String imgPath = getIntent().getExtras().getString(REPORT_BACK_IMG);
+        if (imgPath != null && imgPath.length() > 0) {
+            mPreselectedImage = imgPath;
+        }
+
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -39,19 +48,12 @@ public class ReportBack extends AbstractWebForm {
 		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
 		
 		DSDao dao = new DSDao(this);
-		
-		Long userCampaignId = dao.setSignedUp(new UserContext(this).getUserUid(), campaign.getId());
-		
-		List<Challenge> challenges = campaign.getChallenges();
-		
-		if(challenges != null){
-			for(Challenge challenge : challenges){
-				if("report-back".equals(challenge.getCompletionPage())){
-					dao.addCompletedAction(new CompletedCampaignAction(userCampaignId, challenge.getText()));
-					break;
-				}
-			}
-		}
+
+        UserCampaign uc = new UserCampaign.UserCampaignCVBuilder()
+                .campaignId(campaign.getId())
+                .uid(new UserContext(this).getUserUid())
+                .build();
+        Long userCampaignId = dao.setSignedUp(uc);
 		
 		// Track submission in analytics - Flurry Analytics
 		HashMap<String, String> param = new HashMap<String, String>();

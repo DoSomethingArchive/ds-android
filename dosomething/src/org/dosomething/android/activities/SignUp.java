@@ -10,16 +10,14 @@ import org.dosomething.android.R;
 import org.dosomething.android.analytics.Analytics;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
-import org.dosomething.android.domain.CompletedCampaignAction;
+import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.receivers.AlarmReceiver;
 import org.dosomething.android.transfer.Campaign;
-import org.dosomething.android.transfer.Challenge;
 import org.dosomething.android.transfer.WebForm;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 public class SignUp extends AbstractWebForm {
 	
@@ -56,30 +54,15 @@ public class SignUp extends AbstractWebForm {
 		Campaign campaign = (Campaign) getIntent().getExtras().get(CAMPAIGN);
 		
 		DSDao dao = new DSDao(this);
-		
-		Long userCampaignId = dao.setSignedUp(new UserContext(this).getUserUid(), campaign.getId());
-		
-		List<Challenge> challenges = campaign.getChallenges();
-		
-		if(challenges != null){
-			for(Challenge challenge : challenges){
-				if("sign-up".equals(challenge.getCompletionPage())){
-					dao.addCompletedAction(new CompletedCampaignAction(userCampaignId, challenge.getText()));
-					break;
-				}
-			}
-		}
-		
+
+        UserCampaign uc = new UserCampaign.UserCampaignCVBuilder()
+                .campaignId(campaign.getId())
+                .uid(new UserContext(this).getUserUid())
+                .build();
+        Long userCampaignId = dao.setSignedUp(uc);
+
 		// Check if this campaign has a report back challenge
 		boolean canReportBack = false;
-		if (challenges != null) {
-			for (Challenge challenge : challenges) {
-				if ("report-back".equals(challenge.getCompletionPage())) {
-					canReportBack = true;
-					break;
-				}
-			}
-		}
 		
 		// If so, then set to trigger a notification to remind them later to report back
 		if (canReportBack) {

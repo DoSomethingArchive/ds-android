@@ -5,7 +5,7 @@
 
     <!-- FrameLayout margins skewed to accommodate the drop shadow added to bottom and right edges
         of the view -->
-    <FrameLayout 
+    <FrameLayout
         android:id="@+id/frame"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -16,8 +16,6 @@
         android:background="@drawable/container_dropshadow">
         <ImageView android:id="@+id/background" style="@style/CampaignRowBackground"/>
         <ImageView android:id="@+id/image" style="@style/CampaignRowImage"/>
-        <TextView android:id="@+id/callout" style="@style/CampaignCallout"/>
-        <ImageView android:id="@+id/cause_tag" style="@style/CampaignCauseTag"/>
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
@@ -64,7 +62,7 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/font_size_medium"/>
     </RelativeLayout>
-    
-    
-    
+
+
+
 </FrameLayout>
