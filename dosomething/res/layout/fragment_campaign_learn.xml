@@ -6,6 +6,8 @@
     <RelativeLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
         android:orientation="vertical">
 
         <TextView
@@ -21,6 +23,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/header"
             android:orientation="vertical"/>
+
+        <Button
+            android:id="@+id/btn_did_this"
+            android:layout_below="@id/content"
+            android:text="I DID THIS"
+            style="@style/ButtonPrimary"/>
 
     </RelativeLayout>
 </ScrollView>

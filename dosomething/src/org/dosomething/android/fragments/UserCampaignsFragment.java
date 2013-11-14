@@ -129,16 +129,31 @@ public class UserCampaignsFragment extends RoboFragment {
 
                 TextView body = (TextView)view.findViewById(R.id.preview_body);
                 Date date = new Date();
-                String dateText = "";
+                String bodyText = "";
                 if (mShowCompletedCampaigns) {
                     date.setTime(userCampaign.getDateCompleted().longValue() * 1000);
-                    dateText = "Completed: " + DateFormat.format("MM/dd/yyyy", date);
+                    bodyText = "Completed: " + DateFormat.format("MM/dd/yyyy", date);
                 }
                 else {
                     date.setTime(userCampaign.getDateSignedUp().longValue() * 1000);
-                    dateText = "Signed up: " + DateFormat.format("MM/dd/yyyy", date);
+                    bodyText = "Signed up: " + DateFormat.format("MM/dd/yyyy", date);
+
+                    DSDao dsDao = new DSDao(getActivity());
+                    int[] completedSteps = dsDao.getCampaignStepsCompleted(mUserContext.getUserUid(), userCampaign.getCampaignId());
+                    bodyText += "\n\nSteps Completed: ";
+                    if (completedSteps != null && completedSteps.length > 0) {
+                        for (int i = 0; i < completedSteps.length; i++) {
+                            bodyText += completedSteps[i];
+                            if (i < completedSteps.length - 1) {
+                                bodyText += ", ";
+                            }
+                        }
+                    }
+                    else {
+                        bodyText += "none";
+                    }
                 }
-                body.setText(dateText);
+                body.setText(bodyText);
                 body.setTypeface(mTypefaceDin);
 
                 CardFlipAnimation.animate(getActivity(), view, false);

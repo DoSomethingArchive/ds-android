@@ -1,5 +1,6 @@
 package org.dosomething.android.dao;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -101,6 +102,100 @@ public class DSDao {
     }
 
     /**
+     * Get a list of steps completed for a given user and campaign.
+     *
+     * @param uid User's UID
+     * @param campaignId ID for the campaign
+     * @return Array of ints indicating the step numbers that have been completed
+     */
+    public int[] getCampaignStepsCompleted(String uid, String campaignId) {
+        int[] results = null;
+
+        SQLHelper sql = new SQLHelper(context);
+        SQLiteDatabase readableDb = sql.getReadableDatabase();
+
+        Cursor c = readableDb.query(
+                UserCampaign.TABLE_NAME,
+                new String[] {UserCampaign.COL_COMPLETED_STEPS},
+                UserCampaign.COL_UID + "=? and " + UserCampaign.COL_CAMPAIGN_ID + "=?",
+                new String[] {uid, campaignId},
+                null,
+                null,
+                null
+        );
+
+        if (c.moveToFirst()) {
+            String strSteps = c.getString(0);
+            if (strSteps != null) {
+                try {
+                    JSONObject jsonSteps = new JSONObject(c.getString(0));
+                    if (jsonSteps.length() > 0) {
+                        results = new int[jsonSteps.length()];
+
+                        int i = 0;
+                        Iterator<?> keys = jsonSteps.keys();
+                        while (keys.hasNext()) {
+                            String key = (String)keys.next();
+                            results[i++] = Integer.parseInt(key);
+                        }
+                    }
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        readableDb.close();
+        sql.close();
+
+        return results;
+    }
+
+    /**
+     * Check if a campaign step is completed for the given step number, user, and campaign.
+     *
+     * @param uid User's UID
+     * @param campaignId ID for the campaign
+     * @param stepNumber Step number to check if completed
+     * @return true if step is complete, otherwise false
+     */
+    public boolean isCampaignStepComplete(String uid, String campaignId, int stepNumber) {
+        int isCompleted = 0;
+
+        SQLHelper sql = new SQLHelper(context);
+        SQLiteDatabase readableDb = sql.getReadableDatabase();
+
+        Cursor c = readableDb.query(
+                UserCampaign.TABLE_NAME,
+                new String[]{UserCampaign.COL_COMPLETED_STEPS},
+                UserCampaign.COL_UID + "=? and " + UserCampaign.COL_CAMPAIGN_ID + "=?",
+                new String[]{uid, campaignId},
+                null,
+                null,
+                null
+        );
+
+        if (c.moveToFirst()) {
+            String completedSteps = c.getString(0);
+            if (completedSteps != null) {
+                try {
+                    JSONObject jsonSteps = new JSONObject(completedSteps);
+                    isCompleted = jsonSteps.getInt(Integer.toString(stepNumber));
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        readableDb.close();
+        sql.close();
+
+        return isCompleted == 1 ? true : false;
+    }
+
+    /**
      * Check if a given user has signed up for a given campaign.
      *
      * @param uid User's UID
@@ -117,11 +212,36 @@ public class DSDao {
     }
 
     /**
+     * Clear the list of completed steps for a user in a given campaign.
+     *
+     * @param uid User's UID
+     * @param campaignId ID for the campaign
+     */
+    public void removeCompletedSteps(String uid, String campaignId) {
+        SQLHelper sql = new SQLHelper(context);
+        SQLiteDatabase writableDb = sql.getWritableDatabase();
+
+        // Replace existing column value with an empty json object
+        ContentValues updateValues = new ContentValues();
+        updateValues.put(UserCampaign.COL_COMPLETED_STEPS, "{}");
+
+        int rowsUpdated = writableDb.update(
+                UserCampaign.TABLE_NAME,
+                updateValues,
+                UserCampaign.COL_UID + "=? and " + UserCampaign.COL_CAMPAIGN_ID + "=?",
+                new String[] {uid, campaignId}
+        );
+
+        writableDb.close();
+        sql.close();
+    }
+
+    /**
      * Deletes a user's sign up for a campaign from the table.
      *
      * @param uid User's UID
      * @param campaignId Campaign ID for the campaign
-     * @return int > 0 if successfuly. Otherwise, 0.
+     * @return int > 0 if successful. Otherwise, 0.
      */
     public int removeSignUp(String uid, String campaignId) {
         SQLHelper sql = new SQLHelper(context);
@@ -137,6 +257,69 @@ public class DSDao {
         sql.close();
 
         return rowsRemoved;
+    }
+
+    /**
+     * Update database with the step completed for the given user and campaign.
+     *
+     * @param uid User's UID
+     * @param campaignId ID for the campaign
+     * @param stepNumber Step number being completed
+     */
+    public void setCampaignStepCompleted(String uid, String campaignId, int stepNumber) {
+        SQLHelper sql = new SQLHelper(context);
+
+        SQLiteDatabase readableDb = sql.getReadableDatabase();
+
+        // Get current list of steps completed
+        Cursor c = readableDb.query(
+                UserCampaign.TABLE_NAME,
+                new String[] {UserCampaign.COL_COMPLETED_STEPS},
+                UserCampaign.COL_UID + "=? and " + UserCampaign.COL_CAMPAIGN_ID + "=?",
+                new String[] {uid, campaignId},
+                null,
+                null,
+                null
+        );
+
+        if (c.moveToFirst()) {
+            // Cursor only contains the completed steps column
+            String completedSteps = c.getString(0);
+
+            // If no steps found, create an empty JSON object
+            if (completedSteps == null) {
+                completedSteps = "{}";
+            }
+
+            readableDb.close();
+
+            try {
+                JSONObject jsonSteps = new JSONObject(completedSteps);
+
+                // Update list of steps completed
+                jsonSteps.put(Integer.toString(stepNumber), 1);
+
+                // Update database with updated list
+                SQLiteDatabase writableDb = sql.getWritableDatabase();
+
+                ContentValues updateValues = new ContentValues();
+                updateValues.put(UserCampaign.COL_COMPLETED_STEPS, jsonSteps.toString());
+
+                int rowsUpdated = writableDb.update(
+                        UserCampaign.TABLE_NAME,
+                        updateValues,
+                        UserCampaign.COL_UID + "=? and " + UserCampaign.COL_CAMPAIGN_ID + "=?",
+                        new String[] {uid, campaignId}
+                );
+
+                writableDb.close();
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        sql.close();
     }
 
     /**

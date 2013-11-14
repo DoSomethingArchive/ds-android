@@ -72,6 +72,7 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
     private LinearLayout llSMSReferContainer;
     private TextView txtSMSRefer;
     private Button btnSMSRefer;
+    private Button btnUncompleteSteps;
     private Button btnUnsign;
 
     private org.dosomething.android.transfer.Campaign campaign;
@@ -110,6 +111,7 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
         llSMSReferContainer = (LinearLayout)view.findViewById(R.id.sms_refer_container);
         txtSMSRefer = (TextView)view.findViewById(R.id.sms_refer_text);
         btnSMSRefer = (Button)view.findViewById(R.id.sms_refer);
+        btnUncompleteSteps = (Button)view.findViewById(R.id.uncomplete_steps);
         btnUnsign = (Button)view.findViewById(R.id.unsign_up);
 
         Bundle args = getArguments();
@@ -118,6 +120,7 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
         // Setup click listener for buttons
         btnSignUp.setOnClickListener(this);
         btnSMSRefer.setOnClickListener(this);
+        btnUncompleteSteps.setOnClickListener(this);
         btnUnsign.setOnClickListener(this);
 
         populateFields();
@@ -138,6 +141,9 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
                 break;
             case R.id.sms_refer:
                 startActivityForResult(CampaignSMSRefer.getIntent(getActivity(), campaign), SMS_REFER_ACTIVITY);
+                break;
+            case R.id.uncomplete_steps:
+                removeCompletedSteps();
                 break;
             case R.id.unsign_up:
                 removeSignUp();
@@ -284,6 +290,16 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
     }
 
     /**
+     * Helper function to remove the steps a user's completed for this campaign.
+     * Not intended for production use.
+     */
+    private void removeCompletedSteps() {
+        Activity activity = getActivity();
+
+        new DSDao(activity).removeCompletedSteps(userContext.getUserUid(), campaign.getId());
+    }
+
+    /**
      * Removes the user's sign up for this campaign. Mainly inteded for development use.
      */
     private void removeSignUp() {
@@ -311,6 +327,7 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
      * @param context Activity context
      */
     private void updateSignUpButton(Context context) {
+        btnUncompleteSteps.setVisibility(View.GONE);
         btnUnsign.setVisibility(View.GONE);
 
         if (useAlternateSignUp() || useSmsActionSignUp()) {
@@ -323,8 +340,9 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
                 btnSignUp.setEnabled(false);
                 btnSignUp.setText(R.string.campaign_sign_up_button_already_signed_up);
 
-                // Show a remove sign up button for dev builds
+                // Show helper buttons for dev builds
                 if (!DSConstants.inProduction) {
+                    btnUncompleteSteps.setVisibility(View.VISIBLE);
                     btnUnsign.setVisibility(View.VISIBLE);
                 }
             }

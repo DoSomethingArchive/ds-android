@@ -1,25 +1,38 @@
 package org.dosomething.android.fragments;
 
+import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
+import org.dosomething.android.context.UserContext;
+import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.transfer.ICampaignSectionData;
 
 import java.util.Iterator;
 import java.util.List;
 
+import roboguice.inject.InjectView;
+
 /**
  * Campaign sub-page to Learn how to participate in the campaign.
  */
-public class CampaignLearnFragment extends AbstractCampaignFragment {
+public class CampaignLearnFragment extends AbstractCampaignFragment implements View.OnClickListener {
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
+
+    // Button to mark this step as being completed
+    @InjectView(R.id.btn_did_this) private Button mButtonDidThis;
+
+    // Campaign data
+    private Campaign mCampaign;
 
     @Override
     public String getFragmentName() {
@@ -41,13 +54,42 @@ public class CampaignLearnFragment extends AbstractCampaignFragment {
         LinearLayout layout = (LinearLayout)view.findViewById(R.id.content);
 
         Bundle args = getArguments();
-        Campaign campaign = (Campaign)args.getSerializable(CAMPAIGN);
+        mCampaign = (Campaign)args.getSerializable(CAMPAIGN);
 
-        List<ICampaignSectionData> data = campaign.getLearnData();
+        List<ICampaignSectionData> data = mCampaign.getLearnData();
         Iterator<ICampaignSectionData> iter = data.iterator();
         while (iter.hasNext()) {
             ICampaignSectionData sectionData = iter.next();
             sectionData.addToView(getActivity(), layout);
+        }
+
+        // Set style and behavior for the Did This button
+        Typeface typeface = Typeface.create("DINComp-CondBold", Typeface.BOLD);
+        mButtonDidThis.setTypeface(typeface);
+        mButtonDidThis.setOnClickListener(this);
+
+        Activity activity = getActivity();
+        DSDao dsDao = new DSDao(activity);
+        UserContext userContext = new UserContext(activity);
+        boolean isStepComplete = dsDao.isCampaignStepComplete(userContext.getUserUid(), mCampaign.getId(), 0);
+        mButtonDidThis.setEnabled(!isStepComplete);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+        switch (id) {
+            case R.id.btn_did_this:
+                // Mark this step as being completed
+                Activity activity = getActivity();
+                DSDao dsDao = new DSDao(activity);
+                UserContext userContext = new UserContext(activity);
+                dsDao.setCampaignStepCompleted(userContext.getUserUid(), mCampaign.getId(), 0);
+
+                // Disable button
+                view.setEnabled(false);
+                break;
         }
     }
 }
