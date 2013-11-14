@@ -12,6 +12,8 @@ import org.dosomething.android.R;
  */
 public class CampaignDoFragment extends AbstractCampaignFragment {
 
+    private final int STEP_NUMBER = 2;
+
     @Override
     public String getFragmentName() {
         return "Do-It";

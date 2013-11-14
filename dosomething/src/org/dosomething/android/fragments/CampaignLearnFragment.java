@@ -27,6 +27,7 @@ import roboguice.inject.InjectView;
 public class CampaignLearnFragment extends AbstractCampaignFragment implements View.OnClickListener {
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
+    private final int STEP_NUMBER = 0;
 
     // Button to mark this step as being completed
     @InjectView(R.id.btn_did_this) private Button mButtonDidThis;
@@ -71,7 +72,7 @@ public class CampaignLearnFragment extends AbstractCampaignFragment implements V
         Activity activity = getActivity();
         DSDao dsDao = new DSDao(activity);
         UserContext userContext = new UserContext(activity);
-        boolean isStepComplete = dsDao.isCampaignStepComplete(userContext.getUserUid(), mCampaign.getId(), 0);
+        boolean isStepComplete = dsDao.isCampaignStepComplete(userContext.getUserUid(), mCampaign.getId(), STEP_NUMBER);
         mButtonDidThis.setEnabled(!isStepComplete);
     }
 
@@ -85,7 +86,7 @@ public class CampaignLearnFragment extends AbstractCampaignFragment implements V
                 Activity activity = getActivity();
                 DSDao dsDao = new DSDao(activity);
                 UserContext userContext = new UserContext(activity);
-                dsDao.setCampaignStepCompleted(userContext.getUserUid(), mCampaign.getId(), 0);
+                dsDao.setCampaignStepCompleted(userContext.getUserUid(), mCampaign.getId(), STEP_NUMBER);
 
                 // Disable button
                 view.setEnabled(false);

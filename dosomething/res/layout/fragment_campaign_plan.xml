@@ -6,7 +6,8 @@ android:background="@color/light_background">
     <RelativeLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:orientation="vertical">
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp">
 
         <TextView
             android:id="@+id/header"
@@ -21,6 +22,12 @@ android:background="@color/light_background">
             android:layout_height="wrap_content"
             android:layout_below="@id/header"
             android:orientation="vertical"/>
+
+        <Button
+            android:id="@+id/btn_did_this"
+            android:layout_below="@id/content"
+            android:text="@string/campaign_fragment_did_this_button"
+            style="@style/ButtonPrimary"/>
 
     </RelativeLayout>
 </ScrollView>
