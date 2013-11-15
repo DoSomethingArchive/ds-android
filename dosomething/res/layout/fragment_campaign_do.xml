@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="@color/light_background">
@@ -28,5 +29,26 @@
             android:layout_below="@id/content"
             android:text="@string/campaign_fragment_did_this_button"
             style="@style/ButtonPrimary"/>
+
+        <!-- Expanded gallery images -->
+        <ImageView
+            android:id="@+id/galleryImage1"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
+        <ImageView
+            android:id="@+id/galleryImage2"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
+        <ImageView
+            android:id="@+id/galleryImage3"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
+
     </RelativeLayout>
 </ScrollView>

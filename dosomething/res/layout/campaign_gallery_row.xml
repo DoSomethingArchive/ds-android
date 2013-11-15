@@ -7,7 +7,7 @@
     android:orientation="horizontal">
 
     <org.dosomething.android.widget.SquareImageView
-        android:id="@+id/image1"
+        android:id="@+id/galleryThumb1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
@@ -16,7 +16,7 @@
         android:scaleType="centerCrop" />
 
     <org.dosomething.android.widget.SquareImageView
-        android:id="@+id/image2"
+        android:id="@+id/galleryThumb2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
@@ -25,7 +25,7 @@
         android:scaleType="centerCrop" />
 
     <org.dosomething.android.widget.SquareImageView
-        android:id="@+id/image3"
+        android:id="@+id/galleryThumb3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
