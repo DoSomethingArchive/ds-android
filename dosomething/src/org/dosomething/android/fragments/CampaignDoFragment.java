@@ -56,6 +56,11 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
     @InjectView(R.id.galleryImage2) private ImageView mGalleryImage2;
     @InjectView(R.id.galleryImage3) private ImageView mGalleryImage3;
 
+    // ImageViews for the thumbnailed gallery images
+    private ImageView mGalleryThumb1;
+    private ImageView mGalleryThumb2;
+    private ImageView mGalleryThumb3;
+
     // User Context
     @Inject private UserContext mUserContext;
 
@@ -102,13 +107,13 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
                 imageLoader.displayImage(galleryData.getImageUrl3(), mGalleryImage3);
 
                 // Set a listener on the ImageView thumbnails that were added to the view
-                ImageView thumb1 = (ImageView)mContentLayout.findViewById(R.id.galleryThumb1);
-                ImageView thumb2 = (ImageView)mContentLayout.findViewById(R.id.galleryThumb2);
-                ImageView thumb3 = (ImageView)mContentLayout.findViewById(R.id.galleryThumb3);
+                mGalleryThumb1 = (ImageView)mContentLayout.findViewById(R.id.galleryThumb1);
+                mGalleryThumb2 = (ImageView)mContentLayout.findViewById(R.id.galleryThumb2);
+                mGalleryThumb3 = (ImageView)mContentLayout.findViewById(R.id.galleryThumb3);
 
-                thumb1.setOnClickListener(this);
-                thumb2.setOnClickListener(this);
-                thumb3.setOnClickListener(this);
+                mGalleryThumb1.setOnClickListener(this);
+                mGalleryThumb2.setOnClickListener(this);
+                mGalleryThumb3.setOnClickListener(this);
             }
         }
 
@@ -151,7 +156,7 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
         }
     }
 
-    private void zoomImageFromThumb(final ImageView thumbView, ImageView zoomView) {
+    private void zoomImageFromThumb(final ImageView thumbView, final ImageView zoomView) {
         // Cancel any animation in progress
         if (mCurrentZoomAnimator != null) {
             mCurrentZoomAnimator.cancel();
@@ -196,7 +201,9 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
                 .with(ObjectAnimator.ofFloat(zoomView, View.Y.getName(), startBounds.top, finalBounds.top))
                 .with(ObjectAnimator.ofFloat(zoomView, View.SCALE_X.getName(), startScale, 1f))
                 .with(ObjectAnimator.ofFloat(zoomView, View.SCALE_Y.getName(), startScale, 1f));
-        animSet.setDuration(2000);
+
+        int animDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        animSet.setDuration(animDuration);
         animSet.setInterpolator(new DecelerateInterpolator());
         animSet.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -212,5 +219,42 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
         animSet.start();
         mCurrentZoomAnimator = animSet;
 
+        // Zoom back down when zoomed-in image is clicked
+        final float startScaleFinal = startScale;
+        zoomView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mCurrentZoomAnimator != null) {
+                    mCurrentZoomAnimator.cancel();
+                }
+
+                AnimatorSet animSet = new AnimatorSet();
+                animSet.play(ObjectAnimator.ofFloat(zoomView, View.X.getName(), startBounds.left))
+                        .with(ObjectAnimator.ofFloat(zoomView, View.Y.getName(), startBounds.top))
+                        .with(ObjectAnimator.ofFloat(zoomView, View.SCALE_X.getName(), startScaleFinal))
+                        .with(ObjectAnimator.ofFloat(zoomView, View.SCALE_Y.getName(), startScaleFinal));
+                int animDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
+                animSet.setDuration(animDuration);
+                animSet.setInterpolator(new DecelerateInterpolator());
+                animSet.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        thumbView.setVisibility(View.VISIBLE);
+                        zoomView.setVisibility(View.GONE);
+                        mCurrentZoomAnimator = null;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        thumbView.setVisibility(View.VISIBLE);
+                        zoomView.setVisibility(View.GONE);
+                        mCurrentZoomAnimator = null;
+                    }
+                });
+
+                animSet.start();
+                mCurrentZoomAnimator = animSet;
+            }
+        });
     }
 }

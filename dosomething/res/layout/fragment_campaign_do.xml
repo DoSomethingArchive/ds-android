@@ -36,19 +36,19 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:layout_centerInParent="true"
-            android:visibility="invisible"/>
+            android:visibility="gone"/>
         <ImageView
             android:id="@+id/galleryImage2"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:layout_centerInParent="true"
-            android:visibility="invisible"/>
+            android:visibility="gone"/>
         <ImageView
             android:id="@+id/galleryImage3"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:layout_centerInParent="true"
-            android:visibility="invisible"/>
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </ScrollView>
