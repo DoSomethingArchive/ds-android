@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:orientation="vertical">
+    android:background="@color/light_background">
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp">
 
-    <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Do It Placeholder"/>
-</RelativeLayout>
+        <TextView
+            android:id="@+id/header"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="Do It Placeholder"/>
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header"
+            android:orientation="vertical"/>
+
+        <Button
+            android:id="@+id/btn_did_this"
+            android:layout_below="@id/content"
+            android:text="@string/campaign_fragment_did_this_button"
+            style="@style/ButtonPrimary"/>
+    </RelativeLayout>
+</ScrollView>

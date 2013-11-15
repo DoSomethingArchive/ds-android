@@ -32,6 +32,9 @@ public class CampaignPlanFragment extends AbstractCampaignFragment implements Vi
     // Button to mark this step as being completed
     @InjectView(R.id.btn_did_this) private Button mButtonDidThis;
 
+    // Layout container for dynamic page content
+    @InjectView(R.id.content) private LinearLayout mContentLayout;
+
     // Campaign data
     private Campaign mCampaign;
 
@@ -52,16 +55,15 @@ public class CampaignPlanFragment extends AbstractCampaignFragment implements Vi
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        LinearLayout layout = (LinearLayout)view.findViewById(R.id.content);
-
         Bundle args = getArguments();
         mCampaign = (Campaign)args.getSerializable(CAMPAIGN);
 
+        // Populate content container
         List<ICampaignSectionData> data = mCampaign.getPlanData();
         Iterator<ICampaignSectionData> iter = data.iterator();
         while (iter.hasNext()) {
             ICampaignSectionData sectionData = iter.next();
-            sectionData.addToView(getActivity(), layout);
+            sectionData.addToView(getActivity(), mContentLayout);
         }
 
         // Set style and behavior for the Did This button

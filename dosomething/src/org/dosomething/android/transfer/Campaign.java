@@ -213,49 +213,46 @@ public class Campaign implements Serializable {
 
         JSONArray doItData = obj.optJSONArray("do-it");
         if (doItData != null) {
-            mDoItData = new ArrayList<ICampaignSectionData>(doItData.length());
-            for (int i = 0; i < doItData.length(); i++) {
-                JSONObject data = doItData.getJSONObject(i);
-                String type = data.getString("type");
-                if (type.equals(CampaignTextImageData.TYPE_ID)) {
-                    mDoItData.add(new CampaignTextImageData(data));
-                }
-                else if (type.equals(CampaignImageTextData.TYPE_ID)) {
-                    mDoItData.add(new CampaignImageTextData(data));
-                }
-            }
+            mDoItData = convertToSectionData(doItData);
         }
 
         JSONArray learnData = obj.optJSONArray("learn");
         if (learnData != null) {
-            mLearnData = new ArrayList<ICampaignSectionData>(learnData.length());
-            for (int i = 0; i < learnData.length(); i++) {
-                JSONObject data = learnData.getJSONObject(i);
-                String type = data.getString("type");
-                if (type.equals(CampaignTextImageData.TYPE_ID)) {
-                    mLearnData.add(new CampaignTextImageData(data));
-                }
-                else if (type.equals(CampaignImageTextData.TYPE_ID)) {
-                    mLearnData.add(new CampaignImageTextData(data));
-                }
-            }
+            mLearnData = convertToSectionData(learnData);
         }
 
         JSONArray planData = obj.optJSONArray("plan");
         if (planData != null) {
-            mPlanData = new ArrayList<ICampaignSectionData>(planData.length());
-            for (int i = 0; i < planData.length(); i++) {
-                JSONObject data = planData.getJSONObject(i);
-                String type = data.getString("type");
-                if (type.equals(CampaignTextImageData.TYPE_ID)) {
-                    mPlanData.add(new CampaignTextImageData(data));
-                }
-                else if (type.equals(CampaignImageTextData.TYPE_ID)) {
-                    mPlanData.add(new CampaignImageTextData(data));
-                }
-            }
+            mPlanData = convertToSectionData(planData);
         }
 	}
+
+    /**
+     * Convert JSONArray of section data to an ICampaignSectionData list.
+     *
+     * @param jsonData JSONArray of section data
+     * @return Converted list of ICampaignSectionData objects
+     * @throws JSONException
+     */
+    private List<ICampaignSectionData> convertToSectionData(JSONArray jsonData) throws JSONException {
+        ArrayList<ICampaignSectionData> sectionData = new ArrayList<ICampaignSectionData>(jsonData.length());
+
+        for (int i = 0; i < jsonData.length(); i++) {
+            JSONObject data = jsonData.getJSONObject(i);
+            String type = data.getString("type");
+            if (type.equals(CampaignTextImageData.TYPE_ID)) {
+                sectionData.add(new CampaignTextImageData(data));
+            }
+            else if (type.equals(CampaignImageTextData.TYPE_ID)) {
+                sectionData.add(new CampaignImageTextData(data));
+            }
+            else if (type.equals(CampaignGalleryData.TYPE_ID)) {
+                sectionData.add(new CampaignGalleryData(data));
+            }
+        }
+
+        return sectionData;
+    }
 	
 	public JSONObject toJSON() throws JSONException {
 		JSONObject obj = new JSONObject();
