@@ -181,7 +181,7 @@ public class DSDao {
             if (completedSteps != null) {
                 try {
                     JSONObject jsonSteps = new JSONObject(completedSteps);
-                    isCompleted = jsonSteps.getInt(Integer.toString(stepNumber));
+                    isCompleted = jsonSteps.optInt(Integer.toString(stepNumber), 0);
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
