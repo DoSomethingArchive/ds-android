@@ -52,9 +52,9 @@ public class CampaignGalleryData implements ICampaignSectionData, Serializable {
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(R.layout.campaign_gallery_row, parent, false);
 
-        loadImage((ImageView)v.findViewById(R.id.image1), mThumbnailUrl1);
-        loadImage((ImageView)v.findViewById(R.id.image2), mThumbnailUrl2);
-        loadImage((ImageView)v.findViewById(R.id.image3), mThumbnailUrl3);
+        loadImage((ImageView)v.findViewById(R.id.galleryThumb1), mThumbnailUrl1);
+        loadImage((ImageView)v.findViewById(R.id.galleryThumb2), mThumbnailUrl2);
+        loadImage((ImageView)v.findViewById(R.id.galleryThumb3), mThumbnailUrl3);
 
         // Add inflated view to the parent
         parent.addView(v);
@@ -89,5 +89,26 @@ public class CampaignGalleryData implements ICampaignSectionData, Serializable {
             ImageLoader imageLoader = ImageLoader.getInstance();
             imageLoader.displayImage(url, imageView);
         }
+    }
+
+    /**
+     * @return URL for full size image 1
+     */
+    public String getImageUrl1() {
+        return mImageUrl1;
+    }
+
+    /**
+     * @return URL for full size image 2
+     */
+    public String getImageUrl2() {
+        return mImageUrl2;
+    }
+
+    /**
+     * @return URL for full size image 3
+     */
+    public String getImageUrl3() {
+        return mImageUrl3;
     }
 }
