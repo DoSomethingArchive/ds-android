@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,11 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.dosomething.android.DSConstants;
+import org.dosomething.android.FadeInResizeBitmapDisplayer;
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
@@ -47,6 +50,9 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
 
     // Button to mark this step as being completed
     @InjectView(R.id.btn_did_this) private Button mButtonDidThis;
+
+    // Layout container for the entire screen
+    @InjectView(R.id.container) private ViewGroup mContainerLayout;
 
     // Layout container for dynamic page content
     @InjectView(R.id.content) private LinearLayout mContentLayout;
@@ -101,10 +107,16 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
                 CampaignGalleryData galleryData = (CampaignGalleryData)sectionData;
 
                 // Load images into the fuller size ImageViews
+                Display display = getActivity().getWindowManager().getDefaultDisplay();
+                int screenWidth = display.getWidth();
+
                 ImageLoader imageLoader = ImageLoader.getInstance();
-                imageLoader.displayImage(galleryData.getImageUrl1(), mGalleryImage1);
-                imageLoader.displayImage(galleryData.getImageUrl2(), mGalleryImage2);
-                imageLoader.displayImage(galleryData.getImageUrl3(), mGalleryImage3);
+                DisplayImageOptions imageOptions = new DisplayImageOptions.Builder()
+                        .displayer(new FadeInResizeBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME, screenWidth))
+                        .build();
+                imageLoader.displayImage(galleryData.getImageUrl1(), mGalleryImage1, imageOptions);
+                imageLoader.displayImage(galleryData.getImageUrl2(), mGalleryImage2, imageOptions);
+                imageLoader.displayImage(galleryData.getImageUrl3(), mGalleryImage3, imageOptions);
 
                 // Set a listener on the ImageView thumbnails that were added to the view
                 mGalleryThumb1 = (ImageView)mContentLayout.findViewById(R.id.galleryThumb1);
