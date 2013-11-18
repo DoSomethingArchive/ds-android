@@ -1,14 +1,13 @@
 package org.dosomething.android.fragments;
 
 import android.app.Activity;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -51,9 +50,6 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
     // Button to mark this step as being completed
     @InjectView(R.id.btn_did_this) private Button mButtonDidThis;
 
-    // Layout container for the entire screen
-    @InjectView(R.id.container) private ViewGroup mContainerLayout;
-
     // Layout container for dynamic page content
     @InjectView(R.id.content) private LinearLayout mContentLayout;
 
@@ -61,6 +57,9 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
     @InjectView(R.id.galleryImage1) private ImageView mGalleryImage1;
     @InjectView(R.id.galleryImage2) private ImageView mGalleryImage2;
     @InjectView(R.id.galleryImage3) private ImageView mGalleryImage3;
+
+    // Overlay view to display when fullsize image is displayed
+    @InjectView(R.id.overlay) private View mOverlayView;
 
     // ImageViews for the thumbnailed gallery images
     private ImageView mGalleryThumb1;
@@ -157,62 +156,36 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
                 view.setEnabled(false);
                 break;
             case R.id.galleryThumb1:
-                zoomImageFromThumb((ImageView) view, mGalleryImage1);
+                zoomGalleryImage(mGalleryImage1);
                 break;
             case R.id.galleryThumb2:
-                zoomImageFromThumb((ImageView) view, mGalleryImage2);
+                zoomGalleryImage(mGalleryImage2);
                 break;
             case R.id.galleryThumb3:
-                zoomImageFromThumb((ImageView) view, mGalleryImage3);
+                zoomGalleryImage(mGalleryImage3);
                 break;
         }
     }
 
-    private void zoomImageFromThumb(final ImageView thumbView, final ImageView zoomView) {
+    /**
+     * Animate the display of the fullsize gallery image.
+     *
+     * @param zoomView ImageView to animate in
+     */
+    private void zoomGalleryImage(final ImageView zoomView) {
         // Cancel any animation in progress
         if (mCurrentZoomAnimator != null) {
             mCurrentZoomAnimator.cancel();
         }
 
-        // Calculate start and end bounds for the zoomed-in image
-        final Rect startBounds = new Rect();
-        final Rect finalBounds = new Rect();
-        final Point globalOffset = new Point();
-
-        thumbView.getGlobalVisibleRect(startBounds);
-        getActivity().findViewById(R.id.container).getGlobalVisibleRect(finalBounds, globalOffset);
-        startBounds.offset(-globalOffset.x, -globalOffset.y);
-        finalBounds.offset(-globalOffset.x, -globalOffset.y);
-
-        // Adjust start bounds to the same aspect ratio of the final bounds
-        float startScale;
-        if ((float)finalBounds.width() / finalBounds.height() > (float)startBounds.width() / startBounds.height()) {
-            // Extend start bounds horizontally
-            startScale = (float)startBounds.height() / finalBounds.height();
-            float startWidth = startScale * finalBounds.width();
-            float deltaWidth = (startWidth - startBounds.width()) / 2;
-            startBounds.left -= deltaWidth;
-            startBounds.right += deltaWidth;
-        }
-        else {
-            // Extend start bounds vertically
-            startScale = (float)startBounds.width() / finalBounds.width();
-            float startHeight = startScale * finalBounds.height();
-            float deltaHeight = (startHeight - startBounds.height()) / 2;
-            startBounds.top -= deltaHeight;
-            startBounds.bottom += deltaHeight;
-        }
-
         // Hide thumbnail and show zoomed-in view
-        thumbView.setVisibility(View.INVISIBLE);
+        mOverlayView.setVisibility(View.VISIBLE);
         zoomView.setVisibility(View.VISIBLE);
 
         // Construct and run translation and scaling animations
         AnimatorSet animSet = new AnimatorSet();
-        animSet.play(ObjectAnimator.ofFloat(zoomView, View.X.getName(), startBounds.left, finalBounds.left))
-                .with(ObjectAnimator.ofFloat(zoomView, View.Y.getName(), startBounds.top, finalBounds.top))
-                .with(ObjectAnimator.ofFloat(zoomView, View.SCALE_X.getName(), startScale, 1f))
-                .with(ObjectAnimator.ofFloat(zoomView, View.SCALE_Y.getName(), startScale, 1f));
+        animSet.play(ObjectAnimator.ofFloat(zoomView, View.SCALE_X.getName(), 0.5f, 1f))
+                .with(ObjectAnimator.ofFloat(zoomView, View.SCALE_Y.getName(), 0.5f, 1f));
 
         int animDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         animSet.setDuration(animDuration);
@@ -232,7 +205,6 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
         mCurrentZoomAnimator = animSet;
 
         // Zoom back down when zoomed-in image is clicked
-        final float startScaleFinal = startScale;
         zoomView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -241,24 +213,22 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
                 }
 
                 AnimatorSet animSet = new AnimatorSet();
-                animSet.play(ObjectAnimator.ofFloat(zoomView, View.X.getName(), startBounds.left))
-                        .with(ObjectAnimator.ofFloat(zoomView, View.Y.getName(), startBounds.top))
-                        .with(ObjectAnimator.ofFloat(zoomView, View.SCALE_X.getName(), startScaleFinal))
-                        .with(ObjectAnimator.ofFloat(zoomView, View.SCALE_Y.getName(), startScaleFinal));
+                animSet.play(ObjectAnimator.ofFloat(zoomView, View.SCALE_X.getName(), 0.5f))
+                        .with(ObjectAnimator.ofFloat(zoomView, View.SCALE_Y.getName(), 0.5f));
                 int animDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
                 animSet.setDuration(animDuration);
-                animSet.setInterpolator(new DecelerateInterpolator());
+                animSet.setInterpolator(new AccelerateInterpolator() );
                 animSet.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        thumbView.setVisibility(View.VISIBLE);
+                        mOverlayView.setVisibility(View.GONE);
                         zoomView.setVisibility(View.GONE);
                         mCurrentZoomAnimator = null;
                     }
 
                     @Override
                     public void onAnimationCancel(Animator animation) {
-                        thumbView.setVisibility(View.VISIBLE);
+                        mOverlayView.setVisibility(View.GONE);
                         zoomView.setVisibility(View.GONE);
                         mCurrentZoomAnimator = null;
                     }

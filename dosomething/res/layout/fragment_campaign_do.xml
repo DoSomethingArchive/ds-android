@@ -1,54 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:background="@color/light_background">
-    <RelativeLayout
+    android:layout_width="match_parent">
+    <ScrollView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:paddingBottom="20dp">
-
-        <TextView
-            android:id="@+id/header"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="20dp"
-            android:text="Do It Placeholder"/>
-
-        <LinearLayout
-            android:id="@+id/content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/header"
-            android:orientation="vertical"/>
-
-        <Button
-            android:id="@+id/btn_did_this"
-            android:layout_below="@id/content"
-            android:text="@string/campaign_fragment_did_this_button"
-            style="@style/ButtonPrimary"/>
-
-        <!-- Expanded gallery images -->
-        <ImageView
-            android:id="@+id/galleryImage1"
+        android:background="@color/light_background">
+        <RelativeLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_centerInParent="true"
-            android:visibility="gone"/>
-        <ImageView
-            android:id="@+id/galleryImage2"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:layout_centerInParent="true"
-            android:visibility="gone"/>
-        <ImageView
-            android:id="@+id/galleryImage3"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:layout_centerInParent="true"
-            android:visibility="gone"/>
+            android:paddingBottom="20dp">
 
-    </RelativeLayout>
-</ScrollView>
+            <TextView
+                android:id="@+id/header"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="20dp"
+                android:text="Do It Placeholder"/>
+
+            <LinearLayout
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/header"
+                android:orientation="vertical"/>
+
+            <Button
+                android:id="@+id/btn_did_this"
+                android:layout_below="@id/content"
+                android:text="@string/campaign_fragment_did_this_button"
+                style="@style/ButtonPrimary"/>
+        </RelativeLayout>
+    </ScrollView>
+
+    <!-- Overlay to display when zoomed images are visible -->
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#cc000000"
+        android:visibility="gone"/>
+
+    <!-- Expanded gallery images -->
+    <ImageView
+        android:id="@+id/galleryImage1"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_centerVertical="true"
+        android:visibility="gone"/>
+    <ImageView
+        android:id="@+id/galleryImage2"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_centerVertical="true"
+        android:visibility="gone"/>
+    <ImageView
+        android:id="@+id/galleryImage3"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_centerVertical="true"
+        android:visibility="gone"/>
+</RelativeLayout>
