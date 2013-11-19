@@ -2,17 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="@color/light_background">
+    android:background="@color/light_background"
+    android:paddingBottom="20dp"
+    android:paddingTop="20dp">
 
     <TextView
-        android:id="@+id/header"
+        android:id="@+id/campaign_step_number"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="4"
+        style="@style/CampaignStepNumber"/>
+
+    <TextView
+        android:id="@+id/campaign_step_header"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/campaign_step_circle_size"
+        android:layout_toRightOf="@id/campaign_step_number"
+        android:gravity="center_vertical"
         android:text="@string/campaign_fragment_reportback_header"
-        android:textIsSelectable="false"
-        style="@style/SubpageRowHeader"/>
+        android:textColor="@color/dark_blue"
+        android:textSize="@dimen/font_size_header_1"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/body"
-        android:layout_below="@id/header"
+        android:layout_below="@id/campaign_step_header"
         android:text="@string/campaign_fragment_reportback_body"
         android:textIsSelectable="false"
         style="@style/SubpageRowBody"/>

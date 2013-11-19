@@ -12,18 +12,32 @@
             android:paddingBottom="20dp">
 
             <TextView
-                android:id="@+id/header"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:id="@+id/campaign_step_number"
                 android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
-                android:text="Do It Placeholder"/>
+                android:text="3"
+                style="@style/CampaignStepNumber"/>
+
+            <TextView
+                android:id="@+id/campaign_step_header"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/campaign_step_circle_size"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@id/campaign_step_number"
+                android:gravity="center_vertical"
+                android:text="@string/campaign_fragment_do_header"
+                android:textColor="@color/dark_blue"
+                android:textSize="@dimen/font_size_header_1"
+                android:textStyle="bold"/>
 
             <LinearLayout
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/header"
+                android:layout_below="@id/campaign_step_header"
                 android:orientation="vertical"/>
 
             <Button
