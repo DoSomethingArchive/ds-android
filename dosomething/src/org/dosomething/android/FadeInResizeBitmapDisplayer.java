@@ -76,14 +76,23 @@ public class FadeInResizeBitmapDisplayer implements BitmapDisplayer {
         Matrix matrix = new Matrix();
         matrix.postScale(scale, scale);
 
-        // Create new Bitmap with rescaled dimensions
-        Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, true);
-        imageView.setImageBitmap(scaledBitmap);
+        if (bitmapWidth > 0 && bitmapHeight > 0) {
+            try {
+                // Create new Bitmap with rescaled dimensions
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, true);
+                imageView.setImageBitmap(bitmap);
+            }
+            catch (IllegalArgumentException e) {
+                // Not sure how this is happening, but bitmapWidth and bitmapHeight will be > 0 and
+                // createBitmap() will still sometimes complain that width and height are not > 0.
+                e.printStackTrace();
+            }
+        }
 
         // Execute animation for the fade-in
         animate(imageView, durationMillis);
 
-        return scaledBitmap;
+        return bitmap;
     }
 
     /**

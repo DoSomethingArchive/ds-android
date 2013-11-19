@@ -66,6 +66,9 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
     private ImageView mGalleryThumb2;
     private ImageView mGalleryThumb3;
 
+    // Image Loader
+    @Inject private ImageLoader mImageLoader;
+
     // User Context
     @Inject private UserContext mUserContext;
 
@@ -109,13 +112,13 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
                 Display display = getActivity().getWindowManager().getDefaultDisplay();
                 int screenWidth = display.getWidth();
 
-                ImageLoader imageLoader = ImageLoader.getInstance();
                 DisplayImageOptions imageOptions = new DisplayImageOptions.Builder()
                         .displayer(new FadeInResizeBitmapDisplayer(DSConstants.IMAGE_LOADER_FADE_IN_TIME, screenWidth))
                         .build();
-                imageLoader.displayImage(galleryData.getImageUrl1(), mGalleryImage1, imageOptions);
-                imageLoader.displayImage(galleryData.getImageUrl2(), mGalleryImage2, imageOptions);
-                imageLoader.displayImage(galleryData.getImageUrl3(), mGalleryImage3, imageOptions);
+
+                mImageLoader.displayImage(galleryData.getImageUrl1(), mGalleryImage1, imageOptions);
+                mImageLoader.displayImage(galleryData.getImageUrl2(), mGalleryImage2, imageOptions);
+                mImageLoader.displayImage(galleryData.getImageUrl3(), mGalleryImage3, imageOptions);
 
                 // Set a listener on the ImageView thumbnails that were added to the view
                 mGalleryThumb1 = (ImageView)mContentLayout.findViewById(R.id.galleryThumb1);
