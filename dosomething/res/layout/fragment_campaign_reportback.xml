@@ -13,6 +13,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:text="4"
+        android:visibility="gone"
         style="@style/CampaignStepNumber"/>
 
     <TextView
@@ -21,6 +22,7 @@
         android:layout_height="@dimen/campaign_step_circle_size"
         android:layout_toRightOf="@id/campaign_step_number"
         android:gravity="center_vertical"
+        android:layout_marginLeft="10dp"
         android:text="@string/campaign_fragment_reportback_header"
         android:textColor="@color/dark_blue"
         android:textSize="@dimen/font_size_header_1"
