@@ -138,6 +138,8 @@ public class UserCampaignsFragment extends RoboFragment {
                     date.setTime(userCampaign.getDateSignedUp().longValue() * 1000);
                     bodyText = "Signed up: " + DateFormat.format("MM/dd/yyyy", date);
 
+                    // @todo Hiding the steps completed data until new 2014 campaign content is added
+                    /*
                     DSDao dsDao = new DSDao(getActivity());
                     int[] completedSteps = dsDao.getCampaignStepsCompleted(mUserContext.getUserUid(), userCampaign.getCampaignId());
                     bodyText += "\n\nSteps Completed: ";
@@ -152,6 +154,7 @@ public class UserCampaignsFragment extends RoboFragment {
                     else {
                         bodyText += "none";
                     }
+                    */
                 }
                 body.setText(bodyText);
                 body.setTypeface(mTypefaceDin);
