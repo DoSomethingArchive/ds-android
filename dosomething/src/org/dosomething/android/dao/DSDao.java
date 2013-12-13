@@ -338,9 +338,9 @@ public class DSDao {
 
         // Find out if this campaign's already been added to the table -
         // indicating it's already been signed up for.
-        Cursor cursor = db.query(
+        Cursor c = db.query(
                 UserCampaign.TABLE_NAME,
-                new String[] {UserCampaign.COL_ID},
+                UserCampaign.getAllColumns(),
                 UserCampaign.COL_UID + "=? and " + UserCampaign.COL_CAMPAIGN_ID + "=?",
                 new String[] {uid, campaignId},
                 null,
@@ -351,8 +351,8 @@ public class DSDao {
 
         Long keyId;
         // If campaign's already signed up for, just return that pre-existing key id
-        if (cursor != null && cursor.moveToFirst()) {
-            UserCampaign uc = new UserCampaign(cursor);
+        if (c != null && c.moveToFirst()) {
+            UserCampaign uc = new UserCampaign(c);
             keyId = uc.getId();
         }
         // Otherwise, insert the campaign into the table
@@ -360,7 +360,7 @@ public class DSDao {
             keyId = db.insertOrThrow(UserCampaign.TABLE_NAME, null, userCampaign.getContentValues());
         }
 
-        cursor.close();
+        c.close();
         sql.close();
 
         return keyId;
