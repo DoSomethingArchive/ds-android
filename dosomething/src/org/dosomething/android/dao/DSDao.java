@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.google.inject.Inject;
 
+import org.dosomething.android.activities.ReportBack;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.transfer.Campaign;
 import org.json.JSONException;
@@ -18,6 +19,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -319,6 +321,34 @@ public class DSDao {
             }
         }
 
+        sql.close();
+
+        if (stepNumber == ReportBack.STEP_NUMBER) {
+            this.setCampaignCompleted(uid, campaignId);
+        }
+    }
+
+    /**
+     * Update the date completed field with the current time.
+     *
+     * @param uid User's UID
+     * @param campaignId ID for the campaign
+     */
+    public void setCampaignCompleted(String uid, String campaignId) {
+        SQLHelper sql = new SQLHelper(context);
+        SQLiteDatabase writableDb = sql.getWritableDatabase();
+
+        ContentValues updateValues = new ContentValues();
+        updateValues.put(UserCampaign.COL_DATE_COMPLETED, Calendar.getInstance().getTimeInMillis() / 1000);
+
+        int rowsUpdated = writableDb.update(
+                UserCampaign.TABLE_NAME,
+                updateValues,
+                UserCampaign.COL_UID + "=? and " + UserCampaign.COL_CAMPAIGN_ID + "=?",
+                new String[] {uid, campaignId}
+        );
+
+        writableDb.close();
         sql.close();
     }
 
