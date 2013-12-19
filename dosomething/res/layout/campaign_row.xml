@@ -35,23 +35,29 @@
         android:layout_marginTop="7dp"
         android:paddingBottom="17dp"
         android:paddingLeft="10dp"
-        android:paddingRight="17dp"
-        android:paddingTop="10dp"
         android:background="@drawable/container_dropshadow"
         android:visibility="invisible">
-        <!-- Button must not be focusable in order for ListView to still receive click events -->
-        <Button
+        <!-- The container provides padding allowing the touch area to be larger than the contained image -->
+        <LinearLayout
             android:id="@+id/preview_close"
-            android:layout_height="28dp"
-            android:layout_width="28dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:focusable="false"
-            android:background="@drawable/ic_close_preview"/>
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="17dp"
+            android:paddingTop="10dp">
+            <ImageView
+                android:layout_height="28dp"
+                android:layout_width="28dp"
+                android:background="@drawable/ic_close_preview"/>
+        </LinearLayout>
         <TextView
             android:id="@+id/preview_title"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:paddingTop="10dp"
             android:textColor="@android:color/white"
             android:textSize="@dimen/font_size_header_1"/>
 
@@ -61,6 +67,7 @@
             android:layout_width="match_parent"
             android:layout_below="@id/preview_title"
             android:layout_marginTop="10dp"
+            android:paddingRight="17dp"
             android:textColor="@android:color/white"
             android:textSize="@dimen/font_size_medium"/>
     </RelativeLayout>

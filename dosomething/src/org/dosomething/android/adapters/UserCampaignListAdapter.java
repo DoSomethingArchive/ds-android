@@ -9,9 +9,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -68,7 +68,8 @@ public class UserCampaignListAdapter extends ArrayAdapter<UserCampaign> {
         }
 
         // Set click listener for the close button
-        Button closeButton = (Button)v.findViewById(R.id.preview_close);
+        LinearLayout closeButton = (LinearLayout)v.findViewById(R.id.preview_close);
+
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,8 +80,6 @@ public class UserCampaignListAdapter extends ArrayAdapter<UserCampaign> {
         });
 
         UserCampaign campaign = getItem(position);
-
-
 
         // Ensure front side of the item is visible
         View backside = v.findViewById(R.id.frame_backside);

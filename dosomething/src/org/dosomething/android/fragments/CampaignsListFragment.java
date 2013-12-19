@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -279,7 +280,8 @@ public class CampaignsListFragment extends RoboFragment {
                 v = inflater.inflate(R.layout.campaign_row, null);
 
                 // Set click listener for the close button
-                Button closeButton = (Button)v.findViewById(R.id.preview_close);
+                LinearLayout closeButton = (LinearLayout)v.findViewById(R.id.preview_close);
+
                 closeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
