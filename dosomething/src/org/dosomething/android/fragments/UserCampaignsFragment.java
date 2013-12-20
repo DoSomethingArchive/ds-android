@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,13 +38,17 @@ public class UserCampaignsFragment extends RoboFragment {
 
     @Inject private DSDao mDSDao;
     @Inject @Named("DINComp-CondBold")Typeface mTypefaceDin;
+    private Typeface mTypefaceProximaBold;
+    private Typeface mTypefaceProximaReg;
     @Inject private UserContext mUserContext;
 
     // The list to display the campaigns in
     @InjectView(R.id.list) private ListView mListView;
 
-    // Text to display if no campaigns are found
-    @InjectView(R.id.empty_list) private TextView mEmptyListText;
+    // Content to display if no campaigns are found
+    @InjectView(R.id.empty_view) private LinearLayout mEmptyView;
+    @InjectView(R.id.empty_view_header) private TextView mEmptyViewHeader;
+    @InjectView(R.id.empty_view_body) private TextView mEmptyViewBody;
 
     // True to show completed campaigns, False to show in progress campaigns
     private boolean mShowCompletedCampaigns;
@@ -73,6 +78,9 @@ public class UserCampaignsFragment extends RoboFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
+        mTypefaceProximaBold = Typeface.createFromAsset(getActivity().getAssets(), "ProximaNova-Bold.otf");
+        mTypefaceProximaReg = Typeface.createFromAsset(getActivity().getAssets(), "ProximaNova-Reg.otf");
+
         View rootView = inflater.inflate(R.layout.fragment_user_campaigns_list, container, false);
         return rootView;
     }
@@ -91,19 +99,25 @@ public class UserCampaignsFragment extends RoboFragment {
                 // Handle click events on the list
                 mListView.setOnItemClickListener(itemClickListener);
 
-                mEmptyListText.setVisibility(View.GONE);
+                mEmptyView.setVisibility(View.GONE);
                 mListView.setVisibility(View.VISIBLE);
             }
+            // If no campaigns are found, show the empty data view
             else {
-                mEmptyListText.setVisibility(View.VISIBLE);
+                mEmptyView.setVisibility(View.VISIBLE);
                 mListView.setVisibility(View.GONE);
 
                 if (mShowCompletedCampaigns) {
-                    mEmptyListText.setText(R.string.campaigns_tab_completed_none_found);
+                    mEmptyViewHeader.setText(R.string.campaigns_tab_completed_empty_header);
+                    mEmptyViewBody.setText(R.string.campaigns_tab_completed_none_found);
                 }
                 else {
-                    mEmptyListText.setText(R.string.campaigns_tab_in_progress_none_found);
+                    mEmptyViewHeader.setText(R.string.campaigns_tab_in_progress_empty_header);
+                    mEmptyViewBody.setText(R.string.campaigns_tab_in_progress_none_found);
                 }
+
+                mEmptyViewHeader.setTypeface(mTypefaceProximaBold);
+                mEmptyViewBody.setTypeface(mTypefaceProximaReg);
             }
         }
     }

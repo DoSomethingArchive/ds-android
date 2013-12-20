@@ -73,9 +73,11 @@
     <string name="drawer_open">Navigation Open</string>
     <string name="campaigns_tab_browse_title">Do It</string>
     <string name="campaigns_tab_completed_title">Done</string>
-    <string name="campaigns_tab_completed_none_found">[WIP] You haven\'t completed any campaigns yet! Sign up and report back on a campaign to complete it.</string>
+    <string name="campaigns_tab_completed_empty_header">No Campaigns Finished</string>
+    <string name="campaigns_tab_completed_none_found">Complete campaigns and keep track of how you\'re making the world a better place.</string>
     <string name="campaigns_tab_in_progress_title">Doing It</string>
-    <string name="campaigns_tab_in_progress_none_found">[WIP] You haven\'t signed up for any campaigns yet! Find a campaign on the left and sign up for one to get started.</string>
+    <string name="campaigns_tab_in_progress_empty_header">No Campaigns Started</string>
+    <string name="campaigns_tab_in_progress_none_found">Find and sign up for one of the campaigns under the DO IT section to start making the world suck less.</string>
     <string name="campaigns_title">Campaigns</string>
     <string name="campaigns_upgrade_popup">A new update is available!</string>
     <string name="campaign_date_ends">Ends: %1$s</string>
