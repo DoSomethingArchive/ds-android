@@ -95,6 +95,7 @@
     <string name="campaign_fragment_plan_header">Plan Your Campaign</string>
     <string name="campaign_fragment_plan_tab_title">PLAN</string>
     <string name="campaign_fragment_progress_denied_title">Campaign Progress Denied</string>
+    <string name="campaign_fragment_progress_denied_body">Whoa there! You gotta hit that DO THIS button first before you get to see anything more.</string>
     <string name="campaign_fragment_reportback_body">Show off the great work that you\'ve done! Send us a photo of your participation in this campaign.</string>
     <string name="campaign_fragment_reportback_header">Show Off!</string>
     <string name="campaign_fragment_reportback_title">Show Off</string>
