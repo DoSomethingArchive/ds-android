@@ -1,8 +1,5 @@
 package org.dosomething.android;
 
-import org.dosomething.android.cache.Cache;
-import org.dosomething.android.context.UserContext;
-
 import android.content.Context;
 import android.graphics.Typeface;
 
@@ -19,6 +16,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+
+import org.dosomething.android.cache.Cache;
+import org.dosomething.android.context.UserContext;
 
 public class MyModule extends AbstractModule {
 
@@ -52,6 +52,16 @@ public class MyModule extends AbstractModule {
 			.annotatedWith(Names.named("DINComp-CondBold"))
 			.toProvider(DinCompCondBoldProvider.class)
 			.in(Singleton.class);
+
+        bind(Typeface.class)
+            .annotatedWith(Names.named("ProximaNova-Reg"))
+            .toProvider(ProximaNovaRegProvider.class)
+            .in(Singleton.class);
+
+        bind(Typeface.class)
+            .annotatedWith(Names.named("ProximaNova-Bold"))
+            .toProvider(ProximaNovaBoldProvider.class)
+            .in(Singleton.class);
 	}
 	
 	/**
@@ -111,4 +121,39 @@ public class MyModule extends AbstractModule {
 		}
 	}
 
+    /**
+     * Provides Proxima Nova Regular font for injection.
+     */
+    public static class ProximaNovaRegProvider implements Provider<Typeface> {
+
+        private Context context;
+
+        @Inject
+        public ProximaNovaRegProvider(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public Typeface get() {
+            return Typeface.createFromAsset(context.getAssets(), "ProximaNova-Reg.otf");
+        }
+    }
+
+    /**
+     * Provides Proxima Nova Bold font for injection.
+     */
+    public static class ProximaNovaBoldProvider implements Provider<Typeface> {
+
+        private Context context;
+
+        @Inject
+        public ProximaNovaBoldProvider(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public Typeface get() {
+            return Typeface.createFromAsset(context.getAssets(), "ProximaNova-Bold.otf");
+        }
+    }
 }

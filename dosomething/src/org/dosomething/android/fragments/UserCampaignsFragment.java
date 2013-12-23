@@ -37,9 +37,8 @@ import roboguice.inject.InjectView;
 public class UserCampaignsFragment extends RoboFragment {
 
     @Inject private DSDao mDSDao;
-    @Inject @Named("DINComp-CondBold")Typeface mTypefaceDin;
-    private Typeface mTypefaceProximaBold;
-    private Typeface mTypefaceProximaReg;
+    @Inject @Named("ProximaNova-Bold") private Typeface mTypefaceProximaBold;
+    @Inject @Named("ProximaNova-Reg") private Typeface mTypefaceProximaReg;
     @Inject private UserContext mUserContext;
 
     // The list to display the campaigns in
@@ -77,9 +76,6 @@ public class UserCampaignsFragment extends RoboFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        mTypefaceProximaBold = Typeface.createFromAsset(getActivity().getAssets(), "ProximaNova-Bold.otf");
-        mTypefaceProximaReg = Typeface.createFromAsset(getActivity().getAssets(), "ProximaNova-Reg.otf");
 
         View rootView = inflater.inflate(R.layout.fragment_user_campaigns_list, container, false);
         return rootView;
@@ -139,7 +135,7 @@ public class UserCampaignsFragment extends RoboFragment {
             if (cardBackside != null && cardBackside.getVisibility() == View.INVISIBLE) {
                 TextView title = (TextView)view.findViewById(R.id.preview_title);
                 title.setText(userCampaign.getCampaignName());
-                title.setTypeface(mTypefaceDin);
+                title.setTypeface(mTypefaceProximaReg);
 
                 TextView body = (TextView)view.findViewById(R.id.preview_body);
                 Date date = new Date();
@@ -171,7 +167,7 @@ public class UserCampaignsFragment extends RoboFragment {
                     */
                 }
                 body.setText(bodyText);
-                body.setTypeface(mTypefaceDin);
+                body.setTypeface(mTypefaceProximaReg);
 
                 CardFlipAnimation.animate(getActivity(), view, false);
             }
