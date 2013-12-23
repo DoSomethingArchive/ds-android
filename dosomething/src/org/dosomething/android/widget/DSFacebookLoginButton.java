@@ -30,7 +30,7 @@ public class DSFacebookLoginButton extends LinearLayout {
 
         // Set custom font
         if (!isInEditMode()) {
-            typefaceDin = Typeface.createFromAsset(context.getAssets(), "DINComp-CondBold.ttf");
+            typefaceDin = Typeface.createFromAsset(context.getAssets(), "ProximaNova-Bold.ttf");
             mLoginButton.setTypeface(typefaceDin, Typeface.BOLD);
         }
     }
@@ -46,7 +46,7 @@ public class DSFacebookLoginButton extends LinearLayout {
 
         // Set custom font
         if (!isInEditMode()) {
-            typefaceDin = Typeface.createFromAsset(context.getAssets(), "DINComp-CondBold.ttf");
+            typefaceDin = Typeface.createFromAsset(context.getAssets(), "ProximaNova-Bold.ttf");
             mLoginButton.setTypeface(typefaceDin, Typeface.BOLD);
         }
     }

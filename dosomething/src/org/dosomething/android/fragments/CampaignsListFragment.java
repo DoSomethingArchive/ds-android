@@ -59,7 +59,8 @@ import roboguice.inject.InjectView;
  */
 public class CampaignsListFragment extends RoboFragment {
 
-    @Inject @Named("DINComp-CondBold")Typeface typefaceDin;
+    @Inject @Named("ProximaNova-Bold")Typeface typefaceBold;
+    @Inject @Named("ProximaNova-Reg")Typeface typefaceReg;
 
     @Inject private LayoutInflater inflater;
     @Inject private ImageLoader imageLoader;
@@ -117,7 +118,7 @@ public class CampaignsListFragment extends RoboFragment {
         });
 
         // Setup the popup section to notify when app update is available
-        popupMsgView.setTypeface(typefaceDin);
+        popupMsgView.setTypeface(typefaceReg);
         // Upgrade notification popup click listeners
         popupMsgView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,11 +163,11 @@ public class CampaignsListFragment extends RoboFragment {
             if (cardBackside != null && cardBackside.getVisibility() == View.INVISIBLE) {
                 TextView title = (TextView)view.findViewById(R.id.preview_title);
                 title.setText(campaign.getName());
-                title.setTypeface(typefaceDin);
+                title.setTypeface(typefaceBold);
 
                 TextView body = (TextView)view.findViewById(R.id.preview_body);
                 body.setText(campaign.getTeaser());
-                body.setTypeface(typefaceDin);
+                body.setTypeface(typefaceReg);
 
                 CardFlipAnimation.animate(getActivity(), view, false);
             }
@@ -325,7 +326,7 @@ public class CampaignsListFragment extends RoboFragment {
             TextView textView = (TextView) v.findViewById(R.id.callout);
             if(campaign.getCallout() != null && campaign.getCallout().length() > 0) {
                 textView.setText(campaign.getCallout());
-                textView.setTypeface(typefaceDin);
+                textView.setTypeface(typefaceReg);
                 textView.setVisibility(TextView.VISIBLE);
 
                 // Change text color and background color if it's a past campaign

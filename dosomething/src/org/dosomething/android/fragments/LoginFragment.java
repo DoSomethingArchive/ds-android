@@ -29,7 +29,7 @@ import roboguice.fragment.RoboFragment;
  */
 public class LoginFragment extends RoboFragment implements View.OnClickListener {
 
-    @Inject private @Named("DINComp-CondBold")Typeface dinTypeface;
+    @Inject private @Named("ProximaNova-Bold")Typeface typefaceBold;
 
     private Button mBtnLogin;
     private DSFacebookLoginButton mBtnFacebookLogin;
@@ -59,7 +59,7 @@ public class LoginFragment extends RoboFragment implements View.OnClickListener 
 
         // Set custom typeface for the buttons
         mBtnLogin = (Button)view.findViewById(R.id.button_login);
-        mBtnLogin.setTypeface(dinTypeface, Typeface.BOLD);
+        mBtnLogin.setTypeface(typefaceBold, Typeface.BOLD);
 
         // Set click listener on buttons
         mBtnLogin.setOnClickListener(this);
@@ -74,7 +74,7 @@ public class LoginFragment extends RoboFragment implements View.OnClickListener 
 
         // Set typeface for OR text
         TextView orText = (TextView)view.findViewById(R.id.or_text);
-        orText.setTypeface(dinTypeface, Typeface.BOLD);
+        orText.setTypeface(typefaceBold, Typeface.BOLD);
 
 	    return view;
 	}

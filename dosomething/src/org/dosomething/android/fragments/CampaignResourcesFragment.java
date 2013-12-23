@@ -45,7 +45,7 @@ public class CampaignResourcesFragment extends AbstractCampaignFragment {
 
     @Inject private LayoutInflater inflater;
     @Inject private ImageLoader imageLoader;
-    @Inject @Named("DINComp-CondBold")Typeface headerTypeface;
+    @Inject @Named("ProximaNova-Bold")Typeface headerTypeface;
 
     private TextView introText;
     private ListView list;

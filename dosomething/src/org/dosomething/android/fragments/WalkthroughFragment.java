@@ -20,7 +20,7 @@ import roboguice.fragment.RoboFragment;
  */
 public class WalkthroughFragment extends RoboFragment {
 
-    @Inject private @Named("DINComp-CondBold")Typeface dinTypeface;
+    @Inject private @Named("ProximaNova-Reg")Typeface typefaceReg;
 
     private int mPageNumber;
 
@@ -35,7 +35,7 @@ public class WalkthroughFragment extends RoboFragment {
         View rootView = inflater.inflate(R.layout.fragment_walkthrough, container, false);
         ImageView imageView = (ImageView)rootView.findViewById(R.id.image);
         TextView textView = (TextView)rootView.findViewById(R.id.text);
-        textView.setTypeface(dinTypeface);
+        textView.setTypeface(typefaceReg);
 
         // TODO: change out dummy images and text for finalized walkthrough content
         switch(mPageNumber) {

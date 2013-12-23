@@ -46,18 +46,14 @@ public class MyModule extends AbstractModule {
 		// App model Cache singleton
 		bind(Cache.class)
 			.in(Singleton.class);
-		
-		// Din custom font singleton
-		bind(Typeface.class)
-			.annotatedWith(Names.named("DINComp-CondBold"))
-			.toProvider(DinCompCondBoldProvider.class)
-			.in(Singleton.class);
 
+        // Typeface Proxima Nova Reg
         bind(Typeface.class)
             .annotatedWith(Names.named("ProximaNova-Reg"))
             .toProvider(ProximaNovaRegProvider.class)
             .in(Singleton.class);
 
+        // Typeface Proxima Nova Bold
         bind(Typeface.class)
             .annotatedWith(Names.named("ProximaNova-Bold"))
             .toProvider(ProximaNovaBoldProvider.class)
@@ -101,24 +97,6 @@ public class MyModule extends AbstractModule {
 			return imageLoader;
 		}
 		
-	}
-	
-	/**
-	 * Provides a new Din Typeface object when needed for injection.
-	 */
-	public static class DinCompCondBoldProvider implements Provider<Typeface> {
-		
-		private Context context;
-		
-		@Inject
-		public DinCompCondBoldProvider(Context context) {
-			this.context = context;
-		}
-		
-		@Override
-		public Typeface get() {
-			return Typeface.createFromAsset(context.getAssets(), "DINComp-CondBold.ttf");
-		}
 	}
 
     /**

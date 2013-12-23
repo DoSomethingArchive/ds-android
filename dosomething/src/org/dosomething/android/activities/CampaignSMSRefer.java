@@ -47,7 +47,7 @@ public class CampaignSMSRefer extends AbstractActionBarActivity {
 
 	@Inject private LayoutInflater inflater;
 	@Inject private UserContext userContext;
-    @Inject private @Named("DINComp-CondBold")Typeface typefaceDin;
+    @Inject private @Named("ProximaNova-Bold")Typeface typefaceBold;
 	@InjectView(R.id.sms_cell_input) private EditText etCellInput;
 	@InjectView(R.id.sms_friends_container) private LinearLayout llFriendsContainer;
 	@InjectView(R.id.sms_friends_label) private TextView tvFriendsLabel;
@@ -85,8 +85,8 @@ public class CampaignSMSRefer extends AbstractActionBarActivity {
         });
 
         // Set custom typeface for buttons
-        btnAddNumbers.setTypeface(typefaceDin,Typeface.BOLD);
-        btnSubmit.setTypeface(typefaceDin, Typeface.BOLD);
+        btnAddNumbers.setTypeface(typefaceBold,Typeface.BOLD);
+        btnSubmit.setTypeface(typefaceBold, Typeface.BOLD);
 
 		// Auto-fill any fields we already have information for
 		prePopulate();

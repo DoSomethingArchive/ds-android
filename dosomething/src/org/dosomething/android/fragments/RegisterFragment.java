@@ -42,7 +42,7 @@ import roboguice.fragment.RoboFragment;
 public class RegisterFragment extends RoboFragment implements View.OnClickListener {
 
     @Inject private UserContext userContext;
-    @Inject private @Named("DINComp-CondBold")Typeface dinTypeface;
+    @Inject private @Named("ProximaNova-Bold")Typeface typefaceBold;
 
     private DSFacebookLoginButton mBtnFacebookLogin;
     private Button mBtnRegister;
@@ -74,7 +74,7 @@ public class RegisterFragment extends RoboFragment implements View.OnClickListen
 
         // Set custom typeface for the buttons
         mBtnRegister = (Button)view.findViewById(R.id.button_register);
-        mBtnRegister.setTypeface(dinTypeface, Typeface.BOLD);
+        mBtnRegister.setTypeface(typefaceBold, Typeface.BOLD);
 
         // Set click listener on buttons
         mBtnRegister.setOnClickListener(this);
@@ -89,7 +89,7 @@ public class RegisterFragment extends RoboFragment implements View.OnClickListen
 
         // Set typeface for OR text
         TextView orText = (TextView)view.findViewById(R.id.or_text);
-        orText.setTypeface(dinTypeface, Typeface.BOLD);
+        orText.setTypeface(typefaceBold, Typeface.BOLD);
 
         mEditBirthday = (EditText)view.findViewById(R.id.birthday);
         mEditBirthday.setOnFocusChangeListener(birthdayFocusListener);

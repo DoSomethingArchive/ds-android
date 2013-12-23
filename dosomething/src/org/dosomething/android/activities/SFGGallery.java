@@ -63,7 +63,7 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 	@Inject private LayoutInflater inflater;
 	@Inject private ImageLoader imageLoader;
 	@Inject private UserContext userContext;
-	@Inject @Named("DINComp-CondBold")Typeface dinTypeface;
+	@Inject @Named("ProximaNova-Bold")Typeface typefaceBold;
 
 	@InjectView(R.id.list) private PullToRefreshListView pullToRefreshView;
 	@InjectView(R.id.filters) private LinearLayout filtersView;
@@ -173,7 +173,7 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 		
 		// Style filter button's typeface and setup click listener 
 		Button filterSubmit = (Button)findViewById(R.id.filter_execute);
-		filterSubmit.setTypeface(dinTypeface, Typeface.BOLD);
+		filterSubmit.setTypeface(typefaceBold, Typeface.BOLD);
 		filterSubmit.setOnClickListener(new OnFilterClickListener());
 	}
 	
@@ -301,7 +301,7 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = super.getView(position, convertView, parent);
-			setDinTypeface(v);
+			setTypeface(v);
 		    
 		    return v;
 		}
@@ -309,14 +309,14 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 		@Override
 	    public View getDropDownView(int position, View convertView, ViewGroup parent) {
 			View v = super.getDropDownView(position, convertView, parent);
-		    setDinTypeface(v);
+		    setTypeface(v);
 		    
 			return v;
 		}
 		
-		private void setDinTypeface(View v) {
+		private void setTypeface(View v) {
 			TextView textView = (TextView)v.findViewById(android.R.id.text1);
-		    textView.setTypeface(dinTypeface, Typeface.BOLD);
+		    textView.setTypeface(typefaceBold, Typeface.BOLD);
 		    textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16.f);
 		}
 	}
@@ -466,7 +466,7 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 			TextView state = (TextView)v.findViewById(R.id.state);
 			
 			if (name != null) {
-				name.setTypeface(dinTypeface, Typeface.BOLD); 
+				name.setTypeface(typefaceBold, Typeface.BOLD);
 				name.setText(item.getName());
 			}
 			
@@ -480,17 +480,17 @@ public class SFGGallery extends AbstractActivity implements OnScrollListener {
 			}
 			
 			if (shareCount != null) {
-				shareCount.setTypeface(dinTypeface, Typeface.BOLD);
+				shareCount.setTypeface(typefaceBold, Typeface.BOLD);
 				shareCount.setText("Share Count: "+item.getShareCount());
 			}
 			
 			if (shelter != null) {
-				shelter.setTypeface(dinTypeface, Typeface.BOLD);
+				shelter.setTypeface(typefaceBold, Typeface.BOLD);
 				shelter.setText(item.getShelter());
 			}
 			
 			if (state != null) {
-				state.setTypeface(dinTypeface, Typeface.BOLD);
+				state.setTypeface(typefaceBold, Typeface.BOLD);
 				state.setText(item.getState());
 			}
 			

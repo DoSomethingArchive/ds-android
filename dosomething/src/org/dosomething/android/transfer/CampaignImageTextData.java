@@ -57,7 +57,7 @@ public class CampaignImageTextData implements ICampaignSectionData, Serializable
         if (mHeader != null && mHeader.length() > 0) {
             tvHeader.setText(mHeader);
 
-            Typeface typeface = Typeface.create("DINComp-CondBold", Typeface.BOLD);
+            Typeface typeface = Typeface.create("ProximaNova-Bold", Typeface.BOLD);
             tvHeader.setTypeface(typeface);
         }
         else {

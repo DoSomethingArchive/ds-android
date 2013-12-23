@@ -59,7 +59,7 @@ public class Profile extends AbstractActionBarActivity {
 
     @Inject private LayoutInflater inflater;
     @Inject private UserContext userContext;
-    @Inject private @Named("DINComp-CondBold")Typeface headerTypeface;
+    @Inject private @Named("ProximaNova-Bold")Typeface headerTypeface;
     @Inject private Cache cache;
     @Inject private DSDao dao;
 

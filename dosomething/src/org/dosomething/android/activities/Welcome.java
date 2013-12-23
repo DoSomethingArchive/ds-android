@@ -25,7 +25,7 @@ public class Welcome extends AbstractFragmentActivity implements View.OnClickLis
 
     private final int NUM_WALKTHROUGH_PAGES = 3;
 
-    @Inject private @Named("DINComp-CondBold")Typeface dinTypeface;
+    @Inject private @Named("ProximaNova-Bold")Typeface typefaceBold;
 
     @InjectView(R.id.button_login) private Button mBtnLogin;
     @InjectView(R.id.button_register) private Button mBtnRegister;
@@ -57,8 +57,8 @@ public class Welcome extends AbstractFragmentActivity implements View.OnClickLis
         setDotPosition(0);
 
         // Set typeface for register and login buttons
-        mBtnLogin.setTypeface(dinTypeface);
-        mBtnRegister.setTypeface(dinTypeface);
+        mBtnLogin.setTypeface(typefaceBold);
+        mBtnRegister.setTypeface(typefaceBold);
 
         // Set button click listeners to launch next appropriate activity
         mBtnLogin.setOnClickListener(this);

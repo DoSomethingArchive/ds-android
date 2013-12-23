@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -46,6 +47,8 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
     private static final String GALLERY_IMG_POS = "gallery-img-pos";
     private static final String GALLERY_IMG_URLS = "gallery-img-urls";
     private final int STEP_NUMBER = 2;
+
+    @Inject @Named("ProximaNova-Bold") private Typeface typefaceBold;
 
     // Button to mark this step as being completed
     @InjectView(R.id.btn_did_this) private Button mButtonDidThis;
@@ -132,8 +135,7 @@ public class CampaignDoFragment extends AbstractCampaignFragment implements View
         }
 
         // Set style and behavior for the Did This button
-        Typeface typeface = Typeface.create("DINComp-CondBold", Typeface.BOLD);
-        mButtonDidThis.setTypeface(typeface);
+        mButtonDidThis.setTypeface(typefaceBold);
         mButtonDidThis.setOnClickListener(this);
 
         Activity activity = getActivity();

@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
 import org.dosomething.android.context.UserContext;
@@ -28,6 +31,8 @@ public class CampaignPlanFragment extends AbstractCampaignFragment implements Vi
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
     private final int STEP_NUMBER = 1;
+
+    @Inject @Named("ProximaNova-Bold") private Typeface typefaceBold;
 
     // Button to mark this step as being completed
     @InjectView(R.id.btn_did_this) private Button mButtonDidThis;
@@ -67,8 +72,7 @@ public class CampaignPlanFragment extends AbstractCampaignFragment implements Vi
         }
 
         // Set style and behavior for the Did This button
-        Typeface typeface = Typeface.create("DINComp-CondBold", Typeface.BOLD);
-        mButtonDidThis.setTypeface(typeface);
+        mButtonDidThis.setTypeface(typefaceBold);
         mButtonDidThis.setOnClickListener(this);
 
         Activity activity = getActivity();

@@ -66,7 +66,7 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
 	
 	@Inject private LayoutInflater inflater;
 	@Inject private UserContext userContext;
-	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
+	@Inject @Named("ProximaNova-Bold")Typeface headerTypeface;
 
 	@InjectView(R.id.required_instructions) private TextView lblRequiredInstructions;
 	@InjectView(R.id.submit) private Button btnSubmit;

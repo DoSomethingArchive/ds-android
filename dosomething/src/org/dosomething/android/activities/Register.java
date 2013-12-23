@@ -31,7 +31,7 @@ import java.util.Locale;
 public class Register extends AbstractFragmentActivity {
 	
 	@Inject private UserContext userContext;
-	@Inject @Named("DINComp-CondBold")Typeface headerTypeface;
+	@Inject @Named("ProximaNova-Bold")Typeface headerTypeface;
 	
 	public AbstractWebserviceTask registerTask;
 	

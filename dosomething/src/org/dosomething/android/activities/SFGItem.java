@@ -41,7 +41,7 @@ import roboguice.inject.InjectView;
 public class SFGItem extends AbstractActivity {
 	
 	@Inject private ImageLoader imageLoader;
-	@Inject @Named("DINComp-CondBold")Typeface dinTypeface;
+	@Inject @Named("ProximaNova-Bold")Typeface typefaceBold;
 	@Inject private UserContext userContext;
 
 	@InjectView(R.id.image) private ImageView imageView;
@@ -70,7 +70,7 @@ public class SFGItem extends AbstractActivity {
 		
 		campaign = (Campaign)getIntent().getExtras().get(DSConstants.EXTRAS_KEY.CAMPAIGN.getValue());
 		
-		shareButton.setTypeface(dinTypeface);
+		shareButton.setTypeface(typefaceBold);
 		shareButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -80,7 +80,7 @@ public class SFGItem extends AbstractActivity {
 		
 		if (campaign.getSFGData().getLocatorType() != null) {
 			findButton.setVisibility(Button.VISIBLE);
-			findButton.setTypeface(dinTypeface);
+			findButton.setTypeface(typefaceBold);
 			findButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -114,17 +114,17 @@ public class SFGItem extends AbstractActivity {
 			}
 			
 			if (shareCountView != null) {
-				shareCountView.setTypeface(dinTypeface, Typeface.BOLD);
+				shareCountView.setTypeface(typefaceBold, Typeface.BOLD);
 				shareCountView.setText("Share Count: "+sfgItem.getShareCount());
 			}
 			
 			if (shelterView != null) {
-				shelterView.setTypeface(dinTypeface, Typeface.BOLD);
+				shelterView.setTypeface(typefaceBold, Typeface.BOLD);
 				shelterView.setText(sfgItem.getShelter());
 			}
 			
 			if (locationView != null) {
-				locationView.setTypeface(dinTypeface, Typeface.BOLD);
+				locationView.setTypeface(typefaceBold, Typeface.BOLD);
 				locationView.setText(sfgItem.getCity() + ", " + sfgItem.getState());
 			}
 			

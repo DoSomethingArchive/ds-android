@@ -58,7 +58,7 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
     @Inject private ImageLoader imageLoader;
     @Inject private UserContext userContext;
     @Inject private Cache cache;
-    @Inject @Named("DINComp-CondBold")Typeface headerTypeface;
+    @Inject @Named("ProximaNova-Bold")Typeface headerTypeface;
 
     private ImageView imgLogo;
     private ImageView imgBackground;

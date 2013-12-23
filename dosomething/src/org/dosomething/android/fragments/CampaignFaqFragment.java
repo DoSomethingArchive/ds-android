@@ -27,7 +27,7 @@ public class CampaignFaqFragment extends AbstractCampaignFragment {
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
 
     @Inject private LayoutInflater inflater;
-    @Inject @Named("DINComp-CondBold")Typeface headerTypeface;
+    @Inject @Named("ProximaNova-Bold")Typeface headerTypeface;
 
     private ExpandableListView list;
 
