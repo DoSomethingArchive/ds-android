@@ -15,7 +15,7 @@ import org.dosomething.android.R;
  */
 public class DSFacebookLoginButton extends LinearLayout {
 
-    private Typeface typefaceDin;
+    private Typeface typeface;
 
     private LoginButton mLoginButton;
 
@@ -30,8 +30,8 @@ public class DSFacebookLoginButton extends LinearLayout {
 
         // Set custom font
         if (!isInEditMode()) {
-            typefaceDin = Typeface.createFromAsset(context.getAssets(), "ProximaNova-Bold.ttf");
-            mLoginButton.setTypeface(typefaceDin, Typeface.BOLD);
+            typeface = Typeface.createFromAsset(context.getAssets(), "ProximaNova-Bold.otf");
+            mLoginButton.setTypeface(typeface, Typeface.BOLD);
         }
     }
 
@@ -46,8 +46,8 @@ public class DSFacebookLoginButton extends LinearLayout {
 
         // Set custom font
         if (!isInEditMode()) {
-            typefaceDin = Typeface.createFromAsset(context.getAssets(), "ProximaNova-Bold.ttf");
-            mLoginButton.setTypeface(typefaceDin, Typeface.BOLD);
+            typeface = Typeface.createFromAsset(context.getAssets(), "ProximaNova-Bold.otf");
+            mLoginButton.setTypeface(typeface, Typeface.BOLD);
         }
     }
 
