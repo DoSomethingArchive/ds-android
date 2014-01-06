@@ -1,44 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-
-    <ListView
-        android:id="@+id/list"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:divider="@null"/>
+        android:layout_width="match_parent">
 
-    <LinearLayout
-        android:id="@+id/empty_view"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="vertical">
+        <ListView
+            android:id="@+id/list"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:divider="@null"/>
 
-        <ImageView
-            android:layout_height="128dp"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="64dp"
-            android:src="@drawable/splash"/>
-
-        <TextView
-            android:id="@+id/empty_view_header"
+        <LinearLayout
+            android:id="@+id/empty_view"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="20dp"
-            android:textSize="@dimen/font_size_header_1"
-            android:textStyle="bold"/>
+            android:paddingBottom="64dp"
+            android:paddingTop="64dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/empty_view_body"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="20dp"
-            android:textSize="@dimen/font_size_medium"/>
-    </LinearLayout>
+            <ImageView
+                android:layout_height="128dp"
+                android:layout_width="wrap_content"
+                android:src="@drawable/splash"/>
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/empty_view_header"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:textSize="@dimen/font_size_header_1"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/empty_view_body"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:textSize="@dimen/font_size_medium"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</ScrollView>
