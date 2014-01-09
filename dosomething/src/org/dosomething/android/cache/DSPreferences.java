@@ -1,13 +1,13 @@
 package org.dosomething.android.cache;
 
-import org.dosomething.android.DSConstants;
-import org.dosomething.android.R;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import com.google.inject.Inject;
+
+import org.dosomething.android.DSConstants;
+import org.dosomething.android.R;
 
 public class DSPreferences {
 	
@@ -16,6 +16,7 @@ public class DSPreferences {
 	private static final String CAUSE_1 = "cause_1";
 	private static final String CAUSE_2 = "cause_2";
 	private static final String CAUSE_3 = "cause_3";
+    private static final String LAST_SURVEY_ID = "last_survey_id";
 	
 	private final Context context;
 	
@@ -199,4 +200,28 @@ public class DSPreferences {
 		else
 			return -1;
 	}
+
+    /**
+     * Retrieves the id of the last survey the user opened up.
+     *
+     * @return  the id of the last survey opened
+     */
+    public int getLastSurveyId() {
+        SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+        return settings.getInt(LAST_SURVEY_ID, 0);
+    }
+
+    /**
+     * Saves the id of the last survey the user opened up.
+     *
+     * @param   id  the survey id
+     */
+    public void setLastSurveyId(int id) {
+        SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+        Editor editor = settings.edit();
+
+        editor.putInt(LAST_SURVEY_ID, id);
+
+        editor.commit();
+    }
 }

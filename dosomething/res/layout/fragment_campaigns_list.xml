@@ -23,6 +23,35 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/surveyPopup"
+        android:layout_height="64dp"
+        android:layout_width="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/surveyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="We want to hear from you! Take a quick survey."/>
+
+        <Button
+            android:id="@+id/surveyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/surveyText"
+            android:text="Ok!"/>
+        <Button
+            android:id="@+id/surveyCloseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/surveyText"
+            android:layout_toRightOf="@id/surveyButton"
+            android:text="No thanks"/>
+
+    </RelativeLayout>
+
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/list"
         android:layout_width="match_parent"

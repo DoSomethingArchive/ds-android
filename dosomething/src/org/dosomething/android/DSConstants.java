@@ -23,6 +23,9 @@ public class DSConstants {
     public static final String CAMPAIGN_API_URL = "http://apps.dosomething.org/m_app_api";
     public static final String MCOMMONS_API_JOIN_URL = "http://dosomething.mcommons.com/profiles/join";
 
+    // URL to query for survey data
+    public static final String SURVEY_CHECK_URL = "http://apps.dosomething.org/m_app_api/survey.json";
+
     // Date format to use across all areas of the app that need it
     public static final String DATE_FORMAT = "M/d/yyyy";
 

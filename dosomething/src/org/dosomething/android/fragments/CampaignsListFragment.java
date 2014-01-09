@@ -43,6 +43,7 @@ import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.tasks.AbstractFetchCampaignsTask;
 import org.dosomething.android.tasks.NoInternetException;
+import org.dosomething.android.tasks.SurveyCheckTask;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.widget.ProgressBarImageLoadingListener;
 
@@ -71,6 +72,9 @@ public class CampaignsListFragment extends RoboFragment {
     @InjectView(R.id.popup) private RelativeLayout popupView;
     @InjectView(R.id.popupMsg) private TextView popupMsgView;
     @InjectView(R.id.popupClose) private Button popupCloseButton;
+    @InjectView(R.id.surveyPopup) private RelativeLayout popupSurveyView;
+    @InjectView(R.id.surveyButton) private Button popupSurveyButton;
+    @InjectView(R.id.surveyCloseButton) private Button popupSurveyCloseButton;
 
     private ListView list;
 
@@ -91,6 +95,7 @@ public class CampaignsListFragment extends RoboFragment {
         super.onResume();
 
         fetchCampaigns(false);
+        checkForSurvey();
     }
 
     @Override
@@ -133,6 +138,19 @@ public class CampaignsListFragment extends RoboFragment {
                 popupView.setVisibility(View.GONE);
             }
         });
+
+        // Setup the listener to close the survey popup view
+        popupSurveyCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupSurveyView.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void checkForSurvey() {
+        SurveyCheckTask surveyTask = new SurveyCheckTask(userContext, popupSurveyView, popupSurveyButton);
+        surveyTask.execute();
     }
 
     /**
@@ -330,8 +348,7 @@ public class CampaignsListFragment extends RoboFragment {
                 textView.setVisibility(TextView.VISIBLE);
 
                 // Change text color and background color if it's a past campaign
-                if (todayDate.after(campaign.getEndDate())) {
-                    // TODO: for past campaigns, maybe also set "Past Campaigns" text, even if none was set
+                if (todayDate.after(campaign.getEndDate()))  {
                     int bgColor = getResources().getColor(R.color.campaigns_past_campaign_callout_background);
                     textView.setBackgroundColor(bgColor);
                     int textColor = getResources().getColor(R.color.campaigns_past_campaign_callout_text);
