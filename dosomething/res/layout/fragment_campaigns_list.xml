@@ -25,8 +25,9 @@
 
     <RelativeLayout
         android:id="@+id/surveyPopup"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:padding="10dp"
         android:visibility="gone">
 
         <TextView
@@ -34,21 +35,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:text="We want to hear from you! Take a quick survey."/>
+            android:gravity="center"
+            android:text="@string/survey_prompt"
+            android:textSize="@dimen/font_size_medium"/>
 
-        <Button
-            android:id="@+id/surveyButton"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/surveyText"
-            android:text="Ok!"/>
-        <Button
-            android:id="@+id/surveyCloseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/surveyText"
-            android:layout_toRightOf="@id/surveyButton"
-            android:text="No thanks"/>
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/surveyCloseButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/survey_no_button"
+                android:textSize="@dimen/font_size_small"/>
+            <Button
+                android:id="@+id/surveyButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/survey_yes_button"
+                android:textSize="@dimen/font_size_small"/>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

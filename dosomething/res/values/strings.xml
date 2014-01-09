@@ -177,6 +177,9 @@
     <string name="sms_refer_title">Share With Friends</string>
     <string name="sms_refer_success">Thanks! We\'ll be sending your friends a text message soon!</string>
     <string name="splash_version">v</string>
+    <string name="survey_prompt">Take a quick survey and let us know what you think!</string>
+    <string name="survey_yes_button">Ok</string>
+    <string name="survey_no_button">No Thanks</string>
     <string name="walkthrough_screen1">Join over 2.2 million young people taking action.</string>
     <string name="walkthrough_screen2">Make the world suck less.\nJoin a campaign to get started.</string>
     <string name="walkthrough_screen3">Use the DoSomething app to kick ass in your community.</string>

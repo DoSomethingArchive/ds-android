@@ -73,6 +73,7 @@ public class CampaignsListFragment extends RoboFragment {
     @InjectView(R.id.popupMsg) private TextView popupMsgView;
     @InjectView(R.id.popupClose) private Button popupCloseButton;
     @InjectView(R.id.surveyPopup) private RelativeLayout popupSurveyView;
+    @InjectView(R.id.surveyText) private TextView popupSurveyText;
     @InjectView(R.id.surveyButton) private Button popupSurveyButton;
     @InjectView(R.id.surveyCloseButton) private Button popupSurveyCloseButton;
 
@@ -140,6 +141,9 @@ public class CampaignsListFragment extends RoboFragment {
         });
 
         // Setup the listener to close the survey popup view
+        popupSurveyText.setTypeface(typefaceReg);
+        popupSurveyButton.setTypeface(typefaceBold);
+        popupSurveyCloseButton.setTypeface(typefaceReg);
         popupSurveyCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
