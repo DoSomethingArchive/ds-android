@@ -461,8 +461,9 @@
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_toLeftOf">@id/popupClose</item>
         <item name="android:background">@drawable/upgrade_popup_selector</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">#000</item>
-        <item name="android:textSize">@dimen/font_size_header_2</item>
+        <item name="android:textSize">@dimen/font_size_medium</item>
     </style>
     <style name="WebFormList">
         <item name="android:layout_width">match_parent</item>
