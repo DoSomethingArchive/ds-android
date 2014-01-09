@@ -8,11 +8,22 @@ import com.google.inject.Inject;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
+import org.dosomething.android.transfer.Campaign;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class DSPreferences {
 
     private static final String DS_PREFS = "ds_prefs";
     private static final String HAS_RUN = "has_run";
+    private static final String CAMPAIGNS = "campaigns";
     private static final String CAUSE_1 = "cause_1";
     private static final String CAUSE_2 = "cause_2";
     private static final String CAUSE_3 = "cause_3";
@@ -35,6 +46,67 @@ public class DSPreferences {
     public boolean getHasRun() {
         SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
         return settings.getBoolean(HAS_RUN, false);
+    }
+
+    /**
+     * Retrieve the saved campaigns as a JSONObject.
+     *
+     * @return JSONObject of the campaigns
+     * @throws JSONException
+     */
+    public JSONObject getCampaigns() throws JSONException {
+        JSONObject answer = null;
+        SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+        String json = settings.getString(CAMPAIGNS, null);
+
+        if(json != null){
+            answer = new JSONObject(json);
+        }
+
+        return answer;
+    }
+
+    /**
+     * Retrieve the saved campaigns as a List.
+     *
+     * @return the saved campaign data as a List of Campaign objects
+     * @throws JSONException
+     * @throws ParseException
+     */
+    public List<Campaign> getCampaignsAsList() throws JSONException, ParseException {
+
+        JSONObject jsonCampaigns = getCampaigns();
+
+        JSONArray names = jsonCampaigns.names();
+
+        List<Campaign> campaigns = new ArrayList<Campaign>();
+
+        for(int i = 0; i < names.length(); i++){
+            String name = names.getString(i);
+            JSONObject jsonCampaign = jsonCampaigns.getJSONObject(name);
+            campaigns.add(new Campaign(name, jsonCampaign));
+        }
+
+        Collections.sort(campaigns, new Comparator<Campaign>() {
+            @Override
+            public int compare(Campaign lhs, Campaign rhs) {
+                return lhs.getOrder() - rhs.getOrder();
+            }
+        });
+
+        return campaigns;
+    }
+
+    /**
+     * Saves the campaign data to the SharePreferences.
+     *
+     * @param json the campaign data to save
+     */
+    public void setCampaigns(JSONObject json){
+        SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+        Editor editor = settings.edit();
+        editor.putString(CAMPAIGNS, json.toString());
+        editor.commit();
     }
 
     public void setCause(int cause_id) {

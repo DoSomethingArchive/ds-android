@@ -19,7 +19,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.dosomething.android.R;
 import org.dosomething.android.animations.CardFlipAnimation;
 import org.dosomething.android.animations.Rotate3dAnimation;
-import org.dosomething.android.cache.PersistentCampaignsCache;
+import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.domain.UserCampaign;
 import org.dosomething.android.transfer.Campaign;
 import org.dosomething.android.widget.ProgressBarImageLoadingListener;
@@ -52,7 +52,7 @@ public class UserCampaignListAdapter extends ArrayAdapter<UserCampaign> {
         mShowCompletedCampaigns = bShowCompleted;
 
         try {
-            mCachedCampaigns = new PersistentCampaignsCache(context).getCampaignsAsList();
+            mCachedCampaigns = new DSPreferences(context).getCampaignsAsList();
         }
         catch (Exception e) {
             e.printStackTrace();

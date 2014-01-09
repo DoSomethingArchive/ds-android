@@ -1,26 +1,26 @@
 package org.dosomething.android.tasks;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 import org.acra.ErrorReporter;
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.cache.Cache;
-import org.dosomething.android.cache.PersistentCampaignsCache;
+import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.transfer.Campaign;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask {
 
@@ -45,7 +45,7 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 
 		if(campaigns == null){
 			
-			PersistentCampaignsCache persistentCache = new PersistentCampaignsCache(context);
+			DSPreferences prefs = new DSPreferences(context);
 			
 			boolean isOnline = isOnline(context);
 			
@@ -58,7 +58,7 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 
 					setCampaigns(json);
 					
-					persistentCache.setCampaigns(json);
+					prefs.setCampaigns(json);
 
 					if(cache != null){
 						cache.setCampaigns(campaigns);
@@ -68,7 +68,7 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 					ErrorReporter.getInstance().handleSilentException(e);
 					
 					//fall back to the last fetched, if any
-					JSONObject json = persistentCache.getCampaigns();
+					JSONObject json = prefs.getCampaigns();
 					
 					if(json != null){
 						setCampaigns(json);
@@ -79,7 +79,7 @@ public abstract class AbstractFetchCampaignsTask extends AbstractWebserviceTask 
 
 			}else{
 				//fall back to the last fetched, if any
-				JSONObject json = persistentCache.getCampaigns();
+				JSONObject json = prefs.getCampaigns();
 				
 				if(json != null){
 					setCampaigns(json);

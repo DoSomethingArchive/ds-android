@@ -17,7 +17,7 @@ import com.google.inject.name.Named;
 import org.dosomething.android.R;
 import org.dosomething.android.adapters.UserCampaignListAdapter;
 import org.dosomething.android.animations.CardFlipAnimation;
-import org.dosomething.android.cache.PersistentCampaignsCache;
+import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.domain.UserCampaign;
@@ -174,7 +174,7 @@ public class UserCampaignsFragment extends RoboFragment {
             // Open up campaign screen if it's one that's still in progress
             else if (!mShowCompletedCampaigns) {
                 try {
-                    List<Campaign> cachedCampaigns = new PersistentCampaignsCache(getActivity()).getCampaignsAsList();
+                    List<Campaign> cachedCampaigns = new DSPreferences(getActivity()).getCampaignsAsList();
 
                     Iterator<Campaign> iter = cachedCampaigns.iterator();
                     while (iter.hasNext()) {
