@@ -61,61 +61,64 @@ import roboguice.inject.InjectView;
 
 public abstract class AbstractWebForm extends AbstractActionBarActivity {
 
-	private static final int PICK_IMAGE_REQUEST = 0xFF0;
-	private static final int PICK_SFG_IMAGE_REQUEST = 0xFF1;
-	
-	@Inject private LayoutInflater inflater;
-	@Inject private UserContext userContext;
-	@Inject @Named("ProximaNova-Bold")Typeface headerTypeface;
+    private static final int PICK_IMAGE_REQUEST = 0xFF0;
+    private static final int PICK_SFG_IMAGE_REQUEST = 0xFF1;
 
-	@InjectView(R.id.required_instructions) private TextView lblRequiredInstructions;
-	@InjectView(R.id.submit) private Button btnSubmit;
-	
-	protected List<WebFormFieldBinding> fields;
-	
-	private WebFormFieldBinding pendingImageResult;
-	private boolean submitTaskInProgress;
+    private static final String[] STATES = {"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"};
+
+    @Inject private LayoutInflater inflater;
+    @Inject private UserContext userContext;
+    @Inject @Named("ProximaNova-Bold")Typeface typefaceBold;
+    @Inject @Named("ProximaNova-Reg")Typeface typefaceReg;
+
+    @InjectView(R.id.required_instructions) private TextView lblRequiredInstructions;
+    @InjectView(R.id.submit) private Button btnSubmit;
+
+    protected List<WebFormFieldBinding> fields;
+
+    private WebFormFieldBinding pendingImageResult;
+    private boolean submitTaskInProgress;
 
     // Path to a preselected image to attach to this webform submission
     protected String mPreselectedImage;
-	
-	protected abstract int getContentViewResourceId();
-	protected abstract WebForm getWebForm();
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+
+    protected abstract int getContentViewResourceId();
+    protected abstract WebForm getWebForm();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setContentView(getContentViewResourceId());
+        setContentView(getContentViewResourceId());
 
         // Enable ActionBar home button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-		
-		LinearLayout webform = (LinearLayout)findViewById(R.id.web_form);
-		
-		boolean anyRequired = false;
+
+        LinearLayout webform = (LinearLayout)findViewById(R.id.web_form);
+
+        boolean anyRequired = false;
         fields = new ArrayList<WebFormFieldBinding>();
         for(WebFormField wff : getWebForm().getFields()) {
-        	WebFormFieldBinding binding = new WebFormFieldBinding(wff);
-			fields.add(binding);
-			webform.addView(binding.getView());
-			
-			anyRequired = anyRequired || wff.isRequired();
+            WebFormFieldBinding binding = new WebFormFieldBinding(wff);
+            fields.add(binding);
+            webform.addView(binding.getView());
+
+            anyRequired = anyRequired || wff.isRequired();
         }
-        
+
         if(anyRequired) {
-        	lblRequiredInstructions.setVisibility(TextView.VISIBLE);
+            lblRequiredInstructions.setVisibility(TextView.VISIBLE);
         }
-        
-        btnSubmit.setTypeface(headerTypeface, Typeface.BOLD);
+
+        btnSubmit.setTypeface(typefaceBold, Typeface.BOLD);
         btnSubmit.setOnClickListener(new OnClickListener() {
-        	public void onClick(View v) {
-        		onSubmitClick();
-        	}
+            public void onClick(View v) {
+                onSubmitClick();
+            }
         });
-        
+
         prePopulate();
     }
 
@@ -130,228 +133,232 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-	
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-		
-		if(savedInstanceState!=null) {
-			for(WebFormFieldBinding binding : fields) {
-				ArrayList<String> formValue = savedInstanceState.getStringArrayList(binding.getWebFormField().getName());
-				if(formValue!=null) {
-					binding.setFormValue(formValue);
-				}
-	        }
-		}
-	}
-	
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		
-		for(WebFormFieldBinding binding : fields) {
-			outState.putStringArrayList(binding.getWebFormField().getName(), (ArrayList<String>)binding.getFormValue());
-		}
-	}
-	
-	private void prePopulate() {
-		for (WebFormFieldBinding binding : fields) {
-			String name = binding.getWebFormField().getName();
-			if (name.equals("email") || name.equals("field_webform_email[und][0][email]")) {
-				binding.setFormValue(Collections.singletonList(userContext.getEmail()));
-			}
-			else if (name.equals("name") || name.equals("user_name")) {
-				binding.setFormValue(Collections.singletonList(userContext.getUserName()));
-			}
-			else if (name.equals("field_webform_mobile[und][0][value]") && userContext.getPhoneNumber() != null) {
-				binding.setFormValue(Collections.singletonList(userContext.getPhoneNumber()));
-			}
-			else if (name.equals("first_name")) {
-				binding.setFormValue(Collections.singletonList(userContext.getFirstName()));
-			}
-			else if (name.equals("last_name")) {
-				binding.setFormValue(Collections.singletonList(userContext.getLastName()));
-			}
-			else if (name.equals("address_1")) {
-				binding.setFormValue(Collections.singletonList(userContext.getAddr1()));
-			}
-			else if (name.equals("address_2")) {
-				binding.setFormValue(Collections.singletonList(userContext.getAddr2()));
-			}
-			else if (name.equals("city")) {
-				binding.setFormValue(Collections.singletonList(userContext.getAddrCity()));
-			}
-			else if (name.equals("state")) {
-				binding.setFormValue(Collections.singletonList(userContext.getAddrState()));
-			}
-			else if (name.equals("zip") || name.equals("zip_code")) {
-				binding.setFormValue(Collections.singletonList(userContext.getAddrZip()));
-			}
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if(savedInstanceState!=null) {
+            for(WebFormFieldBinding binding : fields) {
+                ArrayList<String> formValue = savedInstanceState.getStringArrayList(binding.getWebFormField().getName());
+                if(formValue!=null) {
+                    binding.setFormValue(formValue);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        for(WebFormFieldBinding binding : fields) {
+            outState.putStringArrayList(binding.getWebFormField().getName(), (ArrayList<String>)binding.getFormValue());
+        }
+    }
+
+    private void prePopulate() {
+        for (WebFormFieldBinding binding : fields) {
+            String name = binding.getWebFormField().getName();
+            if (name == null) {
+                continue;
+            }
+
+            if (name.equals("email") || name.equals("field_webform_email[und][0][email]")) {
+                binding.setFormValue(Collections.singletonList(userContext.getEmail()));
+            }
+            else if (name.equals("name") || name.equals("user_name")) {
+                binding.setFormValue(Collections.singletonList(userContext.getUserName()));
+            }
+            else if (name.equals("field_webform_mobile[und][0][value]") && userContext.getPhoneNumber() != null) {
+                binding.setFormValue(Collections.singletonList(userContext.getPhoneNumber()));
+            }
+            else if (name.equals("first_name")) {
+                binding.setFormValue(Collections.singletonList(userContext.getFirstName()));
+            }
+            else if (name.equals("last_name")) {
+                binding.setFormValue(Collections.singletonList(userContext.getLastName()));
+            }
+            else if (name.equals("address_1") || name.equals("address1")) {
+                binding.setFormValue(Collections.singletonList(userContext.getAddr1()));
+            }
+            else if (name.equals("address_2") || name.equals("address2")) {
+                binding.setFormValue(Collections.singletonList(userContext.getAddr2()));
+            }
+            else if (name.equals("city")) {
+                binding.setFormValue(Collections.singletonList(userContext.getAddrCity()));
+            }
+            else if (name.equals("state")) {
+                binding.setFormValue(Collections.singletonList(userContext.getAddrState()));
+            }
+            else if (name.equals("zip") || name.equals("zip_code")) {
+                binding.setFormValue(Collections.singletonList(userContext.getAddrZip()));
+            }
             else if (name.startsWith("field_webform_pictures[und]") &&
                     mPreselectedImage != null &&
                     mPreselectedImage.length() > 0) {
                 binding.setSelectedImage(mPreselectedImage);
             }
-		}
-	}
-	
-	private void onBeginImageActivity(WebFormFieldBinding binding, int requestType) {
-		pendingImageResult = binding;
-		Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		startActivityForResult(intent, requestType);
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if((requestCode==PICK_IMAGE_REQUEST || requestCode == PICK_SFG_IMAGE_REQUEST)
-			&& pendingImageResult!=null && data!=null) {
-			
-			Uri uri = data.getData();
-			String[] projection = { MediaStore.Images.Media.DATA };
+        }
+    }
+
+    private void onBeginImageActivity(WebFormFieldBinding binding, int requestType) {
+        pendingImageResult = binding;
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, requestType);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if((requestCode==PICK_IMAGE_REQUEST || requestCode == PICK_SFG_IMAGE_REQUEST)
+                && pendingImageResult!=null && data!=null) {
+
+            Uri uri = data.getData();
+            String[] projection = { MediaStore.Images.Media.DATA };
             Cursor cursor = managedQuery(uri, projection, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             String path = cursor.getString(column_index);
-            
+
             if (requestCode == PICK_IMAGE_REQUEST) {
-            	pendingImageResult.setSelectedImage(path);
+                pendingImageResult.setSelectedImage(path);
             }
             else if (requestCode == PICK_SFG_IMAGE_REQUEST) {
-            	pendingImageResult.setSelectedSFGImage(path);
+                pendingImageResult.setSelectedSFGImage(path);
             }
-		}
-	}
-	
-	private void onFileUploadSuccess(int fieldIndex, String fid, String path) {
-		
-		WebFormFieldBinding binding = fields.get(fieldIndex);
-		binding.addUploadFid(fid);
-		binding.setLastUploadedImage(path);
-		
-		nextFileUploadOrSubmit();
-	}
-	
-	private void onSubmitClick() {
-		
-		if(validateRequired()) {
-			nextFileUploadOrSubmit();
-		}
-	}
-	
-	protected boolean validateRequired() {
-		boolean answer = true;
-		for(WebFormFieldBinding binding : fields) {
-			if(binding.getWebFormField().isRequired() && (binding.getFormValue().isEmpty() || binding.getFormValue().get(0).trim().length()==0)) {
-				new AlertDialog.Builder(AbstractWebForm.this)
-					.setMessage(getString(R.string.required_field, binding.getWebFormField().getLabel()))
-					.setCancelable(false)
-					.setPositiveButton(getString(R.string.ok_upper), null)
-					.create()
-					.show();
-				answer = false;
-				break;
-			}
-		}
-		return answer;
-	}
-	
-	private void nextFileUploadOrSubmit() {
-		
-		boolean didFileUpload = false;
-		for(int i=0; i<fields.size(); i++) {
-			WebFormFieldBinding binding = fields.get(i);
-			if(binding.hasImagesToUpload()) {
-				 
-				String imgPath = binding.getSelectedImage(binding.getLastUploadedImageIndex() + 1);
-				new MyFileUpload(i, imgPath).execute();
-				didFileUpload = true;
-				break;
-			}
-		}
-		
-		if(!didFileUpload) {
-			submitForm();
-		}
-	}
+        }
+    }
+
+    private void onFileUploadSuccess(int fieldIndex, String fid, String path) {
+
+        WebFormFieldBinding binding = fields.get(fieldIndex);
+        binding.addUploadFid(fid);
+        binding.setLastUploadedImage(path);
+
+        nextFileUploadOrSubmit();
+    }
+
+    private void onSubmitClick() {
+
+        if(validateRequired()) {
+            nextFileUploadOrSubmit();
+        }
+    }
+
+    protected boolean validateRequired() {
+        boolean answer = true;
+        for(WebFormFieldBinding binding : fields) {
+            if(binding.getWebFormField().isRequired() && (binding.getFormValue().isEmpty() || binding.getFormValue().get(0).trim().length()==0)) {
+                new AlertDialog.Builder(AbstractWebForm.this)
+                        .setMessage(getString(R.string.required_field, binding.getWebFormField().getLabel()))
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.ok_upper), null)
+                        .create()
+                        .show();
+                answer = false;
+                break;
+            }
+        }
+        return answer;
+    }
+
+    private void nextFileUploadOrSubmit() {
+
+        boolean didFileUpload = false;
+        for(int i=0; i<fields.size(); i++) {
+            WebFormFieldBinding binding = fields.get(i);
+            if(binding.hasImagesToUpload()) {
+
+                String imgPath = binding.getSelectedImage(binding.getLastUploadedImageIndex() + 1);
+                new MyFileUpload(i, imgPath).execute();
+                didFileUpload = true;
+                break;
+            }
+        }
+
+        if(!didFileUpload) {
+            submitForm();
+        }
+    }
 
 
-	
-	private void submitForm() {
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		
-		params.add(new BasicNameValuePair("nid", getWebForm().getNodeId()));
-		
-		for(WebFormFieldBinding binding : fields) {
-			// Save applicable data to SharedPreferences
-			String fieldName = binding.getWebFormField().getName();
-			if (fieldName.equals("first_name")) {
-				List<String> firstName = binding.getFormValue();
-				userContext.setFirstName(firstName.get(0));
-			}
-			else if (fieldName.equals("last_name")) {
-				List<String> lastName = binding.getFormValue();
-				userContext.setLastName(lastName.get(0));
-			}
-			else if (fieldName.equals("address_1")) {
-				List<String> addr1 = binding.getFormValue();
-				userContext.setAddr1(addr1.get(0));
-			}
-			else if (fieldName.equals("address_2")) {
-				List<String> addr2 = binding.getFormValue();
-				userContext.setAddr2(addr2.get(0));
-			}
-			else if (fieldName.equals("city")) {
-				List<String> city = binding.getFormValue();
-				userContext.setAddrCity(city.get(0));
-			}
-			else if (fieldName.equals("state")) {
-				List<String> state = binding.getFormValue();
-				userContext.setAddrState(state.get(0));
-			}
-			else if (fieldName.equals("zip") || fieldName.equals("zip_code")) {
-				List<String> zip = binding.getFormValue();
-				userContext.setAddrZip(zip.get(0));
-			}
-			
-			int fidIndex = 0;
-			
-			for(String value : binding.getFormValue()) {
-				// Date is special case that needs to be broken out into 3 fields
-				if (binding.getLayoutResource() == R.layout.web_form_date_row) {
-					String[] dateValues = value.split("/");
-					if (dateValues.length == 3) {
-						String baseName = binding.getWebFormField().getName();
-						params.add(new BasicNameValuePair(baseName+"[month]",dateValues[0]));
-						params.add(new BasicNameValuePair(baseName+"[day]",dateValues[1]));
-						params.add(new BasicNameValuePair(baseName+"[year]",dateValues[2]));
-					}
-				}
-				else if (binding.getLayoutResource() == R.layout.web_form_image_row) {
-					String name = "field_webform_pictures[und]["+fidIndex+"][fid]";
-					params.add(new BasicNameValuePair(name, value));
-					fidIndex++;
-				}
-				else if (binding.getLayoutResource() == R.layout.web_form_select_multi_row) {
-					String baseName = binding.getWebFormField().getName();
-					params.add(new BasicNameValuePair(baseName+"[select]["+value+"]", value));
-				}
-				else {
-					params.add(new BasicNameValuePair(binding.getWebFormField().getName(), value));
-				}
-			}
-		}
-		
-		new MySubmitTask(params).execute();
-	}
-	
-	protected void onSubmitSuccess() {
-		
-		setResult(RESULT_OK);
-		finish();
-	}
-	
-	public Bitmap getCompressedBitmap(String path, int size) throws Exception {
+
+    private void submitForm() {
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+        params.add(new BasicNameValuePair("nid", getWebForm().getNodeId()));
+
+        for(WebFormFieldBinding binding : fields) {
+            // Save applicable data to SharedPreferences
+            String fieldName = binding.getWebFormField().getName();
+            if (fieldName.equals("first_name")) {
+                List<String> firstName = binding.getFormValue();
+                userContext.setFirstName(firstName.get(0));
+            }
+            else if (fieldName.equals("last_name")) {
+                List<String> lastName = binding.getFormValue();
+                userContext.setLastName(lastName.get(0));
+            }
+            else if (fieldName.equals("address_1") || fieldName.equals("address1")) {
+                List<String> addr1 = binding.getFormValue();
+                userContext.setAddr1(addr1.get(0));
+            }
+            else if (fieldName.equals("address_2") || fieldName.equals("address2")) {
+                List<String> addr2 = binding.getFormValue();
+                userContext.setAddr2(addr2.get(0));
+            }
+            else if (fieldName.equals("city")) {
+                List<String> city = binding.getFormValue();
+                userContext.setAddrCity(city.get(0));
+            }
+            else if (fieldName.equals("state")) {
+                List<String> state = binding.getFormValue();
+                userContext.setAddrState(state.get(0));
+            }
+            else if (fieldName.equals("zip") || fieldName.equals("zip_code")) {
+                List<String> zip = binding.getFormValue();
+                userContext.setAddrZip(zip.get(0));
+            }
+
+            int fidIndex = 0;
+
+            for(String value : binding.getFormValue()) {
+                // Date is special case that needs to be broken out into 3 fields
+                if (binding.getLayoutResource() == R.layout.web_form_date_row) {
+                    String[] dateValues = value.split("/");
+                    if (dateValues.length == 3) {
+                        String baseName = binding.getWebFormField().getName();
+                        params.add(new BasicNameValuePair(baseName+"[month]",dateValues[0]));
+                        params.add(new BasicNameValuePair(baseName+"[day]",dateValues[1]));
+                        params.add(new BasicNameValuePair(baseName+"[year]",dateValues[2]));
+                    }
+                }
+                else if (binding.getLayoutResource() == R.layout.web_form_image_row) {
+                    String name = "field_webform_pictures[und]["+fidIndex+"][fid]";
+                    params.add(new BasicNameValuePair(name, value));
+                    fidIndex++;
+                }
+                else if (binding.getLayoutResource() == R.layout.web_form_select_multi_row) {
+                    String baseName = binding.getWebFormField().getName();
+                    params.add(new BasicNameValuePair(baseName+"[select]["+value+"]", value));
+                }
+                else {
+                    params.add(new BasicNameValuePair(binding.getWebFormField().getName(), value));
+                }
+            }
+        }
+
+        new MySubmitTask(params).execute();
+    }
+
+    protected void onSubmitSuccess() {
+
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    public Bitmap getCompressedBitmap(String path, int size) throws Exception {
         Bitmap b = null;
 
         //Decode image size
@@ -364,7 +371,7 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
 
         int scale = 1;
         if (o.outHeight > size || o.outWidth > size) {
-                scale = (int)Math.pow(2, (int) Math.round(Math.log(size / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
+            scale = (int)Math.pow(2, (int) Math.round(Math.log(size / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
         }
 
         //Decode with inSampleSize
@@ -375,531 +382,574 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
         fis.close();
 
         return b;
-	}
-	
-	protected class WebFormFieldBinding {
-		
-		private View view;
-		private int layoutResource;
-		private WebFormField webFormField;
-		private int lastUploadedImageIndex;
-		private ArrayList<String> selectedImages;
-		private ArrayList<String> uploadFids;
-		private boolean editDialogOpen = false;
-		
-		
-		public WebFormFieldBinding(WebFormField wff) {
-			webFormField = wff;
-			
-			String type = webFormField.getType();
-			if(type.equals("select")) {
-				String selectType = webFormField.getSelectType();
-				if(selectType!=null && selectType.equals("multiple")) {
-					layoutResource = R.layout.web_form_select_multi_row;
-				} else {
-					layoutResource = R.layout.web_form_select_single_row;
-				}
-			} else if(type.equals("number")) { 
-				layoutResource = R.layout.web_form_number_row;
-			} else if(type.equals("phone") || type.equals("tel")) { 
-				layoutResource = R.layout.web_form_phone_row;
-			} else if(type.equals("email")) { 
-				layoutResource = R.layout.web_form_email_row;
-			} else if(type.equals("date")) { 
-				layoutResource = R.layout.web_form_date_row;
-			} else if(type.equals("file")) { 
-				layoutResource = R.layout.web_form_image_row;
-				lastUploadedImageIndex = -1;
-				selectedImages = new ArrayList<String>();
-				uploadFids = new ArrayList<String>();
-			}
-			else if(type.equals("sfg-image")) {
-				layoutResource = R.layout.web_form_sfg_image_row;
-				lastUploadedImageIndex = -1;
-				selectedImages = new ArrayList<String>();
-			}
-			else if(type.equals("textarea")) {
-				layoutResource = R.layout.web_form_textarea_row;
-			} else {
-				layoutResource = R.layout.web_form_textfield_row;
-			}
-			
-			attatchView();
-		}
-		
-		public void attatchView() {
-			
-			view = inflater.inflate(layoutResource, null);
-			
-			TextView label = (TextView)view.findViewById(R.id.label);
-			String labelText = webFormField.getLabel();
-			if(webFormField.isRequired()) {
-				labelText += " *";
-			}
-			label.setText(labelText);
-			
-			switch(layoutResource) {
-				case R.layout.web_form_select_single_row: {
-					List<String> options = new ArrayList<String>();
-					for(WebFormSelectOptions wfso : webFormField.getSelectOptions()) {
-						options.add(wfso.getLabel());
-					}
-					Spinner spinner = (Spinner)view.findViewById(R.id.field_select_single);
-					spinner.setAdapter(new ArrayAdapter<String>(AbstractWebForm.this, android.R.layout.simple_spinner_item, options));
-					break;
-				}
-				case R.layout.web_form_select_multi_row: {
-					LinearLayout layout = (LinearLayout)view.findViewById(R.id.field_select_multi);
-					for(WebFormSelectOptions wfso : webFormField.getSelectOptions()) {
-						CheckBox checkbox = new CheckBox(AbstractWebForm.this);
-						checkbox.setTextColor(getResources().getColor(R.color.web_form_checkbox_label));
-						checkbox.setText(wfso.getLabel());
-						checkbox.setTag(wfso.getValue());
-						layout.addView(checkbox, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-					}
-					break;
-				}
-				case R.layout.web_form_date_row: {
-					EditText field = (EditText)view.findViewById(R.id.field_date);
-					field.setOnClickListener(new OnClickListener() {
-						public void onClick(View v) {
-							showDatePicker();
-						}
-					});
-					field.setOnFocusChangeListener(new OnFocusChangeListener() {
-						public void onFocusChange(View v, boolean hasFocus) {
-							if(hasFocus){
-								showDatePicker();
-							}
-						}
-					});
-					break;
-				}
-				case R.layout.web_form_image_row: {
-					Button button = (Button)view.findViewById(R.id.button);
-					button.setOnClickListener(new OnClickListener() {
-						public void onClick(View v) {
-							AbstractWebForm.this.onBeginImageActivity(WebFormFieldBinding.this, PICK_IMAGE_REQUEST);
-						}
-					});
-					updateImagePreview();
-					break;
-				}
-				case R.layout.web_form_sfg_image_row: {
-					Button button = (Button)view.findViewById(R.id.button);
-					button.setOnClickListener(new OnClickListener() {
-						public void onClick(View v) {
-							AbstractWebForm.this.onBeginImageActivity(WebFormFieldBinding.this, PICK_SFG_IMAGE_REQUEST);
-						}
-					});
-					break;
-				}
-			}
-		}
-		
-		private void showDatePicker(){
-			if(!editDialogOpen){
-		    	new DatePickerDialog(AbstractWebForm.this, new OnDateSetListener() {
-					public void onDateSet(DatePicker datePickerView, int year, int monthOfYear, int dayOfMonth) {
-						Date date  = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
-						EditText field = (EditText)view.findViewById(R.id.field_date);
-						field.setText(new SimpleDateFormat(DSConstants.DATE_FORMAT, Locale.US).format(date));
-						editDialogOpen = false;
-					}
-				}, 1995, 0, 1).show();
-		    	editDialogOpen = true;
-			}
-	    }
-		
-		private void updateImagePreview() {
-			// Clear all images
-			LinearLayout content = (LinearLayout)view.findViewById(R.id.content);
-			if (content != null) {
-				content.removeAllViews();
-				
-				for (int i = 0; selectedImages != null && i < selectedImages.size(); i++) {
-					Context c = getApplicationContext();
-					ImageView imageView = new ImageView(c);
-					// Convert dp into pixels before setting height and width
-					int dpSize = 80;
-					float scale = getResources().getDisplayMetrics().density;	// screen's density scale
-					// +0.5 is to round up to nearest whole number when int conversion happens
-					int pixelSize = (int)(dpSize * scale + 0.5f);
-					imageView.setLayoutParams(new LayoutParams(pixelSize, pixelSize));
-					try {
-						// Set drawable
-						Bitmap bitmap = getCompressedBitmap(selectedImages.get(i), 80);
-						imageView.setImageBitmap(bitmap);
-						
-						// Add new image to the view
-						content.addView(imageView);
-					}
-					catch (Exception e) {
-						//Log.v("IMAGE", "caught exception setting the image");
-					}
-				}
-			}
-		}
-		
-		public void setSelectedSFGImage(String path) {
-			// Only one image can be uploaded at a time for share-for-good campaigns
-			selectedImages.clear();
-			selectedImages.add(path);
-			updateImagePreview();
-		}
-		
-		public void setSelectedImage(String path) {
-			selectedImages.add(path);
-			updateImagePreview();
-		}
+    }
 
-		public String getSelectedImage(int i) {
-			if (selectedImages != null && i >= 0 && i < selectedImages.size())
-				return selectedImages.get(i);
-			else
-				return null;
-		}
-		
-		public void setLastUploadedImage(String path) {
-			for (int i = 0; selectedImages != null && i < selectedImages.size(); i++) {
-				if (selectedImages.get(i) == path)
-					lastUploadedImageIndex = i;
-			}
-		}
-		
-		public int getLastUploadedImageIndex() {
-			return lastUploadedImageIndex;
-		}
-		
-		public boolean hasImagesToUpload() {
-			if (selectedImages != null && lastUploadedImageIndex < selectedImages.size() - 1)
-				return true;
-			else
-				return false;
-		}
-		
-		public void addUploadFid(String fid) {
-			uploadFids.add(fid);
-		}
+    protected class WebFormFieldBinding {
 
-		public View getView() {
-			return view;
-		}
+        private View view;
+        private int layoutResource;
+        private WebFormField webFormField;
+        private int lastUploadedImageIndex;
+        private ArrayList<String> selectedImages;
+        private ArrayList<String> uploadFids;
+        private boolean editDialogOpen = false;
 
-		public WebFormField getWebFormField() {
-			return webFormField;
-		}
-		
-		public int getLayoutResource() {
-			return layoutResource;
-		}
-		
-		public void setFormValue(List<String> values) {
-			
-			switch(layoutResource) {
-				case R.layout.web_form_select_single_row: {
-					Spinner field = (Spinner)view.findViewById(R.id.field_select_single);
-					int selectIndex = 0;
-					List<WebFormSelectOptions> selectOptions = webFormField.getSelectOptions();
-					String value = values.get(0);
-					for(int i=0; i<selectOptions.size(); i++) {
-						WebFormSelectOptions wfso = selectOptions.get(i);
-						if(wfso.getValue().equals(value)) {
-							selectIndex = i;
-							break;
-						}
-					}
-					field.setSelection(selectIndex);
-					break;
-				}
-				case R.layout.web_form_select_multi_row: {
-					LinearLayout layout = (LinearLayout)view.findViewById(R.id.field_select_multi);
-					for(String value : values) {
-						for(int i=0; i<layout.getChildCount(); i++) {
-							CheckBox checkbox = (CheckBox)layout.getChildAt(i);
-							if(value.equals(checkbox.getTag())) {
-								checkbox.setChecked(true);
-								break;
-							}
-						}
-					}
-					break;
-				}
-				case R.layout.web_form_image_row: {
-					if (values.size() > 0) {
-						if (selectedImages != null) {
-							selectedImages.clear();
-						}
-						
-						for (int i = 0; i < values.size(); i++) {
-							selectedImages.add(values.get(i));
-						}
-						
-						updateImagePreview();
-					}
-					break;
-				}
-				case R.layout.web_form_sfg_image_row: {
-					if (values.size() > 0) {
-						updateImagePreview();
-					}
-					break;
-				}
-				case R.layout.web_form_date_row : {
-					EditText field = (EditText)view.findViewById(R.id.field_date);
-					field.setText(values.get(0));
-					break;
-				}
-				case R.layout.web_form_email_row : {
-					EditText field = (EditText)view.findViewById(R.id.field_email);
-					field.setText(values.get(0));
-					break;
-				}
-				case R.layout.web_form_number_row : {
-					EditText field = (EditText)view.findViewById(R.id.field_number);
-					field.setText(values.get(0));
-					break;
-				}
-				case R.layout.web_form_phone_row : {
-					EditText field = (EditText)view.findViewById(R.id.field_phone);
-					field.setText(values.get(0));
-					break;
-				}
-				case R.layout.web_form_textarea_row : {
-					EditText field = (EditText)view.findViewById(R.id.field_textarea);
-					field.setText(values.get(0));
-					break;
-				}
-				case R.layout.web_form_textfield_row : {
-					EditText field = (EditText)view.findViewById(R.id.field_textfield);
-					field.setText(values.get(0));
-					break;
-				}
-				default: {
-					throw new RuntimeException();
-				}
-			}
-		}
-		
-		public List<String> getFormValue() {
-			
-			List<String> answer = new ArrayList<String>(1);
-			switch(layoutResource) {
-				case R.layout.web_form_select_single_row: {
-					Spinner field = (Spinner)view.findViewById(R.id.field_select_single);
-					answer.add(webFormField.getSelectOptions().get(field.getSelectedItemPosition()).getValue());
-					break;
-				}
-				case R.layout.web_form_select_multi_row: {
-					LinearLayout layout = (LinearLayout)view.findViewById(R.id.field_select_multi);
-					for(int i=0; i<layout.getChildCount(); i++) {
-						CheckBox checkbox = (CheckBox)layout.getChildAt(i);
-						if(checkbox.isChecked()) {
-							answer.add((String)checkbox.getTag());
-						}
-					}
-					break;
-				}
-				case R.layout.web_form_image_row: {
-					if (uploadFids != null && uploadFids.size() > 0) {
-						for (int i = 0; i < uploadFids.size(); i++) {
-							answer.add(uploadFids.get(i));
-						}
-					}
-					else if (selectedImages != null && selectedImages.size() > 0) {
-						for (int i = 0; i < selectedImages.size(); i++) {
-							answer.add(selectedImages.get(i));
-						}
-					}
-					break;
-				}
-				case R.layout.web_form_sfg_image_row: {
-					if (selectedImages != null && selectedImages.size() > 0) {
-						answer.add(selectedImages.get(0));
-					}
-					break;
-				}
-				case R.layout.web_form_date_row : {
-					EditText field = (EditText)view.findViewById(R.id.field_date);
-					answer.add(field.getText().toString());
-					break;
-				}
-				case R.layout.web_form_email_row : {
-					EditText field = (EditText)view.findViewById(R.id.field_email);
-					answer.add(field.getText().toString());
-					break;
-				}
-				case R.layout.web_form_number_row : {
-					EditText field = (EditText)view.findViewById(R.id.field_number);
-					answer.add(field.getText().toString());
-					break;
-				}
-				case R.layout.web_form_phone_row : {
-					EditText field = (EditText)view.findViewById(R.id.field_phone);
-					answer.add(field.getText().toString());
-					break;
-				}
-				case R.layout.web_form_textarea_row : {
-					EditText field = (EditText)view.findViewById(R.id.field_textarea);
-					answer.add(field.getText().toString());
-					break;
-				}
-				case R.layout.web_form_textfield_row : {
-					EditText field = (EditText)view.findViewById(R.id.field_textfield);
-					answer.add(field.getText().toString());
-					break;
-				}
-				default: {
-					throw new RuntimeException();
-				}
-			}
-			
-			return answer;
-		}
-	}
-	
-	private class MyFileUpload extends AbstractWebserviceTask {
-		
-		private int fieldIndex;
-		private String path;
-		
-		public boolean uploadSuccess;
-		private String fid;
-		
-		public MyFileUpload(int fieldIndex, String path){
-			super(userContext);
-			this.fieldIndex = fieldIndex;
-			this.path = path;
-		}
-		
-		@Override
-		protected void onSuccess() {
-			
-			if(uploadSuccess) {
-				AbstractWebForm.this.onFileUploadSuccess(fieldIndex, fid, path);
-			} else {
-				onError(null);
-			}
-		}
 
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
+        public WebFormFieldBinding(WebFormField wff) {
+            webFormField = wff;
+
+            String type = webFormField.getType();
+            if (type.equals("select")) {
+                String selectType = webFormField.getSelectType();
+                if (selectType != null && selectType.equals("multiple")) {
+                    layoutResource = R.layout.web_form_select_multi_row;
+                }
+                else {
+                    layoutResource = R.layout.web_form_select_single_row;
+                }
+            }
+            else if (type.equals("number")) {
+                layoutResource = R.layout.web_form_number_row;
+            }
+            else if (type.equals("phone") || type.equals("tel")) {
+                layoutResource = R.layout.web_form_phone_row;
+            }
+            else if (type.equals("email")) {
+                layoutResource = R.layout.web_form_email_row;
+            }
+            else if (type.equals("date")) {
+                layoutResource = R.layout.web_form_date_row;
+            }
+            else if (type.equals("file")) {
+                layoutResource = R.layout.web_form_image_row;
+                lastUploadedImageIndex = -1;
+                selectedImages = new ArrayList<String>();
+                uploadFids = new ArrayList<String>();
+            }
+            else if (type.equals("sfg-image")) {
+                layoutResource = R.layout.web_form_sfg_image_row;
+                lastUploadedImageIndex = -1;
+                selectedImages = new ArrayList<String>();
+            }
+            else if (type.equals("textarea")) {
+                layoutResource = R.layout.web_form_textarea_row;
+            }
+            else if (type.equals("label")) {
+                layoutResource = R.layout.web_form_label_row;
+            }
+            else if (type.equals("school_search")) {
+                layoutResource = R.layout.web_form_school_search_row;
+            }
+            else {
+                layoutResource = R.layout.web_form_textfield_row;
+            }
+
+            attatchView();
+        }
+
+        public void attatchView() {
+
+            view = inflater.inflate(layoutResource, null);
+
+            TextView label = (TextView)view.findViewById(R.id.label);
+            String labelText = webFormField.getLabel();
+            if (webFormField.isRequired()) {
+                labelText += " *";
+            }
+
+            if (label != null) {
+                label.setText(labelText);
+
+                if (layoutResource == R.layout.web_form_label_row)
+                    label.setTypeface(typefaceReg);
+                else
+                    label.setTypeface(typefaceBold);
+            }
+
+            switch(layoutResource) {
+                case R.layout.web_form_select_single_row: {
+                    List<String> options = new ArrayList<String>();
+                    for(WebFormSelectOptions wfso : webFormField.getSelectOptions()) {
+                        options.add(wfso.getLabel());
+                    }
+                    Spinner spinner = (Spinner)view.findViewById(R.id.field_select_single);
+                    spinner.setAdapter(new ArrayAdapter<String>(AbstractWebForm.this, android.R.layout.simple_spinner_item, options));
+                    break;
+                }
+                case R.layout.web_form_select_multi_row: {
+                    LinearLayout layout = (LinearLayout)view.findViewById(R.id.field_select_multi);
+                    for(WebFormSelectOptions wfso : webFormField.getSelectOptions()) {
+                        CheckBox checkbox = new CheckBox(AbstractWebForm.this);
+                        checkbox.setTextColor(getResources().getColor(R.color.web_form_checkbox_label));
+                        checkbox.setText(wfso.getLabel());
+                        checkbox.setTag(wfso.getValue());
+                        layout.addView(checkbox, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                    }
+                    break;
+                }
+                case R.layout.web_form_date_row: {
+                    EditText field = (EditText)view.findViewById(R.id.field_date);
+                    field.setOnClickListener(new OnClickListener() {
+                        public void onClick(View v) {
+                            showDatePicker();
+                        }
+                    });
+                    field.setOnFocusChangeListener(new OnFocusChangeListener() {
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if(hasFocus){
+                                showDatePicker();
+                            }
+                        }
+                    });
+                    break;
+                }
+                case R.layout.web_form_image_row: {
+                    Button button = (Button)view.findViewById(R.id.button);
+                    button.setOnClickListener(new OnClickListener() {
+                        public void onClick(View v) {
+                            AbstractWebForm.this.onBeginImageActivity(WebFormFieldBinding.this, PICK_IMAGE_REQUEST);
+                        }
+                    });
+                    updateImagePreview();
+                    break;
+                }
+                case R.layout.web_form_school_search_row: {
+                    Spinner spinner = (Spinner)view.findViewById(R.id.field_school_search_state);
+                    spinner.setAdapter(new ArrayAdapter<String>(AbstractWebForm.this, android.R.layout.simple_spinner_item, STATES));
+
+                    TextView nameLabel = (TextView)view.findViewById(R.id.label_school_search_name);
+                    TextView stateLabel = (TextView)view.findViewById(R.id.label_school_search_state);
+                    nameLabel.setTypeface(typefaceBold);
+                    stateLabel.setTypeface(typefaceBold);
+
+                    Button button = (Button)view.findViewById(R.id.school_search);
+                    button.setTypeface(typefaceBold);
+                    button.setOnClickListener(null); // TODO
+                    break;
+                }
+                case R.layout.web_form_sfg_image_row: {
+                    Button button = (Button)view.findViewById(R.id.button);
+                    button.setOnClickListener(new OnClickListener() {
+                        public void onClick(View v) {
+                            AbstractWebForm.this.onBeginImageActivity(WebFormFieldBinding.this, PICK_SFG_IMAGE_REQUEST);
+                        }
+                    });
+                    break;
+                }
+            }
+        }
+
+        private void showDatePicker(){
+            if(!editDialogOpen){
+                new DatePickerDialog(AbstractWebForm.this, new OnDateSetListener() {
+                    public void onDateSet(DatePicker datePickerView, int year, int monthOfYear, int dayOfMonth) {
+                        Date date  = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
+                        EditText field = (EditText)view.findViewById(R.id.field_date);
+                        field.setText(new SimpleDateFormat(DSConstants.DATE_FORMAT, Locale.US).format(date));
+                        editDialogOpen = false;
+                    }
+                }, 1995, 0, 1).show();
+                editDialogOpen = true;
+            }
+        }
+
+        private void updateImagePreview() {
+            // Clear all images
+            LinearLayout content = (LinearLayout)view.findViewById(R.id.content);
+            if (content != null) {
+                content.removeAllViews();
+
+                for (int i = 0; selectedImages != null && i < selectedImages.size(); i++) {
+                    Context c = getApplicationContext();
+                    ImageView imageView = new ImageView(c);
+                    // Convert dp into pixels before setting height and width
+                    int dpSize = 80;
+                    float scale = getResources().getDisplayMetrics().density;	// screen's density scale
+                    // +0.5 is to round up to nearest whole number when int conversion happens
+                    int pixelSize = (int)(dpSize * scale + 0.5f);
+                    imageView.setLayoutParams(new LayoutParams(pixelSize, pixelSize));
+                    try {
+                        // Set drawable
+                        Bitmap bitmap = getCompressedBitmap(selectedImages.get(i), 80);
+                        imageView.setImageBitmap(bitmap);
+
+                        // Add new image to the view
+                        content.addView(imageView);
+                    }
+                    catch (Exception e) {
+                        //Log.v("IMAGE", "caught exception setting the image");
+                    }
+                }
+            }
+        }
+
+        public void setSelectedSFGImage(String path) {
+            // Only one image can be uploaded at a time for share-for-good campaigns
+            selectedImages.clear();
+            selectedImages.add(path);
+            updateImagePreview();
+        }
+
+        public void setSelectedImage(String path) {
+            selectedImages.add(path);
+            updateImagePreview();
+        }
+
+        public String getSelectedImage(int i) {
+            if (selectedImages != null && i >= 0 && i < selectedImages.size())
+                return selectedImages.get(i);
+            else
+                return null;
+        }
+
+        public void setLastUploadedImage(String path) {
+            for (int i = 0; selectedImages != null && i < selectedImages.size(); i++) {
+                if (selectedImages.get(i) == path)
+                    lastUploadedImageIndex = i;
+            }
+        }
+
+        public int getLastUploadedImageIndex() {
+            return lastUploadedImageIndex;
+        }
+
+        public boolean hasImagesToUpload() {
+            if (selectedImages != null && lastUploadedImageIndex < selectedImages.size() - 1)
+                return true;
+            else
+                return false;
+        }
+
+        public void addUploadFid(String fid) {
+            uploadFids.add(fid);
+        }
+
+        public View getView() {
+            return view;
+        }
+
+        public WebFormField getWebFormField() {
+            return webFormField;
+        }
+
+        public int getLayoutResource() {
+            return layoutResource;
+        }
+
+        public void setFormValue(List<String> values) {
+
+            switch(layoutResource) {
+                case R.layout.web_form_select_single_row: {
+                    Spinner field = (Spinner)view.findViewById(R.id.field_select_single);
+                    int selectIndex = 0;
+                    List<WebFormSelectOptions> selectOptions = webFormField.getSelectOptions();
+                    String value = values.get(0);
+                    for(int i=0; i<selectOptions.size(); i++) {
+                        WebFormSelectOptions wfso = selectOptions.get(i);
+                        if(wfso.getValue().equals(value)) {
+                            selectIndex = i;
+                            break;
+                        }
+                    }
+                    field.setSelection(selectIndex);
+                    break;
+                }
+                case R.layout.web_form_select_multi_row: {
+                    LinearLayout layout = (LinearLayout)view.findViewById(R.id.field_select_multi);
+                    for(String value : values) {
+                        for(int i=0; i<layout.getChildCount(); i++) {
+                            CheckBox checkbox = (CheckBox)layout.getChildAt(i);
+                            if(value.equals(checkbox.getTag())) {
+                                checkbox.setChecked(true);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+                case R.layout.web_form_image_row: {
+                    if (values.size() > 0) {
+                        if (selectedImages != null) {
+                            selectedImages.clear();
+                        }
+
+                        for (int i = 0; i < values.size(); i++) {
+                            selectedImages.add(values.get(i));
+                        }
+
+                        updateImagePreview();
+                    }
+                    break;
+                }
+                case R.layout.web_form_sfg_image_row: {
+                    if (values.size() > 0) {
+                        updateImagePreview();
+                    }
+                    break;
+                }
+                case R.layout.web_form_date_row : {
+                    EditText field = (EditText)view.findViewById(R.id.field_date);
+                    field.setText(values.get(0));
+                    break;
+                }
+                case R.layout.web_form_email_row : {
+                    EditText field = (EditText)view.findViewById(R.id.field_email);
+                    field.setText(values.get(0));
+                    break;
+                }
+                case R.layout.web_form_number_row : {
+                    EditText field = (EditText)view.findViewById(R.id.field_number);
+                    field.setText(values.get(0));
+                    break;
+                }
+                case R.layout.web_form_phone_row : {
+                    EditText field = (EditText)view.findViewById(R.id.field_phone);
+                    field.setText(values.get(0));
+                    break;
+                }
+                case R.layout.web_form_textarea_row : {
+                    EditText field = (EditText)view.findViewById(R.id.field_textarea);
+                    field.setText(values.get(0));
+                    break;
+                }
+                case R.layout.web_form_textfield_row : {
+                    EditText field = (EditText)view.findViewById(R.id.field_textfield);
+                    field.setText(values.get(0));
+                    break;
+                }
+                default: {
+                    throw new RuntimeException();
+                }
+            }
+        }
+
+        public List<String> getFormValue() {
+
+            List<String> answer = new ArrayList<String>(1);
+            switch(layoutResource) {
+                case R.layout.web_form_select_single_row: {
+                    Spinner field = (Spinner)view.findViewById(R.id.field_select_single);
+                    answer.add(webFormField.getSelectOptions().get(field.getSelectedItemPosition()).getValue());
+                    break;
+                }
+                case R.layout.web_form_select_multi_row: {
+                    LinearLayout layout = (LinearLayout)view.findViewById(R.id.field_select_multi);
+                    for(int i=0; i<layout.getChildCount(); i++) {
+                        CheckBox checkbox = (CheckBox)layout.getChildAt(i);
+                        if(checkbox.isChecked()) {
+                            answer.add((String)checkbox.getTag());
+                        }
+                    }
+                    break;
+                }
+                case R.layout.web_form_image_row: {
+                    if (uploadFids != null && uploadFids.size() > 0) {
+                        for (int i = 0; i < uploadFids.size(); i++) {
+                            answer.add(uploadFids.get(i));
+                        }
+                    }
+                    else if (selectedImages != null && selectedImages.size() > 0) {
+                        for (int i = 0; i < selectedImages.size(); i++) {
+                            answer.add(selectedImages.get(i));
+                        }
+                    }
+                    break;
+                }
+                case R.layout.web_form_sfg_image_row: {
+                    if (selectedImages != null && selectedImages.size() > 0) {
+                        answer.add(selectedImages.get(0));
+                    }
+                    break;
+                }
+                case R.layout.web_form_date_row : {
+                    EditText field = (EditText)view.findViewById(R.id.field_date);
+                    answer.add(field.getText().toString());
+                    break;
+                }
+                case R.layout.web_form_email_row : {
+                    EditText field = (EditText)view.findViewById(R.id.field_email);
+                    answer.add(field.getText().toString());
+                    break;
+                }
+                case R.layout.web_form_number_row : {
+                    EditText field = (EditText)view.findViewById(R.id.field_number);
+                    answer.add(field.getText().toString());
+                    break;
+                }
+                case R.layout.web_form_phone_row : {
+                    EditText field = (EditText)view.findViewById(R.id.field_phone);
+                    answer.add(field.getText().toString());
+                    break;
+                }
+                case R.layout.web_form_textarea_row : {
+                    EditText field = (EditText)view.findViewById(R.id.field_textarea);
+                    answer.add(field.getText().toString());
+                    break;
+                }
+                case R.layout.web_form_textfield_row : {
+                    EditText field = (EditText)view.findViewById(R.id.field_textfield);
+                    answer.add(field.getText().toString());
+                    break;
+                }
+                case R.layout.web_form_school_search_row: {
+                    // TODO: Use the GSID that'll be cached off in the background
+                    break;
+                }
+                case R.layout.web_form_label_row: {
+                    // Nothing to save here, just ignore
+                    break;
+                }
+                default: {
+                    throw new RuntimeException();
+                }
+            }
+
+            return answer;
+        }
+    }
+
+    private class MyFileUpload extends AbstractWebserviceTask {
+
+        private int fieldIndex;
+        private String path;
+
+        public boolean uploadSuccess;
+        private String fid;
+
+        public MyFileUpload(int fieldIndex, String path){
+            super(userContext);
+            this.fieldIndex = fieldIndex;
+            this.path = path;
+        }
+
+        @Override
+        protected void onSuccess() {
+
+            if(uploadSuccess) {
+                AbstractWebForm.this.onFileUploadSuccess(fieldIndex, fid, path);
+            } else {
+                onError(null);
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
             setProgressBarIndeterminateVisibility(Boolean.TRUE);
-		}
+        }
 
-		@Override
-		protected void onFinish() {
-			if (!submitTaskInProgress) {
+        @Override
+        protected void onFinish() {
+            if (!submitTaskInProgress) {
                 setProgressBarIndeterminateVisibility(Boolean.FALSE);
-			}
-		}
+            }
+        }
 
-		@Override
-		protected void onError(Exception e) {
-			new AlertDialog.Builder(AbstractWebForm.this)
-				.setMessage(getString(R.string.auth_failed))
-				.setCancelable(false)
-				.setPositiveButton(getString(R.string.ok_upper), null)
-				.create()
-				.show();
-		}
+        @Override
+        protected void onError(Exception e) {
+            new AlertDialog.Builder(AbstractWebForm.this)
+                    .setMessage(getString(R.string.auth_failed))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.ok_upper), null)
+                    .create()
+                    .show();
+        }
 
-		@Override
-		protected void doWebOperation() throws Exception {
-			
-			Bitmap bitmap = getCompressedBitmap(path, 600);
-			
-			ByteArrayOutputStream byteos = new ByteArrayOutputStream();
-			Base64OutputStream baseos = new Base64OutputStream(byteos, Base64.DEFAULT);
-			bitmap.compress(CompressFormat.JPEG, 50, baseos);
-			
-			
-			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair("file", byteos.toString("UTF-8")));
-			params.add(new BasicNameValuePair("filename", new File(path).getName()));
-			
-			WebserviceResponse response = doPost(DSConstants.API_URL_FILE, params);
-			
-			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
-				uploadSuccess = false;
-			} else {
-				JSONObject obj = response.getBodyAsJSONObject();
-				fid = obj.getString("fid");
-				uploadSuccess = true;
-			}
-		}
-		
-	}
-	
-	private class MySubmitTask extends AbstractWebserviceTask {
-		
-		private List<NameValuePair> params;
-		
-		private String validationMessage;
-		private boolean submitSuccess = false;
-		
-		public MySubmitTask(List<NameValuePair> params) {
-			super(userContext);
-			this.params = params;
-		}
-		
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
+        @Override
+        protected void doWebOperation() throws Exception {
+
+            Bitmap bitmap = getCompressedBitmap(path, 600);
+
+            ByteArrayOutputStream byteos = new ByteArrayOutputStream();
+            Base64OutputStream baseos = new Base64OutputStream(byteos, Base64.DEFAULT);
+            bitmap.compress(CompressFormat.JPEG, 50, baseos);
+
+
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("file", byteos.toString("UTF-8")));
+            params.add(new BasicNameValuePair("filename", new File(path).getName()));
+
+            WebserviceResponse response = doPost(DSConstants.API_URL_FILE, params);
+
+            if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
+                uploadSuccess = false;
+            } else {
+                JSONObject obj = response.getBodyAsJSONObject();
+                fid = obj.getString("fid");
+                uploadSuccess = true;
+            }
+        }
+
+    }
+
+    private class MySubmitTask extends AbstractWebserviceTask {
+
+        private List<NameValuePair> params;
+
+        private String validationMessage;
+        private boolean submitSuccess = false;
+
+        public MySubmitTask(List<NameValuePair> params) {
+            super(userContext);
+            this.params = params;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
             setProgressBarIndeterminateVisibility(Boolean.TRUE);
-			submitTaskInProgress = true;
-		}
+            submitTaskInProgress = true;
+        }
 
-		@Override
-		protected void onSuccess() {
-			
-			if(submitSuccess) {
-				onSubmitSuccess();
-			} else {
-				new AlertDialog.Builder(AbstractWebForm.this)
-					.setMessage(validationMessage)
-					.setCancelable(false)
-					.setPositiveButton(getString(R.string.ok_upper), null)
-					.create()
-					.show();
-			}
-		}
+        @Override
+        protected void onSuccess() {
 
-		@Override
-		protected void onFinish() {
+            if(submitSuccess) {
+                onSubmitSuccess();
+            } else {
+                new AlertDialog.Builder(AbstractWebForm.this)
+                        .setMessage(validationMessage)
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.ok_upper), null)
+                        .create()
+                        .show();
+            }
+        }
+
+        @Override
+        protected void onFinish() {
             setProgressBarIndeterminateVisibility(Boolean.FALSE);
-			submitTaskInProgress = false;
-		}
+            submitTaskInProgress = false;
+        }
 
-		@Override
-		protected void onError(Exception e) {
-			new AlertDialog.Builder(AbstractWebForm.this)
-				.setMessage(getString(R.string.form_submit_failed))
-				.setCancelable(false)
-				.setPositiveButton(getString(R.string.ok_upper), null)
-				.create()
-				.show();
-		}
+        @Override
+        protected void onError(Exception e) {
+            new AlertDialog.Builder(AbstractWebForm.this)
+                    .setMessage(getString(R.string.form_submit_failed))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.ok_upper), null)
+                    .create()
+                    .show();
+        }
 
-		@Override
-		protected void doWebOperation() throws Exception {	
+        @Override
+        protected void doWebOperation() throws Exception {
 
-			WebserviceResponse response = doPost(DSConstants.API_URL_WEBFORM, params);
-			
-			if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
-				
-				validationMessage = response.extractFormErrorsAsMessage();
-				if(validationMessage==null) {
-					validationMessage = getString(R.string.auth_failed);
-				}
-				submitSuccess = false;
-			} else {
-				
-				submitSuccess = true;
-			}
-			
-		}
-	}
-	
+            WebserviceResponse response = doPost(DSConstants.API_URL_WEBFORM, params);
+
+            if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
+
+                validationMessage = response.extractFormErrorsAsMessage();
+                if(validationMessage==null) {
+                    validationMessage = getString(R.string.auth_failed);
+                }
+                submitSuccess = false;
+            } else {
+
+                submitSuccess = true;
+            }
+
+        }
+    }
+
 }
