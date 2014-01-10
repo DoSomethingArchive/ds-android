@@ -172,7 +172,7 @@ public class Campaigns extends AbstractActionBarActivity implements ActionBar.Ta
                             startActivityForResult(Login.getIntent(ctx), REQ_LOGIN_FOR_PROFILE);
                         break;
                     case 2:
-                        Login.logout(ctx);
+                        Login.logout(Campaigns.this);
                         break;
                 }
 
@@ -220,7 +220,7 @@ public class Campaigns extends AbstractActionBarActivity implements ActionBar.Ta
     }
 
     public static Intent getIntent(Context context, DSConstants.CAMPAIGNS_TAB tab) {
-        Intent answer = new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent answer = new Intent(context, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         answer.putExtra(DSConstants.EXTRAS_KEY.CAMPAIGNS_TAB.getValue(), tab.ordinal());
         return answer;
     }

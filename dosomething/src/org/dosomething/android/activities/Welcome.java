@@ -74,10 +74,10 @@ public class Welcome extends AbstractFragmentActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_login:
-                startActivity(new Intent(Welcome.this, Login.class));
+                startActivity(new Intent(Welcome.this, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.id.button_register:
-                startActivity(new Intent(Welcome.this, Register.class));
+                startActivity(new Intent(Welcome.this, Register.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
         }
     }

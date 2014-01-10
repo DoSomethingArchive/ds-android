@@ -1,5 +1,6 @@
 package org.dosomething.android.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -101,30 +102,32 @@ public class Login extends AbstractFragmentActivity {
         return new Intent(context, Login.class);
     }
 
-    public static void logout(Context context) {
-        new AlertDialog.Builder(context)
-                .setMessage(context.getString(R.string.logout_confirm))
-                .setPositiveButton(context.getString(R.string.yes_upper), new OnLogoutClickListener(context))
-                .setNegativeButton(context.getString(R.string.no_upper), null)
+    public static void logout(Activity activity) {
+        new AlertDialog.Builder(activity)
+                .setMessage(activity.getString(R.string.logout_confirm))
+                .setPositiveButton(activity.getString(R.string.yes_upper), new OnLogoutClickListener(activity))
+                .setNegativeButton(activity.getString(R.string.no_upper), null)
                 .create()
                 .show();
     }
 
     public static class OnLogoutClickListener implements OnClickListener {
-        private Context dialogContext;
+        private Activity activity;
 
-        public OnLogoutClickListener(Context ctx) {
-            dialogContext = ctx;
+        public OnLogoutClickListener(Activity a) {
+            activity = a;
         }
-        public void onClick(DialogInterface arg0, int arg1) {
+
+        public void onClick(DialogInterface dialog, int which) {
             // Close Facebook session and clear token info if any
             Session session = Session.getActiveSession();
             if (session != null) {
                 session.closeAndClearTokenInformation();
             }
 
-            new UserContext(dialogContext).clear();
-            dialogContext.startActivity(new Intent(dialogContext, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            new UserContext(activity).clear();
+            activity.startActivity(new Intent(activity, Welcome.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            activity.finish();
         }
     }
 

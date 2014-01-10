@@ -233,7 +233,7 @@ public class Profile extends AbstractActionBarActivity {
                             startActivityForResult(Login.getIntent(ctx), REQ_LOGIN_FOR_PROFILE);
                         break;
                     case 3:
-                        Login.logout(ctx);
+                        Login.logout(Profile.this);
                         break;
                 }
 
