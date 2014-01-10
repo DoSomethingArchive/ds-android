@@ -179,19 +179,19 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
             else if (name.equals("last_name")) {
                 binding.setFormValue(Collections.singletonList(userContext.getLastName()));
             }
-            else if (name.equals("address_1") || name.equals("address1")) {
+            else if (name.equals("address_1") || name.equals("data[address1]")) {
                 binding.setFormValue(Collections.singletonList(userContext.getAddr1()));
             }
-            else if (name.equals("address_2") || name.equals("address2")) {
+            else if (name.equals("address_2") || name.equals("data[address2]")) {
                 binding.setFormValue(Collections.singletonList(userContext.getAddr2()));
             }
-            else if (name.equals("city")) {
+            else if (name.equals("city") || name.equals("data[city]")) {
                 binding.setFormValue(Collections.singletonList(userContext.getAddrCity()));
             }
-            else if (name.equals("state")) {
+            else if (name.equals("state") || name.equals("data[state]")) {
                 binding.setFormValue(Collections.singletonList(userContext.getAddrState()));
             }
-            else if (name.equals("zip") || name.equals("zip_code")) {
+            else if (name.equals("zip") || name.equals("zip_code") || name.equals(("data[zip]"))) {
                 binding.setFormValue(Collections.singletonList(userContext.getAddrZip()));
             }
             else if (name.startsWith("field_webform_pictures[und]") &&
@@ -288,6 +288,7 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
         params.add(new BasicNameValuePair("nid", getWebForm().getNodeId()));
+        params.add(new BasicNameValuePair("uid", userContext.getUserUid()));
 
         for(WebFormFieldBinding binding : fields) {
             // Save applicable data to SharedPreferences
@@ -300,23 +301,23 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
                 List<String> lastName = binding.getFormValue();
                 userContext.setLastName(lastName.get(0));
             }
-            else if (fieldName.equals("address_1") || fieldName.equals("address1")) {
+            else if (fieldName.equals("address_1") || fieldName.equals("data[address1]")) {
                 List<String> addr1 = binding.getFormValue();
                 userContext.setAddr1(addr1.get(0));
             }
-            else if (fieldName.equals("address_2") || fieldName.equals("address2")) {
+            else if (fieldName.equals("address_2") || fieldName.equals("data[address2]")) {
                 List<String> addr2 = binding.getFormValue();
                 userContext.setAddr2(addr2.get(0));
             }
-            else if (fieldName.equals("city")) {
+            else if (fieldName.equals("city") || fieldName.equals("data[city]")) {
                 List<String> city = binding.getFormValue();
                 userContext.setAddrCity(city.get(0));
             }
-            else if (fieldName.equals("state")) {
+            else if (fieldName.equals("state") || fieldName.equals("data[state]")) {
                 List<String> state = binding.getFormValue();
                 userContext.setAddrState(state.get(0));
             }
-            else if (fieldName.equals("zip") || fieldName.equals("zip_code")) {
+            else if (fieldName.equals("zip") || fieldName.equals("zip_code") || fieldName.equals("data[zip]")) {
                 List<String> zip = binding.getFormValue();
                 userContext.setAddrZip(zip.get(0));
             }
@@ -349,7 +350,13 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
             }
         }
 
-        new MySubmitTask(params).execute();
+        // Use the custom url if provided, otherwise resort to the default
+        String url = DSConstants.API_URL_WEBFORM;
+        if (getWebForm().getPostUrl().length() > 0) {
+            url = getWebForm().getPostUrl();
+        }
+
+        new MySubmitTask(url, params).execute();
     }
 
     protected void onSubmitSuccess() {
@@ -884,13 +891,15 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
 
     private class MySubmitTask extends AbstractWebserviceTask {
 
+        private String url;
         private List<NameValuePair> params;
 
         private String validationMessage;
         private boolean submitSuccess = false;
 
-        public MySubmitTask(List<NameValuePair> params) {
+        public MySubmitTask(String url, List<NameValuePair> params) {
             super(userContext);
+            this.url = url;
             this.params = params;
         }
 
@@ -935,7 +944,7 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
         @Override
         protected void doWebOperation() throws Exception {
 
-            WebserviceResponse response = doPost(DSConstants.API_URL_WEBFORM, params);
+            WebserviceResponse response = doPost(url, params);
 
             if(response.getStatusCode()>=400 && response.getStatusCode()<500) {
 
