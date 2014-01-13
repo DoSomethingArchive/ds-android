@@ -58,8 +58,12 @@ public class SignUp extends AbstractWebForm {
         UserCampaign uc = new UserCampaign.UserCampaignCVBuilder()
                 .campaignId(campaign.getId())
                 .uid(new UserContext(this).getUserUid())
+                .campaignName(campaign.getName())
+                .dateEnds(campaign.getEndDate().getTime() / 1000) // times needs to be in seconds
+                .dateSignedUp(Calendar.getInstance().getTimeInMillis() / 1000)
+                .dateStarts(campaign.getStartDate().getTime() / 1000)
                 .build();
-        Long userCampaignId = dao.setSignedUp(uc);
+        dao.setSignedUp(uc);
 
 		// Check if this campaign has a report back challenge
 		boolean canReportBack = false;

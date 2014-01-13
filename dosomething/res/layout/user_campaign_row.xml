@@ -55,6 +55,7 @@
             android:id="@+id/preview_title"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_toLeftOf="@id/preview_close"
             android:paddingTop="10dp"
             android:textColor="@android:color/white"
             android:textSize="@dimen/font_size_header_1"/>

@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
@@ -45,7 +45,7 @@ public class UserCampaignsFragment extends RoboFragment {
     @InjectView(R.id.list) private ListView mListView;
 
     // Content to display if no campaigns are found
-    @InjectView(R.id.empty_view) private LinearLayout mEmptyView;
+    @InjectView(R.id.empty_view) private ScrollView mEmptyView;
     @InjectView(R.id.empty_view_header) private TextView mEmptyViewHeader;
     @InjectView(R.id.empty_view_body) private TextView mEmptyViewBody;
 
