@@ -297,6 +297,12 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
         for(WebFormFieldBinding binding : fields) {
             // Save applicable data to SharedPreferences
             String fieldName = binding.getWebFormField().getName();
+
+            // Ignore this binding if there's not field name provided
+            if (fieldName == null) {
+                continue;
+            }
+
             if (fieldName.equals("first_name")) {
                 List<String> firstName = binding.getFormValue();
                 userContext.setFirstName(firstName.get(0));
