@@ -44,11 +44,14 @@ import org.dosomething.android.tasks.AbstractWebserviceTask;
 import org.dosomething.android.transfer.WebForm;
 import org.dosomething.android.transfer.WebFormField;
 import org.dosomething.android.transfer.WebFormSelectOptions;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,6 +84,9 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
 
     // Path to a preselected image to attach to this webform submission
     protected String mPreselectedImage;
+
+    // For webforms that have a school search component. GSIDs of school results are cached here.
+    private int[] schoolGSIDs;
 
     protected abstract int getContentViewResourceId();
     protected abstract WebForm getWebForm();
@@ -281,8 +287,6 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
         }
     }
 
-
-
     private void submitForm() {
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -480,7 +484,7 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
                         options.add(wfso.getLabel());
                     }
                     Spinner spinner = (Spinner)view.findViewById(R.id.field_select_single);
-                    spinner.setAdapter(new ArrayAdapter<String>(AbstractWebForm.this, android.R.layout.simple_spinner_item, options));
+                    spinner.setAdapter(new ArrayAdapter<String>(AbstractWebForm.this, android.R.layout.simple_spinner_dropdown_item, options));
                     break;
                 }
                 case R.layout.web_form_select_multi_row: {
@@ -522,16 +526,40 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
                 }
                 case R.layout.web_form_school_search_row: {
                     Spinner spinner = (Spinner)view.findViewById(R.id.field_school_search_state);
-                    spinner.setAdapter(new ArrayAdapter<String>(AbstractWebForm.this, android.R.layout.simple_spinner_item, STATES));
+                    spinner.setAdapter(new ArrayAdapter<String>(AbstractWebForm.this, android.R.layout.simple_spinner_dropdown_item, STATES));
 
                     TextView nameLabel = (TextView)view.findViewById(R.id.label_school_search_name);
                     TextView stateLabel = (TextView)view.findViewById(R.id.label_school_search_state);
+                    TextView resultsLabel = (TextView)view.findViewById(R.id.label_school_search_results);
                     nameLabel.setTypeface(typefaceBold);
                     stateLabel.setTypeface(typefaceBold);
+                    resultsLabel.setTypeface(typefaceBold);
 
                     Button button = (Button)view.findViewById(R.id.school_search);
                     button.setTypeface(typefaceBold);
-                    button.setOnClickListener(null); // TODO
+                    button.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String name = ((TextView)findViewById(R.id.field_school_search_name)).getText().toString();
+                            int stateSelection = ((Spinner)findViewById(R.id.field_school_search_state)).getSelectedItemPosition();
+                            String state = STATES[stateSelection];
+
+                            if (name == null || name.length() == 0) {
+                                // Warn that the school name is required
+                                new AlertDialog.Builder(AbstractWebForm.this)
+                                        .setMessage(getString(R.string.school_search_name_required))
+                                        .setCancelable(false)
+                                        .setPositiveButton(getString(R.string.ok_upper), null)
+                                        .create()
+                                        .show();
+                            }
+                            else {
+                                TextView labelView = (TextView)findViewById(R.id.label_school_search_results);
+                                Spinner resultsView = (Spinner)findViewById(R.id.field_school_search_results);
+                                new SchoolSearchTask(state, name, labelView, resultsView).execute();
+                            }
+                        }
+                    });
                     break;
                 }
                 case R.layout.web_form_sfg_image_row: {
@@ -799,7 +827,9 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
                     break;
                 }
                 case R.layout.web_form_school_search_row: {
-                    // TODO: Use the GSID that'll be cached off in the background
+                    Spinner field = (Spinner)view.findViewById(R.id.field_school_search_results);
+                    int selection = field.getSelectedItemPosition();
+                    answer.add(Integer.toString(schoolGSIDs[selection]));
                     break;
                 }
                 case R.layout.web_form_label_row: {
@@ -815,6 +845,9 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
         }
     }
 
+    /**
+     * Webservice task to upload a picture file.
+     */
     private class MyFileUpload extends AbstractWebserviceTask {
 
         private int fieldIndex;
@@ -889,6 +922,9 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
 
     }
 
+    /**
+     * Webservice task to submit the webform.
+     */
     private class MySubmitTask extends AbstractWebserviceTask {
 
         private String url;
@@ -958,6 +994,101 @@ public abstract class AbstractWebForm extends AbstractActionBarActivity {
                 submitSuccess = true;
             }
 
+        }
+    }
+
+    /**
+     * Webservice task for getting schools and their info given a state and the school name.
+     */
+    private class SchoolSearchTask extends AbstractWebserviceTask {
+        private TextView labelView;
+        private Spinner resultsView;
+
+        private String searchState;
+        private String searchName;
+        private int searchLimit = 10;
+
+        private JSONArray jsonResults;
+
+        /**
+         * SchoolSearchTask constructor for finding matching schools based on provided info.
+         *
+         * @param state two letter abbreviation for the state to search in. Must be capitalized.
+         * @param name name of the school to search for.
+         * @param lView the label for search results.
+         * @param sView the spinner to populate with search results.
+         */
+        public SchoolSearchTask(String state, String name, TextView lView, Spinner sView) {
+            super(userContext);
+
+            searchState = state;
+            searchName = name;
+
+            labelView = lView;
+            resultsView = sView;
+
+            if (labelView != null) {
+                labelView.setVisibility(View.GONE);
+            }
+
+            if (resultsView != null) {
+                resultsView.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        protected void doWebOperation() throws Exception {
+            String name = URLEncoder.encode(searchName.trim(), "utf-8");
+            String state = URLEncoder.encode(searchState.trim(), "utf-8");
+            String url = "http://lofischools.herokuapp.com/search?query="+name+"&state="+state+"&limit="+searchLimit;
+            WebserviceResponse response = doGet(url);
+
+            if (response.getStatusCode() >= 200 && response.getStatusCode() < 400) {
+                JSONObject jsonResponse = response.getBodyAsJSONObject();
+                jsonResults = jsonResponse.optJSONArray("results");
+            }
+        }
+
+        @Override
+        protected void onSuccess() {
+        }
+
+        @Override
+        protected void onFinish() {
+            labelView.setVisibility(View.VISIBLE);
+            if (jsonResults != null && jsonResults.length() > 0) {
+                // Update the TextView with the "results found" label
+                labelView.setText(R.string.school_search_results_label);
+
+                schoolGSIDs = new int[jsonResults.length()];
+                String[] schools = new String[jsonResults.length()];
+                for (int i = 0; i < jsonResults.length(); i++) {
+                    try {
+                        JSONObject result = jsonResults.getJSONObject(i);
+
+                        // Populate the schools array to display in a spinner selector
+                        schools[i] = result.getString("name");
+
+                        // Cache the GSID for when the form is later submitted
+                        schoolGSIDs[i] = result.getInt("gsid");
+                    }
+                    catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // Update the dropdown spinner with the school results
+                resultsView.setAdapter(new ArrayAdapter<String>(AbstractWebForm.this, android.R.layout.simple_spinner_dropdown_item, schools));
+                resultsView.setVisibility(View.VISIBLE);
+            }
+            else {
+                // If no results, update the text with the "no results" label
+                labelView.setText(R.string.school_search_no_results_label);
+            }
+        }
+
+        @Override
+        protected void onError(Exception e) {
         }
     }
 

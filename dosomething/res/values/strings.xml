@@ -166,9 +166,12 @@
     <string name="cause_sex_relationships">Sex and Relationships</string>
     <string name="reminder_title">Do Something Reminder</string>
     <string name="reminder_body_reportback">is ending in a week! Remember to let us know what you\'ve done.</string>
-    <string name="school_search_name_label">What is your school\'s name?</string>
-    <string name="school_search_state_label">What state is your school in?</string>
+    <string name="school_search_name_label">What is your school\'s name?*</string>
+    <string name="school_search_name_required">A school name is required for the search.</string>
+    <string name="school_search_state_label">What state is your school in?*</string>
     <string name="school_search_button_label">Search</string>
+    <string name="school_search_results_label">Select your school from the list below, or try to search again.*</string>
+    <string name="school_search_no_results_label">No schools were found matching your criteria.</string>
     <string name="sms_add_contacts">+ ADD FRIEND\'S NUMBER</string>
     <string name="sms_cell_field">Your Cell Phone Number *</string>
     <string name="sms_friends_label">Friends we\'ll text:</string>

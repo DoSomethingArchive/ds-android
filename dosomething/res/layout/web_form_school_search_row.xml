@@ -10,7 +10,7 @@
 
     <Spinner
         android:id="@+id/field_school_search_state"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/label_school_search_state"/>
 
@@ -35,4 +35,17 @@
         android:gravity="center"
         android:text="@string/school_search_button_label"/>
 
+    <TextView
+        android:id="@+id/label_school_search_results"
+        android:layout_below="@id/school_search"
+        android:text="@string/school_search_no_results_label"
+        android:visibility="gone"
+        style="@style/WebFormRowLabel" />
+
+    <Spinner
+        android:id="@+id/field_school_search_results"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/label_school_search_results"
+        android:visibility="gone"/>
 </RelativeLayout>
