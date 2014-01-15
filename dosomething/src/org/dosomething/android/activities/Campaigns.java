@@ -148,8 +148,9 @@ public class Campaigns extends AbstractActionBarActivity implements ActionBar.Ta
         List<String> navItems = new ArrayList<String>();
         if (userContext.isLoggedIn()) {
             navItems.add(0, getString(R.string.drawer_item_campaigns));
-            navItems.add(1, getString(R.string.drawer_item_settings));
-            navItems.add(2, getString(R.string.drawer_item_logout));
+            navItems.add(1, getString(R.string.drawer_item_reminders));
+            navItems.add(2, getString(R.string.drawer_item_settings));
+            navItems.add(3, getString(R.string.drawer_item_logout));
         }
         else {
             navItems.add(0, getString(R.string.drawer_item_campaigns));
@@ -167,11 +168,14 @@ public class Campaigns extends AbstractActionBarActivity implements ActionBar.Ta
                         break;
                     case 1:
                         if (userContext.isLoggedIn())
-                            startActivity(ProfileConfig.getIntent(ctx));
+                            startActivity(RemindersActivity.getIntent(ctx));
                         else
                             startActivityForResult(Login.getIntent(ctx), REQ_LOGIN_FOR_PROFILE);
                         break;
                     case 2:
+                        startActivity(ProfileConfig.getIntent(ctx));
+                        break;
+                    case 3:
                         Login.logout(Campaigns.this);
                         break;
                 }
