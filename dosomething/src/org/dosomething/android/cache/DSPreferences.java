@@ -77,6 +77,10 @@ public class DSPreferences {
 
         JSONObject jsonCampaigns = getCampaigns();
 
+        if (jsonCampaigns == null) {
+            return null;
+        }
+
         JSONArray names = jsonCampaigns.names();
 
         List<Campaign> campaigns = new ArrayList<Campaign>();
