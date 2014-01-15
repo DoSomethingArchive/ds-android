@@ -22,9 +22,6 @@ import java.util.HashMap;
 public class SignUp extends AbstractWebForm {
 	
 	private static final String CAMPAIGN = "campaign";
-	private static final String CAMPAIGN_ID = "campaign-id";
-	private static final String CAMPAIGN_NAME = "campaign-name";
-	private static final int REPORT_BACK_ALARM_ID = 100;
 	
 	private WebForm webForm;
 	
@@ -83,10 +80,10 @@ public class SignUp extends AbstractWebForm {
 			// Only trigger alarm if it'll be set after today
 			if (c.after(todayDate)) {
 				Intent reminder = new Intent(this, AlarmReceiver.class);
-				reminder.putExtra(CAMPAIGN_ID, campaign.getId());
-				reminder.putExtra(CAMPAIGN_NAME, campaign.getName());
+				reminder.putExtra(AlarmReceiver.EXTRA_CAMPAIGN_ID, campaign.getId());
+				reminder.putExtra(AlarmReceiver.EXTRA_CAMPAIGN_NAME, campaign.getName());
 				
-				PendingIntent sender = PendingIntent.getBroadcast(this, REPORT_BACK_ALARM_ID, reminder, PendingIntent.FLAG_UPDATE_CURRENT);
+				PendingIntent sender = PendingIntent.getBroadcast(this, AlarmReceiver.ALARM_ID_REPORT_BACK, reminder, PendingIntent.FLAG_UPDATE_CURRENT);
 				AlarmManager am = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
 				am.set(AlarmManager.RTC_WAKEUP, alarmTime, sender);
 			}

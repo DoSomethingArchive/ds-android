@@ -42,5 +42,21 @@
             android:text="@string/campaign_fragment_did_this_button"
             style="@style/ButtonPrimary"/>
 
+        <Button
+            android:id="@+id/btn_remind_me"
+            android:layout_below="@id/btn_did_this"
+            android:text="Remind Me Later"
+            style="@style/ButtonSecondary"/>
+
+        <TextView
+            android:id="@+id/reminder_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_remind_me"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:textSize="@dimen/font_size_medium"
+            android:visibility="gone"/>
+
     </RelativeLayout>
 </ScrollView>
