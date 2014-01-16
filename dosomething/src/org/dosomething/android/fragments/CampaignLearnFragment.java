@@ -127,7 +127,8 @@ public class CampaignLearnFragment extends AbstractCampaignFragment implements V
                 cal.set(Calendar.HOUR_OF_DAY, 10);
                 cal.set(Calendar.MINUTE, 0);
 
-                PendingIntent pendingIntent = ReminderManager.createPendingIntent(getActivity(), mCampaign.getId(), mCampaign.getName(), "LEARN IT");
+                PendingIntent pendingIntent = ReminderManager.createCampaignStepReminder(getActivity(),
+                        mCampaign.getId(), mCampaign.getName(), getString(R.string.reminder_campaign_step_learn));
                 ReminderManager.scheduleReminder(getActivity(), cal.getTimeInMillis(), pendingIntent);
 
                 // Update the text to show when the user will be reminded

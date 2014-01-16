@@ -165,6 +165,9 @@
     <string name="cause_our_troops">Our Troops</string>
     <string name="cause_health">Physical and Mental Health</string>
     <string name="cause_sex_relationships">Sex and Relationships</string>
+    <string name="reminder_campaign_step_learn">Learn It</string>
+    <string name="reminder_campaign_step_plan">Plan It</string>
+    <string name="reminder_campaign_step_do">Do It</string>
     <string name="reminder_campaign_step_body">Do the \"%1$s\" step for %2$s.</string>
     <string name="reminder_campaign_step_when">We\'ll remind you in 3 days (%1$s)!</string>
     <string name="reminder_title">Do Something Reminder</string>
