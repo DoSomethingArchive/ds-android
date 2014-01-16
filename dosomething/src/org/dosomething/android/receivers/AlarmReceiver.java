@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 
 import org.dosomething.android.R;
 import org.dosomething.android.activities.Welcome;
+import org.dosomething.android.cache.DSPreferences;
 
 /**
  * AlarmReceiver
@@ -81,6 +82,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                     // Send the notification to the system
                     notifManager.notify(ALARM_ID_CAMPAIGN_STEP_REMINDER, notifyBuilder.build());
 
+                    // Remove the log of this reminder from DSPreferences
+                    DSPreferences dsPrefs = new DSPreferences(context);
+                    dsPrefs.clearStepReminder(campaignId, campaignStep);
                 }
             }
         }
