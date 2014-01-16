@@ -64,4 +64,15 @@ public class ReminderManager {
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
     }
+
+    /**
+     * Cancels a reminder from the alarm service.
+     *
+     * @param context Context
+     * @param pendingIntent the PendingIntent created by the ReminderManager to cancel
+     */
+    public static void clearReminder(Context context, PendingIntent pendingIntent) {
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+    }
 }

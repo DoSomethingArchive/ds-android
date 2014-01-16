@@ -16,6 +16,7 @@ import com.google.inject.name.Named;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.R;
+import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.context.UserContext;
 import org.dosomething.android.dao.DSDao;
 import org.dosomething.android.reminders.ReminderManager;
@@ -40,6 +41,9 @@ public class CampaignLearnFragment extends AbstractCampaignFragment implements V
 
     @Inject @Named("ProximaNova-Bold") private Typeface typefaceBold;
     @Inject @Named("ProximaNova-Reg") private Typeface typefaceReg;
+
+    // Interface to the SharedPreferences
+    @Inject private DSPreferences dsPrefs;
 
     // Button to mark this step as being completed
     @InjectView(R.id.btn_did_this) private Button mButtonDidThis;
@@ -73,7 +77,6 @@ public class CampaignLearnFragment extends AbstractCampaignFragment implements V
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         Bundle args = getArguments();
         mCampaign = (Campaign)args.getSerializable(CAMPAIGN);
 
@@ -102,12 +105,18 @@ public class CampaignLearnFragment extends AbstractCampaignFragment implements V
         boolean isStepComplete = dsDao.isCampaignStepComplete(userContext.getUserUid(), mCampaign.getId(), STEP_NUMBER);
         mButtonDidThis.setEnabled(!isStepComplete);
 
-        // TODO: Determine if the "Remind Me" button should be enabled
+        // TODO: update reminder text to inform when a reminder is set for
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
+        String campaignId = mCampaign.getId();
+        String campaignName = mCampaign.getName();
+        String campaignStepName = getString(R.string.reminder_campaign_step_learn);
+
+        PendingIntent reminderIntent = ReminderManager.createCampaignStepReminder(getActivity(),
+                campaignId, campaignName, campaignStepName);
 
         switch (id) {
             case R.id.btn_did_this:
@@ -115,7 +124,13 @@ public class CampaignLearnFragment extends AbstractCampaignFragment implements V
                 Activity activity = getActivity();
                 DSDao dsDao = new DSDao(activity);
                 UserContext userContext = new UserContext(activity);
-                dsDao.setCampaignStepCompleted(userContext.getUserUid(), mCampaign.getId(), STEP_NUMBER);
+                dsDao.setCampaignStepCompleted(userContext.getUserUid(), campaignId, STEP_NUMBER);
+
+                // Remove the reminder from the alarm service
+                ReminderManager.clearReminder(getActivity(), reminderIntent);
+
+                // Remove the reminder set for this step
+                dsPrefs.clearStepReminder(campaignId, campaignStepName);
 
                 // Disable button
                 view.setEnabled(false);
@@ -126,10 +141,13 @@ public class CampaignLearnFragment extends AbstractCampaignFragment implements V
                 cal.add(Calendar.DATE, 3);
                 cal.set(Calendar.HOUR_OF_DAY, 10);
                 cal.set(Calendar.MINUTE, 0);
+                long alarmTime = cal.getTimeInMillis();
 
-                PendingIntent pendingIntent = ReminderManager.createCampaignStepReminder(getActivity(),
-                        mCampaign.getId(), mCampaign.getName(), getString(R.string.reminder_campaign_step_learn));
-                ReminderManager.scheduleReminder(getActivity(), cal.getTimeInMillis(), pendingIntent);
+                // Set a reminder to the system
+                ReminderManager.scheduleReminder(getActivity(), alarmTime, reminderIntent);
+
+                // Save the reminder to SharedPreferences
+                dsPrefs.setStepReminder(campaignId, campaignStepName, alarmTime);
 
                 // Update the text to show when the user will be reminded
                 Date date = new Date(cal.getTimeInMillis());
