@@ -45,7 +45,7 @@
         <Button
             android:id="@+id/btn_remind_me"
             android:layout_below="@id/btn_did_this"
-            android:text="Remind Me Later"
+            android:text="@string/reminder_button"
             style="@style/ButtonSecondary"/>
 
         <TextView
