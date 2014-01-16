@@ -169,6 +169,7 @@
     <string name="reminder_campaign_step_plan">Plan It</string>
     <string name="reminder_campaign_step_do">Do It</string>
     <string name="reminder_campaign_step_body">Do the \"%1$s\" step for %2$s.</string>
+    <string name="reminder_campaign_step_isset">You have a reminder set for %1$s.</string>
     <string name="reminder_campaign_step_when">We\'ll remind you in 3 days (%1$s)!</string>
     <string name="reminder_title">Do Something Reminder</string>
     <string name="reminder_body_reportback">%1$s is ending in a week! Remember to let us know what you\'ve done.</string>

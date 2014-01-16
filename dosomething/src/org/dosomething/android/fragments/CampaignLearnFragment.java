@@ -105,7 +105,22 @@ public class CampaignLearnFragment extends AbstractCampaignFragment implements V
         boolean isStepComplete = dsDao.isCampaignStepComplete(userContext.getUserUid(), mCampaign.getId(), STEP_NUMBER);
         mButtonDidThis.setEnabled(!isStepComplete);
 
-        // TODO: update reminder text to inform when a reminder is set for
+        // Update reminder text to inform when a reminder is set for
+        String campaignStepName = getString(R.string.reminder_campaign_step_learn);
+        if (dsPrefs.isStepReminderSet(mCampaign.getId(), campaignStepName)) {
+
+            long alarmTime = dsPrefs.getStepReminder(mCampaign.getId(), campaignStepName);
+            if (alarmTime > 0) {
+                Date date = new Date(alarmTime);
+                DateFormat df = DateFormat.getDateInstance();
+                df.setTimeZone(Calendar.getInstance().getTimeZone());
+                String strDate = df.format(date);
+                String strReminder = getString(R.string.reminder_campaign_step_isset, strDate);
+
+                mTextReminder.setText(strReminder);
+                mTextReminder.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -134,6 +149,10 @@ public class CampaignLearnFragment extends AbstractCampaignFragment implements V
 
                 // Disable button
                 view.setEnabled(false);
+
+                // Remove any reminder text
+                mTextReminder.setText(null);
+                mTextReminder.setVisibility(View.GONE);
                 break;
             case R.id.btn_remind_me:
                 // Create a reminder to send to the user in 3 days at 10am
@@ -150,7 +169,7 @@ public class CampaignLearnFragment extends AbstractCampaignFragment implements V
                 dsPrefs.setStepReminder(campaignId, campaignStepName, alarmTime);
 
                 // Update the text to show when the user will be reminded
-                Date date = new Date(cal.getTimeInMillis());
+                Date date = new Date(alarmTime);
                 DateFormat df = DateFormat.getDateInstance();
                 df.setTimeZone(cal.getTimeZone());
                 String strDate = df.format(date);

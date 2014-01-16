@@ -378,6 +378,32 @@ public class DSPreferences {
     }
 
     /**
+     * Get the time a reminder is set for.
+     *
+     * @param campaignId unique campaign id
+     * @param campaignStep name of the campaign step
+     * @return time in milliseconds that the reminder is set for
+     */
+    public long getStepReminder(String campaignId, String campaignStep) {
+        SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+        String reminders = settings.getString(STEP_REMINDERS, "{}");
+        long reminderTime = -1;
+
+        try {
+            JSONObject jsonReminders = new JSONObject(reminders);
+            JSONObject jsonSteps = jsonReminders.optJSONObject(campaignId);
+            if (jsonSteps != null) {
+                reminderTime = jsonSteps.optLong(campaignStep, -1);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return reminderTime;
+    }
+
+    /**
      * Check whether or not a reminder is set for the given campaign step.
      *
      * @param campaignId unique campaign id
