@@ -265,6 +265,14 @@ public class Campaign extends AbstractActionBarActivity {
         switch (item.getItemId()) {
             // If home button is selected on ActionBar, then end the activity
             case android.R.id.home:
+                // If this activity is launched from a notification, there's likely nothing else in
+                // the back stack. So pressing the Home button on the action bar would exit the app.
+                // Instead of doing that, if there's no back stack, launch a new Campaigns activity.
+                if (isTaskRoot()) {
+                    Intent i = Campaigns.getIntent(Campaign.this);
+                    startActivity(i);
+                }
+
                 finish();
                 return true;
         }

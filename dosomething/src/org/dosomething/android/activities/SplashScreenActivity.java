@@ -69,7 +69,7 @@ public class SplashScreenActivity extends RoboActivity {
                 }
                 // Otherwise, open to the main campaigns screen
                 else {
-                    Intent i = new Intent(SplashScreenActivity.this, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Intent i = Campaigns.getIntent(SplashScreenActivity.this);
                     startActivity(i);
                 }
 

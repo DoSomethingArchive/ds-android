@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import org.dosomething.android.R;
+import org.dosomething.android.activities.Campaign;
 import org.dosomething.android.activities.Welcome;
 import org.dosomething.android.cache.DSPreferences;
 
@@ -71,13 +72,17 @@ public class AlarmReceiver extends BroadcastReceiver {
                     String notifBody = context.getString(R.string.reminder_campaign_step_body,
                             campaignStep, campaignName);
 
+                    // Create the Intent to package with the notification
+                    Intent launchIntent = Campaign.getIntent(context, campaignId, campaignStep);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent,
+                            Intent.FLAG_ACTIVITY_NEW_TASK);
+
                     // Build the notification
                     NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(context)
                             .setSmallIcon(R.drawable.actionbar_logo)
                             .setContentTitle(notifTitle)
-                            .setContentText(notifBody);
-                    // TODO: create the pending intent
-                    //.setContentIntent(pendingIntent);
+                            .setContentText(notifBody)
+                            .setContentIntent(pendingIntent);
 
                     // Send the notification to the system
                     notifManager.notify(ALARM_ID_CAMPAIGN_STEP_REMINDER, notifyBuilder.build());
