@@ -84,6 +84,11 @@ public class Campaign extends AbstractActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         // Setup ActionBar with available campaign info, or get it if we don't have it
         campaign = (org.dosomething.android.transfer.Campaign) getIntent().getSerializableExtra(CAMPAIGN);

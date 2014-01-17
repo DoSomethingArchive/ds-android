@@ -49,13 +49,11 @@ public class CampaignShare extends AbstractActivity {
 		}
     }
 	
-	public void share(View v){
+	public void share(View v) {
 		startActivity(Intent.createChooser(campaign.getShareIntent(), getString(R.string.campaign_share_chooser)));
 	}
 	
-	public void done(View v){
-		if (type == SIGNED_UP)
-			startActivity(Campaigns.getIntent(this));
+	public void done(View v) {
 		finish();
 	}
 
