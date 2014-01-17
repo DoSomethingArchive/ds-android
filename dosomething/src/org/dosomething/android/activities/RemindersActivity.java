@@ -48,6 +48,15 @@ public class RemindersActivity extends AbstractActionBarActivity {
     // View to display the list of reminders
     @InjectView(R.id.list) private ListView mList;
 
+    // View to display if there are no reminders found
+    @InjectView(R.id.empty_view) private View mEmptyView;
+
+    // Header text in the empty view
+    @InjectView(R.id.empty_view_header) private TextView mEmptyHeader;
+
+    // Body text in the empty view
+    @InjectView(R.id.empty_view_body) private TextView mEmptyBody;
+
     @Override
     public String getPageName() {
         return "reminders";
@@ -61,6 +70,10 @@ public class RemindersActivity extends AbstractActionBarActivity {
         // Enable home button on ActionBar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        // Set the typeface for empty view components
+        mEmptyHeader.setTypeface(typefaceBold);
+        mEmptyBody.setTypeface(typefaceReg);
     }
 
     @Override
@@ -98,14 +111,21 @@ public class RemindersActivity extends AbstractActionBarActivity {
             e.printStackTrace();
         }
 
-        // Sort the results in ascending order
-        Collections.sort(listReminders, new ReminderComparator());
+        if (!listReminders.isEmpty()) {
+            // Sort the results in ascending order
+            Collections.sort(listReminders, new ReminderComparator());
 
-        // Populate the list with the custom adapter
-        ReminderListAdapter listAdapter = new ReminderListAdapter(this, listReminders);
-        mList.setAdapter(listAdapter);
+            // Populate the list with the custom adapter
+            ReminderListAdapter listAdapter = new ReminderListAdapter(this, listReminders);
+            mList.setAdapter(listAdapter);
 
-        // TODO: attach click listener to the adapter
+            // TODO: attach click listener to the adapter
+        }
+        else {
+            // Display the empty view
+            mList.setVisibility(View.GONE);
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
