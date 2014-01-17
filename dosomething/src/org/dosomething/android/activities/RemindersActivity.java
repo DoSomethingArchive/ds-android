@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,7 +35,7 @@ import roboguice.inject.InjectView;
 /**
  * Activity to display Campaign reminders.
  */
-public class RemindersActivity extends AbstractActionBarActivity {
+public class RemindersActivity extends AbstractActionBarActivity implements AdapterView.OnItemClickListener {
 
     @Inject @Named("ProximaNova-Bold")Typeface typefaceBold;
     @Inject @Named("ProximaNova-Reg")Typeface typefaceReg;
@@ -56,6 +57,9 @@ public class RemindersActivity extends AbstractActionBarActivity {
 
     // Body text in the empty view
     @InjectView(R.id.empty_view_body) private TextView mEmptyBody;
+
+    // List of reminders pulled from DSPreferences
+    private ArrayList<Reminder> mListReminders;
 
     @Override
     public String getPageName() {
@@ -81,7 +85,7 @@ public class RemindersActivity extends AbstractActionBarActivity {
         super.onResume();
 
         // Get the list of the reminders saved in DSPreferences
-        ArrayList<Reminder> listReminders = new ArrayList<Reminder>();
+        mListReminders = new ArrayList<Reminder>();
         String reminders = dsPrefs.getStepReminderRaw();
 
         try {
@@ -100,8 +104,8 @@ public class RemindersActivity extends AbstractActionBarActivity {
                         // Add to the list of reminders as long as it's not the campaign "name" key
                         if (!campaignStep.equals("name")) {
                             long alarmTime = jsonSteps.getLong(campaignStep);
-                            Reminder reminder = new Reminder(campaignName, campaignStep, alarmTime);
-                            listReminders.add(reminder);
+                            Reminder reminder = new Reminder(campaignId, campaignName, campaignStep, alarmTime);
+                            mListReminders.add(reminder);
                         }
                     }
                 }
@@ -111,15 +115,16 @@ public class RemindersActivity extends AbstractActionBarActivity {
             e.printStackTrace();
         }
 
-        if (!listReminders.isEmpty()) {
+        if (!mListReminders.isEmpty()) {
             // Sort the results in ascending order
-            Collections.sort(listReminders, new ReminderComparator());
+            Collections.sort(mListReminders, new ReminderComparator());
 
             // Populate the list with the custom adapter
-            ReminderListAdapter listAdapter = new ReminderListAdapter(this, listReminders);
+            ReminderListAdapter listAdapter = new ReminderListAdapter(this, mListReminders);
             mList.setAdapter(listAdapter);
 
-            // TODO: attach click listener to the adapter
+            // And set click listener
+            mList.setOnItemClickListener(this);
         }
         else {
             // Display the empty view
@@ -140,10 +145,24 @@ public class RemindersActivity extends AbstractActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Reminder reminder = mListReminders.get(position);
+        String campaignId = reminder.getCampaignId();
+        String campaignStep = reminder.getCampaignStep();
+
+        // Launch the Campaign activity and end this activity
+        startActivity(Campaign.getIntent(RemindersActivity.this, campaignId, campaignStep));
+        finish();
+    }
+
     /**
      * Wrapper class for reminder data pulled from the DSPreferences cache.
      */
     private class Reminder {
+        // Unique campaign id
+        private String campaignId;
+
         // Display name of the campaign
         private String campaignName;
 
@@ -153,10 +172,15 @@ public class RemindersActivity extends AbstractActionBarActivity {
         // Time in milliseconds when the reminder should trigger
         private long time;
 
-        public Reminder(String name, String step, long t) {
+        public Reminder(String id, String name, String step, long t) {
+            campaignId = id;
             campaignName = name;
             campaignStep = step;
             time = t;
+        }
+
+        public String getCampaignId() {
+            return campaignId;
         }
 
         public String getCampaignName() {
