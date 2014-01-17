@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import org.dosomething.android.R;
 import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.context.UserContext;
+import org.dosomething.android.receivers.AlarmReceiver;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -23,9 +24,6 @@ public class SplashScreenActivity extends RoboActivity {
 
     // Duration of the splash screen in milliseconds
     private final int SPLASH_DURATION = 3000;
-
-    // Alarm notification key
-    private static final String NOTIF_ALARM_CAMPAIGN = "AlarmReminder.campaign";
 
     @Inject private UserContext userContext;
 
@@ -62,8 +60,8 @@ public class SplashScreenActivity extends RoboActivity {
                     startActivity(i);
                 }
                 // If launched from an alarm notification, open to the Campaign the alarm was for
-                else if (getIntent() != null && getIntent().getStringExtra(NOTIF_ALARM_CAMPAIGN) != null) {
-                    String intentCampaign = getIntent().getStringExtra(NOTIF_ALARM_CAMPAIGN);
+                else if (getIntent() != null && getIntent().getStringExtra(AlarmReceiver.NOTIF_ALARM_CAMPAIGN) != null) {
+                    String intentCampaign = getIntent().getStringExtra(AlarmReceiver.NOTIF_ALARM_CAMPAIGN);
                     if (intentCampaign != null) {
                         Intent i = org.dosomething.android.activities.Campaign.getIntent(SplashScreenActivity.this, intentCampaign);
                         startActivity(i);
@@ -71,7 +69,7 @@ public class SplashScreenActivity extends RoboActivity {
                 }
                 // Otherwise, open to the main campaigns screen
                 else {
-                    Intent i = new Intent(SplashScreenActivity.this, Campaigns.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Intent i = Campaigns.getIntent(SplashScreenActivity.this);
                     startActivity(i);
                 }
 

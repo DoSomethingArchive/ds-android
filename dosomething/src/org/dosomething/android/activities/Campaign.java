@@ -53,6 +53,7 @@ public class Campaign extends AbstractActionBarActivity {
 
     private static final String CAMPAIGN = DSConstants.EXTRAS_KEY.CAMPAIGN.getValue();
     private static final String CAMPAIGN_ID = "campaign-id";
+    private static final String CAMPAIGN_STEP = "campaign-step";
     private static final String SMS_REFER = "sms-refer";
 
     private static final int REQ_LOGIN_FOR_SIGN_UP = 111;
@@ -87,25 +88,7 @@ public class Campaign extends AbstractActionBarActivity {
         // Setup ActionBar with available campaign info, or get it if we don't have it
         campaign = (org.dosomething.android.transfer.Campaign) getIntent().getSerializableExtra(CAMPAIGN);
         if (campaign != null) {
-            HashMap tabHash = setupActionBarTabs();
-            mCampaignPagerAdapter = new CampaignPagerAdapter(getSupportFragmentManager(), tabHash);
-            mViewPager.setAdapter(mCampaignPagerAdapter);
-            // OnPageChangeListener to update UI when user swipes to a different fragment page
-            mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-
-                @Override
-                public void onPageSelected(int position) {
-                    ActionBar ab = getSupportActionBar();
-                    if (ab.getNavigationItemCount() > position) {
-                        getSupportActionBar().setSelectedNavigationItem(position);
-                    }
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {}
-            });
+            populateTabs();
 
             // Log a page view for the initial subpage shown when the activity first loads
             logCampaignSubpageView(0);
@@ -113,9 +96,41 @@ public class Campaign extends AbstractActionBarActivity {
         else {
             String campaignId = getIntent().getStringExtra(CAMPAIGN_ID);
             getSupportActionBar().setTitle(R.string.campaign_loading);
+
+            String campaignStep = getIntent().getStringExtra(CAMPAIGN_STEP);
+
             // Load appropriate campaign from cache, otherwise download the data
-            new CampaignsFetchTask(this, campaignId).execute();
+            new CampaignsFetchTask(this, campaignId, campaignStep).execute();
         }
+    }
+
+    /**
+     * Populate the Action Bar tabs and Adapter with the campaign data.
+     *
+     * @return HashMap<Integer, String> of the tab index and corresponding tab title
+     */
+    public HashMap populateTabs() {
+        HashMap tabHash = setupActionBarTabs();
+        mCampaignPagerAdapter = new CampaignPagerAdapter(getSupportFragmentManager(), tabHash);
+        mViewPager.setAdapter(mCampaignPagerAdapter);
+        // OnPageChangeListener to update UI when user swipes to a different fragment page
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            @Override
+            public void onPageSelected(int position) {
+                ActionBar ab = getSupportActionBar();
+                if (ab.getNavigationItemCount() > position) {
+                    getSupportActionBar().setSelectedNavigationItem(position);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
+
+        return tabHash;
     }
 
     /**
@@ -250,6 +265,14 @@ public class Campaign extends AbstractActionBarActivity {
         switch (item.getItemId()) {
             // If home button is selected on ActionBar, then end the activity
             case android.R.id.home:
+                // If this activity is launched from a notification, there's likely nothing else in
+                // the back stack. So pressing the Home button on the action bar would exit the app.
+                // Instead of doing that, if there's no back stack, launch a new Campaigns activity.
+                if (isTaskRoot()) {
+                    Intent i = Campaigns.getIntent(Campaign.this);
+                    startActivity(i);
+                }
+
                 finish();
                 return true;
         }
@@ -446,27 +469,66 @@ public class Campaign extends AbstractActionBarActivity {
         }
     }
 
+    /**
+     * Create the Intent used to launch a Campaign activity.
+     *
+     * @param context Context
+     * @param campaign Campaign data
+     * @return Intent to launch the activity
+     */
     public static Intent getIntent(Context context, org.dosomething.android.transfer.Campaign campaign) {
         Intent answer = new Intent(context, Campaign.class);
         answer.putExtra(CAMPAIGN, campaign);
         return answer;
     }
 
+    /**
+     * Create the Intent used to launch a Campaign activity.
+     *
+     * @param context Context
+     * @param campaignId unique campaign id
+     * @return Intent to launch the activity
+     */
     public static Intent getIntent(Context context, String campaignId) {
         Intent answer = new Intent(context, Campaign.class);
         answer.putExtra(CAMPAIGN_ID, campaignId);
         return answer;
     }
 
+    /**
+     * Create the Intent used to launch a Campaign activity and start at the provided campaign step.
+     *
+     * @param context Context
+     * @param campaignId unique campaign id
+     * @param campaignStep campaign step to launch to
+     * @return Intent to launch the activity
+     */
+    public static Intent getIntent(Context context, String campaignId, String campaignStep) {
+        Intent answer = new Intent(context, Campaign.class);
+        answer.putExtra(CAMPAIGN_ID, campaignId);
+        answer.putExtra(CAMPAIGN_STEP, campaignStep);
+        return answer;
+    }
+
+    /**
+     * Webservice Task to retrieve the campaigns either from cache or downloading it from the server.
+     */
     private class CampaignsFetchTask extends AbstractFetchCampaignsTask {
 
-        private String campaignId;
+        // Context
         private Context context;
 
-        public CampaignsFetchTask(Context _context, String _campaignId) {
+        // Unique id of the campaign
+        private String campaignId;
+
+        // If provided, the campaign step to start on
+        private String campaignStep;
+
+        public CampaignsFetchTask(Context _context, String _campaignId, String _campaignStep) {
             super(Campaign.this, userContext, cache);
             campaignId = _campaignId;
             context = _context;
+            campaignStep = _campaignStep;
         }
 
         @Override
@@ -474,7 +536,43 @@ public class Campaign extends AbstractActionBarActivity {
             if (campaignId != null) {
                 campaign = getCampaignById(campaignId);
                 if (campaign != null) {
-                    setupActionBarTabs();
+                    // Setup the action bar tabs and data
+                    HashMap<Integer, String> tabHash = populateTabs();
+
+                    // Go to the proper campaign step if one is provided
+                    if (campaignStep != null) {
+                        // Find out the tab title based on the campaign step name from the reminder
+                        String titleToMatch = null;
+                        if (campaignStep.equals(getString(R.string.reminder_campaign_step_learn))) {
+                            titleToMatch = getString(R.string.campaign_fragment_learn_tab_title);
+                        }
+                        else if (campaignStep.equals(getString(R.string.reminder_campaign_step_plan))) {
+                            titleToMatch = getString(R.string.campaign_fragment_plan_tab_title);
+                        }
+                        else if (campaignStep.equals(getString(R.string.reminder_campaign_step_do))) {
+                            titleToMatch = getString(R.string.campaign_fragment_do_tab_title);
+                        }
+
+                        // Find the tab index the step is on
+                        int tabItemIndex = -1;
+                        if (titleToMatch != null) {
+                            for (int i = 0; i < tabHash.size(); i++) {
+                                String tabTitle = tabHash.get(Integer.valueOf(i));
+                                if (tabTitle.equals(titleToMatch)) {
+                                    tabItemIndex = i;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Switch over to that tab
+                        if (tabItemIndex >= 0) {
+                            setCurrentTab(tabItemIndex);
+                        }
+                    }
+
+                    // Remove loading title message from the action bar
+                    getSupportActionBar().setTitle(null);
                 }
                 else {
                     onError(null);

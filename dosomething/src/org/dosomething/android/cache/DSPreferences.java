@@ -28,6 +28,7 @@ public class DSPreferences {
     private static final String CAUSE_2 = "cause_2";
     private static final String CAUSE_3 = "cause_3";
     private static final String LAST_SURVEY_ID = "last_survey_id";
+    private static final String STEP_REMINDERS = "campaign_step_reminders";
 
     private final Context context;
 
@@ -76,6 +77,10 @@ public class DSPreferences {
     public List<Campaign> getCampaignsAsList() throws JSONException, ParseException {
 
         JSONObject jsonCampaigns = getCampaigns();
+
+        if (jsonCampaigns == null) {
+            return null;
+        }
 
         JSONArray names = jsonCampaigns.names();
 
@@ -295,5 +300,148 @@ public class DSPreferences {
         editor.putInt(LAST_SURVEY_ID, id);
 
         editor.commit();
+    }
+
+    /**
+     * Remove a campaign step reminder by modifying the JSON string that logs the scheduled campaign
+     * step reminders.
+     *
+     * @param campaignId unique campaign id
+     * @param campaignStep name of the campaign step
+     */
+    public void clearStepReminder(String campaignId, String campaignStep) {
+        if (isStepReminderSet(campaignId, campaignStep)) {
+            SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+            String reminders = settings.getString(STEP_REMINDERS, "{}");
+
+            try {
+                JSONObject jsonReminders = new JSONObject(reminders);
+                JSONObject jsonSteps = jsonReminders.optJSONObject(campaignId);
+                if (jsonSteps != null) {
+                    // Remove the step from the list of reminders for the campaign
+                    jsonSteps.remove(campaignStep);
+
+                    // If the campaign has no more reminder steps (the only one remaining should be
+                    // the name of the campaign, then remove the campaign
+                    if (jsonSteps.length() == 1 && !jsonSteps.isNull("name")) {
+                        jsonReminders.remove(campaignId);
+                    }
+                    // Otherwise, update the campaign reminders with the remaining steps
+                    else {
+                        jsonReminders.put(campaignId, jsonSteps);
+                    }
+
+                    reminders = jsonReminders.toString();
+
+                    // Commit the updates to SharedPreferences
+                    Editor editor = settings.edit();
+                    editor.putString(STEP_REMINDERS, reminders);
+                    editor.commit();
+                }
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Add or update a campaign step reminder by modifying the JSON string that logs the scheduled
+     * campaign step reminders.
+     *
+     * @param campaignId unique campaign id
+     * @param campaignName display name of the campaign
+     * @param campaignStep name of the campaign step
+     * @param reminderTime time in milliseconds the reminder is set for
+     */
+    public void setStepReminder(String campaignId, String campaignName, String campaignStep, long reminderTime) {
+        SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+        String reminders = settings.getString(STEP_REMINDERS, "{}");
+
+        try {
+            JSONObject jsonReminders = new JSONObject(reminders);
+            JSONObject jsonSteps = jsonReminders.optJSONObject(campaignId);
+            if (jsonSteps == null) {
+                jsonSteps = new JSONObject();
+            }
+
+            jsonSteps.put("name", campaignName);
+            jsonSteps.put(campaignStep, reminderTime);
+            jsonReminders.put(campaignId, jsonSteps);
+
+            reminders = jsonReminders.toString();
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Editor editor = settings.edit();
+        editor.putString(STEP_REMINDERS, reminders);
+        editor.commit();
+    }
+
+    /**
+     * Get the time a reminder is set for.
+     *
+     * @param campaignId unique campaign id
+     * @param campaignStep name of the campaign step
+     * @return time in milliseconds that the reminder is set for
+     */
+    public long getStepReminder(String campaignId, String campaignStep) {
+        SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+        String reminders = settings.getString(STEP_REMINDERS, "{}");
+        long reminderTime = -1;
+
+        try {
+            JSONObject jsonReminders = new JSONObject(reminders);
+            JSONObject jsonSteps = jsonReminders.optJSONObject(campaignId);
+            if (jsonSteps != null) {
+                reminderTime = jsonSteps.optLong(campaignStep, -1);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return reminderTime;
+    }
+
+    /**
+     * Retrieve the raw String data of saved campaign step reminders.
+     *
+     * @return JSON string of saved reminders
+     */
+    public String getStepReminderRaw() {
+        SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+        String reminders = settings.getString(STEP_REMINDERS, "{}");
+
+        return reminders;
+    }
+
+    /**
+     * Check whether or not a reminder is set for the given campaign step.
+     *
+     * @param campaignId unique campaign id
+     * @param campaignStep name of the campaign step
+     * @return true if a reminder is set for this step, otherwise false
+     */
+    public boolean isStepReminderSet(String campaignId, String campaignStep) {
+        SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+        String reminders = settings.getString(STEP_REMINDERS, "{}");
+
+        try {
+            JSONObject jsonReminders = new JSONObject(reminders);
+            JSONObject jsonSteps = jsonReminders.optJSONObject(campaignId);
+            if (jsonSteps != null) {
+                boolean isStepSet = !jsonSteps.isNull(campaignStep);
+                return isStepSet;
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
     }
 }

@@ -64,6 +64,9 @@
             android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.Register"
             android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".activities.RemindersActivity"
+            android:label=""
+            android:theme="@style/DSActionBarTheme"/>
         <activity android:name=".activities.ReportBack"
             android:label=""
             android:theme="@style/DSActionBarTheme"/>

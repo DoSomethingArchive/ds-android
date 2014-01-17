@@ -43,6 +43,9 @@ public class DrawerListAdapter extends ArrayAdapter<String> {
         if (itemTitle.equals(mContext.getString(R.string.drawer_item_campaigns))) {
             imageView.setImageResource(R.drawable.action_bar_home);
         }
+        else if (itemTitle.equals(mContext.getString(R.string.drawer_item_reminders))) {
+            imageView.setImageResource(R.drawable.action_bar_reminder);
+        }
         else if (itemTitle.equals(mContext.getString(R.string.drawer_item_profile))) {
             imageView.setImageResource(R.drawable.action_bar_profile);
         }
