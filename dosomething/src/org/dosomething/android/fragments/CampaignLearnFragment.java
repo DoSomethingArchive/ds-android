@@ -166,7 +166,7 @@ public class CampaignLearnFragment extends AbstractCampaignFragment implements V
                 ReminderManager.scheduleReminder(getActivity(), alarmTime, reminderIntent);
 
                 // Save the reminder to SharedPreferences
-                dsPrefs.setStepReminder(campaignId, campaignStepName, alarmTime);
+                dsPrefs.setStepReminder(campaignId, campaignName, campaignStepName, alarmTime);
 
                 // Update the text to show when the user will be reminded
                 Date date = new Date(alarmTime);

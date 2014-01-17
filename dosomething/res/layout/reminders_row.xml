@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/container_dropshadow"
+        android:orientation="vertical">
+
+        <!-- Section to display the date the reminder will be triggered -->
+        <TextView
+            android:id="@+id/reminder_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/dark_blue"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_size_header_2"
+            android:text="Jan 1, 2014"/>
+
+        <!-- Section to display campaign name and step the reminder is for -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="64dp"
+            android:background="@color/campaigns_past_campaign_callout_background"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/campaign_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_medium"
+                android:text="DoSomething.org Campaign"/>
+
+            <TextView
+                android:id="@+id/campaign_step"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_medium"
+                android:text="Learn It"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

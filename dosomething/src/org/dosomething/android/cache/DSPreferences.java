@@ -321,8 +321,9 @@ public class DSPreferences {
                     // Remove the step from the list of reminders for the campaign
                     jsonSteps.remove(campaignStep);
 
-                    // If the campaign has no more reminder steps, then remove the campaign
-                    if (jsonSteps.length() == 0) {
+                    // If the campaign has no more reminder steps (the only one remaining should be
+                    // the name of the campaign, then remove the campaign
+                    if (jsonSteps.length() == 1 && !jsonSteps.isNull("name")) {
                         jsonReminders.remove(campaignId);
                     }
                     // Otherwise, update the campaign reminders with the remaining steps
@@ -349,10 +350,11 @@ public class DSPreferences {
      * campaign step reminders.
      *
      * @param campaignId unique campaign id
+     * @param campaignName display name of the campaign
      * @param campaignStep name of the campaign step
      * @param reminderTime time in milliseconds the reminder is set for
      */
-    public void setStepReminder(String campaignId, String campaignStep, long reminderTime) {
+    public void setStepReminder(String campaignId, String campaignName, String campaignStep, long reminderTime) {
         SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
         String reminders = settings.getString(STEP_REMINDERS, "{}");
 
@@ -363,6 +365,7 @@ public class DSPreferences {
                 jsonSteps = new JSONObject();
             }
 
+            jsonSteps.put("name", campaignName);
             jsonSteps.put(campaignStep, reminderTime);
             jsonReminders.put(campaignId, jsonSteps);
 
@@ -401,6 +404,18 @@ public class DSPreferences {
         }
 
         return reminderTime;
+    }
+
+    /**
+     * Retrieve the raw String data of saved campaign step reminders.
+     *
+     * @return JSON string of saved reminders
+     */
+    public String getStepReminderRaw() {
+        SharedPreferences settings = context.getSharedPreferences(DS_PREFS, 0);
+        String reminders = settings.getString(STEP_REMINDERS, "{}");
+
+        return reminders;
     }
 
     /**
