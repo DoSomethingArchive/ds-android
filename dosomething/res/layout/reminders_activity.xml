@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:divider="@null"/>
+
+    <ScrollView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="64dp"
+            android:paddingTop="64dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_height="128dp"
+                android:layout_width="wrap_content"
+                android:src="@drawable/splash"/>
+
+            <TextView
+                android:id="@+id/empty_view_header"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:text="@string/reminders_empty_header"
+                android:textSize="@dimen/font_size_header_1"/>
+
+            <TextView
+                android:id="@+id/empty_view_body"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:text="@string/reminders_empty_body"
+                android:textSize="@dimen/font_size_medium"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
