@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import org.dosomething.android.DSConstants;
 import org.dosomething.android.activities.DSWebViewActivity;
@@ -21,6 +22,12 @@ public class SurveyCheckTask extends AbstractWebserviceTask {
     // View with the survey text and button
     private View mView;
 
+    // View to display the survey text
+    private TextView mTextView;
+
+    // Text prompt displayed in the survey View
+    private String mSurveyText;
+
     // Handle to the Button to open up the webview for the survey
     private Button mOpenSurvey;
 
@@ -36,10 +43,11 @@ public class SurveyCheckTask extends AbstractWebserviceTask {
     // Handle to SharedPreferences data
     private DSPreferences mPrefs;
 
-    public SurveyCheckTask(UserContext userContext, View view, Button openSurvey) {
+    public SurveyCheckTask(UserContext userContext, View view, TextView textView, Button openSurvey) {
         super(userContext);
 
         mView = view;
+        mTextView = textView;
         mOpenSurvey = openSurvey;
         mShowView = false;
 
@@ -58,6 +66,7 @@ public class SurveyCheckTask extends AbstractWebserviceTask {
             int lastSurveyId = mPrefs.getLastSurveyId();
 
             if (mSurveyId > 0 && mSurveyId > lastSurveyId) {
+                mSurveyText = jsonResponse.optString("text");
                 mSurveyUrl = jsonResponse.getString("url");
                 mShowView = true;
             }
@@ -67,8 +76,15 @@ public class SurveyCheckTask extends AbstractWebserviceTask {
     @Override
     protected void onSuccess() {
         // Display the survey popup in the View
-        if (mShowView && mView != null && mOpenSurvey != null) {
+        if (mShowView && mView != null && mTextView != null && mOpenSurvey != null) {
             mView.setVisibility(View.VISIBLE);
+
+            // Text prompt to take the survey
+            if (mSurveyText.length() > 0) {
+                mTextView.setText(mSurveyText);
+            }
+
+            // Click listener for the "open survey" button
             mOpenSurvey.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -153,7 +153,7 @@ public class CampaignsListFragment extends RoboFragment {
     }
 
     private void checkForSurvey() {
-        SurveyCheckTask surveyTask = new SurveyCheckTask(userContext, popupSurveyView, popupSurveyButton);
+        SurveyCheckTask surveyTask = new SurveyCheckTask(userContext, popupSurveyView, popupSurveyText, popupSurveyButton);
         surveyTask.execute();
     }
 
