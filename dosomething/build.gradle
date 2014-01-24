@@ -1,8 +1,14 @@
+repositories {
+    mavenCentral()
+}
+
 apply plugin: 'android'
+apply plugin: 'newrelic'
 
 dependencies {
     compile 'com.android.support:support-v4:18.0.+'
     compile 'com.android.support:appcompat-v7:18.0.+'
+    compile 'com.newrelic.agent.android:android-agent:3.264.0'
     compile files('libs/acra-4.2.3.jar')
     compile files('libs/commons-codec-1.6.jar')
     compile files('libs/commons-logging-1.1.1.jar')

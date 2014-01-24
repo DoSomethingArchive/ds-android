@@ -25,6 +25,9 @@
     <string name="ua_productionAppSecret">UA_PRODUCTION_APP_SECRET_PLACEHOLDER</string>
     <string name="ua_transport">gcm</string>
 
+    <!-- New Relic Mobile Monitoring -->
+    <string name="newrelic_mobile_monitoring_token">NEWRELIC_MOBILE_MONITORING_TOKEN_PLACEHOLDER</string>
+
     <!-- Create and Share/Pics 4 Pets API Key -->
     <string name="createandshare_api_key">PICS_API_KEY_PLACEHOLDER</string>
 </resources>

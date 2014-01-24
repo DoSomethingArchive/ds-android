@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 
+import com.newrelic.agent.android.NewRelic;
+
 import org.dosomething.android.R;
 import org.dosomething.android.cache.DSPreferences;
 import org.dosomething.android.context.UserContext;
@@ -33,6 +35,11 @@ public class SplashScreenActivity extends RoboActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+
+        // Initialize New Relic tracking
+        NewRelic.withApplicationToken(
+                getString(R.string.newrelic_mobile_monitoring_token)
+        ).start(this.getApplication());
 
         // Get the version number and set it to display in the TextView
         String version = "";
