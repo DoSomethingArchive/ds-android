@@ -35,6 +35,7 @@
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
                 android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
                 android:textSize="@dimen/font_size_header_1"
                 android:textStyle="bold"/>
 
@@ -45,6 +46,7 @@
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
                 android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
                 android:textSize="@dimen/font_size_medium"/>
         </LinearLayout>
     </ScrollView>
