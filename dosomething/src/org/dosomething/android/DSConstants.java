@@ -8,7 +8,7 @@ public class DSConstants {
     // Flag indicating production use. Should be set to false during development to avoid dirtying the data.
     // - enables/disables analytics tracking
     // - indicates which key to use for Urban Airship push notifications
-    public static final boolean inProduction = false;
+    public static final boolean inProduction = true;
 
     // API URLs
     public static String API_URL_BASE = "http://www.dosomething.org/rest/";
