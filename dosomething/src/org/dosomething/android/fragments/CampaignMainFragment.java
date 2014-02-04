@@ -238,41 +238,52 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
             }
             // Otherwise, notify app and server that user signed up for this campaign
             else {
-                // Save on the app-side that the user signed up for this campaign
-                UserCampaign uc = new UserCampaign.UserCampaignCVBuilder()
-                        .campaignId(campaign.getId())
-                        .uid(uid)
-                        .campaignName(campaign.getName())
-                        .dateEnds(campaign.getEndDate().getTime() / 1000) // times needs to be in seconds
-                        .dateSignedUp(Calendar.getInstance().getTimeInMillis() / 1000)
-                        .dateStarts(campaign.getStartDate().getTime() / 1000)
-                        .build();
-                new DSDao(getActivity()).setSignedUp(uc);
-
-                // Update the sign up button's look
-                updateSignUpButton(getActivity());
-
-                // Display a Toast message for success
-                Toast.makeText(getActivity(), getString(R.string.campaign_sign_up_success), Toast.LENGTH_LONG).show();
-
-                // Update the ActionBar tabs on the Activity
-                if (activity instanceof org.dosomething.android.activities.Campaign) {
-                    org.dosomething.android.activities.Campaign campActivity = (org.dosomething.android.activities.Campaign)activity;
-
-                    // Enable the rest of the tabs
-                    campActivity.refreshActionBarTabs();
-
-                    // Change to the next tab
-                    campActivity.setCurrentTab(1);
-                }
-
-                // TODO: notify server that user signed up
+                removeGateOnSignUp();
             }
         }
         // If the user is not logged in somehow, send to the Login activity
         else {
             startActivityForResult(new Intent(activity, Login.class), REQ_LOGIN_FOR_SIGN_UP);
         }
+    }
+
+    /**
+     * Remove the campaign gate, mark a campaign as signed up, and display the tabs that were
+     * previously hidden behind the gate.
+     */
+    private void removeGateOnSignUp() {
+        Activity activity = getActivity();
+        String uid = new UserContext(activity).getUserUid();
+
+        // Save on the app-side that the user signed up for this campaign
+        UserCampaign uc = new UserCampaign.UserCampaignCVBuilder()
+                .campaignId(campaign.getId())
+                .uid(uid)
+                .campaignName(campaign.getName())
+                .dateEnds(campaign.getEndDate().getTime() / 1000) // times needs to be in seconds
+                .dateSignedUp(Calendar.getInstance().getTimeInMillis() / 1000)
+                .dateStarts(campaign.getStartDate().getTime() / 1000)
+                .build();
+        new DSDao(activity).setSignedUp(uc);
+
+        // Update the sign up button's look
+        updateSignUpButton(activity);
+
+        // Display a Toast message for success
+        Toast.makeText(activity, getString(R.string.campaign_sign_up_success), Toast.LENGTH_LONG).show();
+
+        // Update the ActionBar tabs on the Activity
+        if (activity instanceof org.dosomething.android.activities.Campaign) {
+            org.dosomething.android.activities.Campaign campActivity = (org.dosomething.android.activities.Campaign)activity;
+
+            // Enable the rest of the tabs
+            campActivity.refreshActionBarTabs();
+
+            // Change to the next tab
+            campActivity.setCurrentTab(1);
+        }
+
+        // TODO: notify server that user signed up
     }
 
     private boolean hasNoSignUp() {
@@ -384,6 +395,9 @@ public class CampaignMainFragment extends AbstractCampaignFragment implements Vi
 
                 // Increment the counter of times an SMS experience was started
                 userContext.addSmsCampaignsStarted();
+
+                // Remove gate & reveal campaign content
+                removeGateOnSignUp();
             }
             else {
                 onError(null);
